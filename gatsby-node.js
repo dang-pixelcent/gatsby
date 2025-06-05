@@ -3,8 +3,12 @@ const remark = require(`remark`)
 const html = require(`remark-html`)
 const fs = require('fs')
 
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV || 'development'}`
+})
+
 const CACHE_DIR = path.join(__dirname, 'cache/seo')
-const SEO_QUERY_URL = `https://headless-plum-eight.vercel.app`
+const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
 
 function sanitizeFilename(url) {
   return url.replace(/[^a-z0-9]/gi, '_').toLowerCase()
@@ -14,7 +18,7 @@ function getCachedSeoData(url) {
   try {
     const filename = sanitizeFilename(url)
     const filePath = path.join(CACHE_DIR, `${filename}.json`)
-    
+
     if (fs.existsSync(filePath)) {
       const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'))
       console.log(`Using cached SEO data for ${url}`)
@@ -23,7 +27,7 @@ function getCachedSeoData(url) {
   } catch (error) {
     console.error(`Error reading cached SEO data for ${url}:`, error.message)
   }
-  
+
   console.log(`No cached SEO data found for ${url}`)
   return null
 }
@@ -75,6 +79,15 @@ exports.createPages = async ({ actions, graphql }) => {
             title
             flexibleContentHtml
             date
+          }
+        }
+        themeSettings {
+          themeOptionsSettings {
+            headerFooter {
+              body
+              footer
+              header
+            }
           }
         }
       }
@@ -189,4 +202,29 @@ exports.createPages = async ({ actions, graphql }) => {
       },
     })
   })
+
+
+  // === BẮT ĐẦU PHẦN THÊM MỚI: Lưu tracking codes vào tệp cache ===
+  if (data.cms.themeSettings &&
+    data.cms.themeSettings.themeOptionsSettings &&
+    data.cms.themeSettings.themeOptionsSettings.headerFooter) {
+
+    const headerFooterData = data.cms.themeSettings.themeOptionsSettings.headerFooter;
+    const cacheDir = path.join(__dirname, '.cache'); // Thư mục .cache do Gatsby quản lý
+    const trackingCodesCachePath = path.join(cacheDir, 'theme-tracking-codes.json');
+
+    try {
+      // Gatsby tự động tạo thư mục .cache, nhưng bạn có thể kiểm tra nếu muốn
+      if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+      }
+      fs.writeFileSync(trackingCodesCachePath, JSON.stringify(headerFooterData, null, 2));
+      console.log('Theme tracking codes saved to cache:', trackingCodesCachePath);
+    } catch (error) {
+      console.error('Error saving theme tracking codes to cache:', error);
+    }
+  } else {
+    console.warn('Theme tracking codes (headerFooter) not found in GraphQL response. Skipping cache write.');
+  }
+  // === KẾT THÚC PHẦN THÊM MỚI ===
 }
