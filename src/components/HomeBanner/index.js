@@ -3,7 +3,7 @@ import { graphql, useStaticQuery, Link } from "gatsby"
 
 const HomeBanner = () => {
   const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE || 'https://agencysitestaging.mystagingwebsite.com'
-  const siteBaseUrl = process.env.REACT_APP_BASE_URL
+  // const siteBaseUrl = process.env.REACT_APP_BASE_URL
   const data = useStaticQuery(graphql`
     query {
       cms {
@@ -103,7 +103,7 @@ const HomeBanner = () => {
             </div>
           </div>
           <div className="banner-list ast-flex  justify-content-center">
-            {/* {
+            {
               content?.serviceList?.map((item, key) => {
                 let pathForLink = item?.link;
 
@@ -122,8 +122,8 @@ const HomeBanner = () => {
                   </Link>
                 );
               })
-            } */}
-            {
+            }
+            {/* {
               content?.serviceList?.map((item, key) => {
                 return (
                   <Link key={key} to={item?.link} className="link-item">
@@ -131,13 +131,13 @@ const HomeBanner = () => {
                   </Link>
                 );
               })
-            }
+            } */}
           </div>
           <div className="box-desktop">
-            <img src={content?.boxDesktop?.node?.sourceUrl} />
+            <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" class="lazyloaded" decoding="async" nitro-lazy-empty="" id="NzgwOjExMQ==-1"/>
           </div>
           <div className="box-mobile">
-            <img src={content?.boxMobile?.node?.sourceUrl} />
+            <img alt="Mobile Box" src={content?.boxMobile?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile.png" class="nitro-lazy" decoding="async" nitro-lazy-empty="" id="NzgzOjExMA==-1" />
           </div>
           {/* <div className="banner-services text-white ast-flex justify-content-center">
             {
