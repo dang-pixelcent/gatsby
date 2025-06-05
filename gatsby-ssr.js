@@ -3,12 +3,11 @@ import parse from 'html-react-parser'; // Import thư viện
 const fs = require('fs');
 const path = require('path');
 
-// Hàm loadTrackingCodesFromCache của bạn giữ nguyên
+// Hàm để tải tracking codes từ cache
 const loadTrackingCodesFromCache = () => {
   const trackingCodesCachePath = path.join(process.cwd(), '.cache', 'theme-tracking-codes.json');
   try {
     // Dòng log này bạn có thể giữ lại hoặc bỏ đi sau khi debug xong
-    // console.log("----- Path check:", trackingCodesCachePath, "Exists:", fs.existsSync(trackingCodesCachePath));
     if (fs.existsSync(trackingCodesCachePath)) {
       const fileContent = fs.readFileSync(trackingCodesCachePath, 'utf-8');
       const data = JSON.parse(fileContent);
@@ -23,7 +22,6 @@ const loadTrackingCodesFromCache = () => {
 };
 
 // Helper function để đảm bảo output từ parse là một mảng và có key
-// (Quan trọng cho React khi render danh sách các elements)
 const parseHtmlToReact = (htmlString, baseKey) => {
   if (!htmlString || typeof htmlString !== 'string' || htmlString.trim() === '') {
     return [];
@@ -85,15 +83,15 @@ export const onRenderBody = ({
   // --- 2. Cấu hình cho ngay sau thẻ <body> mở ---
   const preBodyItems = [];
 
-  if (scriptsForPreBodyString_fromFooterField) { // GTM noscript
+  if (scriptsForPreBodyString_fromFooterField) {
     const parsedFooterScripts = parseHtmlToReact(scriptsForPreBodyString_fromFooterField, 'prebody-footer-item');
     preBodyItems.push(...parsedFooterScripts);
   }
 
-  if (scriptsForPreBodyString_fromBodyField) { // Scripts từ trường 'body'
-    const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
-    preBodyItems.push(...parsedBodyScripts);
-  }
+  // if (scriptsForPreBodyString_fromBodyField) {
+  //   const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
+  //   preBodyItems.push(...parsedBodyScripts);
+  // }
 
   if (preBodyItems.length > 0) {
     setPreBodyComponents(preBodyItems);
@@ -101,7 +99,7 @@ export const onRenderBody = ({
 
   // --- 3. Cấu hình cho ngay trước thẻ </body> đóng ---
   const postBodyItems = [];
-  // Ví dụ: Nếu bạn có một trường khác cho các script ở cuối body
+  
   const scriptsForPostBodyString = trackingCodes.postBody || "";
   if (scriptsForPostBodyString) {
     const parsedPostBodyScripts = parseHtmlToReact(scriptsForPostBodyString, 'postbody-item');
