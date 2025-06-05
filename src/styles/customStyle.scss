@@ -1,0 +1,600 @@
+/* Custom style */
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Regular.eot');
+  src: local('Soleto'), local('Soleto-Regular'),
+      url('../assets/fonts/Soleto-Regular.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Regular.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Regular.woff') format('woff'),
+      url('../assets/fonts/Soleto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Medium.eot');
+  src: local('Soleto Medium'), local('Soleto-Medium'),
+      url('../assets/fonts/Soleto-Medium.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Medium.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Medium.woff') format('woff'),
+      url('../assets/fonts/Soleto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto XBold';
+  src: url('../assets/fonts/Soleto-XBold.eot');
+  src: local('Soleto XBold'), local('Soleto-XBold'),
+      url('../assets/fonts/Soleto-XBold.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-XBold.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-XBold.woff') format('woff'),
+      url('../assets/fonts/Soleto-XBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-ThinItalic.eot');
+  src: local('Soleto Thin Italic'), local('Soleto-ThinItalic'),
+      url('../assets/fonts/Soleto-ThinItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-ThinItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-ThinItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto XBold';
+  src: url('../assets/fonts/Soleto-XBoldItalic.eot');
+  src: local('Soleto XBold Italic'), local('Soleto-XBoldItalic'),
+      url('../assets/fonts/Soleto-XBoldItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-XBoldItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-XBoldItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-XBoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Bold.eot');
+  src: local('Soleto Bold'), local('Soleto-Bold'),
+      url('../assets/fonts/Soleto-Bold.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Bold.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Bold.woff') format('woff'),
+      url('../assets/fonts/Soleto-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Light.eot');
+  src: local('Soleto Light'), local('Soleto-Light'),
+      url('../assets/fonts/Soleto-Light.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Light.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Light.woff') format('woff'),
+      url('../assets/fonts/Soleto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-MediumItalic.eot');
+  src: local('Soleto Medium Italic'), local('Soleto-MediumItalic'),
+      url('../assets/fonts/Soleto-MediumItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-MediumItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-MediumItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Italic.eot');
+  src: local('Soleto Italic'), local('Soleto-Italic'),
+      url('../assets/fonts/Soleto-Italic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Italic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Italic.woff') format('woff'),
+      url('../assets/fonts/Soleto-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-BoldItalic.eot');
+  src: local('Soleto Bold Italic'), local('Soleto-BoldItalic'),
+      url('../assets/fonts/Soleto-BoldItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-BoldItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-BoldItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Black.eot');
+  src: local('Soleto Black'), local('Soleto-Black'),
+      url('../assets/fonts/Soleto-Black.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Black.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Black.woff') format('woff'),
+      url('../assets/fonts/Soleto-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-BlackItalic.eot');
+  src: local('Soleto Black Italic'), local('Soleto-BlackItalic'),
+      url('../assets/fonts/Soleto-BlackItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-BlackItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-BlackItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-LightItalic.eot');
+  src: local('Soleto Light Italic'), local('Soleto-LightItalic'),
+      url('../assets/fonts/Soleto-LightItalic.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-LightItalic.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-LightItalic.woff') format('woff'),
+      url('../assets/fonts/Soleto-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Soleto';
+  src: url('../assets/fonts/Soleto-Thin.eot');
+  src: local('Soleto Thin'), local('Soleto-Thin'),
+      url('../assets/fonts/Soleto-Thin.eot?#iefix') format('embedded-opentype'),
+      url('../assets/fonts/Soleto-Thin.woff2') format('woff2'),
+      url('../assets/fonts/Soleto-Thin.woff') format('woff'),
+      url('../assets/fonts/Soleto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face{font-family:"Minion";src:url(../assets/fonts/Minion-Condensed-Regular.otf) format("truetype");font-weight:400;font-style:normal}@font-face{font-family:"Minion Bold";src:url(../assets/fonts/Minion-Bold-Condensed.otf) format("truetype");font-weight:400;font-style:normal}
+.fw-300{font-weight:300!important;}
+.fw-500{font-weight:500!important;}
+.fw-600{font-weight:600!important;}
+.fw-700{font-weight:700!important;}
+.fw-800{font-weight:800!important;}
+.fs-22{font-size:22px !important;line-height:1.5!important;}
+.fs-24{font-size:24px !important;line-height:150% !important;}
+.fs-26{font-size:26px !important;}
+.fs-32{font-size:32px !important;line-height:150% !important;}
+.fs-36{font-size:36px !important;line-height:1.5 !important;}
+.fs-28{font-size:28px !important;line-height:150% !important;}
+.fs-48{font-size:48px !important;line-height:150% !important;}
+.fs-56{font-size:56px !important;line-height:1.5 !important;}
+.btn-bg{padding:8px 20px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.bg-F2771A{background-color:#F2771A;color:#fff;}
+.bg-0659A9{background:#0659A9 !important;color:#fff !important;border:1px solid #0659A9 !important; }
+.bg-F2771A:focus{color:#fff;}
+.bg-F2771A:hover{background-color:#fff;color:#F2771A;}
+.bg-0659A9:hover, .bg-0659A9:focus{background:#fff !important;color:#0659A9 !important;}
+.btn-size-16{font-size:16px;line-height:1.5;}
+.btn-size-18{font-size:18px;line-height:1.5;}
+.btn-size-26{font-size:26px;line-height:1.5;}
+.gap-24{gap:24px !important;}
+.gap-20{gap:20px !important;}
+.text-underline{text-decoration: underline;}
+.text-uppercase{text-transform:uppercase !important;}
+.text-white,.color-ffffff{color:#fff !important;}
+.text-black,.color-000000{color:#000 !important;}
+.color-00255B{color: #00255B !important;}
+.color-0659A9{color: #0659A9 !important;}
+.color-2c2c2c{color:#2C2C2C;}
+.f-soleto{font-family: 'Soleto' !important;}
+.f-soletoxbold{font-family: 'Soleto XBold' !important;}
+.f-inter{font-family: 'Inter'!important;}
+.text-center{text-align:center !important;}
+.align-items-center{align-items:center !important;}
+.justify-content-center{justify-content:center !important;}
+.justify-items-center{justify-items:center !important;}
+.justify-content-end{justify-content: flex-end !important;}
+.d-flex{display:flex !important;}
+.flex-column{flex-direction: column !important;}
+.px-0{padding-left:0px !important;padding-right:0px !important;}
+.mb-0{margin-bottom:0px !important;}
+.position-relative{position:relative !important;}
+.position-absolute{position:absolute !important;}
+.mx-auto{margin-left:auto !important;margin-right:auto !important;}
+p{margin-bottom:20px;}
+img{object-fit:cover;max-width:100%;}
+.h2-title{font-size:48px;line-height:1.2;}
+/* */
+.ast-theme-transparent-header #masthead
+{
+    position:relative !important;
+}
+.ast-theme-transparent-header #masthead.menu-fixed {
+    position:fixed !important;
+    top:0;left:0;
+}
+.main-content
+{
+    position:relative;
+}
+.main-content *{
+    font-family: 'Soleto';
+}
+.main-content .ast-container{display:block;}
+section{position:relative;overflow:hidden;}
+.banner-inner{width:100%;}
+.sc-btn{display:flex;}
+/* Header*/
+.ast-site-identity{padding:14px 0px;}
+header .custom-logo-link img.custom-logo{ aspect-ratio: 250 / 72;}
+.header-call .call-text{margin-bottom:4px;font-weight:600;}
+.header-call .call-text,.header-call a{
+    font-family: 'Assistant', sans-serif;
+    font-size:1.04vw ;/*0.62vw - 12px;*//*1.04vw - 20px;*/
+    line-height:1;
+    color:#2C2C2C;
+}
+.header-call a{font-weight:700;}
+.main-header-menu > .menu-item > .menu-link, #astra-footer-menu > .menu-item > .menu-link
+{
+    font-family: 'Soleto XBOLD';
+    font-weight:800;
+    font-size:0.93vw;/*18px;*/
+    line-height:normal;
+    color:#2C2C2C;
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu
+{
+    padding: 1.14vw 1.25vw 1.77vw 1.25vw;
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item
+{
+    padding: 0px 0px 10px !important;
+	margin-bottom: 6px;
+	border-bottom: 1px solid #BACAE1;
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item:last-child{
+    border-bottom: 0px solid;
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item a.mega-menu-link{
+    color: #2C2C2C !important;
+    font-family: Soleto !important;
+    font-size: 0.93vw !important;
+    line-height: 1.5;
+    font-style: normal;
+    font-weight: 400 !important;
+    padding:0px;
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item a.mega-menu-link:hover,
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item a.mega-menu-link:focus{
+    color:#0659a9 !important;
+}
+.site-header-section>*{padding:0px 5px;}
+.m-btn-call
+{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width:40px;
+    height:40px;
+    background-color:#F2771A;
+    border-radius:4px;
+}
+.m-btn-call button{ width:20px;height:20px;padding:0px;border:0px solid;background:transparent;position:relative;}
+.m-btn-call button:before{
+    content:"";
+    display:inline-block;
+    position:absolute;
+    background:no-repeat center/cover url('../assets/img/icon-call.svg');
+    width:20px;
+    height:20px;
+    top:0px;
+    left:0px;
+}
+.ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle,
+.ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle
+{
+    padding:0px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width:40px;
+    height:40px;
+    border-radius:4px;
+    background: #0659A9 !important;
+}
+.ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle svg{
+    fill:#fff !important;
+}
+.is_hide{display:none !important;}
+.ast-mobile-header-wrap .ast-primary-header-bar, .ast-primary-header-bar .site-primary-header-wrap
+{
+    min-height:5.20vw;/*100px;*/
+}
+#mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-item > a.mega-menu-link
+{
+    font-family: 'Assistant', sans-serif;/*'Soleto XBold';*/
+    font-weight:700 !important;
+    font-size:0.93vw;/*18px;*/
+    padding:0.41vw 1.04vw;/*8px 20px;*/
+    line-height:5.20vw;/*100px;*/
+    height:5.20vw;/*100px;*/
+}
+.ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button{
+    font-family: 'Assistant', sans-serif;
+    font-weight:700;
+    font-size:0.93vw;/*18px;*/
+    line-height: normal;
+    padding:0px 1.04vw;/*0px 20px;*/
+    min-width:7.66vw;/*147px;*/
+    height:3.12vw;/*60px;*/
+    display:flex;
+    align-items:center;
+    justify-content: center;
+}
+@media only screen and (min-width:1200px) and (max-width:1280px)
+{
+    #mega-menu-wrap-primary #mega-menu-primary{padding-left:20px;}
+}
+@media only screen and (max-width:1024px)
+{
+    header .custom-logo-link img.custom-logo{ max-width:140px !important;}
+    
+}
+@media (max-width: 544px) {
+    .ast-separate-container #content .ast-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+@media only screen and (max-width:922px)
+{
+    .ast-site-identity{padding:20px 0px;}
+    .is_hide{display:block !important;}
+    #ast-hf-mobile-menu{background:rgb(2, 38, 70);}
+    header .custom-logo-link img.custom-logo{ max-width:168px !important;}
+    .ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item > .menu-link,
+    .ast-builder-menu-mobile .main-navigation .main-header-menu .menu-item:hover > .menu-link,
+    .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item:hover > .ast-menu-toggle
+    {
+        
+        color:#fff;
+    }
+    .main-header-menu .menu-item .sub-menu > .menu-link,
+    .submenu-with-border .sub-menu .menu-link
+    {
+        font-family: 'Soleto';
+        color:#2C2C2C !important;
+    }
+    .btn-get-started{background:#F2771A;text-align:center;}
+    .btn-get-started a{color:#fff !important;}
+    .ast-builder-menu-mobile .main-navigation .menu-item.menu-item-has-children > .ast-menu-toggle
+    {
+        color:#fff;
+        top:0px;
+    }
+    .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item > .ast-menu-toggle:focus{
+        outline:none;
+        border:0px solid;
+    }
+    .ast-header-button-1 .ast-custom-button {
+        font-size: 12px;
+    }
+    .main-header-menu > .menu-item > .menu-link, #astra-footer-menu > .menu-item > .menu-link, #mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-flyout ul.mega-sub-menu li.mega-menu-item a.mega-menu-link
+    {
+        font-size:18px;
+    }
+    .hide-mobile{display:none !important;}
+}
+
+/* Footer */
+
+.site-primary-footer-wrap{background:no-repeat center/cover url('../assets/img/bg-footer-2.jpg') !important;}
+.sc-free-gift{padding:2.08vw;/*40px;*/border-radius:20px;background-color:#fff;gap:2.08vw;/*40px;*/align-items:center;}
+.sc-free-gift .free-gift-content{flex:1;}
+.sc-free-gift .desc{font-size:0.93vw;/*18px;*/line-height:1.5;}
+.ast-builder-grid-row-3-equal .ast-builder-grid-row{grid-template-columns: auto auto auto;grid-column-gap:5.20vw;/*100px;*/}
+.site-footer-primary-section-1{max-width:27.91vw;/*536px;*/}
+.site-footer-primary-section-2, .site-footer-primary-section-3{width:16.40vw;/*315px;*/}
+footer *{color:#fff;font-size:0.93vw;/*18px;*/line-height:1.5;}
+footer a{color:#fff;}
+footer .widget{margin-bottom:1.04vw;/*20px;*/}
+footer .site-footer-primary-section-2 .widget{margin-bottom:1.25vw;/*24px;*/}
+footer h2.widget-title,footer .widget-title{margin-bottom:1.04vw;/*20px;*/font-family:'Inter', sans-serif;font-weight:700;font-size:0.93vw;/*18px;*/line-height:1.5;color:#fff;}
+.socials{gap:0.52vw;/*10px;*/align-items:center;}
+.socials a{width:1.56vw;/*30px;*/height:1.56vw;/*30px;*/}
+.schedule{display:flex;flex-direction:column;gap:0.52vw;/*10px;*/}
+.schedule .item{display:flex;align-items:center;gap:1.04vw;/*20px;*/}
+.schedule .item .day{flex:0 0 7.70vw;/*148px;*/}
+.schedule .item .time{flex:1;}
+.site-below-footer-inner-wrap a{text-decoration: underline;}
+footer a:hover{color:#F2771A;}
+.footer-map{max-width:19.53vw;/*375px;*/height:13.02vw;/*250px;*/overflow:hidden;border-radius:1.04vw;/*20px;*/}
+.footer-map iframe{max-width:unset;width:100%;}
+.ast-footer-copyright p{color:#000;}
+/* General Slick slider */
+.slick-arrow{background:none;padding:0px;border:0px solid;}
+.slick-dots{list-style:none;display:flex;gap:0.52vw;/*10px;*/margin:20px 0px 0px;justify-content: center;align-items:center;}
+.slick-dots button{padding:0px;text-indent:-9999px;height:0.41vw;/*8px;*/width:0.41vw;/*8px;*/border-radius:50%;background-color:#2C2C2C;}
+.slick-active button{background-color:#F2771A;}
+.footer-widget-area[data-section="sidebar-widgets-footer-widget-2"].footer-widget-area-inner #text-21{display:none;}
+@media only screen and (max-width:922px)
+{
+    .pt-100{padding-top:40px !important;}
+    .pb-100{padding-bottom:40px !important;}
+    .gap-20{gap:20px !important;}
+    .gap-24{gap:24px !important;}
+    .section{padding:40px 0px;}
+    .btn-bg{padding:8px 20px;}
+    .slick-dots{gap:10px;}
+    .slick-dots button{width:8px;height:8px;}
+    .ast-builder-grid-row-container.ast-builder-grid-row-tablet-3-equal .ast-builder-grid-row{
+        grid-template-columns: 1fr;
+    }
+    .ast-builder-grid-row-container.ast-builder-grid-row-mobile-full .ast-builder-grid-row,
+    .site-below-footer-wrap[data-section="section-below-footer-builder"] .ast-builder-grid-row
+    {
+        max-width:100%;
+        padding:0px 30px 20px 30px;
+    }
+    .sc-free-gift{padding:20px;gap:20px;flex-direction:column;}
+    footer section{padding:0px;}
+    .site-footer-primary-section-1{max-width:unset;}
+    .site-footer-primary-section-2, .site-footer-primary-section-3{width:auto;}
+    footer .widget:not(:last-child){margin-bottom:20px;}
+    footer h2.widget-title, footer .widget-title{font-size: 18px;margin-bottom:20px;}
+    .footer-map{margin:0px auto;}
+    .site-below-footer-inner-wrap{padding-top:20px;}
+    .site-below-footer-wrap{padding:20px 0px 100px !important;}
+    .schedule div.item{flex-direction: row;align-items:center;}
+    .schedule .item div.day{flex:0 0 148px;font-size:16px;}
+    footer *,.footer-address a,.btn-size-16{font-size:16px;}
+    .socials{gap:10px;}
+}
+.site-header-focus-item.ast-header-html-1{display:none;}
+.cus_header_call_text .header-call{padding:0px 1.04vw;/*0px 20px;*/gap:5px;}
+.sc-main-content{padding:100px 0px;}
+.page-id-2634 .sc-main-content{padding:0px 0px 100px;}
+.pt-100{padding-top:5.20vw /*100px*/ !important;}
+.pb-100{padding-bottom:5.20vw /*100px*/ !important;}
+.page-content{background:no-repeat center/cover url('../assets/img/bg-content.jpg');}
+.sc-main-content h3,.sc-main-content h4{margin-bottom:20px;}
+#ast-fixed-header
+{
+    position: fixed;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.ast-scroll-to-top-right#ast-scroll-top{bottom:140px;}
+/* Fix calendar page */
+.page-id-1303 .banner{height:148px;}
+.page-id-1303 .sc-main-content{padding:0px;}
+/* Fix Home Mobile */
+@media only screen and (min-width:922px) and (max-width:1280px)
+{
+    #mega-menu-wrap-primary #mega-menu-primary > li.mega-menu-item > a.mega-menu-link{padding:0px 0.52vw;/*10px;*/}
+}
+@media only screen and (max-width:922px)
+{
+    .cus-container{padding-left:30px;padding-right:30px;}
+    .ast-header-break-point #masthead .ast-mobile-header-wrap .ast-above-header-bar
+    {
+        padding-left:30px !important;
+        padding-right:30px !important;
+        background:#eee !important;
+    }
+    .site-primary-footer-wrap[data-section="section-primary-footer-builder"] .ast-builder-grid-row
+    {
+        padding-left:30px !important;
+        padding-right:30px !important;
+    }
+    .ast-above-header-bar .ast-builder-grid-row{grid-template-columns: repeat(2, 1fr);}
+    .ast-above-header-bar .site-header-section, .ast-above-header-bar .site-header-section *{width:100%;}
+    .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button,
+    .ast-header-button-2[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button
+    {
+        font-family: 'Assistant', sans-serif;
+        font-weight:700;
+        font-size:12px !important;
+        line-height:1.5;
+        text-align:center;
+    }
+    .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button{
+        padding-top:11px;padding-bottom:11px;
+        height:unset;
+    }
+    .h2-title,
+    .fs-48{font-size: 28px !important;line-height:1.2 !important;}
+    .fs-28{font-size: 20px !important;}
+    .btn-size-18{font-size:18px !important;}
+    .ast-mobile-header-wrap .ast-above-header-bar{position:fixed;width:100%;bottom:0px;left:0px;}
+    .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button
+    {
+        max-width:unset;
+    }
+    #ast-scroll-top{bottom:70px;}
+    #ast-scroll-top[data-on-devices="desktop"]{display:none !important;}
+    .ast-container{padding-left:30px;padding-right:30px;}
+    .site-footer-primary-section-1{max-width:unset;margin-bottom:20px !important;}
+    .site-footer-primary-section-2, .site-footer-primary-section-3{width:auto;margin-bottom:20px !important;}
+    .site-primary-footer-wrap[data-section="section-primary-footer-builder"]{
+        padding:37px 0px;
+    }
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-3"].footer-widget-area-inner,
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-2"].footer-widget-area-inner,
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-4"].footer-widget-area-inner{
+        text-align:left !important;
+    }
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-4"].footer-widget-area-inner #text-19{display:none;}
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-2"].footer-widget-area-inner #text-21{display:block;margin-top:30px;}
+    .footer-widget-area[data-section="sidebar-widgets-footer-widget-2"].footer-widget-area-inner #text-3 p:last-child{margin-bottom:0px;}
+    footer .site-footer-primary-section-2 .widget{margin-bottom:12px;}
+    .socials{gap:10px;}
+    .socials a{width:30px;;height:30px;}
+    .ast-footer-copyright, .ast-footer-copyright p{font-size:18px;}
+    .footer-widget-area.footer-widget-area-inner{text-align:left !important;}
+    .lc_text-widget, .lc_text-widget *,
+    .lc_text-widget--bubble{bottom:70px !important;}
+    .widget-chat-box{
+        position:fixed;
+        bottom:70px;
+        right:20px;
+        z-index:99999;
+        width:58px;
+        height:58px;
+    }
+}
+@media only screen and (max-width:768px)
+{
+    .page-id-1303 .banner{padding:0px;}
+}
+@media only screen and (min-width:922px)
+{
+    .cus-container,
+    .ast-primary-header-bar .site-primary-header-wrap,
+    .site-primary-footer-wrap[data-section="section-primary-footer-builder"] .ast-builder-grid-row
+    {
+        padding-left:14.58vw !important;/*280px*/
+        padding-right:14.58vw !important;/*280px*/
+    }
+    .ast-primary-header-bar .site-primary-header-wrap,
+    .site-primary-footer-wrap[data-section="section-primary-footer-builder"] .ast-builder-grid-row
+    {
+        max-width:unset;
+    }
+    .fs-22{font-size:1.14vw !important;}
+    .fs-24{font-size:1.25vw !important;}
+    .fs-26{font-size:1.35vw !important;}
+    .fs-32{font-size:1.66vw !important;}
+    .fs-36{font-size:1.87vw !important;}
+    .fs-28{font-size:1.45vw !important;}
+    .fs-48{font-size:2.5vw !important;}
+    .fs-56{font-size:2.91vw !important;}
+    .btn-size-16{font-size:0.83vw;}
+    .btn-size-18{font-size:0.93vw;}
+    .btn-size-26{font-size:1.35vw;}
+    .gap-24{gap:1.25vw !important;}
+    .gap-20{gap:1.04vw!important;}
+    .btn-bg{padding:0.41vw 1.04vw;/*8px 20px;*/min-height:3.12vw;/*60px;*/}
+    .h2-title{font-size:2.5vw;/*48px;*/}
+    .btn-h-72{height:3.75vw;/*72px;*/}
+    .header-call{padding:0px 1.04vw;/*0px 20px;*/}
+}
+.gallery-slider .slick-arrow:before {
+    display: table;
+    content: '';
+}

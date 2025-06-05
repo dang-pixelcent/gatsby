@@ -1,0 +1,285 @@
+.service-about {
+    padding: 66px 0px;
+    background: #fff;
+}
+
+.service-about .cols-2 {
+    gap: 1.82vw;
+    /*35px;*/
+}
+
+.service-about .cols-2 figure {
+    width: 30.41vw;
+    /*584px;*/
+}
+
+.service-about .cols-2 .col-content {
+    flex: 1;
+}
+
+.website-about .cols-2 p {
+    font-size: 1.14vw;
+}
+
+.service-features {
+    padding: 75px 0px;
+    background: no-repeat bottom/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/bg-service-sec2.jpg');
+}
+
+.service-features .list {
+    margin: 4.16vw 0px 0px;
+    /*80px 0px 0px;*/
+}
+
+.col-content p {
+    color: #000;
+}
+
+.circle-list {
+    gap: 2.55vw calc(100% - (22.55vw * 2));
+    /*49px calc(100% - (433px * 2));*/
+}
+
+.circle-item {
+    max-width: 22.55vw;
+    /*433px;*/
+    position: relative;
+}
+
+.circle-item:after {
+    content: "";
+    display: inline-block;
+
+    width: 4.53vw;
+    /*87px;*/
+    height: 6.09vw;
+    /*114px;*/
+    position: absolute;
+}
+
+.circle-item-2:after,
+.circle-item-3:after {
+    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/arrow-orange.png');
+}
+
+.circle-item-1:after,
+.circle-item-4:after {
+
+    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/arrow-orange-2.png');
+}
+
+.circle-item-1:after {
+    bottom: -20px;
+    right: -5.57vw;
+    /*-107px;*/
+    transform: rotate(-20deg);
+}
+
+.circle-item-2:after {
+    bottom: -20px;
+    left: -5.57vw;
+    /*-107px;*/
+    transform: rotate(200deg);
+}
+
+.circle-item-3:after {
+    top: 3.12vw;
+    /*60px;*/
+    right: -5.57vw;
+    /*-107px;*/
+    transform: rotate(20deg);
+}
+
+.circle-item-4:after {
+    top: 3.12vw;
+    /*60px;*/
+    left: -5.57vw;
+    /*-107px;*/
+    transform: rotate(160deg);
+}
+
+.circle-item figure {
+    width: 100%;
+    height: 5.20vw;
+    /*100px;*/
+    margin-bottom: 12px;
+}
+
+.circle-item figure img {
+    height: 100%;
+}
+
+.circle-item--content {
+    border: 1px dashed #0659A9;
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px 18px;
+}
+
+.circle-item h2 {
+    font-size: 1.35vw;
+    /*26px;*/
+    line-height: 1.24;
+    margin-bottom: 24px;
+    color: #000;
+}
+
+.circle-item--content .content p {
+    font-weight: 300;
+    font-size: 1.04vw;
+    /*20px;*/
+    line-height: 1.5;
+    color: #000;
+}
+
+.sep-curve-line {
+    text-align: center;
+    margin: 18px 0px;
+}
+
+.item-2 figure {
+    order: 2;
+}
+
+.item-2 .content {
+    order: 1;
+}
+
+.sc-why-service {
+    padding: 66px 0px 77px;
+    background: #fff;
+}
+
+.why-service {
+    gap: 4.16vw;
+    /*80px;*/
+}
+
+.why-service figure {
+    margin-bottom: 0px;
+    width: 18.22vw;
+    /*350px;*/
+}
+
+.why-service .why--content {
+    flex: 1;
+}
+
+.why-service .why--content h3 {
+    margin-bottom: 40px;
+    font-size: 1.35vw;
+    /*26px;*/
+    line-height: normal;
+}
+
+.why-service .why--content .content {
+    font-size: 1.35vw;
+    /*26px;*/
+    line-height: normal;
+}
+
+.feature-center {
+    max-width: 11.51vw;
+    /*221px;*/
+    height: 11.51vw;
+    /*221px;*/
+    border-radius: 100%;
+    border: 0.52vw
+        /*10px*/
+        solid #227AD0;
+    background: #0659A9;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.feature-center .center {
+    gap: 4px;
+}
+
+.center-title {
+    font-size: 1.35vw;
+    /*26px;*/
+    line-height: 1.2;
+}
+
+.center-sub-title {
+    font-size: 0.93vw;
+    /*18px;*/
+    line-height: 1.4;
+}
+
+@media only screen and (min-width:768px) and (max-width:922px) {
+    .circle-list {
+        gap: 2.55vw calc(100% - (31.25vw * 2));
+        /*49px calc(100% - (600px * 2));*/
+    }
+
+    .circle-item {
+        max-width: 31.25vw;
+        /*600px;*/
+    }
+}
+
+@media only screen and (max-width:922px) {
+    .service-about {
+        padding: 40px 0px;
+    }
+
+    .website-about .cols-2 .col-content p {
+        font-size: 18px;
+    }
+
+    .circle-item h2 {
+        font-size: 20px;
+    }
+
+    .circle-item--content .content p {
+        font-size: 18px;
+    }
+
+    .why-service figure {
+        max-width: 350px;
+    }
+
+    .why-service .why--content h3 {
+        margin-bottom: 24px;
+        font-size: 20px;
+    }
+
+    .why-service .why--content .content {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width:767.98px) {
+    .service-about .cols-2 figure {
+        width: 100% !important;
+    }
+
+    .feature-center {
+        display: none;
+    }
+
+    .circle-item:after {
+        content: none;
+    }
+
+    .circle-list {
+        gap: 30px;
+    }
+
+    div.circle-item {
+        max-width: 100%;
+    }
+
+    .why-service figure {
+        max-width: 180px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .why-service .why--content {
+        flex: 0 0 100%;
+    }
+}

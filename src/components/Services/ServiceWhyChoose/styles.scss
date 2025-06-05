@@ -1,0 +1,134 @@
+.service-why-choose {
+    padding: 4.89vw 0px 5.98vw;
+    /*94px 0px 115px;*/
+}
+
+.service-why-choose .h2-title {
+    margin-bottom: 14px;
+}
+
+.why-choose-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.56vw;
+    /*30px;*/
+    margin-top: 3.12vw;
+    /*60px;*/
+}
+
+.w-box {
+    width: calc((100% - 3.12vw)/3);
+    /*60px */
+}
+
+.w-box figure {
+    overflow: hidden;
+    height: 14.11vw;
+    /*271px;*/
+    border-radius: 1.04vw;
+    /*20px;*/
+    margin-top: 1.04vw;
+    /*20px;*/
+}
+
+.w-box img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.w-box h3 {
+    margin-bottom: 0px;
+    text-align: center;
+    font-size: 1.25vw;
+    /*24px;*/
+    line-height: 1.5;
+}
+
+.service-why-choose .bottom-content {
+    margin-top: 2.60vw;
+    /*50px;*/
+}
+
+.service-why-choose .bottom-content p {
+    font-size: 1.25vw;
+    /*24px;*/
+    line-height: 1.5;
+}
+
+.service-why-choose .sc-btn {
+    margin-top: 2.60vw;
+    /*50px;*/
+}
+
+.service-why-choose .sc-btn a {
+    max-width: 800px;
+    width: 100%;
+}
+
+/* @media only screen and (max-width:1199.98px)
+{
+    .service-why-choose .desc{font-size:24px !important;}
+    .why-choose-list{gap:24px;margin-top:30px;}
+    .w-box{width:calc((100% - 40px)/3);}
+    .w-box figure{height:auto;}
+    .w-box h3,.service-why-choose .bottom-content p{font-size:20px;line-height:normal;}   
+}*/
+@media only screen and (max-width:921.98px) {
+    .service-why-choose {
+        padding: 40px 0px;
+    }
+
+    .why-choose-list {
+        gap: 30px;
+    }
+
+    .w-box {
+        width: calc((100% - 60px)/3);
+    }
+
+    .w-box h3 {
+        font-size: 18px;
+        line-height: normal;
+    }
+
+    .w-box figure {
+        height: auto;
+        margin-top: 20px;
+        max-height: 154px;
+    }
+
+    .service-why-choose .bottom-content p {
+        font-size: 18px;
+    }
+}
+
+@media only screen and (max-width:767px) {
+    .why-choose-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    div.w-box {
+        width: 100%;
+        max-width: 435px;
+    }
+
+    .w-box figure {
+        max-width: 433px;
+        max-height: unset;
+    }
+
+    .w-box h3 {
+        font-size: 18px;
+        line-height: normal;
+    }
+
+    .service-why-choose .bottom-content p {
+        font-size: 18px;
+    }
+
+    .service-why-choose .sc-btn {
+        margin-top: 24px;
+    }
+}

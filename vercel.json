@@ -1,0 +1,8 @@
+{
+  "buildCommand": "env-cmd -f .env.staging gatsby build",
+  "git": {
+    "deploymentEnabled": {
+      "development": true
+    }
+  }
+}

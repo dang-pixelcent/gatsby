@@ -1,53 +1,17 @@
-# Gatsby
+# Redux
 
-This directory is a brief example of a [Gatsby](https://www.gatsbyjs.org/) app that can be deployed to Vercel with zero configuration.
+https://using-redux.gatsbyjs.org/
 
-> **Note:** SSR, DSG, and API Routes [are now supported](https://vercel.com/changelog/improved-support-for-gatsby-sites). We do not currently support some Gatsby v5 features, including Partial Hydration and the Slice API.
+Gatsby example site that shows use of redux.
 
-## Deploy Your Own
+# Overview
 
-Deploy your own Gatsby project, along with Serverless Functions, with Vercel.
+To use redux in a Gatsby site you'll need to hook in to two of Gatsby's
+extension points.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/gatsby&template=gatsby)
+Once in `wrapRootElement` which runs during Gatsby's server rendering process,
+and once in `wrapRootElement` which is part of Gatsby's browser APIs.
 
-_Live Example: https://gatsby.vercel.app_
-
-## Quickstart
-
-1.  **Create a Gatsby site.**
-
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
-
-    ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
-    ```
-
-2.  **Start developing.**
-
-    Navigate into your new site’s directory and start it up.
-
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
-
-3.  **Open the code and start customizing!**
-
-    Your site is now running at http://localhost:8000!
-
-    Edit `src/pages/index.js` to see your site update in real-time!
-
-4.  **Learn more**
-
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Tutorials](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Guides](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+Check out [`./gatsby-ssr.js`](./gatsby-ssr.js) and
+[`./gatsby-browser.js`](./gatsby-browser.js) to see how this is implemented in
+this example.

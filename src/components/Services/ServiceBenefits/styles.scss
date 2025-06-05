@@ -1,0 +1,158 @@
+.service-benefits {
+    padding: 100px 0px;
+}
+
+.service-benefits .h2-title {
+    margin-bottom: 14px;
+}
+
+.benefit-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.56vw;
+    /*30px;*/
+    margin-top: 2.91vw;
+    /*56px*/
+}
+
+.w-box {
+    width: calc((100% - 3.12vw)/3);
+    /*60px*/
+}
+
+.w-box figure {
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.w-box figure.mx-height-1 {
+    height: 12.86vw;
+    /*247px;*/
+}
+
+.w-box figure.mx-height-2 {
+    height: 14.01vw;
+    /*269px;*/
+}
+
+.w-box .inner {
+    gap: 1.25vw;
+    /*24px;*/
+}
+
+.w-box img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.w-box h3 {
+    margin-bottom: 0px;
+    margin-bottom: 0.62vw;
+    /*12px;*/
+}
+
+.service-benefits .bottom-content {
+    margin-top: 4.37vw;
+    /*84px;*/
+}
+
+.service-benefits .bottom-content p {
+    font-size: 1.35vw;
+    /*26px;*/
+    line-height: 1.5;
+}
+
+.service-benefits .sc-btn {
+    margin-top: 2.60vw;
+    /*50px;*/
+}
+
+.service-benefits .sc-btn.cus-mt-btn {
+    margin-top: 8.22vw;
+    /*158px;*/
+}
+
+.service-benefits .sc-btn a {
+    max-width: 41.66vw;
+    /*800px;*/
+    padding-left: 3.33vw;
+    /*64px;*/
+    padding-right: 3.33vw;
+    /*64px;*/
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+@media only screen and (max-width:922px) {
+    .service-benefits {
+        padding: 40px 0px;
+    }
+
+    .w-box .desc {
+        font-size: 18px !important;
+    }
+
+    .w-box h3,
+    .service-benefits .bottom-content p {
+        font-size: 22px !important;
+    }
+
+    .service-benefits .sc-btn a {
+        max-width: 70%;
+        font-size: 22px;
+    }
+}
+
+@media only screen and (max-width:768px) {
+
+    .benefit-list {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    div.w-box {
+        width: 100%;
+        max-width: 435px;
+    }
+
+    .w-box .inner {
+        gap: 24px;
+    }
+
+    .w-box figure.mx-height-1 {
+        height: 247px;
+    }
+
+    .w-box figure.mx-height-2 {
+        height: 269px;
+    }
+
+    .w-box h3 {
+        font-size: 18px;
+        line-height: normal;
+    }
+
+    .service-benefits .bottom-content,
+    .service-benefits .sc-btn,
+    .service-benefits .sc-btn.cus-mt-btn {
+        margin-top: 24px;
+    }
+
+}
+
+@media only screen and (max-width:544px) {
+    div.w-box {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .service-benefits .sc-btn a {
+        max-width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
