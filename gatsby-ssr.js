@@ -1,12 +1,21 @@
 import React from "react";
 import parse from 'html-react-parser'; // Import thư viện
-const fs = require('fs');
-const path = require('path');
 
 // Hàm để tải tracking codes từ cache
 const loadTrackingCodesFromCache = () => {
-  const trackingCodesCachePath = path.join(process.cwd(), '.cache', 'theme-tracking-codes.json');
+  // Chỉ chạy trong môi trường server-side (Node.js)
+  if (typeof window !== 'undefined') {
+    console.info("[gatsby-ssr] Running in browser environment, skipping cache read");
+    return { header: '', body: '', footer: '' };
+  }
+  
   try {
+    // Sử dụng eval để tránh webpack phân tích static code
+    const fs = eval('require')('fs');
+    const path = eval('require')('path');
+    
+    const trackingCodesCachePath = path.join(process.cwd(), '.cache', 'theme-tracking-codes.json');
+    
     // Dòng log này bạn có thể giữ lại hoặc bỏ đi sau khi debug xong
     if (fs.existsSync(trackingCodesCachePath)) {
       const fileContent = fs.readFileSync(trackingCodesCachePath, 'utf-8');
