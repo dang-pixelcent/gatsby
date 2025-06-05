@@ -1,5 +1,5 @@
 import * as React from "react"
-import { graphql, useStaticQuery } from "gatsby"
+import { graphql, useStaticQuery, Link } from "gatsby"
 // import "./styles.scss"
 
 const Footer = () => {
@@ -44,7 +44,7 @@ const Footer = () => {
                   <section id="text-21" class="widget widget_text">
                     <div class="textwidget">
                       <div class="ast-flex gap-20">
-                        <a class="btn-bg bg-F2771A btn-size-16 fw-600" href={`${WP_BASE_URL}/get-started-b/`}>FREE ASSESSMENT</a>
+                        <Link className="btn-bg bg-F2771A btn-size-16 fw-600" to="/get-started/">FREE ASSESSMENT</Link>
                         <img loading="lazy" decoding="async" class="alignnone size-full wp-image-38" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/a4m-logo.png`} alt="" width="62" height="60" />
                       </div>
                     </div>
@@ -100,7 +100,7 @@ const Footer = () => {
                   <section id="text-19" class="widget widget_text">
                     <div class="textwidget">
                       <div class="ast-flex gap-20">
-                        <a class="btn-bg bg-F2771A btn-size-16 fw-600" href={`${WP_BASE_URL}/get-started/`}>FREE ASSESSMENT</a>
+                        <Link className="btn-bg bg-F2771A btn-size-16 fw-600" to="/get-started/">FREE ASSESSMENT</Link>
                         <img loading="lazy" decoding="async" class="alignnone size-full wp-image-38" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/a4m-logo.png`} alt="" width="62" height="60" />
                       </div>
                     </div>

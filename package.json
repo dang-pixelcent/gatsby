@@ -12,6 +12,7 @@
     "cheerio": "^1.0.0",
     "cross-env": "^7.0.3",
     "dateformat": "^3.0.3",
+    "deps": "^1.0.0",
     "env-cmd": "^10.1.0",
     "gatsby": "next",
     "gatsby-plugin-apollo": "^4.0.3",
@@ -31,6 +32,7 @@
     "lightbox2": "^2.11.5",
     "node-fetch": "^3.3.2",
     "npm": "^11.4.1",
+    "peer": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
@@ -58,7 +60,9 @@
     "cache-seo:prod": "cross-env NODE_ENV=prod node scripts/cache-seo-data.js",
     "clean-seo-cache": "node scripts/clean-seo-cache.js",
     "clean-gatsby": "gatsby clean",
-    "clean-all-cache": "npm run clean-gatsby && npm run clean-seo-cache"
+    "clean-all-cache": "npm run clean-gatsby && npm run clean-seo-cache",
+    "build:stag:with-seo": "npm run cache-seo:stag && npm run build:stag",
+    "build:prod:with-seo": "npm run cache-seo:prod && npm run build:prod"
   },
   "devDependencies": {
     "ajv": "^7.2.4"
