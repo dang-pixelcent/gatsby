@@ -222,7 +222,7 @@ exports.createPages = async ({ actions, graphql }) => {
     const trackingCodesCachePath = path.join(cacheDir, 'theme-tracking-codes.json');
 
     try {
-      // Gatsby tự động tạo thư mục .cache, nhưng bạn có thể kiểm tra nếu muốn
+      // Gatsby tự động tạo thư mục .cache
       if (!fs.existsSync(cacheDir)) {
         fs.mkdirSync(cacheDir, { recursive: true });
       }

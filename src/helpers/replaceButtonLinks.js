@@ -31,7 +31,6 @@ const cheerio = require('cheerio');
 const getTerminalColors = require('../utils/terminalColors')
 
 // Lấy URL của trang web Gatsby từ biến môi trường
-// Cần đảm bảo GATSBY_SITE_URL được định nghĩa trong file .env của bạn
 const SITE_DOMAIN = process.env.REACT_APP_DOMAIN;
 const colors = getTerminalColors();
 

@@ -462,7 +462,7 @@ const Home = ({ pageContext }) => {
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
                                 <Link
-                                    to={extractPathname(practice.button?.url , '#')}
+                                    to={extractPathname(practice.button?.url, '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
                                     {practice.button?.title}
@@ -699,16 +699,16 @@ const Home = ({ pageContext }) => {
                     </section>
                     <section className="section sc-gift-book">
                         <div className="cus-container">
-                            <div className="free-gift-content mobile">
-                                <h2 className="fs-36 fw-800 color-00255B">
-                                    <Link href={giftBook?.link?.url} target="_blank">{giftBook.title}</Link>
-                                </h2>
-                            </div>
                             <div className="sc-free-gift ast-flex">
+                                <div className="free-gift-content display-mobile">
+                                    <h2 className="fs-36 fw-800 color-00255B">
+                                        <Link href={giftBook?.link?.url} target="_blank">{giftBook.title}</Link>
+                                    </h2>
+                                </div>
                                 <figure>
                                     <img src={giftBook?.image?.node?.sourceUrl} alt={giftBook?.image?.node?.altText} width={150} height={180} />
                                 </figure>
-                                <div className="free-gift-content desktop">
+                                <div className="free-gift-content display-desktop">
                                     <h2 className="fs-36 fw-800 color-00255B">
                                         <a href={giftBook?.link?.url} target="_blank">{giftBook.title}</a>
                                     </h2>

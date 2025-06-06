@@ -16,7 +16,6 @@ const loadTrackingCodesFromCache = () => {
     
     const trackingCodesCachePath = path.join(process.cwd(), '.cache', 'theme-tracking-codes.json');
     
-    // Dòng log này bạn có thể giữ lại hoặc bỏ đi sau khi debug xong
     if (fs.existsSync(trackingCodesCachePath)) {
       const fileContent = fs.readFileSync(trackingCodesCachePath, 'utf-8');
       const data = JSON.parse(fileContent);
