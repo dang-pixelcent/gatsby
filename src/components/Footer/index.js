@@ -3,6 +3,12 @@ import { graphql, useStaticQuery, Link } from "gatsby"
 // import "./styles.scss"
 
 const Footer = () => {
+  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
+  const siteBaseUrl = process.env.REACT_APP_BASE_URL
+  if (!WP_BASE_URL) {
+    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
+  }
+
   const data = useStaticQuery(graphql`
     query {
       cms {
@@ -21,12 +27,6 @@ const Footer = () => {
       }
     }
   `);
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-  const siteBaseUrl = process.env.REACT_APP_BASE_URL
-  if (!WP_BASE_URL) {
-    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
-    return null
-  }
 
   return (
     <>

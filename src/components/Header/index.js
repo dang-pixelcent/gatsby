@@ -10,7 +10,6 @@ const Header = ({ to }) => {
   const siteBaseUrl = process.env.REACT_APP_BASE_URL
   if (!WP_BASE_URL) {
     console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
-    return null
   }
   
   const location = useLocation()
