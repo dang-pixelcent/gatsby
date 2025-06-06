@@ -4,10 +4,10 @@ import Layout from "../../components/layout"
 import Slider from "react-slick";
 import HomeBanner from '../../components/HomeBanner'
 import SEO from '../../components/SEO'
-import { Helmet } from "react-helmet"
+import { extractPathname } from "/src/utils/urlUtils"
 
 const Home = ({ pageContext }) => {
-    const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE || 'https://agencysitestaging.mystagingwebsite.com'
+    const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
     const siteBaseUrl = process.env.REACT_APP_BASE_URL
 
     const { seoData } = pageContext
@@ -375,7 +375,7 @@ const Home = ({ pageContext }) => {
                                     </div>
                                     <div className="sc-btn">
                                         <Link
-                                            to={`${patients?.button?.url}`}
+                                            to={extractPathname(patients?.button?.url, '#')}
                                             className="btn-bg bg-F2771A patients-button btn-size-18 fw-700"
                                         >
                                             {patients.button?.title}
@@ -461,13 +461,12 @@ const Home = ({ pageContext }) => {
                                 }
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
-                                <a
-                                    href={practice.button?.url}
-                                    target="_self"
+                                <Link
+                                    to={extractPathname(practice.button?.url , '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
                                     {practice.button?.title}
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </section>
@@ -542,13 +541,13 @@ const Home = ({ pageContext }) => {
                                 </div>
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
-                                <a
-                                    href={howWeCanHelp?.button?.url}
+                                <Link
+                                    to={extractPathname(howWeCanHelp?.button?.url, '#')}
                                     target="_self"
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
                                     {howWeCanHelp?.button?.title}
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </section>
@@ -566,7 +565,7 @@ const Home = ({ pageContext }) => {
                             <div className="testimonials-list">
                                 <div className="item ast-flex">
                                     <div className="col-video">
-                                        <div className="video-inner" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div>
+                                        <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
@@ -601,16 +600,12 @@ const Home = ({ pageContext }) => {
                                 {testimonials.desc}
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
-                                {
-
-                                }
-                                <a
-                                    href={testimonials?.button?.url}
-                                    target="_self"
+                                <Link
+                                    to={extractPathname(testimonials?.button?.url, '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
                                     {testimonials?.button?.title}
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </section>
@@ -641,13 +636,12 @@ const Home = ({ pageContext }) => {
                                 }
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
-                                <a
-                                    href={stats.button?.url}
-                                    target="_self"
+                                <Link
+                                    to={extractPathname(stats.button?.url, '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
                                     {stats.button?.title}
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </section>
@@ -685,7 +679,7 @@ const Home = ({ pageContext }) => {
                                                     />
                                                 </svg>
                                                 <div className="s-box-inner">
-                                                    <a href={item?.link} target="_self">
+                                                    <Link to={extractPathname(item?.link, '#')} target="_self">
                                                         <figure className="mb-0">
                                                             <img src={item.image?.node?.sourceUrl} alt={item.image?.node?.altText} />
                                                         </figure>
@@ -694,7 +688,7 @@ const Home = ({ pageContext }) => {
                                                                 {item.title}
                                                             </h3>
                                                         </div>
-                                                    </a>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -707,7 +701,7 @@ const Home = ({ pageContext }) => {
                         <div className="cus-container">
                             <div className="free-gift-content mobile">
                                 <h2 className="fs-36 fw-800 color-00255B">
-                                    <a href={giftBook?.link?.url} target="_blank">{giftBook.title}</a>
+                                    <Link href={giftBook?.link?.url} target="_blank">{giftBook.title}</Link>
                                 </h2>
                             </div>
                             <div className="sc-free-gift ast-flex">

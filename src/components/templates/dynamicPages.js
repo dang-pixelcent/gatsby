@@ -2,6 +2,7 @@ import { graphql, Link } from "gatsby"
 import React from "react"
 import Layout from "../layout"
 import SEO from "../SEO"
+import InternalLinkInterceptor from '../InternalLinkInterceptor'
 
 
 const Home = ({ data, pageContext }) => {
@@ -170,6 +171,7 @@ const Home = ({ data, pageContext }) => {
       <SEO
         seoData={seoData}
       />
+      <InternalLinkInterceptor />
       <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
     </Layout>
   )

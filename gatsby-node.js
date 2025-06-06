@@ -2,13 +2,23 @@ const path = require(`path`)
 const remark = require(`remark`)
 const html = require(`remark-html`)
 const fs = require('fs')
+const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js'); 
+const useColors = require('./src/hooks/useColors.js')
 
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 })
 
+const colors = useColors()
 const CACHE_DIR = path.join(__dirname, 'cache/seo')
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
+
+if (!SEO_QUERY_URL) {
+  console.error(`${colors.red}REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`)
+  process.exit(1)
+}
+
+
 
 function sanitizeFilename(url) {
   return url.replace(/[^a-z0-9]/gi, '_').toLowerCase()
@@ -21,20 +31,18 @@ function getCachedSeoData(url) {
 
     if (fs.existsSync(filePath)) {
       const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-      console.log(`Using cached SEO data for ${url}`)
+      console.log(`${colors.cyan}Using cached SEO data for ${url}${colors.reset}`)
       return cached.seoData
     }
   } catch (error) {
-    console.error(`Error reading cached SEO data for ${url}:`, error.message)
+    console.error(`${colors.red}Error reading cached SEO data for ${url}: ${error.message}${colors.reset}`)
   }
 
-  console.log(`No cached SEO data found for ${url}`)
+  console.log(`${colors.yellow}No cached SEO data found for ${url}${colors.reset}`)
   return null
 }
 
 exports.createPages = async ({ actions, graphql }) => {
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE || 'https://agencysitestaging.mystagingwebsite.com'
-
   const { data } = await graphql(`
     query {
       cms {
@@ -95,9 +103,9 @@ exports.createPages = async ({ actions, graphql }) => {
   `)
 
   // truyền seo cho home
-  console.log('Getting home SEO data from cache...')
+  console.log(`${colors.cyan}Getting home SEO data from cache...${colors.reset}`)
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`)
-  console.log('Home SEO data result:', homeDataSeo ? 'SUCCESS' : 'FAILED')
+  console.log(`${colors.cyan}Home SEO data result:${colors.reset}`, homeDataSeo ? 'SUCCESS' : 'FAILED')
 
   // Always create home page programmatically
   actions.createPage({
@@ -109,56 +117,56 @@ exports.createPages = async ({ actions, graphql }) => {
   });
 
   // Process pages with cached SEO data
-  console.log('Processing pages...')
+  console.log(`${colors.cyan}Processing pages...${colors.reset}`)
   const pages = data.cms.pages.edges.map(({ node }) => {
-    console.log(`Processing page: ${node.slug}`)
+    console.log(`${colors.cyan}Processing page: ${node.slug}${colors.reset}`)
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
     return {
       ...node,
-      flexibleContentHtml: node.flexibleContentHtml,
+      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
       seoData: seoData,
     }
   })
-  console.log('Pages processing completed')
+  console.log(`${colors.cyan}Pages processing completed${colors.reset}`)
 
   // Process services with cached SEO data
-  console.log('Processing services...')
+  console.log(`${colors.cyan}Processing services...${colors.reset}`)
   const services = data.cms.services.nodes.map(node => {
-    console.log(`Processing service: ${node.slug}`)
+    console.log(`${colors.cyan}Processing service: ${node.slug}${colors.reset}`)
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
     return {
       ...node,
-      flexibleContentHtml: node.flexibleContentHtml,
+      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
       seoData: seoData,
     }
   })
-  console.log('Services processing completed')
+  console.log(`${colors.cyan}Services processing completed${colors.reset}`)
 
   // Process events with cached SEO data
-  console.log('Processing events...')
+  console.log(`${colors.cyan}Processing events...${colors.reset}`)
   const events = data.cms.events.nodes.map(node => {
-    console.log(`Processing event: ${node.slug}`)
+    console.log(`${colors.cyan}Processing event: ${node.slug}${colors.reset}`)
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
     return {
       ...node,
-      flexibleContentHtml: node.flexibleContentHtml,
+      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
       seoData: seoData,
     }
   })
-  console.log('Events processing completed')
+  console.log(`${colors.cyan}Events processing completed${colors.reset}`)
 
   // Process blogs with cached SEO data
-  console.log('Processing blogs...')
+  console.log(`${colors.cyan}Processing blogs...${colors.reset}`)
   const blogs = data.cms.posts.nodes.map(node => {
-    console.log(`Processing blog: ${node.slug}`)
+    console.log(`${colors.cyan}Processing blog: ${node.slug}${colors.reset}`)
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
     return {
       ...node,
-      flexibleContentHtml: node.flexibleContentHtml,
+      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
       seoData: seoData,
     }
   })
-  console.log('Blogs processing completed')
+  console.log(`${colors.cyan}Blogs processing completed${colors.reset}`)
 
   // Create pages
   pages.forEach(page => {
@@ -219,12 +227,12 @@ exports.createPages = async ({ actions, graphql }) => {
         fs.mkdirSync(cacheDir, { recursive: true });
       }
       fs.writeFileSync(trackingCodesCachePath, JSON.stringify(headerFooterData, null, 2));
-      console.log('Theme tracking codes saved to cache:', trackingCodesCachePath);
+      console.log(`${colors.green}Theme tracking codes saved to cache:${colors.reset}`, trackingCodesCachePath);
     } catch (error) {
-      console.error('Error saving theme tracking codes to cache:', error);
+      console.error(`${colors.red}Error saving theme tracking codes to cache:${colors.reset}`, error);
     }
   } else {
-    console.warn('Theme tracking codes (headerFooter) not found in GraphQL response. Skipping cache write.');
+    console.warn(`${colors.yellow}Theme tracking codes (headerFooter) not found in GraphQL response. Skipping cache write.${colors.reset}`);
   }
   // === KẾT THÚC PHẦN THÊM MỚI ===
 }

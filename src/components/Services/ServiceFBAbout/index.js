@@ -3,8 +3,6 @@ import { graphql, useStaticQuery } from "gatsby";
 import './styles.scss';
 
 const ServiceFBAbout = () => {
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE || 'https://agencysitestaging.mystagingwebsite.com'
-  const siteBaseUrl = process.env.REACT_APP_BASE_URL
   const query = useStaticQuery(graphql`
     query {
       cms {
@@ -35,6 +33,12 @@ const ServiceFBAbout = () => {
       }
     }
   `);
+  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
+  const siteBaseUrl = process.env.REACT_APP_BASE_URL
+  if (!WP_BASE_URL) {
+    console.error("REACT_APP_BASE_URL_SITE must be set in .env file");
+    return null;
+  }
 
   const data = query?.cms?.serviceBy?.services?.flexibleContent[1];
 
