@@ -1,5 +1,12 @@
 const path = require(`path`)
 
+//nơi lấy dữ liệu từ GraphQL
+const WPGRAPHQL_URL = process.env.REACT_APP_WPGRAPHQL_URL
+if (!WPGRAPHQL_URL) {
+  console.error(`REACT_APP_WPGRAPHQL_URL must be set in .env file`)
+  process.exit(1)
+}
+
 module.exports = {
   plugins: [
     `gatsby-plugin-sass`,
@@ -15,7 +22,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-graphql',
       options: {
-        url:  process.env.REACT_APP_WPGRAPHQL_URL || 'https://agencysitestaging.mystagingwebsite.com/graphql',
+        url:  WPGRAPHQL_URL,
         fieldName: `cms`,
         typeName: `GraphCMS`,
       }
