@@ -7,7 +7,6 @@ const ServiceWhyChoose = () => {
   const siteBaseUrl = process.env.REACT_APP_BASE_URL
   if (!WP_BASE_URL || !siteBaseUrl) {
     console.error("REACT_APP_BASE_URL_SITE and REACT_APP_BASE_URL must be set in .env file");
-    return null;
   }
   return (
     <section className="service-why-choose" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2024/12/fb-ads-sec3.jpg')` }}>

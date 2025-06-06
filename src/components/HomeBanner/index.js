@@ -3,6 +3,11 @@ import { graphql, useStaticQuery, Link } from "gatsby"
 import { extractPathname } from "/src/utils/urlUtils"
 
 const HomeBanner = () => {
+  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
+  if (!WP_BASE_URL) {
+    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
+  }
+  // const siteBaseUrl = process.env.REACT_APP_BASE_URL
   const data = useStaticQuery(graphql`
     query {
       cms {
@@ -67,12 +72,6 @@ const HomeBanner = () => {
       }
     }
   `);
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-  if (!WP_BASE_URL) {
-    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
-    return null
-  }
-  // const siteBaseUrl = process.env.REACT_APP_BASE_URL
 
   const content = data.cms.pageBy.template.homeContent.flexibleContent[0]
 
@@ -128,6 +127,7 @@ const HomeBanner = () => {
                 );
               })
             }
+
           </div>
           <div className="box-desktop">
             <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" class="lazyloaded" decoding="async" nitro-lazy-empty="" id="NzgwOjExMQ==-1" />
