@@ -1,19 +1,19 @@
 const axios = require('axios')
 const fs = require('fs')
 const path = require('path')
-const useColors = require('../src/hooks/useColors')
+const getTerminalColors = require('../src/utils/terminalColors.js')
 
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 })
 
 // ANSI color codes
-const colors = useColors()
+const colors = getTerminalColors()
 
-const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
+const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
 if (!WP_BASE_URL || !SEO_QUERY_URL) {
-  console.error(`${colors.red}REACT_APP_BASE_URL_SITE and REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`)
+  console.error(`${colors.red}GATSBY_WP_BASE_URL and REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`)
   process.exit(1)
 }
 const CACHE_DIR = path.join(__dirname, '../cache/seo')

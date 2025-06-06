@@ -3,13 +3,13 @@ const remark = require(`remark`)
 const html = require(`remark-html`)
 const fs = require('fs')
 const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js'); 
-const useColors = require('./src/hooks/useColors.js')
+const getTerminalColors = require('./src/utils/terminalColors.js')
 
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 })
 
-const colors = useColors()
+const colors = getTerminalColors()
 const CACHE_DIR = path.join(__dirname, 'cache/seo')
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
 

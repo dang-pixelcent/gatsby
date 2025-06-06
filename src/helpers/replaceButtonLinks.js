@@ -1,7 +1,7 @@
 // const cheerio = require('cheerio');
 
 // const OLD_DOMAIN = 'https://agencysitestaging.mystagingwebsite.com';
-// const NEW_DOMAIN = process.env.REACT_APP_BASE_URL;
+// const NEW_DOMAIN = process.env.GATSBY_SITE_URL;
 
 // /**
 //  * Thay domain trong các thẻ <a>, KHÔNG đụng tới <img>
@@ -28,12 +28,12 @@
 
 // src/helpers/replaceButtonLinks.js
 const cheerio = require('cheerio');
-const useColors = require('../hooks/useColors');
+const getTerminalColors = require('../utils/terminalColors')
 
 // Lấy URL của trang web Gatsby từ biến môi trường
-// Cần đảm bảo REACT_APP_BASE_URL được định nghĩa trong file .env của bạn
+// Cần đảm bảo GATSBY_SITE_URL được định nghĩa trong file .env của bạn
 const SITE_DOMAIN = process.env.REACT_APP_DOMAIN;
-const colors = useColors(); 
+const colors = getTerminalColors();
 
 if (!SITE_DOMAIN) {
   console.error(`${colors.red}REACT_APP_DOMAIN must be set in .env file${colors.reset}`);

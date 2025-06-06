@@ -3,11 +3,8 @@ import { graphql, useStaticQuery, Link } from "gatsby"
 import { extractPathname } from "/src/utils/urlUtils"
 
 const HomeBanner = () => {
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-  if (!WP_BASE_URL) {
-    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
-  }
-  // const siteBaseUrl = process.env.REACT_APP_BASE_URL
+  const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+  // const siteBaseUrl = process.env.GATSBY_SITE_URL
   const data = useStaticQuery(graphql`
     query {
       cms {

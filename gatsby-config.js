@@ -31,6 +31,6 @@ module.exports = {
   siteMetadata: {
     title: `Gatsby Redux`,
     // description: "Professional marketing services for wellness clinics and healthcare providers. Top Google rankings for keywords your ideal patients are already searching.",
-    // siteUrl: process.env.REACT_APP_BASE_URL || "http://localhost:8000",
+    // siteUrl: process.env.GATSBY_SITE_URL || "http://localhost:8000",
   },
 }

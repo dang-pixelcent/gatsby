@@ -6,11 +6,8 @@ import { useLocation } from "@reach/router"
 
 const Header = ({ to }) => {
   // Sử dụng biến môi trường cho WordPress URL
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-  const siteBaseUrl = process.env.REACT_APP_BASE_URL
-  if (!WP_BASE_URL) {
-    console.error("REACT_APP_BASE_URL_SITE must be set in .env file")
-  }
+  const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+  const siteBaseUrl = process.env.GATSBY_SITE_URL
   
   const location = useLocation()
   const isActive = location.pathname === to

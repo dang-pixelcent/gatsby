@@ -3,11 +3,8 @@ import { graphql, useStaticQuery } from "gatsby";
 import './styles.scss';
 
 const ServiceWhyChoose = () => {
-  const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-  const siteBaseUrl = process.env.REACT_APP_BASE_URL
-  if (!WP_BASE_URL || !siteBaseUrl) {
-    console.error("REACT_APP_BASE_URL_SITE and REACT_APP_BASE_URL must be set in .env file");
-  }
+  const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+  const siteBaseUrl = process.env.GATSBY_SITE_URL
   return (
     <section className="service-why-choose" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2024/12/fb-ads-sec3.jpg')` }}>
       <div className="cus-container">

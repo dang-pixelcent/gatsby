@@ -7,8 +7,8 @@ import SEO from '../../components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
 
 const Home = ({ pageContext }) => {
-    const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
-    const siteBaseUrl = process.env.REACT_APP_BASE_URL
+    const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+    const siteBaseUrl = process.env.GATSBY_SITE_URL
 
     const { seoData } = pageContext
 
