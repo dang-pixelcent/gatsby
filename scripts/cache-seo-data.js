@@ -1,14 +1,14 @@
 const axios = require('axios')
 const fs = require('fs')
 const path = require('path')
-const useColors = require('../src/hooks/useColors')
+const getTerminalColors = require('../src/utils/terminalColors.js')
 
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 })
 
 // ANSI color codes
-const colors = useColors()
+const colors = getTerminalColors()
 
 const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
