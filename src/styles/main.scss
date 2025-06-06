@@ -5289,13 +5289,13 @@ blockquote:before {
   gap: 60px;
 }
 
-// .video-inner {
-//   position: relative;
-//   padding-top: 56.25%;
-//   height: 100%;
-// }
+.video-inner-home {
+  position: relative;
+  padding-top: 56.25%;
+  height: 100%;
+}
 
-.video-inner iframe {
+.video-inner-home iframe {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -5494,7 +5494,7 @@ blockquote:before {
   }
 
   .boxies .box,
-  .video-inner iframe,
+  .video-inner-home iframe,
   .testi-content {
     border-radius: 20px;
     /*20px;*/
