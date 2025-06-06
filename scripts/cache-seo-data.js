@@ -1,22 +1,14 @@
 const axios = require('axios')
 const fs = require('fs')
 const path = require('path')
+const useColors = require('../src/hooks/useColors')
 
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 })
 
 // ANSI color codes
-const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
-}
+const colors = useColors()
 
 const WP_BASE_URL = process.env.REACT_APP_BASE_URL_SITE
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
