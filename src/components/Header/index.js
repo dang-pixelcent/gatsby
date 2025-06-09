@@ -4,13 +4,13 @@ import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { useLocation } from "@reach/router"
 
-const Header = ({ to, isMobileMenuOpen, setMobileMenuOpen }) => {
+const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
   // Sử dụng biến môi trường cho WordPress URL
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
 
-  const location = useLocation()
-  const isActive = location.pathname === to
+  const location = useLocation();
+  const isActive = location.pathname === siteBaseUrl;
 
   React.useEffect(() => {
     const menuTriggers = document.querySelectorAll(".mega-menu-item");
