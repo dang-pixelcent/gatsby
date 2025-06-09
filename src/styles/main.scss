@@ -3212,6 +3212,13 @@ h6,
   padding-right: 20px;
 }
 
+#masthead .ast-mobile-header-wrap .ast-primary-header-bar,
+#masthead .ast-mobile-header-wrap .ast-below-header-bar,
+#masthead .ast-mobile-header-wrap .ast-above-header-bar {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .ast-header-break-point .ast-primary-header-bar {
   border-bottom-width: 0px;
   border-bottom-color: #eaeaea;

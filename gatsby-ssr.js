@@ -59,7 +59,18 @@ export const onRenderBody = ({
   setHeadComponents,
   setPreBodyComponents,
   setPostBodyComponents,
+  setBodyAttributes
 }, pluginOptions) => {
+
+  // ============ADD CLASS FOR BODY================
+  setBodyAttributes({
+    itemType: "https://schema.org/WebPage",
+    itemScope: "itemscope",
+    className: "ast-theme-transparent-header", //lazyloaded menu-fixed
+    // className: "wp-singular page-template page-template-template-service-category page-template-template-service-category-php page page-id-3432 wp-custom-logo wp-theme-astra wp-child-theme-agencymarketing mega-menu-primary ast-plain-container ast-no-sidebar astra-4.11.1 ast-single-post ast-inherit-site-logo-transparent ast-theme-transparent-header ast-hfb-header ast-sticky-main-shrink ast-sticky-above-shrink ast-sticky-below-shrink ast-sticky-header-shrink ast-inherit-site-logo-sticky ast-primary-sticky-enabled ast-normal-title-enabled astra-addon-4.11.0 ast-header-break-point",
+    style: {}
+  });
+  // ============================
 
   const trackingCodes = loadTrackingCodesFromCache();
 
