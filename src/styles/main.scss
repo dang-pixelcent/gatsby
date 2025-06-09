@@ -5940,11 +5940,11 @@ blockquote:before {
 }
 
 .specialty-list .slick-prev {
-  left: 0px;
+  left: 0px !important;
 }
 
 .specialty-list .slick-next {
-  right: 0px;
+  right: 0px !important;
 }
 
 @media only screen and (max-width:922px) {
