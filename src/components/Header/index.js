@@ -4,13 +4,13 @@ import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { useLocation } from "@reach/router"
 
-const Header = ({ to }) => {
+const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
   // Sử dụng biến môi trường cho WordPress URL
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
-  
-  const location = useLocation()
-  const isActive = location.pathname === to
+
+  const location = useLocation();
+  const isActive = location.pathname === siteBaseUrl;
 
   React.useEffect(() => {
     const menuTriggers = document.querySelectorAll(".mega-menu-item");
@@ -82,6 +82,176 @@ const Header = ({ to }) => {
   `);
   const content = data.cms.themeSettings
   const menu = data.cms.menuItems
+  const logoUrl = content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl;
+  const logoAlt = content?.themeOptionsSettings?.defaultLogo?.node?.altText || "Wellness Clinic Marketing";
+
+  // === FIXED HEADER ===
+  React.useEffect(() => {
+    const headerElement = document.getElementById('masthead');
+    if (!headerElement) return;
+
+    // Định nghĩa ngưỡng breakpoint cho mobile
+    const MOBILE_BREAKPOINT = 921;
+
+    // Hàm để kiểm tra và cập nhật trạng thái "dính"
+    const handleScroll = () => {
+      const isDesktop = window.innerWidth > MOBILE_BREAKPOINT; 
+
+      if (isDesktop) {
+        // Logic cho desktop
+        if (window.scrollY > 100) {
+          // Thêm class 'menu-fixed' nếu cuộn xuống hơn 100px
+          headerElement.classList.add('menu-fixed');
+        } else if (window.scrollY <= 0) {
+          headerElement.classList.remove('menu-fixed');
+        }
+        // Lưu ý: Nếu 0 < window.scrollY <= 100 và 'menu-fixed' đang tồn tại, nó sẽ được giữ lại.
+      } else {
+        // Logic gốc cho mobile (ngưỡng là 0 cho cả việc thêm và xóa class)
+        if (window.scrollY > (isMobileMenuOpen ? 200 : 0)) {
+          headerElement.classList.add('menu-fixed');
+        } else if (window.scrollY <= 0) {
+          headerElement.classList.remove('menu-fixed');
+        }
+      }
+    };
+
+    // Gắn sự kiện scroll và resize
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll); // Thêm resize để xử lý khi xoay màn hình hoặc thay đổi kích thước cửa sổ
+
+    // Chạy hàm một lần lúc ban đầu để kiểm tra trạng thái
+    handleScroll();
+
+    // Hàm dọn dẹp để gỡ bỏ cả hai sự kiện
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [isMobileMenuOpen]); // Mảng rỗng [] đảm bảo useEffect chỉ chạy một lần
+  // === END ===
+
+
+  // === BẮT ĐẦU PHẦN THÊM MỚI CHO TOGGLE MENU ===
+  // === XỬ LÝ MỞ/ĐÓNG MENU VÀ SUB-MENU ===
+  React.useEffect(() => {
+    const mainToggle = document.querySelector('.menu-toggle.main-header-menu-toggle');
+    const mobileHeaderContent = document.querySelector('.ast-mobile-header-content');
+    const mainNav = document.querySelector('#ast-mobile-site-navigation');
+    const allSubMenuToggles = mainNav ? mainNav.querySelectorAll('.ast-menu-toggle') : [];
+
+    if (!mainToggle || !mobileHeaderContent || !mainNav) {
+      return;
+    }
+
+    const handleMainMenuToggle = () => {
+      setMobileMenuOpen(prevState => !prevState);
+    };
+
+    mainToggle.addEventListener('click', handleMainMenuToggle);
+
+    const handleSubMenuToggle = (event) => {
+      event.preventDefault();
+      const parentMenuItem = event.currentTarget.closest('.menu-item-has-children');
+      if (!parentMenuItem) return;
+
+      const subMenu = parentMenuItem.querySelector('.sub-menu');
+      if (!subMenu) return;
+
+      const isExpanded = parentMenuItem.classList.toggle('ast-submenu-expanded');
+      event.currentTarget.setAttribute('aria-expanded', isExpanded.toString());
+      subMenu.style.display = isExpanded ? 'block' : 'none';
+    };
+
+    allSubMenuToggles.forEach(toggle => {
+      toggle.addEventListener('click', handleSubMenuToggle);
+    });
+
+    // Cập nhật DOM dựa trên trạng thái menu chính
+    if (isMobileMenuOpen) {
+      mainToggle.classList.add('toggled');
+      mainNav.classList.add('toggled');
+      mobileHeaderContent.style.display = 'block';
+    } else {
+      mainToggle.classList.remove('toggled');
+      mainNav.classList.remove('toggled');
+      mobileHeaderContent.style.display = 'none';
+
+      // === BẮT ĐẦU PHẦN THÊM MỚI: RESET SUB-MENU ===
+      // Khi menu chính đóng, tìm tất cả các sub-menu đang mở và đóng chúng lại.
+      const openedSubMenus = mainNav.querySelectorAll('.ast-submenu-expanded');
+      openedSubMenus.forEach(item => {
+        item.classList.remove('ast-submenu-expanded');
+        const subMenu = item.querySelector('.sub-menu');
+        const toggleButton = item.querySelector('.ast-menu-toggle');
+        if (subMenu) {
+          subMenu.style.display = 'none';
+        }
+        if (toggleButton) {
+          toggleButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+      // === KẾT THÚC PHẦN THÊM MỚI ===
+    }
+
+    // Hàm dọn dẹp
+    return () => {
+      mainToggle.removeEventListener('click', handleMainMenuToggle);
+      allSubMenuToggles.forEach(toggle => {
+        toggle.removeEventListener('click', handleSubMenuToggle);
+      });
+    };
+  }, [isMobileMenuOpen]);
+  // === END ===
+
+  // 2. useEffect để xử lý việc click và thêm/xóa class
+  // React.useEffect(() => {
+  //   const mobileMenuToggle = document.querySelector('.menu-toggle.main-header-menu-toggle');
+  //   const mobileHeaderBarNav = document.querySelector('.main-header-bar-navigation');
+  //   const mobileHeaderContent = document.querySelector('.ast-mobile-header-content');
+  //   const mobileNavToggle = document.querySelector('.site-navigation');
+  //   const mobileUl = document.querySelector('.main-header-menu');
+
+  //   if (!mobileMenuToggle || !mobileHeaderContent) {
+  //     return;
+  //   }
+
+  //   // Hàm xử lý khi nhấn nút
+  //   const handleToggleClick = () => {
+  //     setMobileMenuOpen(prevState => !prevState);
+  //   };
+
+  //   mobileMenuToggle.addEventListener('click', handleToggleClick);
+
+  //   // Cập nhật DOM dựa trên trạng thái `isMobileMenuOpen`
+  //   if (isMobileMenuOpen) {
+  //    mobileHeaderContent.style.display = 'block';
+  //     mobileMenuToggle.classList.add('toggled');
+  //     mobileMenuToggle.setAttribute('aria-expanded', 'true');
+  //     mobileUl.setAttribute('aria-expanded', 'true'); // Hoặc thêm class active để hiển thị
+  //     mobileHeaderBarNav.style.display = 'block'; // Hoặc thêm class active để hiển thị
+  //     mobileHeaderBarNav.classList.add('toggle-on'); // Thêm class toggle-on để hiển thị menu
+  //     mobileNavToggle.classList.add('toggled'); // Thêm class toggled cho phần điều hướng
+  //   } else {
+  //     mobileHeaderContent.style.display = 'none';
+  //     mobileMenuToggle.classList.remove('toggled');
+  //     mobileMenuToggle.setAttribute('aria-expanded', 'false');
+  //     mobileUl.setAttribute('aria-expanded', 'false');
+  //     mobileHeaderBarNav.style.display = 'none';
+  //     mobileHeaderBarNav.classList.remove('toggle-on'); // Xóa class toggle-on để ẩn menu
+  //     mobileNavToggle.classList.remove('toggled'); // Xóa class toggled cho phần điều hướng
+  //   }
+
+  //   // Hàm dọn dẹp
+  //   return () => {
+  //     mobileMenuToggle.removeEventListener('click', handleToggleClick);
+  //   };
+  // }, [isMobileMenuOpen]); // Chạy lại mỗi khi trạng thái isMobileMenuOpen thay đổi
+
+  // === KẾT THÚC PHẦN THÊM MỚI ===
+
+
+
   return (
     <header className="site-header header-main-layout-1 ast-primary-menu-enabled ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline" id="masthead" itemType="https://schema.org/WPHeader" itemScope="itemscope" itemID="#masthead">
       <div id="ast-desktop-header" data-toggle-type="dropdown" className="lazyloaded">
@@ -113,7 +283,7 @@ const Header = ({ to }) => {
                         </div>
                         <ul id="mega-menu-primary" className="mega-menu max-mega-menu mega-menu-horizontal" data-event="hover_intent" data-effect="fade_up" data-effect-speed={200} data-effect-mobile="disabled" data-effect-speed-mobile={0} data-mobile-force-width="false" data-second-click="go" data-document-click="collapse" data-vertical-behaviour="standard" data-breakpoint={768} data-unbind="true" data-mobile-state="collapse_all" data-mobile-direction="vertical" data-hover-intent-timeout={300} data-hover-intent-interval={100}>
                           <li className="mega-full-w-columns mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-menu-grid mega-align-bottom-left mega-menu-grid mega-menu-item-31 full-w-columns" id="mega-menu-item-31">
-                            <a className="mega-menu-link" href="#" aria-expanded="false" tabIndex={0}>Services<span className="mega-indicator" aria-hidden="true" /></a>
+                            <Link className="mega-menu-link" to="/service" aria-expanded="false" tabIndex={0}>Services<span className="mega-indicator" aria-hidden="true" /></Link>
                             <ul className="mega-sub-menu" role="presentation">
                               <li className="mega-menu-row" id="mega-menu-31-0">
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
@@ -244,7 +414,7 @@ const Header = ({ to }) => {
                             </ul>
                           </li>
                           <li className="mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-menu-grid mega-align-bottom-left mega-menu-grid mega-menu-item-1641" id="mega-menu-item-1641">
-                            <a className="mega-menu-link" href="#" aria-expanded="false" tabIndex={0}>Expertise<span className="mega-indicator" aria-hidden="true" /></a>
+                            <Link className="mega-menu-link" to="/expertise" aria-expanded="false" tabIndex={0}>Expertise<span className="mega-indicator" aria-hidden="true" /></Link>
                             <ul className="mega-sub-menu" role="presentation">
                               <li className="mega-menu-row mega-menu-cols2-style menu-cols2-style" id="mega-menu-1641-0">
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
@@ -306,7 +476,7 @@ const Header = ({ to }) => {
                             </ul>
                           </li>
                           <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-menu-item-2155" id="mega-menu-item-2155">
-                            <Link className="mega-menu-link" to={`/our-method-mars/`}  tabIndex={0}>Method</Link>
+                            <Link className="mega-menu-link" to={`/our-method-mars/`} tabIndex={0}>Method</Link>
                           </li>
                           <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-menu-item-has-children mega-align-bottom-left mega-menu-flyout mega-menu-item-372" id="mega-menu-item-372">
                             <Link className="mega-menu-link" to={`/about-us`} aria-expanded="false" tabIndex={0}>
@@ -403,7 +573,24 @@ const Header = ({ to }) => {
             <div className="ast-builder-grid-row ast-builder-grid-row-has-sides ast-builder-grid-row-no-center">
               <div className="site-header-primary-section-left site-header-section ast-flex site-header-section-left">
                 <div className="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
-                  <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope"> <span className="site-logo-img"><a href={`/`} className="custom-logo-link" rel="home"><img width={250} height={72} alt="Wellness Clinic Marketing" sizes="(max-width: 250px) 100vw, 250px" nitro-lazy-srcset="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png 250w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-300x87.png 300w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-768x222.png 768w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png 1038w" nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png" className="custom-logo nitro-lazy" decoding="async" nitro-lazy-empty id="NTgxOjgyOA==-1" src="data:image/svg+xml;nitro-empty-id=NTgxOjgyOA==-1;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjUwIDcyIiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjcyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" /></a></span> </div>
+                  {/* <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope"> <span className="site-logo-img"><Link to="/" className="custom-logo-link" rel="home"><img width={250} height={72} alt="Wellness Clinic Marketing" sizes="(max-width: 250px) 100vw, 250px" nitro-lazy-srcset="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png 250w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-300x87.png 300w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-768x222.png 768w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png 1038w" nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png" className="custom-logo nitro-lazy" decoding="async" nitro-lazy-empty id="NTgxOjgyOA==-1" src="data:image/svg+xml;nitro-empty-id=NTgxOjgyOA==-1;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjUwIDcyIiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjcyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" /></Link></span> </div> */}
+                  <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
+                    <span className="site-logo-img">
+                      <Link to="/" className="custom-logo-link" rel="home">
+                        {/* Sử dụng dữ liệu động từ GraphQL */}
+                        <img
+                          width={250}
+                          height={72}
+                          src={content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl}
+                          className="custom-logo"
+                          alt={logoAlt}
+                          decoding="async"
+                          srcSet={`${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-250x72.png 250w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-300x87.png 300w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-768x222.png 768w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png 1038w`}
+                        // sizes="(max-width: 250px) 100vw, 250px"
+                        />
+                      </Link>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div className="site-header-primary-section-right site-header-section ast-flex ast-grid-right-section">

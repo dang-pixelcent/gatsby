@@ -34,19 +34,29 @@ const Home = ({ data, pageContext }) => {
     };
   }, []);
 
+ // useEffect để xử lý FAQ
   React.useEffect(() => {
     const faqList = document.querySelectorAll('.faq-item');
-    faqList.forEach((item, index) => {
-      faqList[index].addEventListener('click', function () {
-        if (faqList[index].classList.contains('active')) {
-          faqList[index].classList.remove('active');
-        } else {
-          faqList[index].classList.add('active');
-        }
-      });
+    
+    // Hàm xử lý click
+    const handleFaqClick = (event) => {
+      // Dùng currentTarget để đảm bảo chúng ta đang xử lý đúng phần tử được gắn sự kiện
+      const faqItem = event.currentTarget;
+      faqItem.classList.toggle('active');
+    };
 
+    // Gắn sự kiện cho mỗi item
+    faqList.forEach(item => {
+      item.addEventListener('click', handleFaqClick);
     });
-  }, []);
+
+    // Hàm dọn dẹp để gỡ bỏ sự kiện khi component bị hủy
+    return () => {
+      faqList.forEach(item => {
+        item.removeEventListener('click', handleFaqClick);
+      });
+    };
+  }, [flexibleContentHtml]);
 
   React.useEffect(() => {
     const styles = [

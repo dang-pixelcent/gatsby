@@ -2,7 +2,8 @@ const path = require(`path`)
 const remark = require(`remark`)
 const html = require(`remark-html`)
 const fs = require('fs')
-const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js'); 
+const cheerio = require('cheerio')
+const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js');
 const getTerminalColors = require('./src/utils/terminalColors.js')
 
 require('dotenv').config({
@@ -13,13 +14,14 @@ const colors = getTerminalColors()
 const CACHE_DIR = path.join(__dirname, 'cache/seo')
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
 
+// check seo query url
 if (!SEO_QUERY_URL) {
   console.error(`${colors.red}REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`)
   process.exit(1)
 }
 
 
-
+// Tạo thư mục cache nếu chưa tồn tại
 function sanitizeFilename(url) {
   return url.replace(/[^a-z0-9]/gi, '_').toLowerCase()
 }
@@ -40,6 +42,18 @@ function getCachedSeoData(url) {
 
   console.log(`${colors.yellow}No cached SEO data found for ${url}${colors.reset}`)
   return null
+}
+
+/**
+ * Hàm bổ sung: Tự động loại bỏ tất cả các thẻ <script> khỏi một chuỗi HTML.
+ * @param {string} html - Chuỗi HTML đầu vào.
+ * @returns {string} - Chuỗi HTML đã được làm sạch.
+ */
+function removeScriptTags(html = '') {
+  if (!html) return '';
+  const $ = cheerio.load(html);
+  $('script').remove(); // Tìm và xóa tất cả thẻ <script>
+  return $.html();
 }
 
 exports.createPages = async ({ actions, graphql }) => {
@@ -116,57 +130,34 @@ exports.createPages = async ({ actions, graphql }) => {
     },
   });
 
-  // Process pages with cached SEO data
-  console.log(`${colors.cyan}Processing pages...${colors.reset}`)
-  const pages = data.cms.pages.edges.map(({ node }) => {
-    console.log(`${colors.cyan}Processing page: ${node.slug}${colors.reset}`)
-    const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
-    return {
-      ...node,
-      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
-      seoData: seoData,
-    }
-  })
-  console.log(`${colors.cyan}Pages processing completed${colors.reset}`)
+  // Hàm xử lý từng node để làm sạch HTML và lấy SEO data
+  const processNode = (node) => {
+    const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`);
+    // Chạy cả hai hàm làm sạch
+    const cleanedHtml = removeScriptTags(replaceInternalLinks(node.flexibleContentHtml));
 
-  // Process services with cached SEO data
-  console.log(`${colors.cyan}Processing services...${colors.reset}`)
-  const services = data.cms.services.nodes.map(node => {
-    console.log(`${colors.cyan}Processing service: ${node.slug}${colors.reset}`)
-    const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
     return {
       ...node,
-      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
+      flexibleContentHtml: cleanedHtml, // Sử dụng HTML đã được làm sạch
       seoData: seoData,
-    }
-  })
-  console.log(`${colors.cyan}Services processing completed${colors.reset}`)
+    };
+  };
 
-  // Process events with cached SEO data
-  console.log(`${colors.cyan}Processing events...${colors.reset}`)
-  const events = data.cms.events.nodes.map(node => {
-    console.log(`${colors.cyan}Processing event: ${node.slug}${colors.reset}`)
-    const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
-    return {
-      ...node,
-      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
-      seoData: seoData,
-    }
-  })
-  console.log(`${colors.cyan}Events processing completed${colors.reset}`)
+  console.log(`${colors.cyan}Processing pages...${colors.reset}`);
+  const pages = data.cms.pages.edges.map(({ node }) => processNode(node));
+  console.log(`${colors.cyan}Pages processing completed${colors.reset}`);
 
-  // Process blogs with cached SEO data
-  console.log(`${colors.cyan}Processing blogs...${colors.reset}`)
-  const blogs = data.cms.posts.nodes.map(node => {
-    console.log(`${colors.cyan}Processing blog: ${node.slug}${colors.reset}`)
-    const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`)
-    return {
-      ...node,
-      flexibleContentHtml: replaceInternalLinks(node.flexibleContentHtml),
-      seoData: seoData,
-    }
-  })
-  console.log(`${colors.cyan}Blogs processing completed${colors.reset}`)
+  console.log(`${colors.cyan}Processing services...${colors.reset}`);
+  const services = data.cms.services.nodes.map(processNode);
+  console.log(`${colors.cyan}Services processing completed${colors.reset}`);
+
+  console.log(`${colors.cyan}Processing events...${colors.reset}`);
+  const events = data.cms.events.nodes.map(processNode);
+  console.log(`${colors.cyan}Events processing completed${colors.reset}`);
+
+  console.log(`${colors.cyan}Processing blogs...${colors.reset}`);
+  const blogs = data.cms.posts.nodes.map(processNode);
+  console.log(`${colors.cyan}Blogs processing completed${colors.reset}`);
 
   // Create pages
   pages.forEach(page => {
