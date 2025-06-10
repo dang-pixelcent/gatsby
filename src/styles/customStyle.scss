@@ -426,9 +426,15 @@ footer a:hover{color:#F2771A;}
 .ast-footer-copyright p{color:#000;}
 /* General Slick slider */
 .slick-arrow{background:none;padding:0px;border:0px solid;}
-.slick-dots{list-style:none;display:flex;gap:0.52vw;/*10px;*/margin:20px 0px 0px;justify-content: center;align-items:center;}
-.slick-dots button{padding:0px;text-indent:-9999px;height:0.41vw;/*8px;*/width:0.41vw;/*8px;*/border-radius:50%;background-color:#2C2C2C;}
-.slick-active button{background-color:#F2771A;}
+.slick-dots{list-style:none;display:flex !important;gap:0.52vw;/*10px;*/margin:20px 0px 0px;justify-content: center;align-items:center;
+    position: static;    // Hoặc 'relative' nếu cần, thay vì 'absolute' mặc định
+    bottom: auto;        // Reset giá trị 'bottom'
+    width: auto;         // Reset 'width: 100%' mặc định
+    padding: 0;          // Reset 'padding' mặc định
+    text-align: center;  // Mặc dù flex xử lý căn giữa, việc đặt lại không thừa
+}
+.slick-dots button{padding: 0px !important;;text-indent:-9999px;height:.41vw !important;/*8px;*/width:.41vw !important;/*8px;*/border-radius:50%;background-color:#2C2C2C !important;}
+.slick-active button{background-color:#F2771A !important;}
 .footer-widget-area[data-section="sidebar-widgets-footer-widget-2"].footer-widget-area-inner #text-21{display:none;}
 @media only screen and (max-width:922px)
 {
@@ -439,9 +445,18 @@ footer a:hover{color:#F2771A;}
     .section{padding:40px 0px;}
     .btn-bg{padding:8px 20px;}
     .slick-dots{gap:10px;}
-    .slick-dots button{width:8px;height:8px;}
+    .slick-dots button{width:8px !important;height:8px !important;}
     .ast-builder-grid-row-container.ast-builder-grid-row-tablet-3-equal .ast-builder-grid-row{
         grid-template-columns: 1fr;
+    }
+    .slick-dots li {
+        position: relative;
+        display: inline-block;
+        width: 8px;
+        height: 23px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
     }
     .ast-builder-grid-row-container.ast-builder-grid-row-mobile-full .ast-builder-grid-row,
     .site-below-footer-wrap[data-section="section-below-footer-builder"] .ast-builder-grid-row
@@ -462,6 +477,15 @@ footer a:hover{color:#F2771A;}
     .schedule .item div.day{flex:0 0 148px;font-size:16px;}
     footer *,.footer-address a,.btn-size-16{font-size:16px;}
     .socials{gap:10px;}
+}
+.slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: 4px;
+    height: 23px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
 }
 .site-header-focus-item.ast-header-html-1{display:none;}
 .cus_header_call_text .header-call{padding:0px 1.04vw;/*0px 20px;*/gap:5px;}
@@ -558,6 +582,12 @@ footer a:hover{color:#F2771A;}
         height:58px;
     }
 }
+
+.lc_chat-widget-bubble {
+  /* Di chuyển nút bấm lên trên */
+  bottom: 70px !important; 
+}
+
 @media only screen and (max-width:768px)
 {
     .page-id-1303 .banner{padding:0px;}

@@ -3,10 +3,11 @@ import React from "react"
 import Layout from "../layout"
 import SEO from "../SEO"
 import InternalLinkInterceptor from '../InternalLinkInterceptor'
+import FormPortal from "../FormPortal"
 
 
 const Home = ({ data, pageContext }) => {
-  const { flexibleContentHtml, uri, seoData } = pageContext
+  const { flexibleContentHtml, uri, slug, seoData } = pageContext
 
   React.useEffect(() => {
     // Tạo các script tag mới và thêm vào DOM
@@ -34,10 +35,10 @@ const Home = ({ data, pageContext }) => {
     };
   }, []);
 
- // useEffect để xử lý FAQ
+  // useEffect để xử lý FAQ
   React.useEffect(() => {
     const faqList = document.querySelectorAll('.faq-item');
-    
+
     // Hàm xử lý click
     const handleFaqClick = (event) => {
       // Dùng currentTarget để đảm bảo chúng ta đang xử lý đúng phần tử được gắn sự kiện
@@ -177,13 +178,16 @@ const Home = ({ data, pageContext }) => {
   }, []);
 
   return (
-    <Layout>
-      <SEO
-        seoData={seoData}
-      />
-      <InternalLinkInterceptor />
-      <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
-    </Layout>
+    <React.Fragment>
+      <Layout>
+        <SEO
+          seoData={seoData}
+        />
+        <InternalLinkInterceptor />
+        <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
+      </Layout>
+      <FormPortal />
+    </React.Fragment>
   )
 }
 

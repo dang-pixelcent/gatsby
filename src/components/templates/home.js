@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import HomeBanner from '../../components/HomeBanner'
 import SEO from '../../components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
+import Helmet from "react-helmet"
 
 const Home = ({ pageContext }) => {
     const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
@@ -277,6 +278,7 @@ const Home = ({ pageContext }) => {
     }, [patients]);
 
     const settings = {
+        draggable: false,
         dots: false,
         infinite: true,
         speed: 300,
@@ -335,9 +337,9 @@ const Home = ({ pageContext }) => {
 
     return (
         <Layout>
-            {/* <Helmet>
+            <Helmet>
                 <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            </Helmet> */}
+            </Helmet>
             <SEO
                 seoData={seoData}
             />
