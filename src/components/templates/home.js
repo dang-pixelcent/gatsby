@@ -277,6 +277,7 @@ const Home = ({ pageContext }) => {
     }, [patients]);
 
     const settings = {
+        draggable: false,
         dots: false,
         infinite: true,
         speed: 300,
