@@ -12,6 +12,7 @@ import Footer from './Footer'
 import { useLocation } from "@reach/router"
 import { Helmet } from "react-helmet"
 import ScrollTop from "./ScrollTop";
+import ChatWidget from "./ChatWidget"
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -86,6 +87,7 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Footer />
       <ScrollTop />
+      <ChatWidget />
     </div>
   )
 }
