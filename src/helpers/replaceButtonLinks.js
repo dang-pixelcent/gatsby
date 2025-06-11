@@ -49,6 +49,11 @@ module.exports = function replaceInternalLinks(html = '') {
   if (!html) return '';
 
   const $ = cheerio.load(html);
+  let successCount = 0;
+  let errorCount = 0;
+
+  // Thông báo bắt đầu xử lý
+  console.log(`${colors.yellow}Đang thay thế các URL nội bộ...${colors.reset}`);
 
   $('a[href]').each((_, el) => {
     const $el = $(el);
@@ -60,12 +65,22 @@ module.exports = function replaceInternalLinks(html = '') {
         const urlObject = new URL(href);
         // Lấy pathname (ví dụ: /our-team/) và gán lại cho href
         $el.attr('href', urlObject.pathname);
-        console.log(`${colors.cyan}Đã thay thế URL: ${href} thành ${urlObject.pathname}${colors.reset}`);
+        successCount++;
       } catch (e) {
         console.error(`${colors.red}URL không hợp lệ trong nội dung: ${href}${colors.reset}`);
+        errorCount++;
       }
     }
   });
+
+  // Thông báo kết quả cuối cùng
+  if (successCount > 0 || errorCount > 0) {
+    if (errorCount === 0) {
+      console.log(`${colors.green}✓ Thành công! Đã thay thế ${successCount} URL${colors.reset}`);
+    } else {
+      console.log(`${colors.red}⚠ Hoàn thành với lỗi: ${successCount} thành công, ${errorCount} lỗi${colors.reset}`);
+    }
+  }
 
   return $.html();
 };
