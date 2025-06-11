@@ -3,7 +3,9 @@ import React from "react"
 import Layout from "../layout"
 import SEO from "../SEO"
 import InternalLinkInterceptor from '../InternalLinkInterceptor'
-import FormPortal from "../FormPortal"
+// import FormPortal from "../FormPortal"
+import ComponentPortal from "../Tools/ComponentPortal"
+import ScheduleForm from '../Blocks/ScheduleForm';
 
 
 const Home = ({ data, pageContext }) => {
@@ -178,16 +180,20 @@ const Home = ({ data, pageContext }) => {
   }, []);
 
   return (
-    <React.Fragment>
-      <Layout>
-        <SEO
-          seoData={seoData}
-        />
-        <InternalLinkInterceptor />
-        <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
-      </Layout>
-      <FormPortal />
-    </React.Fragment>
+    <Layout>
+      <SEO
+        seoData={seoData}
+      />
+      <InternalLinkInterceptor />
+      <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
+
+      {/* Sử dụng ComponentPortal để tiêm các component khác nhau vào các vị trí khác nhau.
+        Nó sẽ tự động tìm các div này trong flexibleContentHtml và tiêm vào.
+      */}
+      <ComponentPortal selector="#sdformthree">
+        <ScheduleForm />
+      </ComponentPortal>
+    </Layout>
   )
 }
 
