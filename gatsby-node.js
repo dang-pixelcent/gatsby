@@ -131,7 +131,9 @@ exports.createPages = async ({ actions, graphql }) => {
   // Xử lý và tạo trang cho từng loại
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
   data.cms.pages.edges.map(({ node }) => processNode(node)).forEach(page => {
-    createPageFromNode(page);
+    if (!page.isFrontPage) {
+      createPageFromNode(page);
+    }
   });
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
