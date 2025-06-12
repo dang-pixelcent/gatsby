@@ -6,7 +6,7 @@ import InternalLinkInterceptor from '../InternalLinkInterceptor'
 import ComponentPortal from "../Tools/ComponentPortal"
 import ScriptLoader from '../Tools/ScriptLoader';
 import DynamicScriptHandler from '../DynamicScriptHandler'
-// import { ScheduleForm } from '../Blocks/GetStarted';
+import { ScheduleForm } from '../Blocks/GetStarted';
 
 
 
@@ -55,9 +55,9 @@ const Home = ({ data, pageContext }) => {
         {/* Sử dụng ComponentPortal để tiêm các component khác nhau vào các vị trí khác nhau.
         Nó sẽ tự động tìm các div này trong flexibleContentHtml và tiêm vào.
       */}
-        {/* <ComponentPortal selector="#sdformthree">
-        <ScheduleForm />
-      </ComponentPortal> */}
+        <ComponentPortal selector="#sdformthree">
+          <ScheduleForm />
+        </ComponentPortal>
 
         {/* {(slug === "streamlining-operations-and-boosting-patient-engagement-with-crm-automation-for-medspa-marketing") && (
         <ScriptLoader
