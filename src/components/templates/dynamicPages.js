@@ -101,14 +101,14 @@ const Home = ({ data, pageContext }) => {
         {/* Tự động tải tất cả các script có src */}
         {scripts.map((script) => {
           if (script.resourceType === 'external-script') {
-            // ✨ Lấy cấu hình cho script hiện tại
+            // Lấy cấu hình cho script hiện tại
             const config = getScriptConfig(script.attributes.src);
 
             return (
               <ScriptLoader
                 key={script.attributes.id}
                 attributes={script.attributes}
-                // ✨ Sử dụng cấu hình để quyết định
+                // Sử dụng cấu hình để quyết định
                 keepOnUnmount={config.keepOnUnmount}
               />
             );
