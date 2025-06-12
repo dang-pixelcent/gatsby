@@ -53,12 +53,12 @@ const Home = ({ data, pageContext }) => {
   // Thêm useEffect để chạy các hàm process()
   useEffect(() => {
     // Hàm này sẽ chạy mỗi khi component được mount (tải trang, back/forward)
-    console.log("Page content updated, processing scripts...");
+    //console.log("Page content updated, processing scripts...");
     scripts.forEach(script => {
       const config = getScriptConfig(script.attributes.src);
       // Nếu có hàm process trong cấu hình, hãy gọi nó
       if (config.process) {
-        console.log(`Calling process() for: ${script.attributes.src}`);
+        //console.log(`Calling process() for: ${script.attributes.src}`);
         config.process();
       }
     });
@@ -66,7 +66,7 @@ const Home = ({ data, pageContext }) => {
   }, [scripts, flexibleContentHtml]);
 
   const memoizedScriptLoaders = useMemo(() => {
-    console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
+    // console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
     return scripts.map((script) => {
       if (script.resourceType === 'external-script') {
         const config = getScriptConfig(script.attributes.src);
