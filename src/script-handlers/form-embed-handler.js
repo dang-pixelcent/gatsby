@@ -4,60 +4,60 @@
  * @returns {function|null} - Trả về một hàm dọn dẹp nếu tìm thấy phần tử, hoặc null nếu không.
  */
 export const initializeFormEmbed = () => {
-    // const formContainer = document.getElementById("sdformthree");
+    const formContainer = document.getElementById("sdformthree");
 
-    // // Nếu không có container, không làm gì cả.
-    // if (!formContainer) {
-    //     return null;
-    // }
+    // Nếu không có container, không làm gì cả.
+    if (!formContainer) {
+        return null;
+    }
 
-    // let isFormLoaded = false;
+    let isFormLoaded = false;
 
-    // const handleScroll = () => {
-    //     if (isFormLoaded) return;
+    const handleScroll = () => {
+        if (isFormLoaded) return;
 
-    //     isFormLoaded = true;
+        isFormLoaded = true;
 
-    //     // Tạo iframe
-    //     const ghliframe = document.createElement('iframe');
-    //     ghliframe.id = "pZ5us1TDI3kKin0xSGLQ";
-    //     ghliframe.style.width = "100%";
-    //     ghliframe.style.border = "none";
-    //     ghliframe.src = "https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ";
-    //     ghliframe.setAttribute("nitro-exclude", "true");
+        // Tạo iframe
+        const ghliframe = document.createElement('iframe');
+        ghliframe.id = "pZ5us1TDI3kKin0xSGLQ";
+        ghliframe.style.width = "100%";
+        ghliframe.style.border = "none";
+        ghliframe.src = "https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ";
+        ghliframe.setAttribute("nitro-exclude", "true");
 
-    //     formContainer.appendChild(ghliframe);
+        formContainer.appendChild(ghliframe);
 
-    //     // Tạo script
-    //     const ghlscript = document.createElement('script');
-    //     ghlscript.src = "https://book.practiceflow.md/js/form_embed.js";
-    //     ghlscript.setAttribute("nitro-exclude", "true");
-    //     formContainer.appendChild(ghlscript);
+        // Tạo script
+        const ghlscript = document.createElement('script');
+        ghlscript.src = "https://book.practiceflow.md/js/form_embed.js";
+        ghlscript.setAttribute("nitro-exclude", "true");
+        formContainer.appendChild(ghlscript);
 
-    //     // Remove scroll listener after loading
-    //     window.removeEventListener('scroll', handleScroll);
-    // };
+        // Remove scroll listener after loading
+        window.removeEventListener('scroll', handleScroll);
+    };
 
-    // // Thêm scroll listener với once: true để tự động remove
-    // if (window.addEventListener) {
-    //     window.addEventListener('scroll', handleScroll, { once: true });
-    // }
+    // Thêm scroll listener với once: true để tự động remove
+    if (window.addEventListener) {
+        window.addEventListener('scroll', handleScroll, { once: true });
+    }
 
-    // // Trả về hàm dọn dẹp
-    // return () => {
-    //     window.removeEventListener('scroll', handleScroll);
+    // Trả về hàm dọn dẹp
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
         
-    //     // Clear container nếu cần
-    //     if (formContainer) {
-    //         const iframe = formContainer.querySelector('#pZ5us1TDI3kKin0xSGLQ');
-    //         if (iframe) {
-    //             iframe.remove();
-    //         }
+        // Clear container nếu cần
+        if (formContainer) {
+            const iframe = formContainer.querySelector('#pZ5us1TDI3kKin0xSGLQ');
+            if (iframe) {
+                iframe.remove();
+            }
             
-    //         const script = formContainer.querySelector('script[src*="form_embed.js"]');
-    //         if (script) {
-    //             script.remove();
-    //         }
-    //     }
-    // };
+            const script = formContainer.querySelector('script[src*="form_embed.js"]');
+            if (script) {
+                script.remove();
+            }
+        }
+    };
 };

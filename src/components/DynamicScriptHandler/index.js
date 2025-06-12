@@ -8,7 +8,7 @@ import { initializeFAQs } from '../../script-handlers/faq-handler';
 import { initializeSlickCarousel } from '../../script-handlers/slick-carousel-handler';
 import { initializeLoadMore } from '../../script-handlers/load-more-handler';
 import { initializeTabs } from '../../script-handlers/tab-handler';
-import { initializeFormEmbed } from '../../script-handlers/form-embed-handler';
+//import { initializeFormEmbed } from '../../script-handlers/form-embed-handler';
 import { initializeHeightEqualizer } from '../../script-handlers/height-equalizer-handler';
 import { initializeJotForm } from '../../script-handlers/jotform-handler';
 
@@ -18,7 +18,7 @@ const HANDLER_REGISTRY = [
     initializeSlickCarousel,
     initializeLoadMore,
     initializeTabs,
-    initializeFormEmbed,
+    //initializeFormEmbed,
     initializeHeightEqualizer,
     initializeJotForm,
 ];
