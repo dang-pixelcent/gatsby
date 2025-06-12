@@ -42,7 +42,10 @@ const ScriptLoader = ({
             } else {
                 existingScript.addEventListener('load', onLoad);
             }
-            return; // Dừng lại ở đây
+            // Trả về hàm dọn dẹp để gỡ bỏ event listener khi component bị gỡ bỏ
+            return () => {
+                existingScript.removeEventListener('load', onLoad);
+            };
         }
 
         // Nếu script chưa tồn tại, tạo mới
