@@ -83,7 +83,7 @@ const HomeBanner = () => {
             <img
               src={content?.badgeLogo?.node?.sourceUrl}
               alt="Badge"
-              className="img-badge"
+              className="img-badge position-absolute lazyloaded"
             />
             <div className="sub-title f-soleto fw-500 text-white">
               {content?.subTitle}
