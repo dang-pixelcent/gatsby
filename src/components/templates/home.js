@@ -354,7 +354,8 @@ const Home = ({ pageContext }) => {
                             <Slider {...settings} className="experts-list ast-flex align-items-center">
                                 {
                                     experts?.logo?.map((item, key) => (
-                                        <a key={key} href={item?.image?.node?.link ?? '#'}>
+                                        // <Link key={key} href={item?.image?.node?.link ?? '#'}>
+                                        <a key={key} href='/#'>
                                             <img src={item?.image?.node?.sourceUrl} alt="" />
                                         </a>
                                     ))
