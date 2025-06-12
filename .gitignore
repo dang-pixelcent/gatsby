@@ -8,6 +8,7 @@
 /public*
 /cache
 /extracted-scripts
+/manual-review
 
 
 # testing

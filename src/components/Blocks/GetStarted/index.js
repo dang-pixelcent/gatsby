@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-const ScheduleForm = () => {
+export const ScheduleForm = () => {
     // useRef để tham chiếu đến div container, giúp tránh các vấn đề về re-render
     const formContainerRef = useRef(null);
 
@@ -41,8 +41,6 @@ const ScheduleForm = () => {
 
     // Trả về JSX với một div container để script có thể tìm thấy và chèn form vào
     return (
-        <div id="sdformthree" ref={formContainerRef}></div>
+        <div ref={formContainerRef}></div>
     );
 };
-
-export default ScheduleForm;

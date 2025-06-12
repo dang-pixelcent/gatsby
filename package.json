@@ -59,11 +59,12 @@
     "cache-seo:stag": "cross-env NODE_ENV=staging node scripts/cache-seo-data.js",
     "cache-seo:prod": "cross-env NODE_ENV=prod node scripts/cache-seo-data.js",
     "clean-seo-cache": "node scripts/clean-seo-cache.js",
-    "clean-gatsby": "gatsby clean",
+    "clean-gatsby-cache": "gatsby clean",
     "clean-all-cache": "npm run clean-gatsby && npm run clean-seo-cache",
     "build:stag:with-seo": "npm run cache-seo:stag && npm run build:stag",
     "build:prod:with-seo": "npm run cache-seo:prod && npm run build:prod",
-    "extract-all": "node scripts/extract-all-scripts.js"
+    "extract-all-scripts": "node scripts/extract-all-scripts.js",
+    "manual-extract-inline-scripts": "node scripts/manual-extract-inline-scripts.js"
   },
   "devDependencies": {
     "ajv": "^7.2.4"
