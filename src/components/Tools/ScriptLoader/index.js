@@ -66,7 +66,7 @@ const ScriptLoader = ({
                 }
             }
         };
-    }, [JSON.stringify(attributes), onLoad, onError, keepOnUnmount]);
+    }, [attributes, onLoad, onError, keepOnUnmount]);
 
     return null;
 };

@@ -1,5 +1,5 @@
 import { graphql, Link } from "gatsby"
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react";
 import Layout from "../layout"
 import SEO from "../SEO"
 import InternalLinkInterceptor from '../InternalLinkInterceptor'
@@ -65,6 +65,23 @@ const Home = ({ data, pageContext }) => {
     // Chạy lại effect này mỗi khi danh sách script hoặc nội dung thay đổi
   }, [scripts, flexibleContentHtml]);
 
+  const memoizedScriptLoaders = useMemo(() => {
+    console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
+    return scripts.map((script) => {
+      if (script.resourceType === 'external-script') {
+        const config = getScriptConfig(script.attributes.src);
+        return (
+          <ScriptLoader
+            key={script.attributes.id}
+            attributes={script.attributes} // `script.attributes` bây giờ có tham chiếu ổn định
+            keepOnUnmount={config.keepOnUnmount}
+          />
+        );
+      }
+      return null;
+    });
+  }, [scripts]); // Chỉ tính toán lại khi mảng `scripts` thay đổi
+
   return (
     <React.Fragment>
       <Layout>
@@ -99,22 +116,7 @@ const Home = ({ data, pageContext }) => {
       ))} */}
 
         {/* Tự động tải tất cả các script có src */}
-        {scripts.map((script) => {
-          if (script.resourceType === 'external-script') {
-            // Lấy cấu hình cho script hiện tại
-            const config = getScriptConfig(script.attributes.src);
-
-            return (
-              <ScriptLoader
-                key={script.attributes.id}
-                attributes={script.attributes}
-                // Sử dụng cấu hình để quyết định
-                keepOnUnmount={config.keepOnUnmount}
-              />
-            );
-          }
-          return null;
-        })}
+        {memoizedScriptLoaders}
 
       </Layout>
       {/* Tiêm các script động vào cuối body */}
