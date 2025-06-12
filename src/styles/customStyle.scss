@@ -628,3 +628,14 @@ footer a:hover{color:#F2771A;}
     display: table;
     content: '';
 }
+
+// Free Gift Section on Home Page
+.free-gift-content .desc p {
+    font-size: 1.04vw;
+}
+
+@media only screen and (max-width: 922px) {
+    .free-gift-content .desc p, .sc-gift-book .free-gift-content .desc {
+        font-size: 18px;
+    }
+}
