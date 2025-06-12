@@ -43,12 +43,13 @@ function getCachedSeoData(url) {
 }
 
 /**
- * @description Xử lý HTML cho production: Chỉ trích xuất thông tin script có 'src' và làm sạch HTML.
+ * Trích xuất tất cả các thẻ script từ một chuỗi HTML,
+ * lấy toàn bộ thuộc tính của chúng và trả về HTML đã được làm sạch.
  * @param {string} html - Chuỗi HTML đầu vào.
- * @param {string} pageSlug - Slug của trang để tạo ID cho script.
- * @returns {{cleanedHtml: string, scripts: Array<object>}} - Một object chứa HTML đã sạch và mảng script external.
+ * @param {string} pageSlug - Slug của trang để tạo ID duy nhất.
+ * @returns {{cleanedHtml: string, scripts: Array<Object>}}
  */
-function processScripts(html = '', pageSlug) {
+function processAllScripts(html = '', pageSlug) {
   if (!html || !pageSlug) {
     return { cleanedHtml: html || '', scripts: [] };
   }
@@ -58,20 +59,25 @@ function processScripts(html = '', pageSlug) {
   const extractedScripts = [];
 
   scriptTags.each((index, element) => {
-    const script = $(element);
-    const src = script.attr('src');
+    // element.attribs chứa một object với tất cả các thuộc tính của thẻ
+    // Ví dụ: { src: '...', async: '', type: 'module' }
+    const attributes = { ...element.attribs };
 
-    // Chỉ quan tâm đến các script có thuộc tính 'src'
-    if (src) {
+    // Chúng ta vẫn chỉ quan tâm đến các script có nguồn bên ngoài (có src)
+    if (attributes.src) {
+      // Đảm bảo script luôn có một ID duy nhất để làm key trong React
+      if (!attributes.id) {
+        attributes.id = `external-script-${pageSlug}-${index}`;
+      }
+
+      // Thêm thông tin metadata nếu cần, ví dụ 'type' ở đây là để phân biệt
+      // với các loại tài nguyên khác sau này, không phải thuộc tính 'type' của script.
       extractedScripts.push({
-        type: 'external',
-        src: src,
-        id: script.attr('id') || `external-script-${pageSlug}-${index}`,
-        async: script.attr('async') !== undefined,
-        defer: script.attr('defer') !== undefined,
+        resourceType: 'external-script',
+        attributes: attributes,
       });
     }
-    // Bỏ qua hoàn toàn các script inline
+    // Các script inline (không có src) sẽ bị xóa cùng với các script khác mà không được xử lý
   });
 
   // Xóa tất cả các thẻ script khỏi HTML
@@ -110,7 +116,7 @@ exports.createPages = async ({ actions, graphql }) => {
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(node.flexibleContentHtml);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
-    const { cleanedHtml, scripts } = processScripts(htmlWithReplacedLinks, node.slug);
+    const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
 
     return {
       ...node,
