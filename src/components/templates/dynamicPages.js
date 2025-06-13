@@ -2,12 +2,18 @@ import { graphql, Link } from "gatsby"
 import React, { useEffect, useMemo } from "react";
 import Layout from "../layout"
 import SEO from "../SEO"
+// làm sạch link
 import InternalLinkInterceptor from '../InternalLinkInterceptor'
+// Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
 import ComponentPortal from "../Tools/ComponentPortal"
+// Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
+import DomInjector from '../Tools/DomInjector';
 import ScriptLoader from '../Tools/ScriptLoader';
 import DynamicScriptHandler from '../DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '../../config/scriptManager';
 import { ScheduleForm } from '../Blocks/GetStarted';
+import { ServiceSlider } from '../Blocks/ServiceSlider.js/';
+
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
 const getScriptConfig = (src) => {
@@ -97,6 +103,11 @@ const Home = ({ data, pageContext }) => {
         <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
         </ComponentPortal>
+
+        <DomInjector selector=".col-slider">
+          <ServiceSlider />
+        </DomInjector>
+
 
         {/* {(slug === "streamlining-operations-and-boosting-patient-engagement-with-crm-automation-for-medspa-marketing") && (
         <ScriptLoader
