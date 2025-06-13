@@ -128,7 +128,7 @@ exports.createPages = async ({ actions, graphql }) => {
 
   const createPageFromNode = (node, pathPrefix = '') => {
     actions.createPage({
-      path: `${pathPrefix}${node.slug}`,
+      path: `${pathPrefix}${node.uri}`,
       component: path.resolve(`./src/components/templates/dynamicPages.js`),
       context: { ...node },
     });
@@ -143,13 +143,13 @@ exports.createPages = async ({ actions, graphql }) => {
   });
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
-  data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, 'service/'));
+  data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, ''));
 
   console.log(`${colors.cyan}Processing events...${colors.reset}`);
-  data.cms.events.nodes.map(processNode).forEach(event => createPageFromNode(event, 'events/'));
+  data.cms.events.nodes.map(processNode).forEach(event => createPageFromNode(event, ''));
 
   console.log(`${colors.cyan}Processing blogs...${colors.reset}`);
-  data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, 'blog/'));
+  data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, ''));
 
 
   // Lưu tracking codes vào cache
