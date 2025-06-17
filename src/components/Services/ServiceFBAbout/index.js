@@ -46,16 +46,16 @@ const ServiceFBAbout = () => {
             <figure className="mb-0">
               <img src={data?.image?.node?.sourceUrl} alt="" />
             </figure>
-            <div class="col-content f-soleto fs-22" dangerouslySetInnerHTML={{ __html: data?.content }}></div>
+            <div className="col-content f-soleto fs-22" dangerouslySetInnerHTML={{ __html: data?.content }}></div>
           </div>
-          <div class="list">
+          <div className="list">
             {data?.item?.map((item, index) => (
               <>
-                <div key={index} class={`list-item ${(index + 1) % 2 === 0 ? "item-2" : ""} ast-flex flex-wrap align-items-center`}>
-                  <figure class="mb-0"><img src={item?.icon?.node?.sourceUrl} alt="Facebook Ads that Attract Quality Leads" /></figure>
-                  <div class="list-item--content">
-                    <h2 class="f-soleto fw-700">{item?.title}</h2>
-                    <div class="content f-soleto" dangerouslySetInnerHTML={{ __html: item?.content }}></div>
+                <div key={index} className={`list-item ${(index + 1) % 2 === 0 ? "item-2" : ""} ast-flex flex-wrap align-items-center`}>
+                  <figure className="mb-0"><img src={item?.icon?.node?.sourceUrl} alt="Facebook Ads that Attract Quality Leads" /></figure>
+                  <div className="list-item--content">
+                    <h2 className="f-soleto fw-700">{item?.title}</h2>
+                    <div className="content f-soleto" dangerouslySetInnerHTML={{ __html: item?.content }}></div>
                   </div>
                 </div>
                 {(index + 1) !== data?.item?.length && (

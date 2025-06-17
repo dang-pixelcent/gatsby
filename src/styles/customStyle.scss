@@ -211,7 +211,7 @@
 .px-0{padding-left:0px !important;padding-right:0px !important;}
 .mb-0{margin-bottom:0px !important;}
 .position-relative{position:relative !important;}
-.position-absolute{position:absolute !important;}
+.position-absolute{position:absolute}
 .mx-auto{margin-left:auto !important;margin-right:auto !important;}
 p{margin-bottom:20px;}
 img{object-fit:cover;max-width:100%;}
@@ -581,11 +581,6 @@ footer a:hover{color:#F2771A;}
         width:58px;
         height:58px;
     }
-}
-
-.lc_chat-widget-bubble {
-  /* Di chuyển nút bấm lên trên */
-  bottom: 70px !important; 
 }
 
 @media only screen and (max-width:768px)

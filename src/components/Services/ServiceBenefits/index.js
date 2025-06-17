@@ -1,6 +1,7 @@
 import './styles.scss';
 import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
+import { extractPathname } from "/src/utils/urlUtils"
 
 const ServiceBenefits = () => {
   const query = useStaticQuery(graphql`
@@ -65,7 +66,7 @@ const ServiceBenefits = () => {
           </div>
           <div className="bottom-content f-soleto text-center text-white" dangerouslySetInnerHTML={{ __html: data?.bottomContent }}></div>
           <div className="sc-btn ast-flex justify-content-center">
-            <a href={data?.button?.url} target={data?.button?.target} className={`btn-bg bg-F2771A btn-size-26 fw-700 ${data?.buttonType === "fluid_width" ? "w-100" : ''}`}>{data?.button?.title}</a>
+            <Link to={extractPathname(data?.button?.url)} target={data?.button?.target} className={`btn-bg bg-F2771A btn-size-26 fw-700 ${data?.buttonType === "fluid_width" ? "w-100" : ''}`}>{data?.button?.title}</Link>
           </div>
         </div>
       </section>

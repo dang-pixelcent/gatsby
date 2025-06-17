@@ -1,10 +1,11 @@
 import React from 'react';
 import { useStaticQuery, graphql, Link } from 'gatsby';
+import SearchForm from './SearchForm'; // Giả sử bạn đã tạo component SearchForm
 
 const BlogSidebar = () => {
-      // Sử dụng biến môi trường cho WordPress URL
-  const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
-  const siteBaseUrl = process.env.GATSBY_SITE_URL
+    // Sử dụng biến môi trường cho WordPress URL
+    const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+    const siteBaseUrl = process.env.GATSBY_SITE_URL
     // Query này chạy độc lập để lấy 5 bài viết mới nhất
     const data = useStaticQuery(graphql`
         query RecentPostsSidebarQuery {
@@ -34,18 +35,19 @@ const BlogSidebar = () => {
                 {/* NOTE: Phần Search và các widget quảng cáo có thể được thêm vào đây dưới dạng component riêng
                     hoặc được quản lý qua một hệ thống widget trong tương lai. 
                     Ở đây chúng ta tập trung vào Recent Posts. */}
+                <SearchForm />
                 <div className="widget-get-book">
                     <div className="widget-title">GET FREE BOOK</div>
                     <div className="widget-content">
-                        <img decoding="async" src={`${WP_BASE_URL}/wp-content/uploads/2025/04/get-book.png`} alt=""/>
-                            <div className="name">Alex Sidorenkov</div>
-                            <div className="position">Grow Your Medical Wellness Practice</div>
-                            <div className="sc-btn"><a href="https://e.wellnessclinicmarketing.com/free-book/" target="_blank" rel="noopener noreferrer" className="bg-btn">Get Your Free Copy</a></div>
+                        <img decoding="async" src={`${WP_BASE_URL}/wp-content/uploads/2025/04/get-book.png`} alt="" />
+                        <div className="name">Alex Sidorenkov</div>
+                        <div className="position">Grow Your Medical Wellness Practice</div>
+                        <div className="sc-btn"><a href="https://e.wellnessclinicmarketing.com/free-book/" target="_blank" rel="noopener noreferrer" className="bg-btn">Get Your Free Copy</a></div>
                     </div>
                 </div>
                 <aside id="block-8" className="widget widget_block"><div className="widget-doctor">
                     <div className="widget-doctor-inner">
-                        <figure><img decoding="async" src={`${WP_BASE_URL}/wp-content/uploads/2025/04/widget-doctor-alex.png`} alt=""/></figure>
+                        <figure><img decoding="async" src={`${WP_BASE_URL}/wp-content/uploads/2025/04/widget-doctor-alex.png`} alt="" /></figure>
                         <div className="widget-content">
                             <div className="title">Meet the Man Behind the Book</div>
                             <div className="name">Alex Sidorenkov</div>
