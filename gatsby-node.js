@@ -92,7 +92,7 @@ function processAllScripts(html = '', pageSlug) {
 
 async function createPaginatedBlogPages({ graphql, actions }) {
   const { createPage } = actions;
-  const blogArchiveTemplate = path.resolve('./src/components/templates/blogArchive.js');
+  const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
   const postsPerPage = 5;
 
   // Bước 1: Vẫn lấy tổng số bài viết để tính tổng số trang (numPages)
@@ -255,6 +255,14 @@ exports.createPages = async ({ actions, graphql }) => {
 
   console.log(`${colors.cyan}Processing case studies...${colors.reset}`);
   data.cms.caseStudies.nodes.map(processNode).forEach(caseStudy => createPageFromNode(caseStudy, ''));
+
+  // tạo trang kết quả tìm kiếm cho blogs
+  console.log(`${colors.cyan}Creating search result page for blogs...${colors.reset}`);
+  actions.createPage({
+    path: "/blogs/search",
+    matchPath: "/blogs/search/*", // Dấu * cho phép các query param như ?q=...
+    component: path.resolve("./src/components/templates/blog/searchResult.js"),
+  });
 
   // Lưu tracking codes vào cache
   if (data.cms.themeSettings?.themeOptionsSettings?.headerFooter) {
