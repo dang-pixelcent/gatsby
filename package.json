@@ -64,7 +64,10 @@
     "build:stag:with-seo": "npm run cache-seo:stag && npm run build:stag",
     "build:prod:with-seo": "npm run cache-seo:prod && npm run build:prod",
     "extract-all-scripts": "node scripts/extract-all-scripts.js",
-    "manual-extract-inline-scripts": "node scripts/manual-extract-inline-scripts.js"
+    "manual-extract-inline-scripts": "node scripts/manual-extract-inline-scripts.js",
+    "clean-and-fetch-seo": "npm run clean-seo-cache && npm run cache-seo",
+    "clean-and-fetch-seo:stag": "npm run clean-seo-cache && npm run cache-seo:stag",
+    "clean-and-fetch-seo:prod": "npm run clean-seo-cache && npm run cache-seo:prod"
   },
   "devDependencies": {
     "ajv": "^7.2.4"
