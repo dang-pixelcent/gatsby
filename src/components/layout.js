@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { Script } from "gatsby"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/main.min.scss"
@@ -12,7 +13,7 @@ import Footer from './Footer'
 import { useLocation } from "@reach/router"
 import { Helmet } from "react-helmet"
 import ScrollTop from "./ScrollTop";
-// import ChatWidget from "./ChatWidget"
+import ChatWidget from "./ChatWidget"
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -77,37 +78,6 @@ const DefaultLayout = ({ children }) => {
   }, [location.pathname, isMobileMenuOpen]); // Chạy lại hook này mỗi khi đường dẫn trang thay đổi
 
 
-  // Thêm useEffect để tải script chat widget
-  useEffect(() => {
-    // 1. Tạo một thẻ script mới
-    const script = document.createElement('script');
-
-    // 2. Thiết lập các thuộc tính cho script
-    script.src = "https://widgets.leadconnectorhq.com/loader.js";
-    script.setAttribute('data-noptimize', 'async'); // Thêm async để không chặn render
-    script.setAttribute('data-resources-url', "https://widgets.leadconnectorhq.com/chat-widget/loader.js");
-    script.setAttribute('data-widget-id', "668d5bc943da7a2804c9bf8e");
-
-    // 3. Thêm script vào thẻ <body> của trang web
-    document.body.appendChild(script);
-
-    // 4. Hàm dọn dẹp: Sẽ chạy khi component unmount
-    return () => {
-       // Gỡ bỏ script
-        if (script.parentNode) {
-            script.parentNode.removeChild(script);
-        }
-
-        // Dọn dẹp widget
-        const widgetContainer = document.querySelector('.widget-chat-box-container'); // Hoặc class gốc của widget
-        if (widgetContainer) {
-            widgetContainer.remove();
-        }
-    };
-  }, []); // Mảng rỗng `[]` đảm bảo hook này chỉ chạy một lần duy nhất
-
-  // KẾT THÚC
-
   return (
     <div>
       <Helmet>
@@ -120,7 +90,7 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Footer />
       <ScrollTop />
-      {/* <div className="widget-chat-box"><script data-noptimize src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="668d5bc943da7a2804c9bf8e"></script></div> */}
+      <ChatWidget />
     </div>
   )
 }
