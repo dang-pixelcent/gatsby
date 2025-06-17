@@ -583,9 +583,8 @@ footer a:hover{color:#F2771A;}
     }
 }
 
-.lc_chat-widget-bubble {
-  /* Di chuyển nút bấm lên trên */
-  bottom: 70px !important; 
+body .lc-widget-container .lc-text-widget--bubble {
+    bottom: 70px !important;
 }
 
 @media only screen and (max-width:768px)

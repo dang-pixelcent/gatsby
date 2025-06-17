@@ -20,6 +20,7 @@ const DefaultLayout = ({ children }) => {
 
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // bodyClass sẽ được cập nhật mỗi khi trang thay đổi hoặc kích thước cửa sổ thay đổi
   useEffect(() => {
     const updateBodyClass = () => {
       const isMobile = window.innerWidth <= 921; // Ngưỡng breakpoint của bạn
@@ -76,7 +77,7 @@ const DefaultLayout = ({ children }) => {
   }, [location.pathname, isMobileMenuOpen]); // Chạy lại hook này mỗi khi đường dẫn trang thay đổi
 
 
-  // ✨ BẮT ĐẦU: Thêm useEffect để tải script chat widget
+  // Thêm useEffect để tải script chat widget
   useEffect(() => {
     // 1. Tạo một thẻ script mới
     const script = document.createElement('script');
@@ -92,18 +93,20 @@ const DefaultLayout = ({ children }) => {
 
     // 4. Hàm dọn dẹp: Sẽ chạy khi component unmount
     return () => {
-      // Gỡ bỏ script khỏi body để tránh lỗi khi chuyển trang
-      document.body.removeChild(script);
+       // Gỡ bỏ script
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
 
-      // Widget này có thể tạo thêm các element khác, chúng ta cần tìm và xóa chúng
-      const widgetContainer = document.querySelector('.widget-chat-box-container'); // Tên class này có thể khác, bạn cần kiểm tra
-      if (widgetContainer) {
-        widgetContainer.remove();
-      }
+        // Dọn dẹp widget
+        const widgetContainer = document.querySelector('.widget-chat-box-container'); // Hoặc class gốc của widget
+        if (widgetContainer) {
+            widgetContainer.remove();
+        }
     };
   }, []); // Mảng rỗng `[]` đảm bảo hook này chỉ chạy một lần duy nhất
 
-  // ✨ KẾT THÚC: Phần thêm script
+  // KẾT THÚC
 
   return (
     <div>

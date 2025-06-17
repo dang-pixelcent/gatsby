@@ -127,10 +127,10 @@ const HomeBanner = () => {
 
           </div>
           <div className="box-desktop">
-            <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" class="lazyloaded" decoding="async" nitro-lazy-empty="" id="NzgwOjExMQ==-1" />
+            <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" className="lazyloaded" decoding="async" nitro-lazy-empty="true" id="NzgwOjExMQ==-1" />
           </div>
           <div className="box-mobile">
-            <img alt="Mobile Box" src={content?.boxMobile?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile.png" class="nitro-lazy" decoding="async" nitro-lazy-empty="" id="NzgzOjExMA==-1" />
+            <img alt="Mobile Box" src={content?.boxMobile?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile.png" className="nitro-lazy" decoding="async" nitro-lazy-empty="true" id="NzgzOjExMA==-1" />
           </div>
           {/* <div className="banner-services text-white ast-flex justify-content-center">
             {
