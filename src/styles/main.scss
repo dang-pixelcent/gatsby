@@ -2458,17 +2458,17 @@ h6,
 }
 
 .ast-header-button-2[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
-  font-weight: 500 !important;
+  font-weight: 500;
 }
 
 // button right
 
 @media (max-width: 544px) {
   .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
-    padding-top: 11px !important;
-    padding-bottom: 11px !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
@@ -2589,12 +2589,12 @@ h6,
   }
 }
 
-.ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-}
+// .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
+//   padding-top: 8px !important;
+//   padding-bottom: 8px !important;
+//   padding-left: 20px !important;
+//   padding-right: 20px !important;
+// }
 
 
 [data-section*="section-hb-button-"] .menu-link {
@@ -2603,10 +2603,10 @@ h6,
 
 .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
   // font-family: "Inter", sans-serif !important;
-  font-weight: 500 !important;
+  font-weight: 500;
   // font-size: 18px !important;
-  font-size: 1rem !important;
-  line-height: 27px !important;
+  font-size: 1rem;
+  line-height: 27px;
   text-transform: uppercase;
 }
 
@@ -4546,9 +4546,9 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 }
 
 .position-absolute {
-  position: absolute !important;
+  position: absolute;
 }
-
+ 
 .banner-sep {
   gap: 2.08vw;
   align-items: center;
@@ -5408,6 +5408,14 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 //   /*20px 30px;*/
 //   text-align: center;
 // }
+.box-content {
+    margin-top: 1.04vw;
+    font-size: 1.04vw;
+    background: #fff;
+    border-radius: 1.04vw;
+    padding: 1.04vw 1.56vw;
+    text-align: center;
+}
 
 .border-0659A9 {
   border: 1px dashed #0659a9;
