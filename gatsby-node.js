@@ -89,6 +89,101 @@ function processAllScripts(html = '', pageSlug) {
   };
 }
 
+
+async function createPaginatedBlogPages({ graphql, actions }) {
+  const { createPage } = actions;
+  const blogArchiveTemplate = path.resolve('./src/components/templates/blogArchive.js');
+  const postsPerPage = 5;
+
+  // Bước 1: Vẫn lấy tổng số bài viết để tính tổng số trang (numPages)
+  const countResult = await graphql(`
+        query GetAllPostIds {
+            cms {
+                posts(first: 9999) {
+                    nodes { id }
+                }
+            }
+        }
+    `);
+
+  if (countResult.errors) {
+    console.error("Failed to fetch post count", countResult.errors);
+    return;
+  }
+
+  const totalPosts = countResult.data.cms.posts.nodes.length;
+  const numPages = Math.ceil(totalPosts / postsPerPage);
+
+  console.log(`Total Posts: ${totalPosts}, Total Pages: ${numPages}`);
+
+
+  let hasNextPage = true;
+  let endCursor = null; // Ban đầu chưa có "dấu trang"
+  let pageNumber = 1;
+
+  // Dùng vòng lặp while thay vì for
+  while (hasNextPage) {
+    console.log(`Fetching data for blog page ${pageNumber}...`);
+
+    // Query cho trang hiện tại, dùng `after: $endCursor`
+    const pageResult = await graphql(`
+            query GetPostsForPage($first: Int!, $after: String) {
+                cms {
+                    posts(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
+                        edges {
+                            node {
+                                id
+                                title
+                                uri
+                                excerpt(format: RENDERED)
+                                featuredImage {
+                                    node {
+                                        sourceUrl
+                                        altText
+                                    }
+                                }
+                            }
+                        }
+                        pageInfo {
+                            hasNextPage
+                            endCursor
+                        }
+                    }
+                }
+            }
+        `, { first: postsPerPage, after: endCursor });
+
+    if (pageResult.errors) {
+      console.error(`GraphQL query for blog page ${pageNumber} failed`, pageResult.errors);
+      // Nếu lỗi, dừng vòng lặp
+      hasNextPage = false;
+      continue;
+    }
+
+    const postsOnPage = pageResult.data.cms.posts.edges;
+    const pageInfo = pageResult.data.cms.posts.pageInfo;
+
+    const pagePath = pageNumber === 1 ? '/blogs/' : `/blogs/page/${pageNumber}`;
+
+    createPage({
+      path: pagePath,
+      component: blogArchiveTemplate,
+      context: {
+        posts: postsOnPage.map(edge => edge.node),
+        pageNumber: pageNumber,
+        numPages: numPages, // Tổng số trang vẫn được truyền xuống
+        hasNextPage: pageInfo.hasNextPage,
+      },
+    });
+
+    // Cập nhật các biến cho vòng lặp tiếp theo
+    endCursor = pageInfo.endCursor;
+    hasNextPage = pageInfo.hasNextPage;
+    pageNumber++;
+  }
+}
+
+
 exports.createPages = async ({ actions, graphql }) => {
   const { data } = await graphql(`
     query {
@@ -97,10 +192,14 @@ exports.createPages = async ({ actions, graphql }) => {
         services(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
         events(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
         posts(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
+        caseStudies(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
         themeSettings { themeOptionsSettings { headerFooter { body, footer, header } } }
       }
     }
   `);
+
+  // XỬ LÝ BLOG
+  await createPaginatedBlogPages({ graphql, actions });
 
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
   actions.createPage({
@@ -128,7 +227,7 @@ exports.createPages = async ({ actions, graphql }) => {
 
   const createPageFromNode = (node, pathPrefix = '') => {
     actions.createPage({
-      path: `${pathPrefix}${node.slug}`,
+      path: `${pathPrefix}${node.uri}`,
       component: path.resolve(`./src/components/templates/dynamicPages.js`),
       context: { ...node },
     });
@@ -136,21 +235,26 @@ exports.createPages = async ({ actions, graphql }) => {
 
   // Xử lý và tạo trang cho từng loại
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
-  data.cms.pages.edges.map(({ node }) => processNode(node)).forEach(page => {
-    if (!page.isFrontPage) {
-      createPageFromNode(page);
-    }
-  });
+  data.cms.pages.edges
+    .filter(({ node }) => node.uri !== '/blogs/') // Lọc bỏ trang /blogs/
+    .map(({ node }) => processNode(node))
+    .forEach(page => {
+      if (!page.isFrontPage) {
+        createPageFromNode(page);
+      }
+    });
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
-  data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, 'service/'));
+  data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, ''));
 
   console.log(`${colors.cyan}Processing events...${colors.reset}`);
-  data.cms.events.nodes.map(processNode).forEach(event => createPageFromNode(event, 'events/'));
+  data.cms.events.nodes.map(processNode).forEach(event => createPageFromNode(event, ''));
 
   console.log(`${colors.cyan}Processing blogs...${colors.reset}`);
-  data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, 'blog/'));
+  data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, ''));
 
+  console.log(`${colors.cyan}Processing case studies...${colors.reset}`);
+  data.cms.caseStudies.nodes.map(processNode).forEach(caseStudy => createPageFromNode(caseStudy, ''));
 
   // Lưu tracking codes vào cache
   if (data.cms.themeSettings?.themeOptionsSettings?.headerFooter) {
