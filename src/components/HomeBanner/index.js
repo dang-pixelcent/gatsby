@@ -78,7 +78,7 @@ const HomeBanner = () => {
         className="home-banner"
         style={{ background: `no-repeat center/cover url(${content?.backgroundImage?.node?.sourceUrl})` }}
       >
-        <div className="ast-container">
+        <div className="cus-container">
           <div className="banner-title position-relative text-center">
             <img
               src={content?.badgeLogo?.node?.sourceUrl}
