@@ -5418,6 +5418,19 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   text-align: center;
 }
 
+// chỉnh z-index của video trong banner
+.cols2-banner .col-video {
+  position:relative;
+  z-index:2;
+}
+
+// ẩn nút điều hướng của slick slider mặc định
+.slick-prev:before,
+.slick-next:before {
+    display: none !important;
+    /* Hoặc bạn cũng có thể dùng content: ''; */
+}
+
 .featured-case-study .box-content {
   /* Reset các thuộc tính của .box-content */
   margin-top: initial; /* hoặc 0, unset, revert */
