@@ -1,4 +1,5 @@
 @forward 'layouts/blog';
+
 :root {
   --ast-post-nav-space: 0;
   --ast-container-default-xlg-padding: 2.5em;
@@ -4548,7 +4549,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 .position-absolute {
   position: absolute;
 }
- 
+
 .banner-sep {
   gap: 2.08vw;
   align-items: center;
@@ -5409,12 +5410,27 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 //   text-align: center;
 // }
 .box-content {
-    margin-top: 1.04vw;
-    font-size: 1.04vw;
-    background: #fff;
-    border-radius: 1.04vw;
-    padding: 1.04vw 1.56vw;
-    text-align: center;
+  margin-top: 1.04vw;
+  font-size: 1.04vw;
+  background: #fff;
+  border-radius: 1.04vw;
+  padding: 1.04vw 1.56vw;
+  text-align: center;
+}
+
+.featured-case-study .box-content {
+  /* Reset các thuộc tính của .box-content */
+  margin-top: initial; /* hoặc 0, unset, revert */
+  font-size: initial;
+  background: initial;
+  border-radius: initial;
+  padding: initial;
+  text-align: initial;
+  
+  /* Áp dụng styles mới */
+  order: 1;
+  flex: 1;
+  /* Thêm các thuộc tính mới khác nếu cần */
 }
 
 .border-0659A9 {
