@@ -57,12 +57,19 @@ const GET_ALL_CONTENT_QUERY = gql`
       }
     }
     events(first: 100) {
-        nodes {
-          slug
-          uri
-          flexibleContentHtml
-        }
+      nodes {
+        slug
+        uri
+        flexibleContentHtml
       }
+    }
+    caseStudies(first: 99) {
+      nodes {
+        uri
+        slug
+        flexibleContentHtml
+      }
+    }
   }
 `;
 
@@ -155,6 +162,7 @@ async function fetchAndExtractAllScripts() {
         processEntries(data.services.nodes, 'services', createComponentBlocks);
         processEntries(data.posts.nodes, 'posts', createComponentBlocks);
         processEntries(data.events.nodes, 'events', createComponentBlocks);
+        processEntries(data.caseStudies.nodes, 'caseStudies', createComponentBlocks);
 
         console.log(`\n${colors.green}✓✓✓ QUÁ TRÌNH HOÀN TẤT! Tất cả các script đã được lưu trong thư mục:${colors.reset} ${OUTPUT_DIR}`);
 
