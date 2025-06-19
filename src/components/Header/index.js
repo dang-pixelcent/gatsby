@@ -3,8 +3,12 @@ import "./styles.scss"
 import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { useLocation } from "@reach/router"
+import { useMobileMenuContext } from "@context/MobileMenuContext"
 
-const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
+const Header = () => {
+  // Lấy dữ liệu từ context
+  const { isMobileMenuOpen, setMobileMenuOpen } = useMobileMenuContext();
+
   // Sử dụng biến môi trường cho WordPress URL
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
