@@ -3,13 +3,14 @@ import { graphql, useStaticQuery, Link } from "gatsby"
 import Layout from "@components/layout"
 import Slider from "react-slick";
 import HomeBanner from '@components/HomeBanner'
-import SEO from '@components/SEO'
+import { SEO } from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
 
-const Home = ({ pageContext }) => {
-    const { seoData } = pageContext;
-    const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
-    const siteBaseUrl = process.env.GATSBY_SITE_URL
+const Home = () => {
+    // const { seoData } = pageContext;
+
+    // const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+    // const siteBaseUrl = process.env.GATSBY_SITE_URL
 
     const query = useStaticQuery(graphql`
     query {
@@ -371,11 +372,6 @@ const Home = ({ pageContext }) => {
 
     return (
         <Layout>
-            <SEO
-                seoData={seoData}
-            >
-                <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            </SEO>
             <div id="content" className="site-content">
                 <div className="main-content">
                     <HomeBanner />
@@ -765,5 +761,13 @@ const Home = ({ pageContext }) => {
         </Layout>
     )
 }
+
+export const Head = ({ pageContext }) => (
+    <SEO
+        seoData={pageContext.seoData || {}}
+    >
+        <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
+    </SEO>
+);
 
 export default Home;

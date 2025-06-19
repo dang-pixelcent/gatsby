@@ -2,7 +2,7 @@
 import { graphql, Link } from "gatsby"
 import React, { useEffect, useMemo } from "react";
 import Layout from "@components/layout"
-import SEO from "@components/SEO"
+import { SEO } from "@components/SEO"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
@@ -24,9 +24,8 @@ const getScriptConfig = (src) => {
   return configKey ? SCRIPT_HANDLING_CONFIG[configKey] : DEFAULT_SCRIPT_HANDLING;
 };
 
-const Home = ({ data, pageContext }) => {
-  const { flexibleContentHtml, seoData, scripts = [], id, uri } = pageContext;
-
+const Home = ({ pageContext }) => {
+  const { flexibleContentHtml, scripts = [] } = pageContext;
   // React.useEffect(() => {
   //   // Tạo các script tag mới và thêm vào DOM
   //   const scripts = [
@@ -89,9 +88,9 @@ const Home = ({ data, pageContext }) => {
   return (
     <React.Fragment>
       <Layout>
-        <SEO
+        {/* <SEO
           seoData={seoData}
-        />
+        /> */}
 
         <InternalLinkInterceptor />
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
@@ -134,5 +133,10 @@ const Home = ({ data, pageContext }) => {
     </React.Fragment>
   )
 }
+export const Head = ({ pageContext }) => (
+    <SEO 
+        seoData={pageContext.seoData || {}} 
+    />
+);
 
 export default Home

@@ -1,7 +1,8 @@
 import React from "react"
-import { Helmet } from "react-helmet"
+// import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
-const SEO = ({
+
+export const SEO = ({
     seoData,
     // bodyClass,
     children
@@ -14,16 +15,16 @@ const SEO = ({
     
     if (!seoData) {
         return (
-            <Helmet>
+            <>
                 <html lang="en-US" />
                 {/* <body className={bodyClass} /> */}
                 {children}
-            </Helmet>
+            </>
         )
     }
 
     return (
-        <Helmet>
+        <>
             <html lang="en-US" />
             <meta charSet="utf-8" />
             <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
@@ -41,8 +42,6 @@ const SEO = ({
 
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}
-        </Helmet>
+        </>
     )
 }
-
-export default SEO
