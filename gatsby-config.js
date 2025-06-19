@@ -26,7 +26,29 @@ module.exports = {
         fieldName: `cms`,
         typeName: `GraphCMS`,
       }
-    }
+    },
+    /**
+     * Plugin để sử dụng các alias import 
+     * Giúp bạn có thể import các module một cách ngắn gọn hơn
+     */
+    {
+      resolve: 'gatsby-plugin-alias-imports',
+      options: {
+        alias: {
+          "@src": "src",
+          "@components": "src/components",
+          "@templates": "src/components/templates",
+          "@hooks": "src/hooks",
+          "@context": "src/context",
+          "@styles": "src/styles",
+          "@helpers": "src/helpers",
+          "@config": "src/config",
+        },
+        extensions: [
+          "js",
+        ],
+      }
+    },
   ],
   siteMetadata: {
     title: `Gatsby Redux`,
