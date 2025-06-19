@@ -293,7 +293,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                         <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/improvement-1.svg" className="image wp-image-238 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjUxOjM0OQ==-1" src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/improvement-1.svg" /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-857" id="mega-menu-item-857">
                                         <Link className="mega-menu-link" to={`/service/website-development`}>
-                                          Website Development
+                                          Website Development & Design
                                         </Link>
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-9" id="mega-menu-item-text-9">
@@ -309,7 +309,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                         <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/improvement-5.svg" className="image wp-image-239 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjU2OjM0OQ==-1" src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/improvement-5.svg" /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-858" id="mega-menu-item-858">
                                         <Link className="mega-menu-link" to={`/service/facebook-advertising`}>
-                                          Facebook Advertising
+                                          Meta Advertising (Facebook & Instagram)
                                         </Link>
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-10" id="mega-menu-item-text-10">
@@ -655,7 +655,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                     <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                                   </svg>
                                 </span>
-                                <span className="menu-text">Website Development</span>
+                                <span className="menu-text">Website Development & Design</span>
                               </Link>
                             </li>
                             <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-858">
@@ -665,7 +665,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                     <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                                   </svg>
                                 </span>
-                                <span className="menu-text">Facebook Advertising</span>
+                                <span className="menu-text">Meta Advertising (Facebook & Instagram)</span>
                               </Link>
                             </li>
                             <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-859">
