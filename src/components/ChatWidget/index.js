@@ -51,9 +51,9 @@ const ChatWidget = () => {
 
                 // Style cố định cho button với responsive
                 if (wScreen <= 921) {
-                    chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; position: fixed !important; z-index: 9999 !important;';
+                    chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important;';
                 } else {
-                    chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; position: fixed !important; z-index: 9999 !important;';
+                    chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important;';
                 }
             }
 
@@ -80,8 +80,12 @@ const ChatWidget = () => {
                                 chatDialog.style.cssText = '';
                             }
 
-                            // Style button dựa trên kích thước hiện tại
-                            newChatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; position: fixed !important; z-index: 9999 !important; display: block !important;';
+                            // Style button dựa trên kích thước hiện tại - đẩy lên 70px khi đóng greeting
+                            if (currentWidth <= 921) {
+                                newChatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
+                            } else {
+                                newChatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
+                            }
                             newChatButton.removeAttribute('data-click-added');
 
                             // // Re-add click event
@@ -91,8 +95,28 @@ const ChatWidget = () => {
                         }
                     }, 300);
                 });
+            }
 
-                // Clear main interval khi đã setup xong
+            // Xử lý nút prompt close
+            const promptCloseBtn = root.querySelector('.lc_text-widget_prompt--prompt-close');
+            if (promptCloseBtn && !promptCloseBtn.hasAttribute('data-click-added')) {
+                promptCloseBtn.setAttribute('data-click-added', 'true');
+
+                promptCloseBtn.addEventListener('click', () => {
+                    setTimeout(() => {
+                        const buttons = conWidget.querySelectorAll('button');
+                        if (buttons && buttons.length > 0) {
+                            const chatButton = buttons[0];
+                            
+                            // Đẩy chat button lên 70px khi đóng prompt
+                            chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
+                        }
+                    }, 100);
+                });
+            }
+
+            // Clear main interval khi đã setup xong
+            if ((closeBtn && closeEventAdded) || promptCloseBtn) {
                 if (mainInterval) {
                     clearInterval(mainInterval);
                     mainInterval = null;
