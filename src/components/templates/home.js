@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
-import Layout from "../../components/layout"
+import Layout from "@components/layout"
 import Slider from "react-slick";
-import HomeBanner from '../../components/HomeBanner'
-import SEO from '../../components/SEO'
+import HomeBanner from '@components/HomeBanner'
+import SEO from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
-import Helmet from "react-helmet"
+import { useBodyClass } from '@hooks/useBodyClass';
 
 const Home = ({ pageContext }) => {
+    const bodyClass = useBodyClass();
+    const { seoData } = pageContext;
     const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
     const siteBaseUrl = process.env.GATSBY_SITE_URL
-
-    const { seoData } = pageContext
 
     const query = useStaticQuery(graphql`
     query {
@@ -373,12 +373,12 @@ const Home = ({ pageContext }) => {
 
     return (
         <Layout>
-            <Helmet>
-                <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            </Helmet>
             <SEO
                 seoData={seoData}
-            />
+                bodyClass={bodyClass}
+            >
+                <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
+            </SEO>
             <div id="content" className="site-content">
                 <div className="main-content">
                     <HomeBanner />

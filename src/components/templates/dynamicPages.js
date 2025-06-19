@@ -1,18 +1,20 @@
+// các import cơ bản phải có
 import { graphql, Link } from "gatsby"
 import React, { useEffect, useMemo } from "react";
-import Layout from "../layout"
-import SEO from "../SEO"
+import Layout from "@components/layout"
+import SEO from "@components/SEO"
+import { useBodyClass } from '@hooks/useBodyClass';
 // làm sạch link
-import InternalLinkInterceptor from '../InternalLinkInterceptor'
+import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
-import ComponentPortal from "../Tools/ComponentPortal"
+import ComponentPortal from "@components/Tools/ComponentPortal"
 // Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
-import DomInjector from '../Tools/DomInjector';
-import ScriptLoader from '../Tools/ScriptLoader';
-import DynamicScriptHandler from '../DynamicScriptHandler'
-import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '../../config/scriptManager';
-import { ScheduleForm } from '../Blocks/GetStarted';
-import { ServiceSlider } from '../Blocks/ServiceSlider.js/';
+import DomInjector from '@components/Tools/DomInjector';
+import ScriptLoader from '@components/Tools/ScriptLoader';
+import DynamicScriptHandler from '@components/DynamicScriptHandler'
+import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
+import { ScheduleForm } from '@components/Blocks/GetStarted';
+import { ServiceSlider } from '@components/Blocks/ServiceSlider.js/';
 
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
@@ -24,6 +26,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ data, pageContext }) => {
+  const bodyClass = useBodyClass();
   const { flexibleContentHtml, seoData, scripts = [], id, uri } = pageContext;
 
   // React.useEffect(() => {
@@ -52,9 +55,6 @@ const Home = ({ data, pageContext }) => {
   //   };
   // }, []);
 
-
-
-  const pageKey = id || uri;
 
   // Thêm useEffect để chạy các hàm process()
   useEffect(() => {
@@ -93,7 +93,9 @@ const Home = ({ data, pageContext }) => {
       <Layout>
         <SEO
           seoData={seoData}
+          bodyClass={bodyClass}
         />
+
         <InternalLinkInterceptor />
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
