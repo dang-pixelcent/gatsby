@@ -10,10 +10,9 @@ import "../styles/customStyle.scss"
 import "../styles/dashicons.min.css"
 import Header from './Header'
 import Footer from './Footer'
-import { useLocation } from "@reach/router"
-import { Helmet } from "react-helmet"
 import ScrollTop from "./ScrollTop";
 import ChatWidget from "./ChatWidget"
+import { useLocation } from "@reach/router"
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -78,11 +77,25 @@ const DefaultLayout = ({ children }) => {
   }, [location.pathname, isMobileMenuOpen]); // Chạy lại hook này mỗi khi đường dẫn trang thay đổi
 
 
+  // Hook này sẽ theo dõi sự thay đổi của `bodyClass` và cập nhật DOM
+  useEffect(() => {
+    // Gán trực tiếp chuỗi class vào thẻ body
+    // Thao tác này sẽ ghi đè lên tất cả các class cũ và áp dụng bộ class mới
+    document.body.className = bodyClass;
+
+    // Trả về một hàm cleanup (không bắt buộc nhưng là good practice)
+    // để xóa các class khi component unmount, đưa body về trạng thái sạch sẽ.
+    return () => {
+      document.body.className = '';
+    };
+  }, [bodyClass]); // Chỉ chạy lại effect này khi `bodyClass` thay đổi
+  // +++ KẾT THÚC PHẦN THÊM MỚI +++
+
   return (
     <div>
-      <Helmet>
+      {/* <Helmet>
         <body className={bodyClass} />
-      </Helmet>
+      </Helmet> */}
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}

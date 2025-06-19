@@ -92,8 +92,11 @@ function processAllScripts(html = '', pageSlug) {
 
 async function createPaginatedBlogPages({ graphql, actions }) {
   const { createPage } = actions;
+  // khung trang cho blogs
   const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
   const postsPerPage = 5;
+  // lấy date seo cho blogs từ cacche
+  const blogsDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/blogs/`);
 
   // Bước 1: Vẫn lấy tổng số bài viết để tính tổng số trang (numPages)
   const countResult = await graphql(`
@@ -173,6 +176,7 @@ async function createPaginatedBlogPages({ graphql, actions }) {
         pageNumber: pageNumber,
         numPages: numPages, // Tổng số trang vẫn được truyền xuống
         hasNextPage: pageInfo.hasNextPage,
+        seoData: blogsDataSeo || null,
       },
     });
 
@@ -201,6 +205,7 @@ exports.createPages = async ({ actions, graphql }) => {
   // XỬ LÝ BLOG
   await createPaginatedBlogPages({ graphql, actions });
 
+  // trang home riêng + SEO
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
   actions.createPage({
     path: `/`,
@@ -264,7 +269,8 @@ exports.createPages = async ({ actions, graphql }) => {
     component: path.resolve("./src/components/templates/blog/searchResult.js"),
   });
 
-  // Lưu tracking codes vào cache
+
+  /** Lưu tracking codes vào cache */
   if (data.cms.themeSettings?.themeOptionsSettings?.headerFooter) {
     const headerFooterData = data.cms.themeSettings.themeOptionsSettings.headerFooter;
     const cacheDir = path.join(__dirname, '.cache');

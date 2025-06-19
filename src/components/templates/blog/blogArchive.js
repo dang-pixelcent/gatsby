@@ -1,14 +1,19 @@
 import React from 'react';
-import Layout from '../../layout';
-import PostItem from '../../Blog/PostItem';
-import BlogSidebar from '../../Blog/BlogSidebar';
-import Pagination from '../../Blog/Pagination';
+import Layout from '@components/layout';
+import SEO from "@components/SEO"
+
+import PostItem from '@components/Blog/PostItem';
+import BlogSidebar from '@components/Blog/BlogSidebar';
+import Pagination from '@components/Blog/Pagination';
 
 const BlogArchive = ({ pageContext }) => {
-    const { posts, pageNumber, numPages } = pageContext;
+    const { posts, pageNumber, numPages, seoData } = pageContext;
 
     return (
         <Layout>
+            <SEO
+                seoData={seoData}
+            />
             {/* Banner tĩnh */}
             <section className="banner cus-height" style={{ background: "no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
                 <div className="cus-container h-100">
@@ -27,8 +32,8 @@ const BlogArchive = ({ pageContext }) => {
                             {posts.map(post => (
                                 <PostItem key={post.id} post={post} />
                             ))}
-                            <Pagination 
-                                currentPage={pageNumber} 
+                            <Pagination
+                                currentPage={pageNumber}
                                 numPages={numPages}
                                 basePath="/blogs"
                             />
