@@ -1,19 +1,16 @@
 import React from 'react';
 import Layout from '@components/layout';
-import SEO from "@components/SEO"
+import { SEO } from "@components/SEO"
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
 import Pagination from '@components/Blog/Pagination';
 
 const BlogArchive = ({ pageContext }) => {
-    const { posts, pageNumber, numPages, seoData } = pageContext;
+    const { posts, pageNumber, numPages } = pageContext;
 
     return (
         <Layout>
-            <SEO
-                seoData={seoData}
-            />
             {/* Banner tĩnh */}
             <section className="banner cus-height" style={{ background: "no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
                 <div className="cus-container h-100">
@@ -47,5 +44,11 @@ const BlogArchive = ({ pageContext }) => {
         </Layout>
     );
 };
+
+export const Head = ({ pageContext }) => (
+    <SEO 
+        seoData={pageContext.seoData || {}} 
+    />
+);
 
 export default BlogArchive;
