@@ -5,10 +5,8 @@ import Slider from "react-slick";
 import HomeBanner from '@components/HomeBanner'
 import SEO from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
-import { useBodyClass } from '@hooks/useBodyClass';
 
 const Home = ({ pageContext }) => {
-    const bodyClass = useBodyClass();
     const { seoData } = pageContext;
     const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
     const siteBaseUrl = process.env.GATSBY_SITE_URL
@@ -375,7 +373,6 @@ const Home = ({ pageContext }) => {
         <Layout>
             <SEO
                 seoData={seoData}
-                bodyClass={bodyClass}
             >
                 <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
             </SEO>

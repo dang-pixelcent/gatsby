@@ -3,7 +3,6 @@ import { graphql, Link } from "gatsby"
 import React, { useEffect, useMemo } from "react";
 import Layout from "@components/layout"
 import SEO from "@components/SEO"
-import { useBodyClass } from '@hooks/useBodyClass';
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
@@ -26,7 +25,6 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ data, pageContext }) => {
-  const bodyClass = useBodyClass();
   const { flexibleContentHtml, seoData, scripts = [], id, uri } = pageContext;
 
   // React.useEffect(() => {
@@ -93,7 +91,6 @@ const Home = ({ data, pageContext }) => {
       <Layout>
         <SEO
           seoData={seoData}
-          bodyClass={bodyClass}
         />
 
         <InternalLinkInterceptor />

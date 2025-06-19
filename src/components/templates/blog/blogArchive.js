@@ -1,21 +1,18 @@
 import React from 'react';
 import Layout from '@components/layout';
 import SEO from "@components/SEO"
-import { useBodyClass } from '@hooks/useBodyClass';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
 import Pagination from '@components/Blog/Pagination';
 
 const BlogArchive = ({ pageContext }) => {
-    const bodyClass = useBodyClass();
     const { posts, pageNumber, numPages, seoData } = pageContext;
 
     return (
         <Layout>
             <SEO
                 seoData={seoData}
-                bodyClass={bodyClass}
             />
             {/* Banner tĩnh */}
             <section className="banner cus-height" style={{ background: "no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>

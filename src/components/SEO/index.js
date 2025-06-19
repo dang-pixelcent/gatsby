@@ -3,16 +3,20 @@ import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
 const SEO = ({
     seoData,
-    bodyClass,
+    // bodyClass,
     children
 }) => {
-    if (!bodyClass) console.warn("[SEO] bodyClass is not provided, this may cause issues with styling or functionality.");
+    // // Lấy giá trị isMobileMenuOpen từ context
+    // const { isMobileMenuOpen } = useMobileMenuContext();
+    // // Sử dụng hook để tính toán chuỗi class cho thẻ body
+    // const calculatedBodyClass = useBodyClass(isMobileMenuOpen);
+    //if (!bodyClass) console.warn("[SEO] bodyClass is not provided, this may cause issues with styling or functionality.");
     
     if (!seoData) {
         return (
             <Helmet>
                 <html lang="en-US" />
-                <body className={bodyClass} />
+                {/* <body className={bodyClass} /> */}
                 {children}
             </Helmet>
         )
@@ -25,7 +29,7 @@ const SEO = ({
             <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 
             {/* Thêm bodyClass vào thẻ body */}
-            <body className={bodyClass} />
+            {/* <body className={bodyClass} /> */}
 
             {/* dữ liệu-seo từ wp */}
             {parse(seoData)}
