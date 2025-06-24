@@ -1,8 +1,12 @@
 const React = require('react');
 const parse = require('html-react-parser').default || require('html-react-parser');
-const fs = require('fs');
-const path = require('path');
-// const path = eval('require')('path');
+// Sử dụng eval để tránh webpack warning
+const fs = eval('require')('fs');
+const path = eval('require')('path');
+const getTerminalColors = require('./src/utils/terminalColors.js');
+
+// Lấy màu sắc từ utils để sử dụng trong console log
+const color = getTerminalColors();
 
 // Đường dẫn đến thư mục cache và file chứa tracking codes
 const CACHE_DIR = '.cache';
@@ -16,17 +20,15 @@ const PAGE_SNIPPETS_DIR = 'page-snippets'; // Thư mục chứa các snippet ri�
  */
 const readJsonCache = (filePath) => {
   try {
-    // Sử dụng eval để tránh webpack phân tích static code
-    // const fs = eval('require')('fs');
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
-      console.log(`[gatsby-ssr] Successfully loaded cache from ${filePath}`);
+      console.log(`${color.cyan}[gatsby-ssr] Successfully loaded cache from ${filePath}${color.reset}`);
       const data = JSON.parse(fileContent);
       return data;
     }
-    console.info(`[gatsby-ssr] Cache file ${filePath} not found - this is normal for first build or if cache was cleared.`);
+    console.info(`${color.yellow}[gatsby-ssr] Cache file ${filePath} not found - this is normal for first build or if cache was cleared.${color.reset}`);
   } catch (error) {
-    console.error(`[gatsby-ssr] Error reading cache file ${filePath}:`, error);
+    console.error(`${color.red}[gatsby-ssr] Error reading cache file ${filePath}:`, error);
   }
   return { headerHtml: '', bodyOpenHtml: '', footerHtml: '' }; // Luôn trả về object rỗng để tránh lỗi
 };
@@ -52,7 +54,7 @@ const parseHtmlToReact = (htmlString, baseKey) => {
     // Nếu parse trả về string hoặc thứ gì đó không phải React element (ví dụ: chuỗi rỗng sau parse)
     return [];
   } catch (error) {
-    console.error(`[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
+    console.error(`${color.red}[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
     return [];
   }
 };
@@ -77,7 +79,7 @@ export const onRenderBody = ({
   // ============================
 
   // Đọc snippet riêng của trang từ cache
-  console.log(`[gatsby-ssr] Processing page: ${pathname} at ${new Date().toISOString()}`);
+  console.log(`${color.cyan}[gatsby-ssr] Processing page: ${pathname} at ${new Date().toISOString()}${color.reset}`);
   const slug = pathname.replace(/\//g, '') || 'homepage'; // Thay thế dấu '/' bằng rỗng, nếu pathname là '/', sử dụng 'homePage' làm slug
   const pageSnippetsPath = path.join(process.cwd(), CACHE_DIR, PAGE_SNIPPETS_DIR, `${slug}.json`);
   const pageSnippets = readJsonCache(pageSnippetsPath);
