@@ -82,15 +82,7 @@ const SearchResultPage = ({ location }) => {
     const currentPosts = allResults.slice(indexOfFirstPost, indexOfLastPost);
     const numPages = Math.ceil(allResults.length / postsPerPage);
 
-    // Debug log
-    console.log('Debug pagination:', {
-        currentPage,
-        totalPosts: allResults.length,
-        indexOfFirstPost,
-        indexOfLastPost,
-        currentPostsLength: currentPosts.length,
-        numPages
-    });// Tạo basePath cho pagination với search query
+    // Tạo basePath cho pagination với search query
     const basePath = `/blogs/search?q=${encodeURIComponent(searchTerm)}&`;
 
     return (
