@@ -213,35 +213,35 @@ exports.createPages = async ({ actions, graphql }) => {
   const result = await graphql(`
         query {
             cms {
-                pages(where: {status: PUBLISH}, first: 99) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date, 
+                pages(where: {status: PUBLISH}, first: 999) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date, 
                     htmlSnippets {
                       bodyOpenHtml
                       footerHtml
                       headerHtml
                     }
                 } } }
-                services(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                services(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
                     htmlSnippets {
                       bodyOpenHtml
                       footerHtml
                       headerHtml
                     }
                 } }
-                events(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                events(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
                     htmlSnippets {
                       bodyOpenHtml
                       footerHtml
                       headerHtml
                     }
                 } }
-                posts(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                posts(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
                     htmlSnippets {
                       bodyOpenHtml
                       footerHtml
                       headerHtml
                     }
                 } }
-                caseStudiesPost(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                caseStudiesPost(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
                     htmlSnippets {
                       bodyOpenHtml
                       footerHtml

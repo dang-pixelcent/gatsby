@@ -35,35 +35,35 @@ if (!WPGRAPHQL_URL) {
 // Câu truy vấn GraphQL để lấy tất cả nội dung cần thiết
 const GET_ALL_CONTENT_QUERY = gql`
   query GetAllContentWithScripts {
-    pages(where: {status: PUBLISH}, first: 100) { # Tăng giới hạn nếu cần
+    pages(where: {status: PUBLISH}, first: 999) { # Tăng giới hạn nếu cần
       nodes {
         slug
         uri
         flexibleContentHtml
       }
     }
-    services(first: 100) {
+    services(first: 999) {
       nodes {
         slug
         uri
         flexibleContentHtml
       }
     }
-    posts(first: 100) {
+    posts(first: 999) {
       nodes {
         slug
         uri
         flexibleContentHtml
       }
     }
-    events(first: 100) {
+    events(first: 999) {
       nodes {
         slug
         uri
         flexibleContentHtml
       }
     }
-    caseStudies(first: 99) {
+    caseStudiesPost(first: 999) {
       nodes {
         uri
         slug
