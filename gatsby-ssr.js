@@ -79,7 +79,6 @@ export const onRenderBody = ({
   // ============================
 
   // Đọc snippet riêng của trang từ cache
-  console.log(`${color.cyan}[gatsby-ssr] Processing page: ${pathname} at ${new Date().toISOString()}${color.reset}`);
   const slug = pathname.replace(/\//g, '') || 'homepage'; // Thay thế dấu '/' bằng rỗng, nếu pathname là '/', sử dụng 'homePage' làm slug
   const pageSnippetsPath = path.join(process.cwd(), CACHE_DIR, PAGE_SNIPPETS_DIR, `${slug}.json`);
   const pageSnippets = readJsonCache(pageSnippetsPath);
