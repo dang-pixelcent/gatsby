@@ -12,7 +12,9 @@ export const SEO = ({
     // // Sử dụng hook để tính toán chuỗi class cho thẻ body
     // const calculatedBodyClass = useBodyClass(isMobileMenuOpen);
     //if (!bodyClass) console.warn("[SEO] bodyClass is not provided, this may cause issues with styling or functionality.");
-    
+    // Kiểm tra xem seoData có phải là một chuỗi hợp lệ và không rỗng hay không
+    const canParseSeoData = typeof seoData === 'string' && seoData.trim().length > 0;
+
     if (!seoData) {
         return (
             <>
@@ -33,7 +35,7 @@ export const SEO = ({
             {/* <body className={bodyClass} /> */}
 
             {/* dữ liệu-seo từ wp */}
-            {parse(seoData)}
+            {canParseSeoData && parse(seoData)}
 
             <link rel="icon" href="/favicon.png" sizes="32x32" />
             <link rel="icon" href="/favicon.png" sizes="192x192" />
