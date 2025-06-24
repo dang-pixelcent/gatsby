@@ -19,10 +19,6 @@ const Pagination = ({ currentPage, numPages, basePath }) => {
 
     // Sửa đổi ở đây: Kiểm tra xem basePath có chứa query param không
     const getPageLink = (page) => {
-        if (basePath.includes('?')) {
-            // Dành cho trang tìm kiếm (ví dụ: /blogs/search?q=abc&)
-            return `${basePath}page=${page}`;
-        }
         // Dành cho trang blog chính
         return page === 1 ? basePath : `${basePath}/page/${page}`;
     };
