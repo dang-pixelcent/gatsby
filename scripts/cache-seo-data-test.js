@@ -79,7 +79,7 @@ async function cacheSeoData() {
 
   const query = `
   query {
-    pages(where: {status: PUBLISH}, first: 99) {
+    pages(where: {status: PUBLISH}, first: 999) {
     edges {
       node {
       uri
@@ -87,25 +87,25 @@ async function cacheSeoData() {
       }
     }
     }
-    services(first: 99) {
+    services(first: 999) {
     nodes {
       uri
       slug
     }
     }
-    events(first: 99) {
+    events(first: 999) {
     nodes {
       uri
       slug
     }
     }
-    posts(first: 99) {
+    posts(first: 999) {
     nodes {
       uri
       slug
     }
     }
-    caseStudies(first: 99) {
+    caseStudies(first: 999) {
     nodes {
       uri
       slug

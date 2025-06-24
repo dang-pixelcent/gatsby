@@ -23,6 +23,13 @@ if (!SEO_QUERY_URL) {
   process.exit(1);
 }
 
+// Tạo thư mục cache cho snippets từng page nếu chưa có
+const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
+if (!fs.existsSync(SNIPPETS_CACHE_DIR)) {
+  fs.mkdirSync(SNIPPETS_CACHE_DIR, { recursive: true });
+}
+
+
 function sanitizeFilename(url) {
   return url.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 }
@@ -76,6 +83,19 @@ function processAllScripts(html = '', pageSlug) {
         resourceType: 'external-script',
         attributes: attributes,
       });
+    }
+    else {
+      // Xử lý script inline (không có src)
+      const inlineContent = $(element).html(); // Lấy nội dung bên trong thẻ <script>
+
+      // Chỉ thêm vào nếu có nội dung
+      if (inlineContent) {
+        extractedScripts.push({
+          resourceType: 'inline-script',
+          content: `(function(){\n${inlineContent}\n})();`,
+          id: `inline-script-${pageSlug}-${index}` // Tạo ID để làm key
+        });
+      }
     }
     // Các script inline (không có src) sẽ bị xóa cùng với các script khác mà không được xử lý
   });
@@ -189,39 +209,123 @@ async function createPaginatedBlogPages({ graphql, actions }) {
 
 
 exports.createPages = async ({ actions, graphql }) => {
-  const { data } = await graphql(`
-    query {
-      cms {
-        pages(where: {status: PUBLISH}, first: 99) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date } } }
-        services(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
-        events(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
-        posts(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
-        caseStudies(first: 99) { nodes { id, slug, uri, title, flexibleContentHtml, date } }
-        themeSettings { themeOptionsSettings { headerFooter { body, footer, header } } }
-      }
-    }
-  `);
+  //=======================PHẦN TRUY VẤN===================================
+  const result = await graphql(`
+        query {
+            cms {
+                pages(where: {status: PUBLISH}, first: 999) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date, 
+                    htmlSnippets {
+                      bodyOpenHtml
+                      footerHtml
+                      headerHtml
+                    }
+                } } }
+                services(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                    htmlSnippets {
+                      bodyOpenHtml
+                      footerHtml
+                      headerHtml
+                    }
+                } }
+                events(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                    htmlSnippets {
+                      bodyOpenHtml
+                      footerHtml
+                      headerHtml
+                    }
+                } }
+                posts(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                    htmlSnippets {
+                      bodyOpenHtml
+                      footerHtml
+                      headerHtml
+                    }
+                } }
+                caseStudiesPost(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
+                    htmlSnippets {
+                      bodyOpenHtml
+                      footerHtml
+                      headerHtml
+                    }
+                } }
 
-  // XỬ LÝ BLOG
+                htmlSnippets {
+                    bodyOpenHtml
+                    footerHtml
+                    headerHtml
+                }
+            }
+        }
+    `);
+
+  // Kiểm tra lỗi sau khi query (rất quan trọng)
+  if (result.errors) {
+    console.error("Main GraphQL query failed!", result.errors);
+    throw new Error("Main GraphQL query failed!");
+  }
+  const { data } = result;
+  //======================PHẦN CHÍNH===================================
+  // XỬ LÝ BLOGs với phân trang
   await createPaginatedBlogPages({ graphql, actions });
 
+  /**
+   * PHẦN XỬ LÝ RIÊNG CHO TRANG HOME
+   * - Lấy dữ liệu SEO từ cache
+   *  - Tạo trang home với template riêng
+   *  - Lưu các snippets HTML riêng cho trang home vào cache
+   */
   // trang home riêng + SEO
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
+  
+  // Tìm homepage node để xử lý snippets
+  const homepageNode = data.cms.pages.edges.find(({ node }) => node.isFrontPage)?.node;
+  let homepageSnippets = null;
+  
+  if (homepageNode && homepageNode.htmlSnippets) {
+    // Lưu snippets riêng cho homepage
+    const snippetPath = path.join(SNIPPETS_CACHE_DIR, 'homepage.json');
+    try {
+      fs.writeFileSync(snippetPath, JSON.stringify(homepageNode.htmlSnippets));
+      homepageSnippets = homepageNode.htmlSnippets;
+      console.log(`${colors.green}Homepage snippets saved to cache.${colors.reset}`);
+    } catch (error) {
+      console.error(`${colors.red}Error saving homepage snippets:${colors.reset}`, error);
+    }
+  }
+  
   actions.createPage({
     path: `/`,
     component: path.resolve(`./src/components/templates/home.js`),
     context: {
-      seoData: homeDataSeo || null
+      seoData: homeDataSeo || null,
+      htmlSnippets: homepageSnippets
     },
   });
+  /**
+   * END PHẦN XỬ LÝ TRANG HOME
+   */
 
+  /**
+   * PHẦN XỬ LÝ CÁC TRANG DYNAMIC
+   */
   const processNode = (node) => {
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`);
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(node.flexibleContentHtml);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
     const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
-
+    // Bước 3: lưu snippets riêng vào cache
+    if (node.htmlSnippets) {
+      const slug = node.uri.replace(/\//g, '') || 'homepage';
+      const snippetPath = path.join(SNIPPETS_CACHE_DIR, `${slug}.json`);
+      try {
+        fs.writeFileSync(snippetPath, JSON.stringify(node.htmlSnippets));
+        console.log(`${colors.green}Page snippets saved for: ${node.uri}${colors.reset}`);
+      } catch (error) {
+        console.error(`${colors.red}Error saving snippets for ${node.uri}:${colors.reset}`, error);
+      }
+    }
+    
     return {
       ...node,
       flexibleContentHtml: cleanedHtml,
@@ -259,7 +363,7 @@ exports.createPages = async ({ actions, graphql }) => {
   data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, ''));
 
   console.log(`${colors.cyan}Processing case studies...${colors.reset}`);
-  data.cms.caseStudies.nodes.map(processNode).forEach(caseStudy => createPageFromNode(caseStudy, ''));
+  data.cms.caseStudiesPost.nodes.map(processNode).forEach(caseStudy => createPageFromNode(caseStudy, ''));
 
   // tạo trang kết quả tìm kiếm cho blogs
   console.log(`${colors.cyan}Creating search result page for blogs...${colors.reset}`);
@@ -271,16 +375,17 @@ exports.createPages = async ({ actions, graphql }) => {
 
 
   /** Lưu tracking codes vào cache */
-  if (data.cms.themeSettings?.themeOptionsSettings?.headerFooter) {
-    const headerFooterData = data.cms.themeSettings.themeOptionsSettings.headerFooter;
+  if (data.cms.htmlSnippets) {
+    const snippetsData = data.cms.htmlSnippets;
     const cacheDir = path.join(__dirname, '.cache');
-    const trackingCodesCachePath = path.join(cacheDir, 'theme-tracking-codes.json');
+    // Đổi tên file cache cho rõ nghĩa hơn
+    const snippetsCachePath = path.join(cacheDir, 'global-html-snippets.json');
     try {
       if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
-      fs.writeFileSync(trackingCodesCachePath, JSON.stringify(headerFooterData, null, 2));
-      console.log(`${colors.green}Theme tracking codes saved to cache.${colors.reset}`);
+      fs.writeFileSync(snippetsCachePath, JSON.stringify(snippetsData, null, 2));
+      console.log(`${colors.green}Global HTML snippets saved to cache.${colors.reset}`);
     } catch (error) {
-      console.error(`${colors.red}Error saving theme tracking codes:${colors.reset}`, error);
+      console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
     }
   }
 };

@@ -105,7 +105,7 @@ async function cacheSeoData() {
       slug
     }
     }
-    caseStudies(first: 99) {
+    caseStudiesPost(first: 99) {
     nodes {
       uri
       slug
@@ -134,7 +134,7 @@ async function cacheSeoData() {
       urls.push(`${SEO_QUERY_URL}${node.uri}`)
     })
 
-    data.caseStudies.nodes.forEach(node => {
+    data.caseStudiesPost.nodes.forEach(node => {
       urls.push(`${SEO_QUERY_URL}${node.uri}`)
     })
 

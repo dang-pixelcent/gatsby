@@ -1,5 +1,5 @@
 // các import cơ bản phải có
-import { graphql, Link } from "gatsby"
+import { graphql, Link, Script } from "gatsby"
 import React, { useEffect, useMemo } from "react";
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
@@ -58,11 +58,13 @@ const Home = ({ pageContext }) => {
     // Hàm này sẽ chạy mỗi khi component được mount (tải trang, back/forward)
     //console.log("Page content updated, processing scripts...");
     scripts.forEach(script => {
-      const config = getScriptConfig(script.attributes.src);
-      // Nếu có hàm process trong cấu hình, hãy gọi nó
-      if (config.process) {
-        //console.log(`Calling process() for: ${script.attributes.src}`);
-        config.process();
+      if (script.resourceType === 'external-script') {
+        const config = getScriptConfig(script.attributes.src);
+        // Nếu có hàm process trong cấu hình, hãy gọi nó
+        if (config.process) {
+          //console.log(`Calling process() for: ${script.attributes.src}`);
+          config.process();
+        }
       }
     });
     // Chạy lại effect này mỗi khi danh sách script hoặc nội dung thay đổi
@@ -130,13 +132,27 @@ const Home = ({ pageContext }) => {
       </Layout>
       {/* Tiêm các script động vào cuối body */}
       <DynamicScriptHandler />
+      {/* {scripts.map((script) => {
+        // Trường hợp 2: Script inline
+        if (script.resourceType === 'inline-script') {
+          return (
+            <Script
+              key={script.id}
+              strategy="post-hydrate" // Script inline cũng có thể có chiến lược
+              dangerouslySetInnerHTML={{ __html: script.content }}
+            />
+          );
+        }
+
+        return null;
+      })} */}
     </React.Fragment>
   )
 }
 export const Head = ({ pageContext }) => (
-    <SEO 
-        seoData={pageContext.seoData || {}} 
-    />
+  <SEO
+    seoData={pageContext.seoData || {}}
+  />
 );
 
 export default Home

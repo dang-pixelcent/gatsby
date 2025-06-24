@@ -1,33 +1,38 @@
-import React from "react";
-import parse from 'html-react-parser'; // Import thư viện
+const React = require('react');
+const parse = require('html-react-parser').default || require('html-react-parser');
+// Sử dụng eval để tránh webpack warning
+const fs = eval('require')('fs');
+const path = eval('require')('path');
+const getTerminalColors = require('./src/utils/terminalColors.js');
 
-// Hàm để tải tracking codes từ cache
-const loadTrackingCodesFromCache = () => {
-  // Chỉ chạy trong môi trường server-side (Node.js)
-  if (typeof window !== 'undefined') {
-    console.info("[gatsby-ssr] Running in browser environment, skipping cache read");
-    return { header: '', body: '', footer: '' };
-  }
-  
+// Lấy màu sắc từ utils để sử dụng trong console log
+const color = getTerminalColors();
+
+// Đường dẫn đến thư mục cache và file chứa tracking codes
+const CACHE_DIR = '.cache';
+const GLOBAL_SNIPPETS_FILE = 'global-html-snippets.json';
+const PAGE_SNIPPETS_DIR = 'page-snippets'; // Thư mục chứa các snippet riêng của từng trang
+
+/**
+ * Hàm helper để đọc một file JSON từ cache một cách an toàn.
+ * @param {string} filePath - Đường dẫn đầy đủ đến file cache.
+ * @returns {object} - Dữ liệu JSON đã parse hoặc object rỗng.
+ */
+const readJsonCache = (filePath) => {
   try {
-    // Sử dụng eval để tránh webpack phân tích static code
-    const fs = eval('require')('fs');
-    const path = eval('require')('path');
-    
-    const trackingCodesCachePath = path.join(process.cwd(), '.cache', 'theme-tracking-codes.json');
-    
-    if (fs.existsSync(trackingCodesCachePath)) {
-      const fileContent = fs.readFileSync(trackingCodesCachePath, 'utf-8');
+    if (fs.existsSync(filePath)) {
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      console.log(`${color.cyan}[gatsby-ssr] Successfully loaded cache from ${filePath}${color.reset}`);
       const data = JSON.parse(fileContent);
-      console.log("[gatsby-ssr] Successfully loaded tracking codes from cache");
       return data;
     }
-    console.info("[gatsby-ssr] Cached 'theme-tracking-codes.json' not found - this is normal for first build or if cache was cleared.");
+    console.info(`${color.yellow}[gatsby-ssr] Cache file ${filePath} not found - this is normal for first build or if cache was cleared.${color.reset}`);
   } catch (error) {
-    console.error("[gatsby-ssr] Error reading or parsing cached 'theme-tracking-codes.json':", error);
+    console.error(`${color.red}[gatsby-ssr] Error reading cache file ${filePath}:`, error);
   }
-  return { header: '', body: '', footer: '' };
+  return { headerHtml: '', bodyOpenHtml: '', footerHtml: '' }; // Luôn trả về object rỗng để tránh lỗi
 };
+
 
 // Helper function để đảm bảo output từ parse là một mảng và có key
 const parseHtmlToReact = (htmlString, baseKey) => {
@@ -49,13 +54,14 @@ const parseHtmlToReact = (htmlString, baseKey) => {
     // Nếu parse trả về string hoặc thứ gì đó không phải React element (ví dụ: chuỗi rỗng sau parse)
     return [];
   } catch (error) {
-    console.error(`[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
+    console.error(`${color.red}[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
     return [];
   }
 };
 
 
 export const onRenderBody = ({
+  pathname, // Đường dẫn hiện tại của trang render
   setHeadComponents,
   setPreBodyComponents,
   setPostBodyComponents,
@@ -72,11 +78,26 @@ export const onRenderBody = ({
   });
   // ============================
 
-  const trackingCodes = loadTrackingCodesFromCache();
+  // Đọc snippet riêng của trang từ cache
+  const slug = pathname.replace(/\//g, '') || 'homepage'; // Thay thế dấu '/' bằng rỗng, nếu pathname là '/', sử dụng 'homePage' làm slug
+  const pageSnippetsPath = path.join(process.cwd(), CACHE_DIR, PAGE_SNIPPETS_DIR, `${slug}.json`);
+  const pageSnippets = readJsonCache(pageSnippetsPath);
 
-  const scriptsForHeadString = trackingCodes.header || "";
-  const scriptsForPreBodyString_fromBodyField = trackingCodes.body || "";
-  const scriptsForPreBodyString_fromFooterField = trackingCodes.footer || "";
+  // global tracking codes
+  const globalSnippetsPath = path.join(process.cwd(), CACHE_DIR, GLOBAL_SNIPPETS_FILE);
+  const globalSnippets = readJsonCache(globalSnippetsPath);
+
+  //==============GHÉP NỐI CÁC SNIPPET LẠI VỚI NHAU================
+  // HTML cuối cùng = HTML toàn cục + HTML của trang hiện tại
+  const scriptsForHeadString_fromHeadField = (globalSnippets.headerHtml || '') + (pageSnippets.headerHtml || '');
+  const scriptsForPreBodyString_fromBodyField = (globalSnippets.bodyOpenHtml || '') + (pageSnippets.bodyOpenHtml || '');
+  const scriptsForPreBodyString_fromFooterField = (globalSnippets.footerHtml || '') + (pageSnippets.footerHtml || '');
+
+
+  // phần cũ chỉ có tracking codes global
+  // const scriptsForHeadString_fromHeadField = globalSnippets.headerHtml || "";
+  // const scriptsForPreBodyString_fromBodyField = globalSnippets.bodyOpenHtml || "";
+  // const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
 
   // --- 1. Cấu hình cho <head> ---
   const headItems = [];
@@ -88,9 +109,9 @@ export const onRenderBody = ({
     />
   );
 
-  if (scriptsForHeadString) {
+  if (scriptsForHeadString_fromHeadField) {
     // Phân tích chuỗi HTML thành các React elements
-    const parsedHeadScripts = parseHtmlToReact(scriptsForHeadString, 'head-script-item');
+    const parsedHeadScripts = parseHtmlToReact(scriptsForHeadString_fromHeadField, 'head-script-item');
     // Thêm các elements đã parse vào headItems (sử dụng spread operator nếu parsedHeadScripts là mảng)
     headItems.push(...parsedHeadScripts);
   }
@@ -102,15 +123,10 @@ export const onRenderBody = ({
   // --- 2. Cấu hình cho ngay sau thẻ <body> mở ---
   const preBodyItems = [];
 
-  if (scriptsForPreBodyString_fromFooterField) {
-    const parsedFooterScripts = parseHtmlToReact(scriptsForPreBodyString_fromFooterField, 'prebody-footer-item');
-    preBodyItems.push(...parsedFooterScripts);
+  if (scriptsForPreBodyString_fromBodyField) {
+    const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
+    preBodyItems.push(...parsedBodyScripts);
   }
-
-  // if (scriptsForPreBodyString_fromBodyField) {
-  //   const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
-  //   preBodyItems.push(...parsedBodyScripts);
-  // }
 
   if (preBodyItems.length > 0) {
     setPreBodyComponents(preBodyItems);
@@ -118,11 +134,10 @@ export const onRenderBody = ({
 
   // --- 3. Cấu hình cho ngay trước thẻ </body> đóng ---
   const postBodyItems = [];
-  
-  const scriptsForPostBodyString = trackingCodes.postBody || "";
-  if (scriptsForPostBodyString) {
-    const parsedPostBodyScripts = parseHtmlToReact(scriptsForPostBodyString, 'postbody-item');
-    postBodyItems.push(...parsedPostBodyScripts);
+
+  if (scriptsForPreBodyString_fromFooterField) {
+    const parsedFooterScripts = parseHtmlToReact(scriptsForPreBodyString_fromFooterField, 'postbody-footer-item');
+    postBodyItems.push(...parsedFooterScripts);
   }
 
   if (postBodyItems.length > 0) {
