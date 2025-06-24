@@ -52,24 +52,29 @@ const SearchResultPage = ({ location }) => {
         const query = params.get('q') || '';
         const page = parseInt(params.get('page')) || 1;
         
-        setSearchTerm(query);
+        // Cập nhật currentPage khi URL thay đổi
         setCurrentPage(page);
-
-        if (query) {
-            setIsLoading(true);
-            fetchSearchResults(query)
-                .then(data => {
-                    setAllResults(data);
-                    setIsLoading(false);
-                })
-                .catch(error => {
-                    console.error("Search failed:", error);
-                    setIsLoading(false);
-                });
-        } else {
-            setIsLoading(false);
-        }
-    }, [location.search]);
+        
+        // Chỉ fetch dữ liệu khi search term thay đổi
+        if (query !== searchTerm) {
+            setSearchTerm(query);
+            
+            if (query) {
+                setIsLoading(true);
+                fetchSearchResults(query)
+                    .then(data => {
+                        setAllResults(data);
+                        setIsLoading(false);
+                    })
+                    .catch(error => {
+                        console.error("Search failed:", error);
+                        setIsLoading(false);
+                    });
+            } else {
+                setAllResults([]);
+                setIsLoading(false);
+            }        }
+    }, [location.search, searchTerm]);
 
     // Logic phân trang
     const indexOfLastPost = currentPage * postsPerPage;
@@ -77,11 +82,20 @@ const SearchResultPage = ({ location }) => {
     const currentPosts = allResults.slice(indexOfFirstPost, indexOfLastPost);
     const numPages = Math.ceil(allResults.length / postsPerPage);
 
-    // Tạo basePath cho pagination với search query
+    // Debug log
+    console.log('Debug pagination:', {
+        currentPage,
+        totalPosts: allResults.length,
+        indexOfFirstPost,
+        indexOfLastPost,
+        currentPostsLength: currentPosts.length,
+        numPages
+    });// Tạo basePath cho pagination với search query
     const basePath = `/blogs/search?q=${encodeURIComponent(searchTerm)}&`;
 
     return (
-        <Layout>            {/* Banner tĩnh */}
+        <Layout>
+            {/* Banner tĩnh */}
             <section className="banner" style={{background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')"}}>
                 <div className="cus-container h-100 ast-flex align-items-center">
                     <div className="ast-full-width text-left text-white">
@@ -96,9 +110,9 @@ const SearchResultPage = ({ location }) => {
             {/* Khung chính của trang search giống như blog */}
             <section className="section sc-blog">
                 <div className="cus-container">
-                    <div className="main ast-flex justify-content-between">
-                        {/* Cột trái */}
-                        <div className="blog-items ast-flex flex-column">                            {isLoading ? (
+                    <div className="main ast-flex justify-content-between">                        {/* Cột trái */}
+                        <div className="blog-items ast-flex flex-column">
+                            {isLoading ? (
                                 <div className="loading-container" style={{
                                     display: 'flex',
                                     justifyContent: 'center',
