@@ -82,21 +82,13 @@ const SearchResultPage = ({ location }) => {
     const currentPosts = allResults.slice(indexOfFirstPost, indexOfLastPost);
     const numPages = Math.ceil(allResults.length / postsPerPage);
 
-    // Debug log
-    console.log('Debug pagination:', {
-        currentPage,
-        totalPosts: allResults.length,
-        indexOfFirstPost,
-        indexOfLastPost,
-        currentPostsLength: currentPosts.length,
-        numPages
-    });// Tạo basePath cho pagination với search query
+    // Tạo basePath cho pagination với search query
     const basePath = `/blogs/search?q=${encodeURIComponent(searchTerm)}&`;
 
     return (
         <Layout>
             {/* Banner tĩnh */}
-            <section className="banner" style={{background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')"}}>
+            <section className="banner cus-height" style={{background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')"}}>
                 <div className="cus-container h-100 ast-flex align-items-center">
                     <div className="ast-full-width text-left text-white">
                         <h1 className="h1-title fs-56 f-soletoxbold fw-800 text-white" style={{marginBottom: '24px'}}>
