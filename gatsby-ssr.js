@@ -1,8 +1,6 @@
 const React = require('react');
 const parse = require('html-react-parser').default || require('html-react-parser');
-// Sử dụng eval để tránh webpack warning
-const fs = eval('require')('fs');
-const path = eval('require')('path');
+const path = require('path');
 const getTerminalColors = require('./src/utils/terminalColors.js');
 
 // Lấy màu sắc từ utils để sử dụng trong console log
@@ -19,6 +17,7 @@ const PAGE_SNIPPETS_DIR = 'page-snippets'; // Thư mục chứa các snippet ri�
  * @returns {object} - Dữ liệu JSON đã parse hoặc object rỗng.
  */
 const readJsonCache = (filePath) => {
+  const fs = eval('require')('fs');
   try {
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -89,15 +88,15 @@ export const onRenderBody = ({
 
   //==============GHÉP NỐI CÁC SNIPPET LẠI VỚI NHAU================
   // HTML cuối cùng = HTML toàn cục + HTML của trang hiện tại
-  // const scriptsForHeadString_fromHeadField = (globalSnippets.headerHtml || '') + (pageSnippets.headerHtml || '');
-  // const scriptsForPreBodyString_fromBodyField = (globalSnippets.bodyOpenHtml || '') + (pageSnippets.bodyOpenHtml || '');
-  // const scriptsForPreBodyString_fromFooterField = (globalSnippets.footerHtml || '') + (pageSnippets.footerHtml || '');
+  const scriptsForHeadString_fromHeadField = (globalSnippets.headerHtml || '') + (pageSnippets.headerHtml || '');
+  const scriptsForPreBodyString_fromBodyField = (globalSnippets.bodyOpenHtml || '') + (pageSnippets.bodyOpenHtml || '');
+  const scriptsForPreBodyString_fromFooterField = (globalSnippets.footerHtml || '') + (pageSnippets.footerHtml || '');
 
 
   // phần cũ chỉ có tracking codes global
-  const scriptsForHeadString_fromHeadField = globalSnippets.headerHtml || "";
-  const scriptsForPreBodyString_fromBodyField = globalSnippets.bodyOpenHtml || "";
-  const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
+  // const scriptsForHeadString_fromHeadField = globalSnippets.headerHtml || "";
+  // const scriptsForPreBodyString_fromBodyField = globalSnippets.bodyOpenHtml || "";
+  // const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
 
   // --- 1. Cấu hình cho <head> ---
   const headItems = [];
