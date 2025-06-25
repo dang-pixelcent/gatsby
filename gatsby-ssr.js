@@ -89,15 +89,15 @@ export const onRenderBody = ({
 
   //==============GHÉP NỐI CÁC SNIPPET LẠI VỚI NHAU================
   // HTML cuối cùng = HTML toàn cục + HTML của trang hiện tại
-  const scriptsForHeadString_fromHeadField = (globalSnippets.headerHtml || '') + (pageSnippets.headerHtml || '');
-  const scriptsForPreBodyString_fromBodyField = (globalSnippets.bodyOpenHtml || '') + (pageSnippets.bodyOpenHtml || '');
-  const scriptsForPreBodyString_fromFooterField = (globalSnippets.footerHtml || '') + (pageSnippets.footerHtml || '');
+  // const scriptsForHeadString_fromHeadField = (globalSnippets.headerHtml || '') + (pageSnippets.headerHtml || '');
+  // const scriptsForPreBodyString_fromBodyField = (globalSnippets.bodyOpenHtml || '') + (pageSnippets.bodyOpenHtml || '');
+  // const scriptsForPreBodyString_fromFooterField = (globalSnippets.footerHtml || '') + (pageSnippets.footerHtml || '');
 
 
   // phần cũ chỉ có tracking codes global
-  // const scriptsForHeadString_fromHeadField = globalSnippets.headerHtml || "";
-  // const scriptsForPreBodyString_fromBodyField = globalSnippets.bodyOpenHtml || "";
-  // const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
+  const scriptsForHeadString_fromHeadField = globalSnippets.headerHtml || "";
+  const scriptsForPreBodyString_fromBodyField = globalSnippets.bodyOpenHtml || "";
+  const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
 
   // --- 1. Cấu hình cho <head> ---
   const headItems = [];
