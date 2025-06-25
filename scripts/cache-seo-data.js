@@ -64,6 +64,56 @@ function sanitizeFilename(url) {
   return url.replace(/[^a-z0-9]/gi, '_').toLowerCase()
 }
 
+// Helper function to add URLs to cache list
+function addUrlsToCache(urls, data, contentType) {
+  if (data[contentType]) {
+    const nodes = data[contentType].edges ? data[contentType].edges.map(edge => edge.node) : data[contentType].nodes;
+    nodes.forEach(node => {
+      urls.push(`${SEO_QUERY_URL}${node.uri}`)
+    })
+  }
+}
+
+// Helper function to process URLs in batches
+async function processBatches(urls) {
+  const BATCH_SIZE = 10 // Xử lý 10 URLs cùng lúc
+  const batches = []
+
+  for (let i = 0; i < urls.length; i += BATCH_SIZE) {
+    batches.push(urls.slice(i, i + BATCH_SIZE))
+  }
+
+  for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
+    const batch = batches[batchIndex]
+    console.log(`${colors.cyan}Processing batch ${batchIndex + 1}/${batches.length}${colors.reset}`)
+
+    // Xử lý song song trong batch
+    await Promise.allSettled(
+      batch.map(async (url, index) => {
+        const filename = sanitizeFilename(url)
+        const filePath = path.join(CACHE_DIR, `${filename}.json`)
+
+        // // Check cache exists và còn fresh (ví dụ: trong 24h)
+        // if (fs.existsSync(filePath)) {
+        //   const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+        //   const cacheAge = Date.now() - new Date(cached.cachedAt).getTime()
+        //   if (cacheAge < 24 * 60 * 60 * 1000) { // 24 hours
+        //     console.log(`${colors.gray}⚡ Using cached data for ${url}${colors.reset}`)
+        //     return
+        //   }
+        // }
+
+        const seoData = await fetchSeoData(url)
+        fs.writeFileSync(filePath, JSON.stringify({
+          url,
+          seoData,
+          cachedAt: new Date().toISOString()
+        }, null, 2))
+      })
+    )
+  }
+}
+
 async function cacheSeoData() {
   console.log(`${colors.cyan}${colors.bright}Starting SEO data caching...${colors.reset}`)
 
@@ -123,66 +173,18 @@ async function cacheSeoData() {
   try {
     const data = await client.request(query)
 
-    // Add all URLs to cache list
-    data.pages.edges.forEach(({ node }) => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
-
-    data.services.nodes.forEach(node => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
-
-    data.events.nodes.forEach(node => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
-
-    data.posts.nodes.forEach(node => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
-
-    data.caseStudiesPost.nodes.forEach(node => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
+    // Add all URLs to cache list using helper function
+    addUrlsToCache(urls, data, 'pages')
+    addUrlsToCache(urls, data, 'services')
+    addUrlsToCache(urls, data, 'events')
+    addUrlsToCache(urls, data, 'posts')
+    addUrlsToCache(urls, data, 'caseStudiesPost')
+    addUrlsToCache(urls, data, 'categories')
 
     console.log(`${colors.magenta}Found ${urls.length} URLs to cache${colors.reset}`)
 
     // Tối ưu: Xử lý song song với giới hạn concurrency
-    const BATCH_SIZE = 10 // Xử lý 10 URLs cùng lúc
-    const batches = []
-
-    for (let i = 0; i < urls.length; i += BATCH_SIZE) {
-      batches.push(urls.slice(i, i + BATCH_SIZE))
-    }
-
-    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
-      const batch = batches[batchIndex]
-      console.log(`${colors.cyan}Processing batch ${batchIndex + 1}/${batches.length}${colors.reset}`)
-
-      // Xử lý song song trong batch
-      await Promise.allSettled(
-        batch.map(async (url, index) => {
-          const filename = sanitizeFilename(url)
-          const filePath = path.join(CACHE_DIR, `${filename}.json`)
-
-          // // Check cache exists và còn fresh (ví dụ: trong 24h)
-          // if (fs.existsSync(filePath)) {
-          //   const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-          //   const cacheAge = Date.now() - new Date(cached.cachedAt).getTime()
-          //   if (cacheAge < 24 * 60 * 60 * 1000) { // 24 hours
-          //     console.log(`${colors.gray}⚡ Using cached data for ${url}${colors.reset}`)
-          //     return
-          //   }
-          // }
-
-          const seoData = await fetchSeoData(url)
-          fs.writeFileSync(filePath, JSON.stringify({
-            url,
-            seoData,
-            cachedAt: new Date().toISOString()
-          }, null, 2))
-        })
-      )
-    }
+    await processBatches(urls)
 
     console.log(`${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`)
 
