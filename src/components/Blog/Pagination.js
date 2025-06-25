@@ -10,8 +10,19 @@ const Pagination = ({ currentPage, numPages, basePath }) => {
         boundaryCount: 1,
     });
 
+    // Kiểm tra xem basePath có được truyền vào không
+    if (!basePath) {
+        console.error("Pagination component requires a basePath prop.");
+        return null;
+    }
+
     if (numPages <= 1) {
         return null;
+    }
+
+    // loại bỏ dấu gạch chéo cuối cùng nếu có
+    if (basePath.endsWith('/')) {
+        basePath = basePath.slice(0, -1);
     }
 
     const isFirst = currentPage === 1;

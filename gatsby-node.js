@@ -197,6 +197,12 @@ async function createPaginatedBlogPages({ graphql, actions }) {
         numPages: numPages, // Tổng số trang vẫn được truyền xuống
         hasNextPage: pageInfo.hasNextPage,
         seoData: blogsDataSeo || null,
+        pageInfo: {
+          name: 'Blogs',
+          slug: null,
+          uri: '/blogs/',
+          id: null // Không cần id cho blogs, chỉ cần uri
+        }
       },
     });
 
@@ -204,6 +210,151 @@ async function createPaginatedBlogPages({ graphql, actions }) {
     endCursor = pageInfo.endCursor;
     hasNextPage = pageInfo.hasNextPage;
     pageNumber++;
+  }
+}
+
+
+async function createPaginatedCategoryPages({ graphql, actions }) {
+  const { createPage } = actions;
+  const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
+  const postsPerPage = 5;
+
+  // Bước 1: Lấy tất cả categories
+  const categoriesResult = await graphql(`
+    query GetAllCategories {
+      cms {
+        categories(first: 999) {
+          nodes {
+            name
+            slug
+            uri
+            id
+          }
+        }
+      }
+    }
+  `);
+
+  if (categoriesResult.errors) {
+    console.error("Failed to fetch categories", categoriesResult.errors);
+    return;
+  }
+
+  const categories = categoriesResult.data.cms.categories.nodes;
+  console.log(`Processing ${categories.length} categories...`);
+
+  // Bước 2: Xử lý từng category
+  for (const category of categories) {
+    console.log(`${colors.cyan}Processing category: ${category.name}${colors.reset}`);
+
+    // Lấy cached SEO data cho category
+    const categoryDataSeo = getCachedSeoData(`${SEO_QUERY_URL}${category.uri}`);
+
+    // Đếm tổng số posts trong category này
+    const countResult = await graphql(`
+      query GetCategoryPostCount($categoryName: String!) {
+        cms {
+          posts(first: 9999, where: {categoryName: $categoryName}) {
+            nodes { id }
+          }
+        }
+      }
+    `, { categoryName: category.name });
+
+    if (countResult.errors) {
+      console.error(`Failed to count posts for category ${category.name}`, countResult.errors);
+      continue;
+    }
+
+    const totalPosts = countResult.data.cms.posts.nodes.length;
+    const numPages = Math.ceil(totalPosts / postsPerPage);
+
+    if (totalPosts === 0) {
+      console.log(`${colors.yellow}Category ${category.name} has no posts, skipping...${colors.reset}`);
+      continue;
+    }
+
+    console.log(`Category ${category.name}: ${totalPosts} posts, ${numPages} pages`);
+
+    // Bước 3: Tạo các trang phân trang cho category này
+    let hasNextPage = true;
+    let endCursor = null;
+    let pageNumber = 1;
+
+    while (hasNextPage) {
+      console.log(`Fetching data for category ${category.name}, page ${pageNumber}...`);
+
+      const pageResult = await graphql(`
+        query GetCategoryPostsForPage($categoryName: String!, $first: Int!, $after: String) {
+          cms {
+            posts(first: $first, after: $after, where: { 
+              categoryName: $categoryName,
+              orderby: { field: DATE, order: DESC } 
+            }) {
+              edges {
+                node {
+                  id
+                  title
+                  uri
+                  excerpt(format: RENDERED)
+                  featuredImage {
+                    node {
+                      sourceUrl
+                      altText
+                    }
+                  }
+                }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+            }
+          }
+        }
+      `, {
+        categoryName: category.name,
+        first: postsPerPage,
+        after: endCursor
+      });
+
+      if (pageResult.errors) {
+        console.error(`GraphQL query for category ${category.name}, page ${pageNumber} failed`, pageResult.errors);
+        hasNextPage = false;
+        continue;
+      }
+
+      const postsOnPage = pageResult.data.cms.posts.edges;
+      const pageInfo = pageResult.data.cms.posts.pageInfo;
+
+      // Tạo đường dẫn cho trang category
+      const pagePath = pageNumber === 1
+        ? category.uri
+        : `${category.uri}page/${pageNumber}/`;
+
+      createPage({
+        path: pagePath,
+        component: blogArchiveTemplate,
+        context: {
+          posts: postsOnPage.map(edge => edge.node),
+          pageNumber: pageNumber,
+          numPages: numPages,
+          hasNextPage: pageInfo.hasNextPage,
+          seoData: categoryDataSeo || null,
+          pageInfo: {
+            name: category.name,
+            slug: category.slug,
+            uri: category.uri,
+            id: category.id
+          }
+        },
+      });
+
+      // Cập nhật cho vòng lặp tiếp theo
+      endCursor = pageInfo.endCursor;
+      hasNextPage = pageInfo.hasNextPage;
+      pageNumber++;
+    }
   }
 }
 
@@ -268,6 +419,9 @@ exports.createPages = async ({ actions, graphql }) => {
   // XỬ LÝ BLOGs với phân trang
   await createPaginatedBlogPages({ graphql, actions });
 
+  // XỬ LÝ CÁC TRANG CATEGORY với phân trang
+  await createPaginatedCategoryPages({ graphql, actions });
+
   /**
    * PHẦN XỬ LÝ RIÊNG CHO TRANG HOME
    * - Lấy dữ liệu SEO từ cache
@@ -276,11 +430,11 @@ exports.createPages = async ({ actions, graphql }) => {
    */
   // trang home riêng + SEO
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
-  
+
   // Tìm homepage node để xử lý snippets
   const homepageNode = data.cms.pages.edges.find(({ node }) => node.isFrontPage)?.node;
   let homepageSnippets = null;
-  
+
   if (homepageNode && homepageNode.htmlSnippets) {
     // Lưu snippets riêng cho homepage
     const snippetPath = path.join(SNIPPETS_CACHE_DIR, 'homepage.json');
@@ -292,7 +446,7 @@ exports.createPages = async ({ actions, graphql }) => {
       console.error(`${colors.red}Error saving homepage snippets:${colors.reset}`, error);
     }
   }
-  
+
   actions.createPage({
     path: `/`,
     component: path.resolve(`./src/components/templates/home.js`),
@@ -325,7 +479,7 @@ exports.createPages = async ({ actions, graphql }) => {
         console.error(`${colors.red}Error saving snippets for ${node.uri}:${colors.reset}`, error);
       }
     }
-    
+
     return {
       ...node,
       flexibleContentHtml: cleanedHtml,
