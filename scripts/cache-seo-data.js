@@ -79,37 +79,43 @@ async function cacheSeoData() {
 
   const query = `
   query {
-    pages(where: {status: PUBLISH}, first: 99) {
-    edges {
-      node {
-      uri
-      slug
+    pages(where: {status: PUBLISH}, first: 999) {
+      edges {
+        node {
+        uri
+        slug
+        }
       }
     }
+    services(first: 999) {
+      nodes {
+        uri
+        slug
+      }
     }
-    services(first: 99) {
-    nodes {
-      uri
-      slug
+    events(first: 999) {
+      nodes {
+        uri
+        slug
+      }
     }
+    posts(first: 999) {
+      nodes {
+        uri
+        slug
+      }
     }
-    events(first: 99) {
-    nodes {
-      uri
-      slug
+    caseStudiesPost(first: 999) {
+      nodes {
+        uri
+        slug
+      }
     }
-    }
-    posts(first: 99) {
-    nodes {
-      uri
-      slug
-    }
-    }
-    caseStudiesPost(first: 99) {
-    nodes {
-      uri
-      slug
-    }
+    categories(first: 999) {
+      nodes {
+        slug
+        uri
+      }
     }
   }
   `
