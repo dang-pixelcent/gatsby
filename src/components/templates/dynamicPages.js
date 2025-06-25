@@ -132,7 +132,7 @@ const Home = ({ pageContext }) => {
       </Layout>
       {/* Tiêm các script động vào cuối body */}
       <DynamicScriptHandler />
-      {/* {scripts.map((script) => {
+      {scripts.map((script) => {
         // Trường hợp 2: Script inline
         if (script.resourceType === 'inline-script') {
           return (
@@ -145,7 +145,7 @@ const Home = ({ pageContext }) => {
         }
 
         return null;
-      })} */}
+      })}
     </React.Fragment>
   )
 }

@@ -12,17 +12,18 @@ import { initializeTabs } from '../../script-handlers/tab-handler';
 import { initializeHeightEqualizer } from '../../script-handlers/height-equalizer-handler';
 import { initializeJotForm } from '../../script-handlers/jotform-handler';
 import { initializeResultsNavigation } from '../../script-handlers/results-navigation-handler';
+import { initializeTrackingPixels } from '../../script-handlers/trackinghandler';
 
 // 2. Thêm chúng vào danh sách đăng ký
 const HANDLER_REGISTRY = [
-    initializeFAQs,
-    initializeSlickCarousel,
+    // initializeFAQs,
+    // initializeSlickCarousel,
     initializeLoadMore,
-    initializeTabs,
-    //initializeFormEmbed,
-    initializeHeightEqualizer,
-    initializeJotForm,
-    initializeResultsNavigation,
+    // initializeTabs,
+    // initializeHeightEqualizer,
+    // initializeJotForm,
+    // initializeResultsNavigation,
+    initializeTrackingPixels,
 ];
 
 const DynamicScriptHandler = () => {
