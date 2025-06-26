@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { useLocation } from "@reach/router"
 
-const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
+const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
   // Sử dụng biến môi trường cho WordPress URL
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
@@ -95,7 +95,7 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
 
     // Hàm để kiểm tra và cập nhật trạng thái "dính"
     const handleScroll = () => {
-      const isDesktop = window.innerWidth > MOBILE_BREAKPOINT; 
+      const isDesktop = window.innerWidth > MOBILE_BREAKPOINT;
 
       if (isDesktop) {
         // Logic cho desktop
@@ -264,7 +264,8 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                     <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
-                          <img width={250} height={72} src={content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl} className="custom-logo" alt="MD Marketing Agency" decoding="async" srcSet={`${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-250x72.png 250w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-300x87.png 300w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-768x222.png 768w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png 1038w`} sizes="(max-width: 250px) 100vw, 250px" />
+                          {/* <img width={250} height={72} src={content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl} className="custom-logo" alt="MD Marketing Agency" decoding="async" srcSet={`${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-250x72.png 250w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-300x87.png 300w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-768x222.png 768w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png 1038w`} sizes="(max-width: 250px) 100vw, 250px" /> */}
+                          <img width={250} height={72} src={`/logo/footer-logo.png`} className="custom-logo" alt="MD Marketing Agency" decoding="async" srcSet={`/logo/logo-head-250x72.png 250w, /logo/logo-head-300x87.png 300w, /logo/logo-head-1024x296.png 1024w, /logo/logo-head-768x222.png 768w, /logo/logo-head.png 1038w`} sizes="(max-width: 250px) 100vw, 250px" />
                         </Link>
                       </span>
                     </div>
@@ -290,7 +291,7 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-0-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-8" id="mega-menu-item-media_image-8">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-1.svg`} className="image wp-image-238 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjUxOjM0OQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-1.svg`} /></li>
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-1.svg`} className="image wp-image-238 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjUxOjM0OQ==-1" src={`/services/improvement-1.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-857" id="mega-menu-item-857">
                                         <Link className="mega-menu-link" to={`/service/website-development`}>
                                           Website Development & Design
@@ -306,7 +307,7 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-0-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-9" id="mega-menu-item-media_image-9">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-5.svg`} className="image wp-image-239 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjU2OjM0OQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-5.svg`} /></li>
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-5.svg`} className="image wp-image-239 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjU2OjM0OQ==-1" src={`/services/improvement-5.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-858" id="mega-menu-item-858">
                                         <Link className="mega-menu-link" to={`/service/facebook-advertising`}>
                                           Meta Advertising (Facebook & Instagram)
@@ -326,7 +327,7 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-1-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-11" id="mega-menu-item-media_image-11">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-2.svg`} className="image wp-image-240 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY0OjM1MQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-2.svg`} /></li>
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-2.svg`} className="image wp-image-240 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY0OjM1MQ==-1" src={`/services/improvement-2.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-859" id="mega-menu-item-859">
                                         <Link className="mega-menu-link" to={`/service/search-engine-optimization`}>
                                           Search Engine Marketing
@@ -342,7 +343,7 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-1-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-12" id="mega-menu-item-media_image-12">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-6.svg`} className="image wp-image-241 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY5OjM1MQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-6.svg`} /></li>
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-6.svg`} className="image wp-image-241 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY5OjM1MQ==-1" src={`/services/improvement-6.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-860" id="mega-menu-item-860">
                                         <Link className="mega-menu-link" to={`/service/lead-management`}>
                                           Lead Management (CRM)
@@ -361,7 +362,8 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-2-0">
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-13" id="mega-menu-item-media_image-13"><img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-3.svg`} className="image wp-image-242 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="Mjc3OjM1MQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-3.svg`} /></li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-13" id="mega-menu-item-media_image-13">
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-3.svg`} className="image wp-image-242 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="Mjc3OjM1MQ==-1" src={`/services/improvement-3.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-861" id="mega-menu-item-861">
                                         <Link className="mega-menu-link" to={`/service/google-maps-marketing`}>
                                           Google Maps Marketing
@@ -376,7 +378,8 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-2-1">
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-16" id="mega-menu-item-media_image-16"><img width={40} height={40} alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/12/icon-reputation-management.png`} className="image wp-image-864 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjgyOjM4Nw==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/12/icon-reputation-management.png`} /></li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-16" id="mega-menu-item-media_image-16">
+                                        <img width={40} height={40} alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/icon-reputation-management.png`} className="image wp-image-864 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjgyOjM4Nw==-1" src={`/services/icon-reputation-management.png`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-862" id="mega-menu-item-862">
                                         <Link className="mega-menu-link" to={`/service/reputation-management`}>
                                           Reputation Management
@@ -395,7 +398,8 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-3-0">
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-15"><img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-4.svg`} className="image wp-image-244 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjkwOjM1MQ==-1" src={`${WP_BASE_URL}/wp-content/uploads/2024/11/improvement-4.svg`} /></li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-15">
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-4.svg`} className="image wp-image-244 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjkwOjM1MQ==-1" src={`/services/improvement-4.svg`} /></li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-863" id="mega-menu-item-863">
                                         <Link className="mega-menu-link" to={`/service/google-advertising`}>
                                           Google Paid Advertising
@@ -581,11 +585,11 @@ const Header = ({isMobileMenuOpen, setMobileMenuOpen}) => {
                         <img
                           width={250}
                           height={72}
-                          src={content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl}
+                          src={`/logo/footer-logo.png`}
                           className="custom-logo"
                           alt={logoAlt}
                           decoding="async"
-                          srcSet={`${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-250x72.png 250w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-300x87.png 300w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-768x222.png 768w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png 1038w`}
+                          srcSet={`/logo/logo-head-250x72.png 250w, /logo/logo-head-300x87.png 300w, /logo/logo-head-1024x296.png 1024w, /logo/logo-head-768x222.png 768w, /logo/logo-head.png 1038w`}
                         // sizes="(max-width: 250px) 100vw, 250px"
                         />
                       </Link>
