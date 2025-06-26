@@ -100,9 +100,9 @@ const Home = ({ pageContext }) => {
         {/* Sử dụng ComponentPortal để tiêm các component khác nhau vào các vị trí khác nhau.
         Nó sẽ tự động tìm các div này trong flexibleContentHtml và tiêm vào.
       */}
-        <ComponentPortal selector="#sdformthree">
+        {/* <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
-        </ComponentPortal>
+        </ComponentPortal> */}
 
         <DomInjector selector=".col-slider">
           <ServiceSlider />
