@@ -13,6 +13,7 @@ import { initializeHeightEqualizer } from '../../script-handlers/height-equalize
 import { initializeJotForm } from '../../script-handlers/jotform-handler';
 import { initializeResultsNavigation } from '../../script-handlers/results-navigation-handler';
 import { initializeTrackingPixels } from '../../script-handlers/trackinghandler';
+import { initializeSearchForm } from '../../script-handlers/form-handler';
 
 // 2. Thêm chúng vào danh sách đăng ký
 const HANDLER_REGISTRY = [
@@ -24,6 +25,7 @@ const HANDLER_REGISTRY = [
     // initializeJotForm,
     // initializeResultsNavigation,
     initializeTrackingPixels,
+    initializeSearchForm
 ];
 
 const DynamicScriptHandler = () => {
