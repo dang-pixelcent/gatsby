@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'gatsby';
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
 import Pagination from '@components/Blog/Pagination';
+
+import { useLocation } from '@reach/router'; 
+
+
+// async function fetchSeoData(searchTerm) {
+//     // MOCK BIẾN MÔI TRƯỜNG:
+//     const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+//     const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
+//     try {
+//         const fullurl = `${SEO_QUERY_URL}/?s=${encodeURIComponent(searchTerm)}`;
+//         const apiUrl = `${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(fullurl)}`;
+//         const response = await fetch(apiUrl);
+//         if (!response.ok) {
+//             console.error("Rank Math API request failed:", response.statusText);
+//             return null;
+//         }
+//         const json = await response.json();
+//         console.log("SEO data fetched successfully:", json);
+//         return json.success ? json.head : console.log("Failed to fetch SEO data:", json);
+//     } catch (error) {
+//         console.error("Error fetching SEO data:", error);
+//         return null;
+//     }
+// }
 
 // Hàm để gọi GraphQL API phía client
 async function fetchSearchResults(searchTerm) {
@@ -51,14 +74,11 @@ const SearchResultPage = ({ location }) => {
         const params = new URLSearchParams(location.search);
         const query = params.get('q') || '';
         const page = parseInt(params.get('page')) || 1;
-        
         // Cập nhật currentPage khi URL thay đổi
         setCurrentPage(page);
-        
         // Chỉ fetch dữ liệu khi search term thay đổi
         if (query !== searchTerm) {
             setSearchTerm(query);
-            
             if (query) {
                 setIsLoading(true);
                 fetchSearchResults(query)
@@ -73,7 +93,8 @@ const SearchResultPage = ({ location }) => {
             } else {
                 setAllResults([]);
                 setIsLoading(false);
-            }        }
+            }
+        }
     }, [location.search, searchTerm]);
 
     // Logic phân trang
@@ -88,13 +109,13 @@ const SearchResultPage = ({ location }) => {
     return (
         <Layout>
             {/* Banner tĩnh */}
-            <section className="banner cus-height" style={{background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')"}}>
+            <section className="banner cus-height" style={{ background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
                 <div className="cus-container h-100 ast-flex align-items-center">
                     <div className="ast-full-width text-left text-white">
-                        <h1 className="h1-title fs-56 f-soletoxbold fw-800 text-white" style={{marginBottom: '24px'}}>
+                        <h1 className="h1-title fs-56 f-soletoxbold fw-800 text-white" style={{ marginBottom: '24px' }}>
                             Search results for: {searchTerm}
                         </h1>
-                        <div className="desc fs-22 f-soleto fw-300" style={{marginBottom: '30px'}}></div>
+                        <div className="desc fs-22 f-soleto fw-300" style={{ marginBottom: '30px' }}></div>
                     </div>
                 </div>
             </section>
@@ -112,9 +133,9 @@ const SearchResultPage = ({ location }) => {
                                     minHeight: '100px',
                                     flexDirection: 'column',
                                 }}>
-                                    <img 
-                                        src="/loading.gif" 
-                                        alt="Loading..." 
+                                    <img
+                                        src="/loading.gif"
+                                        alt="Loading..."
                                         style={{
                                             width: '20px',
                                             height: '20px',
@@ -156,18 +177,97 @@ const SearchResultPage = ({ location }) => {
     );
 };
 
-// export const Head = ({ location }) => {
-//     const params = new URLSearchParams(location.search);
-//     const searchTerm = params.get('q') || '';
+export const Head = () => {
+    // ✨ 1. Dùng hook useLocation để lấy thông tin URL chính xác ở client-side
+    const location = useLocation();
+
+    // ✨ 2. Phần còn lại của logic không đổi, vì giờ đây `location` đã có đủ thông tin
+    const params = new URLSearchParams(location.search);
+    const searchTerm = params.get('q') || '';
     
-//     return (
-//         <SEO 
-//             seoData={{
-//                 title: `Search Results for: ${searchTerm}`,
-//                 metaDesc: `Search results for "${searchTerm}" - Find the best articles and posts related to your search.`,
-//             }} 
-//         />
-//     );
-// };
+    const pageTitle = searchTerm ? `${searchTerm}` : 'Search';
+    const siteName = "Wellness Clinic Marketing";
+    const fullTitle = `${pageTitle} - ${siteName}`;
+    const pageUrl = location.href;
+
+    // Tạo cấu trúc Schema JSON-LD động
+    // Schema JSON-LD động với thông tin logo đầy đủ
+    const schemaData = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://gatsby-mu-eight.vercel.app/#organization",
+                "name": siteName,
+                "url": "https://gatsby-mu-eight.vercel.app",
+                "logo": {
+                    "@type": "ImageObject",
+                    "@id": "https://gatsby-mu-eight.vercel.app/#logo",
+                    "url": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
+                    "contentUrl": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
+                    "caption": siteName,
+                    "inLanguage": "en-US",
+                    "width": "1038",
+                    "height": "300"
+                }
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://gatsby-mu-eight.vercel.app/#website",
+                "url": "https://gatsby-mu-eight.vercel.app",
+                "name": siteName,
+                "publisher": {
+                    "@id": "https://gatsby-mu-eight.vercel.app/#organization"
+                },
+                "inLanguage": "en-US"
+            },
+            {
+                "@type": "WebPage",
+                "@id": `${pageUrl}#webpage`,
+                "url": pageUrl,
+                "name": fullTitle,
+                "isPartOf": {
+                    "@id": "https://gatsby-mu-eight.vercel.app/#website"
+                },
+                "inLanguage": "en-US"
+            }
+        ]
+    };
+
+    return (
+        <SEO>
+            {/* Thẻ Title */}
+            <title>{fullTitle}</title>
+
+            {/* Thẻ Robots quan trọng nhất cho trang search */}
+            <meta name="robots" content="noindex, follow" />
+
+            {/* Các thẻ Open Graph */}
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content={fullTitle} />
+            <meta property="og:url" content={pageUrl} />
+            <meta property="og:site_name" content={siteName} />
+            
+            {/* Các thẻ Twitter Card */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content={fullTitle} />
+
+            {/* Thẻ Schema JSON-LD động */}
+            <script type="application/ld+json" className="rank-math-schema-pro">
+                {JSON.stringify(schemaData)}
+            </script>
+        </SEO>
+    );
+
+
+    // // Nếu không có dữ liệu SEO (API lỗi), hiển thị các thẻ mặc định
+    // return (
+    //     <>
+    //         <title>{`${defaultTitle} | Your Site Name`}</title>
+    //         <meta name="robots" content="noindex, follow" />
+    //     </>
+    // );
+};
 
 export default SearchResultPage;
