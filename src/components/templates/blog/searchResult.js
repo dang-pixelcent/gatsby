@@ -178,16 +178,21 @@ const SearchResultPage = ({ location }) => {
 };
 
 export const Head = () => {
-    // ✨ 1. Dùng hook useLocation để lấy thông tin URL chính xác ở client-side
     const location = useLocation();
 
-    // ✨ 2. Phần còn lại của logic không đổi, vì giờ đây `location` đã có đủ thông tin
     const params = new URLSearchParams(location.search);
     const searchTerm = params.get('q') || '';
-    
-    const pageTitle = searchTerm ? `${searchTerm}` : 'Search';
+    const page = parseInt(params.get('page')) || 1;
+
     const siteName = "Wellness Clinic Marketing";
-    const fullTitle = `${pageTitle} - ${siteName}`;
+    // Lấy tổng số trang từ URL nếu có (hoặc bạn có thể truyền qua context/props nếu cần)
+    // Ở đây sẽ không có totalPages, nên chỉ hiển thị số trang hiện tại nếu page > 1
+    let fullTitle = searchTerm ? `${searchTerm}` : 'Search';
+    if (page > 1) {
+        fullTitle = `${searchTerm} - Page ${page} - ${siteName}`;
+    } else {
+        fullTitle = `${searchTerm ? searchTerm : 'Search'} - ${siteName}`;
+    }
     const pageUrl = location.href;
 
     // Tạo cấu trúc Schema JSON-LD động
