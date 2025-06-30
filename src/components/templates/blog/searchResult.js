@@ -6,7 +6,7 @@ import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
 import Pagination from '@components/Blog/Pagination';
 
-import { useLocation } from '@reach/router'; 
+import { useLocation } from '@reach/router';
 
 
 // async function fetchSeoData(searchTerm) {
@@ -244,6 +244,7 @@ export const Head = () => {
             {/* Thẻ Title */}
             <title>{fullTitle}</title>
 
+            <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
             {/* Thẻ Robots quan trọng nhất cho trang search */}
             <meta name="robots" content="noindex, follow" />
 
@@ -253,7 +254,7 @@ export const Head = () => {
             <meta property="og:title" content={fullTitle} />
             <meta property="og:url" content={pageUrl} />
             <meta property="og:site_name" content={siteName} />
-            
+
             {/* Các thẻ Twitter Card */}
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content={fullTitle} />
