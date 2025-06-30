@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
+import { Helmet } from 'react-helmet';
+import parse from 'html-react-parser';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
@@ -9,26 +11,26 @@ import Pagination from '@components/Blog/Pagination';
 import { useLocation } from '@reach/router';
 
 
-// async function fetchSeoData(searchTerm) {
-//     // MOCK BIẾN MÔI TRƯỜNG:
-//     const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
-//     const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
-//     try {
-//         const fullurl = `${SEO_QUERY_URL}/?s=${encodeURIComponent(searchTerm)}`;
-//         const apiUrl = `${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(fullurl)}`;
-//         const response = await fetch(apiUrl);
-//         if (!response.ok) {
-//             console.error("Rank Math API request failed:", response.statusText);
-//             return null;
-//         }
-//         const json = await response.json();
-//         console.log("SEO data fetched successfully:", json);
-//         return json.success ? json.head : console.log("Failed to fetch SEO data:", json);
-//     } catch (error) {
-//         console.error("Error fetching SEO data:", error);
-//         return null;
-//     }
-// }
+async function fetchSeoData(searchTerm) {
+    // MOCK BIẾN MÔI TRƯỜNG:
+    const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+    const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
+    try {
+        const fullurl = `${SEO_QUERY_URL}/?s=${encodeURIComponent(searchTerm)}`;
+        const apiUrl = `${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(fullurl)}`;
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            console.error("Rank Math API request failed:", response.statusText);
+            return null;
+        }
+        const json = await response.json();
+        console.log("SEO data fetched successfully:", json);
+        return json.success ? json.head : console.log("Failed to fetch SEO data:", json);
+    } catch (error) {
+        console.error("Error fetching SEO data:", error);
+        return null;
+    }
+}
 
 // Hàm để gọi GraphQL API phía client
 async function fetchSearchResults(searchTerm) {
@@ -68,30 +70,41 @@ const SearchResultPage = ({ location }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [seoData, setSeoData] = useState(null);
     const postsPerPage = 5; // Số lượng bài viết mỗi trang
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const query = params.get('q') || '';
         const page = parseInt(params.get('page')) || 1;
-        // Cập nhật currentPage khi URL thay đổi
         setCurrentPage(page);
-        // Chỉ fetch dữ liệu khi search term thay đổi
+
+        // Chỉ fetch khi search term thay đổi
         if (query !== searchTerm) {
             setSearchTerm(query);
+
             if (query) {
                 setIsLoading(true);
-                fetchSearchResults(query)
-                    .then(data => {
+
+                // Fetch song song cả kết quả và SEO
+                Promise.all([
+                    fetchSearchResults(query),
+                    fetchSeoData(query)
+                ])
+                    .then(([data, seo]) => {
                         setAllResults(data);
+                        setSeoData(seo); // Lưu SEO vào state
                         setIsLoading(false);
                     })
                     .catch(error => {
-                        console.error("Search failed:", error);
+                        console.error("Search or SEO fetch failed:", error);
+                        setAllResults([]);
+                        setSeoData(null);
                         setIsLoading(false);
                     });
             } else {
                 setAllResults([]);
+                setSeoData(null);
                 setIsLoading(false);
             }
         }
@@ -105,9 +118,22 @@ const SearchResultPage = ({ location }) => {
 
     // Tạo basePath cho pagination với search query
     const basePath = `/blogs/search?q=${encodeURIComponent(searchTerm)}&`;
+    const canParseSeoData = typeof seoData === 'string' && seoData.trim().length > 0;
 
     return (
         <Layout>
+            <Helmet>
+                <html lang="en-US" />
+                <meta charSet="utf-8" />
+                <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+                {canParseSeoData ? (
+                    parse(seoData) // Sử dụng parse để chuyển đổi chuỗi HTML thành React elements
+                ) : null}
+                <link rel="icon" href="/favicon.png" sizes="32x32" />
+                <link rel="icon" href="/favicon.png" sizes="192x192" />
+                <link rel="apple-touch-icon" href="/favicon.png" />
+                <meta name="msapplication-TileImage" content="/favicon.png" />
+            </Helmet>
             {/* Banner tĩnh */}
             <section className="banner cus-height" style={{ background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
                 <div className="cus-container h-100 ast-flex align-items-center">
@@ -177,103 +203,103 @@ const SearchResultPage = ({ location }) => {
     );
 };
 
-export const Head = () => {
-    const location = useLocation();
+// export const Head = () => {
+//     const location = useLocation();
 
-    const params = new URLSearchParams(location.search);
-    const searchTerm = params.get('q') || '';
-    const page = parseInt(params.get('page')) || 1;
+//     const params = new URLSearchParams(location.search);
+//     const searchTerm = params.get('q') || '';
+//     const page = parseInt(params.get('page')) || 1;
 
-    const siteName = "Wellness Clinic Marketing";
-    // Lấy tổng số trang từ URL nếu có (hoặc bạn có thể truyền qua context/props nếu cần)
-    // Ở đây sẽ không có totalPages, nên chỉ hiển thị số trang hiện tại nếu page > 1
-    let fullTitle = searchTerm ? `${searchTerm}` : 'Search';
-    if (page > 1) {
-        fullTitle = `${searchTerm} - Page ${page} - ${siteName}`;
-    } else {
-        fullTitle = `${searchTerm ? searchTerm : 'Search'} - ${siteName}`;
-    }
-    const pageUrl = location.href;
+//     const siteName = "Wellness Clinic Marketing";
+//     // Lấy tổng số trang từ URL nếu có (hoặc bạn có thể truyền qua context/props nếu cần)
+//     // Ở đây sẽ không có totalPages, nên chỉ hiển thị số trang hiện tại nếu page > 1
+//     let fullTitle = searchTerm ? `${searchTerm}` : 'Search';
+//     if (page > 1) {
+//         fullTitle = `${searchTerm} - Page ${page} - ${siteName}`;
+//     } else {
+//         fullTitle = `${searchTerm ? searchTerm : 'Search'} - ${siteName}`;
+//     }
+//     const pageUrl = location.href;
 
-    // Tạo cấu trúc Schema JSON-LD động
-    // Schema JSON-LD động với thông tin logo đầy đủ
-    const schemaData = {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "Organization",
-                "@id": "https://gatsby-mu-eight.vercel.app/#organization",
-                "name": siteName,
-                "url": "https://gatsby-mu-eight.vercel.app",
-                "logo": {
-                    "@type": "ImageObject",
-                    "@id": "https://gatsby-mu-eight.vercel.app/#logo",
-                    "url": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
-                    "contentUrl": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
-                    "caption": siteName,
-                    "inLanguage": "en-US",
-                    "width": "1038",
-                    "height": "300"
-                }
-            },
-            {
-                "@type": "WebSite",
-                "@id": "https://gatsby-mu-eight.vercel.app/#website",
-                "url": "https://gatsby-mu-eight.vercel.app",
-                "name": siteName,
-                "publisher": {
-                    "@id": "https://gatsby-mu-eight.vercel.app/#organization"
-                },
-                "inLanguage": "en-US"
-            },
-            {
-                "@type": "WebPage",
-                "@id": `${pageUrl}#webpage`,
-                "url": pageUrl,
-                "name": fullTitle,
-                "isPartOf": {
-                    "@id": "https://gatsby-mu-eight.vercel.app/#website"
-                },
-                "inLanguage": "en-US"
-            }
-        ]
-    };
+//     // Tạo cấu trúc Schema JSON-LD động
+//     // Schema JSON-LD động với thông tin logo đầy đủ
+//     const schemaData = {
+//         "@context": "https://schema.org",
+//         "@graph": [
+//             {
+//                 "@type": "Organization",
+//                 "@id": "https://gatsby-mu-eight.vercel.app/#organization",
+//                 "name": siteName,
+//                 "url": "https://gatsby-mu-eight.vercel.app",
+//                 "logo": {
+//                     "@type": "ImageObject",
+//                     "@id": "https://gatsby-mu-eight.vercel.app/#logo",
+//                     "url": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
+//                     "contentUrl": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
+//                     "caption": siteName,
+//                     "inLanguage": "en-US",
+//                     "width": "1038",
+//                     "height": "300"
+//                 }
+//             },
+//             {
+//                 "@type": "WebSite",
+//                 "@id": "https://gatsby-mu-eight.vercel.app/#website",
+//                 "url": "https://gatsby-mu-eight.vercel.app",
+//                 "name": siteName,
+//                 "publisher": {
+//                     "@id": "https://gatsby-mu-eight.vercel.app/#organization"
+//                 },
+//                 "inLanguage": "en-US"
+//             },
+//             {
+//                 "@type": "WebPage",
+//                 "@id": `${pageUrl}#webpage`,
+//                 "url": pageUrl,
+//                 "name": fullTitle,
+//                 "isPartOf": {
+//                     "@id": "https://gatsby-mu-eight.vercel.app/#website"
+//                 },
+//                 "inLanguage": "en-US"
+//             }
+//         ]
+//     };
 
-    return (
-        <SEO>
-            {/* Thẻ Title */}
-            <title>{fullTitle}</title>
+//     return (
+//         <SEO>
+//             {/* Thẻ Title */}
+//             <title>{fullTitle}</title>
 
-            <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            {/* Thẻ Robots quan trọng nhất cho trang search */}
-            <meta name="robots" content="noindex, follow" />
+//             <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
+//             {/* Thẻ Robots quan trọng nhất cho trang search */}
+//             <meta name="robots" content="noindex, follow" />
 
-            {/* Các thẻ Open Graph */}
-            <meta property="og:locale" content="en_US" />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={fullTitle} />
-            <meta property="og:url" content={pageUrl} />
-            <meta property="og:site_name" content={siteName} />
+//             {/* Các thẻ Open Graph */}
+//             <meta property="og:locale" content="en_US" />
+//             <meta property="og:type" content="website" />
+//             <meta property="og:title" content={fullTitle} />
+//             <meta property="og:url" content={pageUrl} />
+//             <meta property="og:site_name" content={siteName} />
 
-            {/* Các thẻ Twitter Card */}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={fullTitle} />
+//             {/* Các thẻ Twitter Card */}
+//             <meta name="twitter:card" content="summary_large_image" />
+//             <meta name="twitter:title" content={fullTitle} />
 
-            {/* Thẻ Schema JSON-LD động */}
-            <script type="application/ld+json" className="rank-math-schema-pro">
-                {JSON.stringify(schemaData)}
-            </script>
-        </SEO>
-    );
+//             {/* Thẻ Schema JSON-LD động */}
+//             <script type="application/ld+json" className="rank-math-schema-pro">
+//                 {JSON.stringify(schemaData)}
+//             </script>
+//         </SEO>
+//     );
 
 
-    // // Nếu không có dữ liệu SEO (API lỗi), hiển thị các thẻ mặc định
-    // return (
-    //     <>
-    //         <title>{`${defaultTitle} | Your Site Name`}</title>
-    //         <meta name="robots" content="noindex, follow" />
-    //     </>
-    // );
-};
+//     // // Nếu không có dữ liệu SEO (API lỗi), hiển thị các thẻ mặc định
+//     // return (
+//     //     <>
+//     //         <title>{`${defaultTitle} | Your Site Name`}</title>
+//     //         <meta name="robots" content="noindex, follow" />
+//     //     </>
+//     // );
+// };
 
 export default SearchResultPage;
