@@ -3126,10 +3126,6 @@ h6,
   }
 }
 
-.ast-header-button-1 .ast-custom-button {
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1);
-}
-
 .ast-desktop .ast-mega-menu-enabled .ast-builder-menu-1 div:not(.astra-full-megamenu-wrapper) .sub-menu,
 .ast-builder-menu-1 .inline-on-mobile .sub-menu,
 .ast-desktop .ast-builder-menu-1 .astra-full-megamenu-wrapper,
@@ -4508,6 +4504,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 
 .home-banner {
   padding: 3.90vw 0px;
+  // background: url('https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp') no-repeat center/cover;
 }
 
 .banner-title .sub-title {
