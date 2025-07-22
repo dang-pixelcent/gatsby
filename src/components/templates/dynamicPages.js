@@ -1,18 +1,18 @@
 // các import cơ bản phải có
-import { graphql, Link, Script } from "gatsby"
+import { Script } from "gatsby"
 import React, { useEffect, useMemo } from "react";
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
-import ComponentPortal from "@components/Tools/ComponentPortal"
+// import ComponentPortal from "@components/Tools/ComponentPortal"
 // Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
 import DomInjector from '@components/Tools/DomInjector';
-import ScriptLoader from '@components/Tools/ScriptLoader';
+// import ScriptLoader from '@components/Tools/ScriptLoader';
 import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
-import { ScheduleForm } from '@components/Blocks/GetStarted';
+// import { ScheduleForm } from '@components/Blocks/GetStarted';
 import { ServiceSlider } from '@components/Blocks/ServiceSlider.js/';
 
 
@@ -53,39 +53,53 @@ const Home = ({ pageContext }) => {
   // }, []);
 
 
-  // Thêm useEffect để chạy các hàm process()
-  useEffect(() => {
-    // Hàm này sẽ chạy mỗi khi component được mount (tải trang, back/forward)
-    //console.log("Page content updated, processing scripts...");
-    scripts.forEach(script => {
-      if (script.resourceType === 'external-script') {
-        const config = getScriptConfig(script.attributes.src);
-        // Nếu có hàm process trong cấu hình, hãy gọi nó
-        if (config.process) {
-          //console.log(`Calling process() for: ${script.attributes.src}`);
-          config.process();
-        }
-      }
-    });
-    // Chạy lại effect này mỗi khi danh sách script hoặc nội dung thay đổi
-  }, [scripts, flexibleContentHtml]);
+  // // Thêm useEffect để chạy các hàm process()
+  // useEffect(() => {
+  //   // Hàm này sẽ chạy mỗi khi component được mount (tải trang, back/forward)
+  //   //console.log("Page content updated, processing scripts...");
+  //   scripts.forEach(script => {
+  //     if (script.resourceType === 'external-script') {
+  //       const config = getScriptConfig(script.attributes.src);
+  //       // Nếu có hàm process trong cấu hình, hãy gọi nó
+  //       if (config.process) {
+  //         //console.log(`Calling process() for: ${script.attributes.src}`);
+  //         config.process();
+  //       }
+  //     }
+  //   });
+  //   // Chạy lại effect này mỗi khi danh sách script hoặc nội dung thay đổi
+  // }, [scripts, flexibleContentHtml]);
 
-  const memoizedScriptLoaders = useMemo(() => {
-    // console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
-    return scripts.map((script) => {
-      if (script.resourceType === 'external-script') {
+  const handleScriptLoad = (script) => {
         const config = getScriptConfig(script.attributes.src);
-        return (
-          <ScriptLoader
-            key={script.attributes.id}
-            attributes={script.attributes} // `script.attributes` bây giờ có tham chiếu ổn định
-            keepOnUnmount={config.keepOnUnmount}
-          />
-        );
-      }
-      return null;
-    });
-  }, [scripts]); // Chỉ tính toán lại khi mảng `scripts` thay đổi
+        
+        if (config.process) {
+            requestIdleCallback(() => {
+                try {
+                    config.process();
+                } catch (error) {
+                    console.warn(`Failed to process script: ${script.attributes.src}`, error);
+                }
+            });
+        }
+    };
+
+  // const memoizedScriptLoaders = useMemo(() => {
+  //   // console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
+  //   return scripts.map((script) => {
+  //     if (script.resourceType === 'external-script') {
+  //       const config = getScriptConfig(script.attributes.src);
+  //       return (
+  //         <ScriptLoader
+  //           key={script.attributes.id}
+  //           attributes={script.attributes} // `script.attributes` bây giờ có tham chiếu ổn định
+  //           keepOnUnmount={config.keepOnUnmount}
+  //         />
+  //       );
+  //     }
+  //     return null;
+  //   });
+  // }, [scripts]); // Chỉ tính toán lại khi mảng `scripts` thay đổi
 
   return (
     <React.Fragment>
@@ -127,18 +141,32 @@ const Home = ({ pageContext }) => {
       ))} */}
 
         {/* Tự động tải tất cả các script có src */}
-        {memoizedScriptLoaders}
+        {/* {memoizedScriptLoaders} */}
 
       </Layout>
       {/* Tiêm các script động vào cuối body */}
       <DynamicScriptHandler />
       {scripts.map((script) => {
+        if (script.resourceType === 'external-script') {
+          return (
+            <Script
+              key={script.attributes.id}
+              src={script.attributes.src}
+              strategy="idle" // NON-BLOCKING
+              // defer
+              onLoad={() => handleScriptLoad(script)}
+              onError={(error) => {
+                console.error(`Error loading script: ${script.attributes.src}`, error);
+              }}
+            />
+          );
+        }
         // Trường hợp 2: Script inline
         if (script.resourceType === 'inline-script') {
           return (
             <Script
               key={script.id}
-              strategy="post-hydrate" // Script inline cũng có thể có chiến lược
+              strategy="idle" // Script inline cũng có thể có chiến lược
               dangerouslySetInnerHTML={{ __html: script.content }}
             />
           );
