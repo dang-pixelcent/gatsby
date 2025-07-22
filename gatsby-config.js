@@ -8,12 +8,28 @@ if (!WPGRAPHQL_URL) {
 }
 
 module.exports = {
+  flags: {
+    DEV_SSR: true
+  },
   plugins: [
-    `gatsby-plugin-react-helmet`,
+    // `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-image`,
+    // `gatsby-plugin-preload-fonts`,
+    // `gatsby-plugin-webpack-bundle-analyser-v2`,
+    // {
+    //   resolve: `gatsby-plugin-purgecss`,
+    //   options: {
+    //     // In ra console các class CSS đã bị xóa (hữu ích khi gỡ lỗi)
+    //     printRejected: true, 
+    //     // Bỏ qua các file CSS từ các thư viện bên thứ 3 nếu cần
+    //     // ignore: ['swiper/'], 
+    //     // BẬT tùy chọn này nếu bạn đang dùng Tailwind CSS
+    //     // tailwind: true, 
+    //   },
+    // },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

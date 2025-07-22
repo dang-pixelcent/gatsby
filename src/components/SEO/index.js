@@ -29,11 +29,28 @@ export const SEO = ({
         )
     }
 
+    const lcpImageUrl = "https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp";
+
     return (
         <>
             <html lang="en-US" />
             <meta charSet="utf-8" />
             <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+
+            {/* --- TỐI ƯU HÓA KẾT NỐI SỚM --- */}
+            {/* Preconnect đến các domain của bên thứ ba quan trọng */}
+            <link rel="preconnect" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
+            <link rel="preconnect" href="https://www.googletagmanager.com" />
+            <link rel="preconnect" href="https://www.google-analytics.com" />
+            
+            {/* DNS-prefetch như một phương án dự phòng */}
+            <link rel="dns-prefetch" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
+            <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+            <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+            {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
+
+            {/* Tối ưu hóa LCP cho ảnh banner */}
+            <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />
 
             {/* Thêm bodyClass vào thẻ body */}
             {/* <body className={bodyClass} /> */}

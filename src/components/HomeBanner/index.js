@@ -76,12 +76,17 @@ const HomeBanner = () => {
     <>
       <section
         className="home-banner"
-        style={{ background: `no-repeat center/cover url(${content?.backgroundImage?.node?.sourceUrl})` }}
+        style={{
+          backgroundImage: "url('https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp')",
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
       >
         <div className="cus-container">
           <div className="banner-title position-relative text-center">
             <img
-              src={content?.badgeLogo?.node?.sourceUrl}
+              src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/badge-png.webp"
               alt="Badge"
               className="img-badge position-absolute lazyloaded"
             />
@@ -127,10 +132,17 @@ const HomeBanner = () => {
 
           </div>
           <div className="box-desktop">
-            <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" className="lazyloaded" decoding="async" nitro-lazy-empty="true" id="NzgwOjExMQ==-1" />
+            {/* <img alt="Desktop Box" src={content?.boxDesktop?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" className="lazyloaded" decoding="async" nitro-lazy-empty="true" id="NzgwOjExMQ==-1" /> */}
+            <img alt="Desktop Box"
+              src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop-png.webp"
+              nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop.png" className="lazyloaded" decoding="async" nitro-lazy-empty="true" id="NzgwOjExMQ==-1" />
           </div>
           <div className="box-mobile">
-            <img alt="Mobile Box" src={content?.boxMobile?.node?.sourceUrl} nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile.png" className="nitro-lazy" decoding="async" nitro-lazy-empty="true" id="NzgzOjExMA==-1" />
+            <img alt="Mobile Box"
+              decoding="async"
+              data-berqwpsrc="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile-png.webp"
+              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDU1IiBoZWlnaHQ9IjMyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9Im5vbmUiIC8+PC9zdmc+"
+              className="nitro-lazy" />
           </div>
           {/* <div className="banner-services text-white ast-flex justify-content-center">
             {
