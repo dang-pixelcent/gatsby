@@ -18,7 +18,6 @@
     "gatsby-plugin-alias-imports": "^1.0.5",
     "gatsby-plugin-apollo": "^4.0.3",
     "gatsby-plugin-image": "^3.14.0",
-    "gatsby-plugin-react-helmet": "^6.14.0",
     "gatsby-plugin-sass": "next",
     "gatsby-plugin-sharp": "^5.14.0",
     "gatsby-source-filesystem": "^5.14.0",
@@ -29,14 +28,12 @@
     "graphql-request": "^7.2.0",
     "html-react-parser": "^5.2.5",
     "install": "^0.13.0",
-    "jquery": "^3.7.1",
     "lightbox2": "^2.11.5",
     "node-fetch": "^3.3.2",
     "npm": "^11.4.1",
     "peer": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-helmet": "^6.1.0",
     "react-redux": "5.1.2",
     "react-slick": "^0.30.3",
     "redux": "3.7.2",
@@ -55,7 +52,7 @@
     "build:stag": "cross-env GENERATE_SOURCEMAP=false env-cmd -f .env.staging gatsby build",
     "build:prod": "cross-env GENERATE_SOURCEMAP=false env-cmd -f .env.prod gatsby build",
     "start": "env-cmd -f .env.development gatsby develop",
-    "serve": "gatsby serve",
+    "serve": "env-cmd -f .env.development gatsby serve",
     "cache-seo": "node scripts/cache-seo-data.js",
     "cache-seo:stag": "cross-env NODE_ENV=staging node scripts/cache-seo-data.js",
     "cache-seo:prod": "cross-env NODE_ENV=prod node scripts/cache-seo-data.js",
@@ -68,7 +65,8 @@
     "manual-extract-inline-scripts": "node scripts/manual-extract-inline-scripts.js",
     "clean-and-fetch-seo": "npm run clean-seo-cache && npm run cache-seo",
     "clean-and-fetch-seo:stag": "npm run clean-seo-cache && npm run cache-seo:stag",
-    "clean-and-fetch-seo:prod": "npm run clean-seo-cache && npm run cache-seo:prod"
+    "clean-and-fetch-seo:prod": "npm run clean-seo-cache && npm run cache-seo:prod",
+    "preload-fonts": "gatsby-preload-fonts"
   },
   "devDependencies": {
     "ajv": "^7.2.4"
