@@ -1,6 +1,6 @@
 // các import cơ bản phải có
 import { Script } from "gatsby"
-import React, { useEffect, useMemo } from "react";
+import React, { Suspense, lazy } from "react";
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 // làm sạch link
@@ -13,7 +13,7 @@ import DomInjector from '@components/Tools/DomInjector';
 import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 // import { ScheduleForm } from '@components/Blocks/GetStarted';
-import { ServiceSlider } from '@components/Blocks/ServiceSlider.js/';
+const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
@@ -71,18 +71,18 @@ const Home = ({ pageContext }) => {
   // }, [scripts, flexibleContentHtml]);
 
   const handleScriptLoad = (script) => {
-        const config = getScriptConfig(script.attributes.src);
-        
-        if (config.process) {
-            requestIdleCallback(() => {
-                try {
-                    config.process();
-                } catch (error) {
-                    console.warn(`Failed to process script: ${script.attributes.src}`, error);
-                }
-            });
+    const config = getScriptConfig(script.attributes.src);
+
+    if (config.process) {
+      requestIdleCallback(() => {
+        try {
+          config.process();
+        } catch (error) {
+          console.warn(`Failed to process script: ${script.attributes.src}`, error);
         }
-    };
+      });
+    }
+  };
 
   // const memoizedScriptLoaders = useMemo(() => {
   //   // console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
@@ -118,8 +118,14 @@ const Home = ({ pageContext }) => {
           <ScheduleForm />
         </ComponentPortal> */}
 
-        <DomInjector selector=".col-slider">
+        {/* <DomInjector selector=".col-slider">
           <ServiceSlider />
+        </DomInjector> */}
+        <DomInjector selector=".col-slider">
+          {/* 4. Bọc component "lười biếng" trong Suspense */}
+          <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
+            <LazyServiceSlider />
+          </Suspense>
         </DomInjector>
 
 

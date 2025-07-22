@@ -2,7 +2,7 @@ import React from 'react';
 import ServiceHeroSlider from './ServiceHeroSlider';
 
 
-export function ServiceSlider() {
+function ServiceSlider() {
     // link các ảnh sẽ được truyền vào component ServiceHeroSlider
     const imageData = [
         { src: 'https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2024/12/new-slider-component-1.jpg', alt: 'slide 1' },
@@ -20,3 +20,5 @@ export function ServiceSlider() {
         </div>
     );
 }
+
+export default ServiceSlider;
