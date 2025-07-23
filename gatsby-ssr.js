@@ -11,7 +11,7 @@ const CACHE_DIR = '.cache';
 const GLOBAL_SNIPPETS_FILE = 'global-html-snippets.json';
 const PAGE_SNIPPETS_DIR = 'page-snippets'; // Thư mục chứa các snippet riêng của từng trang
 
-/**
+/** 1.
  * Hàm helper để đọc một file JSON từ cache một cách an toàn.
  * @param {string} filePath - Đường dẫn đầy đủ đến file cache.
  * @returns {object} - Dữ liệu JSON đã parse hoặc object rỗng.
@@ -33,7 +33,7 @@ const readJsonCache = (filePath) => {
 };
 
 
-// Helper function để đảm bảo output từ parse là một mảng và có key
+// 2. Helper function để đảm bảo output từ parse là một mảng và có key
 const parseHtmlToReact = (htmlString, baseKey) => {
   if (!htmlString || typeof htmlString !== 'string' || htmlString.trim() === '') {
     return [];
@@ -56,6 +56,28 @@ const parseHtmlToReact = (htmlString, baseKey) => {
     console.error(`${color.red}[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
     return [];
   }
+};
+
+
+
+/** 3.
+ * HÀM MỚI: Biến đổi các thẻ script để chạy với Partytown
+ * @param {string} htmlString - Chuỗi HTML chứa các script.
+ * @param {string} baseKey - Key cơ sở cho các React element.
+ * @returns {Array} - Mảng các React elements đã được biến đổi.
+ */
+// Nó sẽ tìm và thay thế các thẻ script, sau đó gọi hàm parseHtmlToReact ở trên.
+const transformAndParseScripts = (htmlString, baseKey) => {
+  if (!htmlString || typeof htmlString !== 'string' || htmlString.trim() === '') {
+    return [];
+  }
+
+  // Bước 1: Dùng Regex để tìm và thêm type="text/partytown" vào tất cả thẻ script.
+  // Cách này không phụ thuộc vào thư viện parse và rất an toàn.
+  const transformedHtml = htmlString.replace(/<script/g, '<script type="text/partytown"');
+
+  // Bước 2: Gọi hàm parse ban đầu của bạn để chuyển HTML đã được biến đổi sang React.
+  return parseHtmlToReact(transformedHtml, baseKey);
 };
 
 
@@ -104,13 +126,13 @@ export const onRenderBody = ({
     <link
       key="google-fonts"
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Anek+Devanagari:wght@100..800&family=Assistant:wght@200..800&display=swap"
+    // href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Anek+Devanagari:wght@100..800&family=Assistant:wght@200..800&display=swap"
     />
   );
 
   if (scriptsForHeadString_fromHeadField) {
     // Phân tích chuỗi HTML thành các React elements
-    const parsedHeadScripts = parseHtmlToReact(scriptsForHeadString_fromHeadField, 'head-script-item');
+    const parsedHeadScripts = transformAndParseScripts(scriptsForHeadString_fromHeadField, 'head-script-item');
     // Thêm các elements đã parse vào headItems (sử dụng spread operator nếu parsedHeadScripts là mảng)
     headItems.push(...parsedHeadScripts);
   }
@@ -123,7 +145,7 @@ export const onRenderBody = ({
   const preBodyItems = [];
 
   if (scriptsForPreBodyString_fromBodyField) {
-    const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
+    const parsedBodyScripts = transformAndParseScripts(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
     preBodyItems.push(...parsedBodyScripts);
   }
 
@@ -135,7 +157,7 @@ export const onRenderBody = ({
   const postBodyItems = [];
 
   if (scriptsForPreBodyString_fromFooterField) {
-    const parsedFooterScripts = parseHtmlToReact(scriptsForPreBodyString_fromFooterField, 'postbody-footer-item');
+    const parsedFooterScripts = transformAndParseScripts(scriptsForPreBodyString_fromFooterField, 'postbody-footer-item');
     postBodyItems.push(...parsedFooterScripts);
   }
 

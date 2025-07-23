@@ -1,4 +1,15 @@
 @forward 'layouts/blog';
+@forward "customStyle.scss";
+@forward "main.min.scss";
+
+// 1. Import từ node_modules
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+// 2. Import các file CSS cục bộ khác
+@import "lightbox.min.css";
+@import "slick.css"; // File tùy chỉnh nếu có
+@import "dashicons.min.css";
 
 :root {
   --ast-post-nav-space: 0;
@@ -2536,6 +2547,21 @@ h6,
   justify-content: center;
 }
 
+@media (min-width: 768px) and (max-width: 921px) {
+  .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    padding: inherit;
+    min-width: inherit;
+    height: inherit;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+  }
+}
+
 .ast-header-button-1 .ast-custom-button {
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.1);
 }
@@ -2609,6 +2635,15 @@ h6,
   font-size: 1rem;
   line-height: 27px;
   text-transform: uppercase;
+}
+
+@media (min-width: 768px) and (max-width: 921px) {
+  .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    text-transform: inherit;
+  }
 }
 
 .ast-header-button-1[data-section="section-hb-button-1"] {
@@ -4853,6 +4888,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 @media only screen and (max-width: 1200px) {
   .experts-list {
     padding: 0px;
+    display: block !important;
   }
 
   .experts-list .slick-track {
@@ -6443,6 +6479,7 @@ blockquote:before {
   .specialty-list {
     margin: 0px;
     padding: 0px 35px 0px 25px !important;
+    display: block !important;
   }
 
   .s-content .sc-btn,

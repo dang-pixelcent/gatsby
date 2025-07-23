@@ -1617,6 +1617,9 @@ body.mega-menu-primary.ast-header-break-point .ast-mobile-menu-buttons {
   .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item > .ast-menu-toggle:focus, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item > .ast-menu-toggle:hover {
     color: #fff !important;
   }
+  .ast-menu-toggle {
+    color: #fff !important;
+  }
 }
 @media (min-width: 922px) {
   #mega-menu-wrap-primary #mega-menu-primary .max-w-560 > ul.mega-sub-menu {

@@ -8,7 +8,7 @@ import { useLocation } from "@reach/router";
 // import { initializeSlickCarousel } from '../../script-handlers/slick-carousel-handler';
 import { initializeLoadMore } from '../../script-handlers/load-more-handler';
 // import { initializeTabs } from '../../script-handlers/tab-handler';
-//import { initializeFormEmbed } from '../../script-handlers/form-embed-handler';
+// import { initializeFormEmbed } from '../../script-handlers/form-embed-handler';
 // import { initializeHeightEqualizer } from '../../script-handlers/height-equalizer-handler';
 // import { initializeJotForm } from '../../script-handlers/jotform-handler';
 // import { initializeResultsNavigation } from '../../script-handlers/results-navigation-handler';

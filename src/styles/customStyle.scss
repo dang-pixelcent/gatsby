@@ -303,6 +303,20 @@ header .custom-logo-link img.custom-logo{ aspect-ratio: 250 / 72;}
     top:0px;
     left:0px;
 }
+@media (min-width: 768px) and (max-width: 921px) {
+    .ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle,
+    .ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle
+    {
+        padding:0px;
+        display:flex;
+        align-items:center;
+        justify-content: center;
+        width:40px !important;
+        height:40px !important;
+        border-radius:4px;
+        background: #0659A9 !important;
+    }
+}
 .ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle,
 .ast-mobile-header-wrap .ast-button-wrap .menu-toggle.main-header-menu-toggle
 {
@@ -370,7 +384,7 @@ header .custom-logo-link img.custom-logo{ aspect-ratio: 250 / 72;}
     .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item:hover > .ast-menu-toggle
     {
         
-        color:#fff;
+        color:#fff !important;
     }
     .main-header-menu .menu-item .sub-menu > .menu-link,
     .submenu-with-border .sub-menu .menu-link
@@ -534,12 +548,12 @@ footer a:hover{color:#F2771A;}
         font-family: 'Assistant', sans-serif;
         font-weight:700;
         font-size:12px !important;
-        line-height:1.5;
+        line-height:1.5 !important;
         text-align:center;
     }
     .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button{
-        padding-top:11px;padding-bottom:11px;
-        height:unset;
+        padding-top:11px !important;padding-bottom:11px !important;
+        height:unset !important;
     }
     .h2-title,
     .fs-48{font-size: 28px !important;line-height:1.2 !important;}
