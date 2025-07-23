@@ -5,7 +5,8 @@ import parse from 'html-react-parser';
 export const SEO = ({
     seoData,
     // bodyClass,
-    children
+    children,
+    lcpImageUrl
 }) => {
     // // Lấy giá trị isMobileMenuOpen từ context
     // const { isMobileMenuOpen } = useMobileMenuContext();
@@ -29,8 +30,6 @@ export const SEO = ({
         )
     }
 
-    const lcpImageUrl = "https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp";
-
     return (
         <>
             <html lang="en-US" />
@@ -42,15 +41,18 @@ export const SEO = ({
             <link rel="preconnect" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
             <link rel="preconnect" href="https://www.googletagmanager.com" />
             <link rel="preconnect" href="https://www.google-analytics.com" />
-            
+
             {/* DNS-prefetch như một phương án dự phòng */}
             <link rel="dns-prefetch" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
             <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
             <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+            <link rel="preconnect" href="https://widgets.leadconnectorhq.com" />
+            <link rel="dns-prefetch" href="https://widgets.leadconnectorhq.com" />
             {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
 
             {/* Tối ưu hóa LCP cho ảnh banner */}
-            <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />
+            {lcpImageUrl && <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />}
 
             {/* Thêm bodyClass vào thẻ body */}
             {/* <body className={bodyClass} /> */}

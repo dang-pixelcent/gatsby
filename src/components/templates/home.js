@@ -765,6 +765,7 @@ const Home = () => {
 export const Head = ({ pageContext }) => (
     <SEO
         seoData={pageContext.seoData || {}}
+        lcpImageUrl="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp"
     >
         <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
     </SEO>

@@ -6,6 +6,10 @@
  */
 export const initializeLoadMore = () => {
     const loadMoreBtn = document.querySelector(".loadmore");
+    // Chỉ chạy logic nếu nút này tồn tại trên trang
+    if (!loadMoreBtn) {
+        return;
+    }
     const items = document.querySelectorAll(".item");
 
     if (!loadMoreBtn || items.length === 0) {

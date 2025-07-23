@@ -634,7 +634,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                               </svg>
                             </span>
-                            <span className="menu-text">Services</span>
+                            <span className="menu-text1">Services</span>
                             <span role="application" className="dropdown-menu-toggle ast-header-navigation-arrow" tabIndex={0} aria-expanded="false" aria-label="Menu Toggle">
                               <span className="ast-icon icon-arrow">
                                 <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
@@ -731,7 +731,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                               </svg>
                             </span>
-                            <span className="menu-text">Expertise</span>
+                            <span className="menu-text1">Expertise</span>
                             <span role="application" className="dropdown-menu-toggle ast-header-navigation-arrow" tabIndex={0} aria-expanded="false" aria-label="Menu Toggle">
                               <span className="ast-icon icon-arrow">
                                 <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
@@ -848,7 +848,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                               </svg>
                             </span>
-                            <span className="menu-text">Method</span>
+                            <span className="menu-text1">Method</span>
                           </Link>
                         </li>
                         <li className="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-372">
@@ -858,7 +858,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
                               </svg>
                             </span>
-                            <span className="menu-text">About Us</span>
+                            <span className="menu-text1">About Us</span>
                             <span role="application" className="dropdown-menu-toggle ast-header-navigation-arrow" tabIndex={0} aria-expanded="false" aria-label="Menu Toggle">
                               <span className="ast-icon icon-arrow">
                                 <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
