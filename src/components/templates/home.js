@@ -9,7 +9,7 @@ import { extractPathname } from "/src/utils/urlUtils"
 // ⭐️ Import các công cụ cần thiết cho lazy-loading
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import OptimalWistiaEmbed from '@components/OptimalWistiaEmbed';
+import OptimalWistiaEmbed from '@components/Video/OptimalWistiaEmbed';
 
 import { Script } from "gatsby"; // Dùng Gatsby Script cho Wistia
 

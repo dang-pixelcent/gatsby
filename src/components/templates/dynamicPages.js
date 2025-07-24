@@ -10,7 +10,7 @@ import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 // import LazyWistiaEmbed from '@components/Video/LazyWistiaEmbed';
 import LazyBlockquoteEmbed from '@components/Video/LazyBlockquoteEmbed';
-import OptimalWistiaEmbed from '@components/OptimalWistiaEmbed';
+import OptimalWistiaEmbed from '@components/Video/OptimalWistiaEmbed';
 
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
