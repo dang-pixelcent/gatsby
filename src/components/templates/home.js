@@ -9,6 +9,8 @@ import { extractPathname } from "/src/utils/urlUtils"
 // ⭐️ Import các công cụ cần thiết cho lazy-loading
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import OptimalWistiaEmbed from '@components/OptimalWistiaEmbed';
+
 import { Script } from "gatsby"; // Dùng Gatsby Script cho Wistia
 
 // ================== COMPONENT LAZY-LOAD CHO WISTIA ==================
@@ -533,7 +535,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div> */}
-                                    <LazyWistiaEmbed videoId="xf7qhxzcf3" />
+                                    <OptimalWistiaEmbed videoId="xf7qhxzcf3" />
                                 </div>
                             </div>
                         </div>
