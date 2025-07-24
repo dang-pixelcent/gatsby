@@ -464,8 +464,67 @@ exports.createPages = async ({ actions, graphql }) => {
    */
   const processNode = (node) => {
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`);
+    let htmlContent = node.flexibleContentHtml;
+
+    // --- BƯỚC 1: XỬ LÝ VIDEO EMBEDS ---
+    if (htmlContent) {
+      const $ = cheerio.load(htmlContent);
+
+      // 1a. Tìm và thay thế YouTube iframes
+      $('iframe[src*="youtube.com/embed"]').each((index, element) => {
+        const iframe = $(element);
+        const src = iframe.attr('src');
+        const videoIdMatch = src.match(/embed\/([^?]+)/);
+        if (videoIdMatch && videoIdMatch[1]) {
+          const videoId = videoIdMatch[1];
+          const placeholder = `<div 
+                                      class="youtube-placeholder" 
+                                      data-videoid="${videoId}"
+                                      id="youtube-${node.slug}-${index}"
+                                   ></div>`;
+          iframe.replaceWith(placeholder);
+        }
+      });
+
+      // 1b. Tìm và thay thế Wistia iframes
+      $('iframe[src*="fast.wistia.net/embed"]').each((index, element) => {
+        const iframe = $(element);
+        const src = iframe.attr('src');
+        // Wistia ID thường nằm trong URL dạng .../iframe/VIDEO_ID
+        const videoIdMatch = src.match(/iframe\/([a-z0-9]+)/);
+        if (videoIdMatch && videoIdMatch[1]) {
+          const videoId = videoIdMatch[1];
+          const placeholder = `<div 
+                                      class="wistia-placeholder" 
+                                      data-videoid="${videoId}"
+                                      id="wistia-${node.slug}-${index}"
+                                   ></div>`;
+          iframe.replaceWith(placeholder);
+        }
+      });
+
+      // 1c. ✨ Xử lý TikTok (cho tương lai)
+      $('blockquote.tiktok-embed').each((index, element) => {
+        const blockquote = $(element);
+        // Lấy toàn bộ mã nhúng và mã hóa để truyền an toàn qua data attribute
+        const embedCode = encodeURIComponent(blockquote.parent().html());
+        blockquote.parent().replaceWith(`<div class="tiktok-placeholder" data-embed-code="${embedCode}" id="tiktok-${node.slug}-${index}"></div>`);
+      });
+
+      // 1d. ✨ Xử lý X / Twitter (cho tương lai)
+      $('blockquote.twitter-tweet').each((index, element) => {
+        const blockquote = $(element);
+        const embedCode = encodeURIComponent(blockquote.parent().html());
+        blockquote.parent().replaceWith(`<div class="twitter-placeholder" data-embed-code="${embedCode}" id="twitter-${node.slug}-${index}"></div>`);
+      });
+
+      // Cập nhật lại nội dung HTML đã xử lý
+      htmlContent = $.html();
+    }
+    // --- KẾT THÚC XỬ LÝ VIDEO ---
+
     // Bước 1: Thay thế các link nội bộ trước
-    const htmlWithReplacedLinks = replaceInternalLinks(node.flexibleContentHtml);
+    const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
     const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
     // Bước 3: lưu snippets riêng vào cache

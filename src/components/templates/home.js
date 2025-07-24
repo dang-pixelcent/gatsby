@@ -1,10 +1,64 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
 import Layout from "@components/layout"
 import Slider from "react-slick";
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
+
+// ⭐️ Import các công cụ cần thiết cho lazy-loading
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import { Script } from "gatsby"; // Dùng Gatsby Script cho Wistia
+
+// ================== COMPONENT LAZY-LOAD CHO WISTIA ==================
+const LazyWistiaEmbed = ({ videoId }) => {
+    const [showVideo, setShowVideo] = useState(false);
+
+    if (!showVideo) {
+        return (
+            <div
+                onClick={() => setShowVideo(true)}
+                style={{ position: 'relative', cursor: 'pointer', aspectRatio: '16/9' }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && setShowVideo(true)}
+            >
+                <img
+                    src={`https://fast.wistia.net/embed/iframe/${videoId}/still.jpg`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', border: '0' }}
+                    alt="Video thumbnail"
+                />
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.5)', borderRadius: '50%', width: '68px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg height="100%" version="1.1" viewBox="0 0 68 48" width="100%"><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {/* Tải script của Wistia chỉ khi cần */}
+            <Script src="https://fast.wistia.com/assets/external/E-v1.js" strategy="idle" />
+            <div className="wistia_responsive_padding" style={{ padding: "56.25% 0 0 0", position: "relative" }}>
+                <div className="wistia_responsive_wrapper" style={{ height: "100%", left: 0, position: "absolute", top: 0, width: "100%" }}>
+                    <iframe
+                        src={`https://fast.wistia.net/embed/iframe/${videoId}?autoplay=1&videoFoam=true`}
+                        title="Wistia video player"
+                        allow="autoplay; fullscreen"
+                        frameBorder="0"
+                        scrolling="no"
+                        className="wistia_embed"
+                        name="wistia_embed"
+                        width="100%"
+                        height="100%"
+                    ></iframe>
+                </div>
+            </div>
+        </>
+    );
+};
+// ====================================================================
 
 const Home = () => {
     // const { seoData } = pageContext;
@@ -287,27 +341,50 @@ const Home = () => {
         }
     };
 
-    useEffect(() => {
-        if (patients) {
+    // useEffect(() => {
+    //     if (patients) {
 
-            const script1 = document.createElement("script");
-            script1.src = "https://fast.wistia.com/embed/medias/xf7qhxzcf3.jsonp";
-            script1.async = true;
-            document.body.appendChild(script1);
+    //         const script1 = document.createElement("script");
+    //         script1.src = "https://fast.wistia.com/embed/medias/xf7qhxzcf3.jsonp";
+    //         script1.async = true;
+    //         document.body.appendChild(script1);
 
 
-            const script2 = document.createElement("script");
-            script2.src = "https://fast.wistia.com/assets/external/E-v1.js";
-            script2.async = true;
-            document.body.appendChild(script2);
+    //         const script2 = document.createElement("script");
+    //         script2.src = "https://fast.wistia.com/assets/external/E-v1.js";
+    //         script2.async = true;
+    //         document.body.appendChild(script2);
 
-            return () => {
-                document.body.removeChild(script1);
-                document.body.removeChild(script2);
-            };
+    //         return () => {
+    //             document.body.removeChild(script1);
+    //             document.body.removeChild(script2);
+    //         };
+    //     }
+
+    // }, [patients]);
+
+    // ================== LOGIC XỬ LÝ VIDEO ĐỘNG ==================
+    const TestimonialsVideo = () => {
+        if (!testimonials?.video) return null;
+
+        const htmlString = testimonials.video;
+        
+        // Tìm YouTube ID
+        const youtubeMatch = htmlString.match(/youtube\.com\/embed\/([^"?]+)/);
+        if (youtubeMatch && youtubeMatch[1]) {
+            return <LiteYouTubeEmbed id={youtubeMatch[1]} title="Testimonial Video" />;
         }
 
-    }, [patients]);
+        // Tìm Wistia ID
+        const wistiaMatch = htmlString.match(/wistia_async_([a-z0-9]+)/);
+        if (wistiaMatch && wistiaMatch[1]) {
+            return <LazyWistiaEmbed videoId={wistiaMatch[1]} />;
+        }
+
+        // Nếu không tìm thấy, trả về HTML gốc để không làm hỏng giao diện
+        return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+    };
+    // ==========================================================
 
     const settings = {
         draggable: false,
@@ -415,7 +492,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div className="home-video">
-                                    <div
+                                    {/* <div
                                         className="wistia_responsive_padding"
                                         style={{ padding: "56.25% 0 0 0", position: "relative" }}
                                     >
@@ -455,7 +532,8 @@ const Home = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
+                                    <LazyWistiaEmbed videoId="xf7qhxzcf3" />
                                 </div>
                             </div>
                         </div>
@@ -597,7 +675,8 @@ const Home = () => {
                             <div className="testimonials-list">
                                 <div className="item ast-flex">
                                     <div className="col-video">
-                                        <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div>
+                                        {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
+                                        <TestimonialsVideo />
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
