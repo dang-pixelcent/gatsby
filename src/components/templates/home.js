@@ -620,7 +620,7 @@ const Home = () => {
                                 <div className="item ast-flex">
                                     <div className="col-video">
                                         {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
-                                        <TestimonialsVideo />
+                                        <div className="video-inner-home"><TestimonialsVideo /></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
