@@ -1,8 +1,16 @@
 // các import cơ bản phải có
 import { Script } from "gatsby"
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
+
+import ReactDOM from 'react-dom';
+// ⭐️ Import component lazy-load YouTube và CSS của nó
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import LazyWistiaEmbed from '@components/Video/LazyWistiaEmbed';
+import LazyBlockquoteEmbed from '@components/Video/LazyBlockquoteEmbed';
+
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
@@ -26,6 +34,33 @@ const getScriptConfig = (src) => {
 
 const Home = ({ pageContext }) => {
   const { flexibleContentHtml, scripts = [] } = pageContext;
+
+  useEffect(() => {
+    const cleanupTasks = [];
+
+    // Hàm helper để render và quản lý cleanup
+    const renderComponent = (selector, Component) => {
+      document.querySelectorAll(selector).forEach(placeholder => {
+        ReactDOM.render(Component(placeholder), placeholder);
+        cleanupTasks.push(placeholder);
+      });
+    };
+
+    // Gọi các chuyên gia xử lý video
+    renderComponent('.youtube-placeholder', p => <LiteYouTubeEmbed id={p.dataset.videoid} title="YouTube video" />);
+    renderComponent('.wistia-placeholder', p => <LazyWistiaEmbed videoId={p.dataset.videoid} />);
+    renderComponent('.tiktok-placeholder', p => <LazyBlockquoteEmbed embedCode={decodeURIComponent(p.dataset.embedCode)} scriptSrc="https://www.tiktok.com/embed.js" platformName="TikTok" />);
+    renderComponent('.twitter-placeholder', p => <LazyBlockquoteEmbed embedCode={decodeURIComponent(p.dataset.embedCode)} scriptSrc="https://platform.twitter.com/widgets.js" platformName="X (Twitter)" />);
+
+    // Hàm dọn dẹp cuối cùng
+    return () => {
+      cleanupTasks.forEach(placeholder => {
+        ReactDOM.unmountComponentAtNode(placeholder);
+      });
+    };
+  }, [flexibleContentHtml]);
+  // ================== KẾT THÚC NÂNG CẤP ==================
+
   // React.useEffect(() => {
   //   // Tạo các script tag mới và thêm vào DOM
   //   const scripts = [
