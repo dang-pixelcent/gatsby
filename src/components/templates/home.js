@@ -243,24 +243,6 @@ const Home = () => {
     const special = query.cms.pageBy.template?.homeContent?.flexibleContent[8];
     const giftBook = query.cms.pageBy.template?.homeContent?.flexibleContent[9];
 
-    // --- MÃ NHÚNG GỐC CỦA WISTIA (y hệt site live) ---
-    const wistiaStaticEmbedCode = `
-        <script src="https://fast.wistia.com/embed/medias/xf7qhxzcf3.jsonp" async></script>
-        <script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
-        <div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
-            <div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;">
-                <div class="wistia_embed wistia_async_xf7qhxzcf3 videoFoam=true seo=false" style="height:100%;position:relative;width:100%">&nbsp;</div>
-            </div>
-        </div>
-    `;
-
-    // Component con để xử lý video động
-    const TestimonialsVideo = () => {
-        if (!testimonials?.video) return null;
-        // Chỉ cần truyền mã HTML gốc vào component vạn năng
-        return <LazyEmbed embedCode={testimonials.video} />;
-    };
-
     // /**
     //  * xử lý SEO cho trang chủ
     //  */
@@ -477,7 +459,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div> */}
-                                    <LazyEmbed embedCode={wistiaStaticEmbedCode} />
+                                    <LazyEmbed embedCode={patients.video} />
                                 </div>
                             </div>
                         </div>
@@ -620,7 +602,7 @@ const Home = () => {
                                 <div className="item ast-flex">
                                     <div className="col-video">
                                         {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
-                                        <div className="video-inner-home"><TestimonialsVideo /></div>
+                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials.video} /></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
