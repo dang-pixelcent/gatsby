@@ -9,6 +9,7 @@
       url('../assets/fonts/Soleto-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -21,6 +22,7 @@
       url('../assets/fonts/Soleto-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -33,6 +35,7 @@
       url('../assets/fonts/Soleto-XBold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -45,6 +48,7 @@
       url('../assets/fonts/Soleto-ThinItalic.ttf') format('truetype');
   font-weight: 100;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -57,6 +61,7 @@
       url('../assets/fonts/Soleto-XBoldItalic.ttf') format('truetype');
   font-weight: bold;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -69,6 +74,7 @@
       url('../assets/fonts/Soleto-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -81,6 +87,7 @@
       url('../assets/fonts/Soleto-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -93,6 +100,7 @@
       url('../assets/fonts/Soleto-MediumItalic.ttf') format('truetype');
   font-weight: 500;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -105,6 +113,7 @@
       url('../assets/fonts/Soleto-Italic.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -117,6 +126,7 @@
       url('../assets/fonts/Soleto-BoldItalic.ttf') format('truetype');
   font-weight: bold;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -129,6 +139,7 @@
       url('../assets/fonts/Soleto-Black.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -141,6 +152,7 @@
       url('../assets/fonts/Soleto-BlackItalic.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -153,6 +165,7 @@
       url('../assets/fonts/Soleto-LightItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -165,8 +178,10 @@
       url('../assets/fonts/Soleto-Thin.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }
-@font-face{font-family:"Minion";src:url(../assets/fonts/Minion-Condensed-Regular.otf) format("truetype");font-weight:400;font-style:normal}@font-face{font-family:"Minion Bold";src:url(../assets/fonts/Minion-Bold-Condensed.otf) format("truetype");font-weight:400;font-style:normal}
+@font-face{font-family:"Minion";src:url(../assets/fonts/Minion-Condensed-Regular.otf) format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Minion Bold";src:url(../assets/fonts/Minion-Bold-Condensed.otf) format("truetype");font-weight:400;font-style:normal;font-display:swap}
 .fw-300{font-weight:300!important;}
 .fw-500{font-weight:500!important;}
 .fw-600{font-weight:600!important;}

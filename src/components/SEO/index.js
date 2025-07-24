@@ -49,6 +49,10 @@ export const SEO = ({
 
             <link rel="preconnect" href="https://widgets.leadconnectorhq.com" />
             <link rel="dns-prefetch" href="https://widgets.leadconnectorhq.com" />
+
+            <link rel="preconnect" href="https://fonts.bunny.net" crossOrigin="true" />
+            <link rel="dns-prefetch" href="https://fonts.bunny.net" />
+
             {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
 
             {/* Tối ưu hóa LCP cho ảnh banner */}
