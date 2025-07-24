@@ -18,7 +18,7 @@ module.exports = {
         // Chuyển tiếp các lệnh gọi này đến luồng Partytown
         forward: [`dataLayer.push`, `fbq`],
         // proxyUrl: `/__partytown-proxy`,
-        // ✨ THÊM CẤU HÌNH NÀY VÀO ✨
+
         partytownConfig: {
           // Thêm tất cả các tên miền của bên thứ ba vào đây
           proxyingDomains: [
@@ -26,6 +26,7 @@ module.exports = {
             'connect.facebook.net',
             'cdn.aimtell.com',
             'js.ubembed.com', // <--- Thêm Unbounce vào
+            'www.google-analytics.com'
           ],
         },
       }
