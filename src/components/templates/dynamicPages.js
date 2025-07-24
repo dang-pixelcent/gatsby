@@ -6,10 +6,7 @@ import { SEO } from "@components/SEO"
 
 import ReactDOM from 'react-dom';
 // ⭐️ Import component lazy-load YouTube và CSS của nó
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
-import LazyWistiaEmbed from '@components/Video/LazyWistiaEmbed';
-import LazyBlockquoteEmbed from '@components/Video/LazyBlockquoteEmbed';
+import LazyEmbed from '@components/Video/LazyEmbed';
 
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
@@ -35,24 +32,34 @@ const getScriptConfig = (src) => {
 const Home = ({ pageContext }) => {
   const { flexibleContentHtml, scripts = [] } = pageContext;
 
+  /**
+   * Nâng cấp: Tự động lazy-load các video và nội dung nhúng
+   */
   useEffect(() => {
+    const contentContainer = document.getElementById('content');
+    if (!contentContainer) return;
+
     const cleanupTasks = [];
+    const totalContentHeight = contentContainer.offsetHeight;
 
-    // Hàm helper để render và quản lý cleanup
-    const renderComponent = (selector, Component) => {
-      document.querySelectorAll(selector).forEach(placeholder => {
-        ReactDOM.render(Component(placeholder), placeholder);
+    // Tìm tất cả các placeholder vạn năng
+    document.querySelectorAll('.lazy-embed-placeholder').forEach(placeholder => {
+      const embedCode = placeholder.dataset.embedCode;
+      if (embedCode) {
+        const placeholderTop = placeholder.offsetTop;
+        const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '400px' : '100px';
+
+        ReactDOM.render(
+          <LazyEmbed
+            embedCode={decodeURIComponent(embedCode)}
+            rootMargin={rootMargin}
+          />,
+          placeholder
+        );
         cleanupTasks.push(placeholder);
-      });
-    };
+      }
+    });
 
-    // Gọi các chuyên gia xử lý video
-    renderComponent('.youtube-placeholder', p => <LiteYouTubeEmbed id={p.dataset.videoid} title="YouTube video" />);
-    renderComponent('.wistia-placeholder', p => <LazyWistiaEmbed videoId={p.dataset.videoid} />);
-    renderComponent('.tiktok-placeholder', p => <LazyBlockquoteEmbed embedCode={decodeURIComponent(p.dataset.embedCode)} scriptSrc="https://www.tiktok.com/embed.js" platformName="TikTok" />);
-    renderComponent('.twitter-placeholder', p => <LazyBlockquoteEmbed embedCode={decodeURIComponent(p.dataset.embedCode)} scriptSrc="https://platform.twitter.com/widgets.js" platformName="X (Twitter)" />);
-
-    // Hàm dọn dẹp cuối cùng
     return () => {
       cleanupTasks.forEach(placeholder => {
         ReactDOM.unmountComponentAtNode(placeholder);
