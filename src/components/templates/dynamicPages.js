@@ -40,43 +40,27 @@ const Home = ({ pageContext }) => {
     if (!contentContainer) return;
 
     const cleanupTasks = [];
+    const totalContentHeight = contentContainer.offsetHeight;
 
-    // Sử dụng requestAnimationFrame để trì hoãn việc thực thi,
-    // cho trình duyệt thời gian để "thở" sau lần render đầu tiên.
-    const animationFrameId = requestAnimationFrame(() => {
-      // === GIAI ĐOẠN 1: ĐỌC TẤT CẢ THÔNG TIN LAYOUT ===
-      const totalContentHeight = contentContainer.offsetHeight;
-      const placeholders = Array.from(document.querySelectorAll('.lazy-embed-placeholder, .youtube-placeholder, .wistia-placeholder'));
-
-      const renderTasks = placeholders.map(placeholder => {
+    // Tìm tất cả các placeholder vạn năng
+    document.querySelectorAll('.lazy-embed-placeholder').forEach(placeholder => {
+      const embedCode = placeholder.dataset.embedCode;
+      if (embedCode) {
         const placeholderTop = placeholder.offsetTop;
         const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '400px' : '100px';
-        return { placeholder, rootMargin };
-      });
 
-      // === GIAI ĐOẠN 2: GHI TẤT CẢ THAY ĐỔI VÀO DOM ===
-      renderTasks.forEach(task => {
-        const { placeholder, rootMargin } = task;
-        let ComponentToRender = null;
-
-        if (placeholder.classList.contains('youtube-placeholder')) {
-          ComponentToRender = <LiteYouTubeEmbed id={placeholder.dataset.videoid} title="YouTube video" />;
-        } else if (placeholder.classList.contains('wistia-placeholder')) {
-          ComponentToRender = <OptimalWistiaEmbed videoId={placeholder.dataset.videoid} rootMargin={rootMargin} />;
-        } else if (placeholder.classList.contains('lazy-embed-placeholder')) {
-          ComponentToRender = <LazyEmbed embedCode={decodeURIComponent(placeholder.dataset.embedCode)} rootMargin={rootMargin} />;
-        }
-
-        if (ComponentToRender) {
-          ReactDOM.render(ComponentToRender, placeholder);
-          cleanupTasks.push(placeholder);
-        }
-      });
+        ReactDOM.render(
+          <LazyEmbed
+            embedCode={decodeURIComponent(embedCode)}
+            rootMargin={rootMargin}
+          />,
+          placeholder
+        );
+        cleanupTasks.push(placeholder);
+      }
     });
 
-    // Hàm dọn dẹp cuối cùng
     return () => {
-      cancelAnimationFrame(animationFrameId);
       cleanupTasks.forEach(placeholder => {
         ReactDOM.unmountComponentAtNode(placeholder);
       });
