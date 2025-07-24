@@ -11,7 +11,7 @@ import "../styles/main.scss"
 import Header from './Header'
 import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
-// import ChatWidget from "./ChatWidget"
+import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 
 const DefaultLayout = ({ children }) => {
@@ -103,7 +103,7 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Footer />
       <ScrollTop />
-      {/* <ChatWidget /> */}
+      <ChatWidget />
     </div>
   )
 }

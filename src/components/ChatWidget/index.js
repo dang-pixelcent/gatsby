@@ -1,178 +1,131 @@
-// // src/components/ChatWidget/index.js
+// src/components/ChatWidget/index.js
 
-// import React from 'react';
-// import { Script } from 'gatsby';
+import React, { useEffect, useRef, useCallback } from 'react';
+import { Script } from 'gatsby';
 
-// const ChatWidget = () => {
-//     const onloadScript = () => {
-//         // Custom script để thêm element style với xử lý responsive
-//         let mainInterval;
-//         let closeEventAdded = false;
-//         let currentScreenSize = window.innerWidth;
+const ChatWidget = () => {
+    // useRef để lưu trữ các biến mà không làm component re-render
+    const observerRef = useRef(null);
+    const cleanupRef = useRef(null); // Lưu trữ hàm dọn dẹp của event listeners
 
-//         const customizeWidget = () => {
-//             const chatWidget = document.querySelector('chat-widget');
+    // --- Logic tùy chỉnh widget, được bọc trong useCallback để tối ưu ---
+    const customizeWidget = useCallback(() => {
+        const chatWidget = document.querySelector('chat-widget');
+        if (!chatWidget?.shadowRoot) return;
 
-//             if (!chatWidget || !chatWidget.shadowRoot) return false;
+        const root = chatWidget.shadowRoot;
+        const conWidget = root.querySelector('.lc_text-widget');
+        if (!conWidget) return;
 
-//             const root = chatWidget.shadowRoot;
-//             const conWidget = root.querySelector('.lc_text-widget');
+        let currentScreenSize = window.innerWidth;
 
-//             if (!conWidget) return false;
+        // --- Hàm xử lý thay đổi kích thước cửa sổ ---
+        const handleResize = () => {
+            const newWidth = window.innerWidth;
+            const breakpointChanged = (currentScreenSize <= 921 && newWidth > 921) || (currentScreenSize > 921 && newWidth <= 921);
 
-//             // Reset widget khi chuyển từ mobile sang desktop
-//             const wScreen = window.innerWidth;
-//             const isMobileToDesktop = currentScreenSize <= 921 && wScreen > 921;
-//             const isDesktopToMobile = currentScreenSize > 921 && wScreen <= 921;
+            if (breakpointChanged) {
+                // Reset styles khi thay đổi breakpoint
+                ['.lc_text-widget', '.lc_text-widget_content', '.lc_text-widget_dialog'].forEach(selector => {
+                    const el = root.querySelector(selector);
+                    if (el) el.style.cssText = '';
+                });
+                currentScreenSize = newWidth;
+            }
+            
+            // Luôn cập nhật style cho button chat
+            const chatButton = conWidget.querySelector('button:not([aria-label="Close Greeting"])');
+            if (chatButton) {
+                chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important;';
+            }
+        };
+        
+        // Dùng debounce để tối ưu sự kiện resize
+        let resizeTimeout;
+        const debouncedResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(handleResize, 150);
+        };
+        window.addEventListener('resize', debouncedResize);
 
-//             if (isMobileToDesktop || isDesktopToMobile) {
-//                 // Reset chat widget content frame size
-//                 const chatContainer = root.querySelector('.lc_text-widget');
-//                 const chatFrame = root.querySelector('.lc_text-widget_content');
-//                 const chatDialog = root.querySelector('.lc_text-widget_dialog');
+        // --- Hàm xử lý click vào nút đóng ---
+        const handleCloseClick = () => {
+            setTimeout(() => {
+                const button = conWidget.querySelector('button:not([aria-label="Close Greeting"])');
+                if (button) {
+                    button.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
+                }
+            }, 300); // Đợi animation đóng hoàn tất
+        };
+        
+        const closeBtn = root.querySelector('.lc_text-widget_heading_close--btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', handleCloseClick);
+        }
+        
+        const promptCloseBtn = root.querySelector('.lc_text-widget_prompt--prompt-close');
+        if (promptCloseBtn) {
+            promptCloseBtn.addEventListener('click', handleCloseClick);
+        }
 
-//                 if (chatContainer) {
-//                     chatContainer.style.cssText = '';
-//                 }
-//                 if (chatFrame) {
-//                     chatFrame.style.cssText = '';
-//                 }
-//                 if (chatDialog) {
-//                     chatDialog.style.cssText = '';
-//                 }
+        // Áp dụng style lần đầu
+        handleResize();
 
-//                 currentScreenSize = wScreen;
-//             }
+        // Trả về hàm dọn dẹp để xóa tất cả event listener
+        return () => {
+            window.removeEventListener('resize', debouncedResize);
+            if (closeBtn) closeBtn.removeEventListener('click', handleCloseClick);
+            if (promptCloseBtn) promptCloseBtn.removeEventListener('click', handleCloseClick);
+            clearTimeout(resizeTimeout);
+        };
+    }, []);
 
-//             // Tìm và style button chat
-//             const buttons = conWidget.querySelectorAll('button');
-//             if (buttons && buttons.length > 0) {
-//                 const chatButton = buttons[0];
+    // --- useEffect chính để quản lý vòng đời ---
+    useEffect(() => {
+        // Chỉ chạy ở phía client
+        if (typeof window === 'undefined') return;
 
-//                 // Style cố định cho button với responsive
-//                 if (wScreen <= 921) {
-//                     chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important;';
-//                 } else {
-//                     chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important;';
-//                 }
-//             }
+        // Sử dụng MutationObserver để đợi 'chat-widget' xuất hiện
+        const observer = new MutationObserver((mutations, obs) => {
+            const chatWidget = document.querySelector('chat-widget');
+            if (chatWidget?.shadowRoot) {
+                // Khi tìm thấy, chạy hàm tùy chỉnh và lưu lại hàm dọn dẹp
+                cleanupRef.current = customizeWidget();
+                
+                // Dừng theo dõi để tiết kiệm tài nguyên
+                obs.disconnect();
+                observerRef.current = null;
+            }
+        });
 
-//             // Xử lý nút close
-//             const closeBtn = root.querySelector('.lc_text-widget_heading_close--btn');
-//             if (closeBtn && !closeEventAdded) {
-//                 closeEventAdded = true;
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+        });
+        observerRef.current = observer;
 
-//                 closeBtn.addEventListener('click', () => {
-//                     setTimeout(() => {
-//                         const currentWidth = window.innerWidth;
-//                         const newButtons = conWidget.querySelectorAll('button');
+        // Dọn dẹp cuối cùng khi component bị hủy
+        return () => {
+            if (observerRef.current) {
+                observerRef.current.disconnect(); // Dừng observer
+            }
+            if (typeof cleanupRef.current === 'function') {
+                cleanupRef.current(); // Chạy hàm dọn dẹp của event listeners
+            }
+        };
+    }, [customizeWidget]); // Chỉ chạy lại nếu hàm customizeWidget thay đổi (rất hiếm)
 
-//                         if (newButtons && newButtons.length > 0) {
-//                             const newChatButton = newButtons[0];
+    return (
+        <div className="widget-chat-box">
+            <Script
+                async
+                src="https://widgets.leadconnectorhq.com/loader.js"
+                data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+                data-widget-id="668d5bc943da7a2804c9bf8e"
+                // Không cần prop onLoad nữa, useEffect sẽ quản lý tất cả
+            />
+        </div>
+    );
+};
 
-//                             // Reset content frame khi đóng
-//                             const chatFrame = root.querySelector('.lc_text-widget_content');
-//                             const chatDialog = root.querySelector('.lc_text-widget_dialog');
-//                             if (chatFrame) {
-//                                 chatFrame.style.cssText = '';
-//                             }
-//                             if (chatDialog) {
-//                                 chatDialog.style.cssText = '';
-//                             }
-
-//                             // Style button dựa trên kích thước hiện tại - đẩy lên 70px khi đóng greeting
-//                             if (currentWidth <= 921) {
-//                                 newChatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
-//                             } else {
-//                                 newChatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
-//                             }
-//                             newChatButton.removeAttribute('data-click-added');
-
-//                             // // Re-add click event
-//                             // newChatButton.addEventListener('click', (e) => {
-//                             //     newChatButton.style.display = 'none';
-//                             // }, { once: true });
-//                         }
-//                     }, 300);
-//                 });
-//             }
-
-//             // Xử lý nút prompt close
-//             const promptCloseBtn = root.querySelector('.lc_text-widget_prompt--prompt-close');
-//             if (promptCloseBtn && !promptCloseBtn.hasAttribute('data-click-added')) {
-//                 promptCloseBtn.setAttribute('data-click-added', 'true');
-
-//                 promptCloseBtn.addEventListener('click', () => {
-//                     setTimeout(() => {
-//                         const buttons = conWidget.querySelectorAll('button');
-//                         if (buttons && buttons.length > 0) {
-//                             const chatButton = buttons[0];
-                            
-//                             // Đẩy chat button lên 70px khi đóng prompt
-//                             chatButton.style.cssText = 'right: 20px !important; bottom: 70px !important; display: block !important;';
-//                         }
-//                     }, 100);
-//                 });
-//             }
-
-//             // Clear main interval khi đã setup xong
-//             if ((closeBtn && closeEventAdded) || promptCloseBtn) {
-//                 if (mainInterval) {
-//                     clearInterval(mainInterval);
-//                     mainInterval = null;
-//                 }
-//                 return true;
-//             }
-
-//             return false;
-//         };
-
-//         // Window resize handler
-//         const handleResize = () => {
-//             const newWidth = window.innerWidth;
-//             if ((currentScreenSize <= 921 && newWidth > 921) || (currentScreenSize > 921 && newWidth <= 921)) {
-//                 // Screen size category changed, re-customize widget
-//                 setTimeout(() => {
-//                     customizeWidget();
-//                 }, 100);
-//             }
-//         };
-
-//         // Add resize listener
-//         window.addEventListener('resize', handleResize);
-
-//         // Main interval để tìm và customize widget
-//         mainInterval = setInterval(() => {
-//             if (customizeWidget()) {
-//                 clearInterval(mainInterval);
-//                 mainInterval = null;
-//             }
-//         }, 500);
-
-//         // Cleanup after 15 seconds
-//         setTimeout(() => {
-//             if (mainInterval) {
-//                 clearInterval(mainInterval);
-//                 mainInterval = null;
-//             }
-//         }, 15000);
-
-//         // Cleanup function for resize listener
-//         return () => {
-//             window.removeEventListener('resize', handleResize);
-//         };
-//     }
-//     return (
-//         <div className="widget-chat-box">
-//             <Script
-//                 async
-//                 src="https://widgets.leadconnectorhq.com/loader.js"
-//                 data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
-//                 data-widget-id="668d5bc943da7a2804c9bf8e"
-//                 onLoad={ onloadScript}
-//             />
-//         </div>
-//     );
-// };
-
-// export default ChatWidget;
+export default ChatWidget;
