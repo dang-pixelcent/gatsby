@@ -477,7 +477,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div> */}
-                                    <LazyEmbed embedCode={wistiaStaticEmbedCode} />
+                                    <LazyEmbed embedCode={patients.video} />
                                 </div>
                             </div>
                         </div>
@@ -620,7 +620,7 @@ const Home = () => {
                                 <div className="item ast-flex">
                                     <div className="col-video">
                                         {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
-                                        <div className="video-inner-home"><TestimonialsVideo /></div>
+                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials.video} /></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
