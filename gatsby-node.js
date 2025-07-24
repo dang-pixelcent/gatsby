@@ -470,55 +470,26 @@ exports.createPages = async ({ actions, graphql }) => {
     if (htmlContent) {
       const $ = cheerio.load(htmlContent);
 
-      // 1a. Tìm và thay thế YouTube iframes
-      $('iframe[src*="youtube.com/embed"]').each((index, element) => {
-        const iframe = $(element);
-        const src = iframe.attr('src');
-        const videoIdMatch = src.match(/embed\/([^?]+)/);
-        if (videoIdMatch && videoIdMatch[1]) {
-          const videoId = videoIdMatch[1];
-          const placeholder = `<div 
-                                      class="youtube-placeholder" 
-                                      data-videoid="${videoId}"
-                                      id="youtube-${node.slug}-${index}"
-                                   ></div>`;
-          iframe.replaceWith(placeholder);
-        }
+      // Tìm tất cả các loại embed có thể có
+      const embedSelectors = [
+        'iframe[src*="youtube.com"]',
+        'iframe[src*="wistia.net"]',
+        'blockquote.tiktok-embed',
+        'blockquote.twitter-tweet'
+      ];
+
+      $(embedSelectors.join(', ')).each((index, element) => {
+        const embedElement = $(element);
+        // Lấy HTML của thẻ cha để bao gồm cả các script đi kèm nếu có
+        const parentHtml = embedElement.parent().html();
+
+        // Mã hóa để truyền an toàn qua data attribute
+        const embedCode = encodeURIComponent(parentHtml);
+
+        // Thay thế bằng placeholder vạn năng
+        embedElement.parent().replaceWith(`<div class="lazy-embed-placeholder" data-embed-code="${embedCode}"></div>`);
       });
 
-      // 1b. Tìm và thay thế Wistia iframes
-      $('iframe[src*="fast.wistia.net/embed"]').each((index, element) => {
-        const iframe = $(element);
-        const src = iframe.attr('src');
-        // Wistia ID thường nằm trong URL dạng .../iframe/VIDEO_ID
-        const videoIdMatch = src.match(/iframe\/([a-z0-9]+)/);
-        if (videoIdMatch && videoIdMatch[1]) {
-          const videoId = videoIdMatch[1];
-          const placeholder = `<div 
-                                      class="wistia-placeholder" 
-                                      data-videoid="${videoId}"
-                                      id="wistia-${node.slug}-${index}"
-                                   ></div>`;
-          iframe.replaceWith(placeholder);
-        }
-      });
-
-      // 1c. ✨ Xử lý TikTok (cho tương lai)
-      $('blockquote.tiktok-embed').each((index, element) => {
-        const blockquote = $(element);
-        // Lấy toàn bộ mã nhúng và mã hóa để truyền an toàn qua data attribute
-        const embedCode = encodeURIComponent(blockquote.parent().html());
-        blockquote.parent().replaceWith(`<div class="tiktok-placeholder" data-embed-code="${embedCode}" id="tiktok-${node.slug}-${index}"></div>`);
-      });
-
-      // 1d. ✨ Xử lý X / Twitter (cho tương lai)
-      $('blockquote.twitter-tweet').each((index, element) => {
-        const blockquote = $(element);
-        const embedCode = encodeURIComponent(blockquote.parent().html());
-        blockquote.parent().replaceWith(`<div class="twitter-placeholder" data-embed-code="${embedCode}" id="twitter-${node.slug}-${index}"></div>`);
-      });
-
-      // Cập nhật lại nội dung HTML đã xử lý
       htmlContent = $.html();
     }
     // --- KẾT THÚC XỬ LÝ VIDEO ---
