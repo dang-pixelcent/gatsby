@@ -470,7 +470,6 @@ exports.createPages = async ({ actions, graphql }) => {
     if (htmlContent) {
       const $ = cheerio.load(htmlContent);
 
-      // Tìm tất cả các loại embed có thể có
       const embedSelectors = [
         'iframe[src*="youtube.com"]',
         'iframe[src*="wistia.net"]',
@@ -480,14 +479,24 @@ exports.createPages = async ({ actions, graphql }) => {
 
       $(embedSelectors.join(', ')).each((index, element) => {
         const embedElement = $(element);
-        // Lấy HTML của thẻ cha để bao gồm cả các script đi kèm nếu có
-        const parentHtml = embedElement.parent().html();
+        const parent = embedElement.parent(); // Lấy thẻ cha
 
-        // Mã hóa để truyền an toàn qua data attribute
-        const embedCode = encodeURIComponent(parentHtml);
+        // Lấy class và style từ thẻ cha
+        const parentClass = parent.attr('class') || '';
+        const parentStyle = parent.attr('style') || '';
 
-        // Thay thế bằng placeholder vạn năng
-        embedElement.parent().replaceWith(`<div class="lazy-embed-placeholder" data-embed-code="${embedCode}"></div>`);
+        // Lấy HTML bên trong thẻ cha (chính là mã nhúng)
+        const embedCode = encodeURIComponent(parent.html());
+
+        // Tạo placeholder mới, sao chép class và style từ thẻ cha
+        const placeholder = `<div 
+                                    class="lazy-embed-placeholder ${parentClass}" 
+                                    style="${parentStyle}"
+                                    data-embed-code="${embedCode}"
+                                 ></div>`;
+
+        // Thay thế thẻ cha bằng placeholder đã được nâng cấp
+        parent.replaceWith(placeholder);
       });
 
       htmlContent = $.html();
