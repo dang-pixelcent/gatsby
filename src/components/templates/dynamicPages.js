@@ -17,6 +17,7 @@ import DomInjector from '@components/Tools/DomInjector';
 // import ScriptLoader from '@components/Tools/ScriptLoader';
 import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
+import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
 // import { ScheduleForm } from '@components/Blocks/GetStarted';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 
@@ -159,6 +160,9 @@ const Home = ({ pageContext }) => {
         {/* <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
         </ComponentPortal> */}
+        <DomInjector selector="#sdformthree">
+          <LazyPracticeFlowForm />
+        </DomInjector>
 
         {/* <DomInjector selector=".col-slider">
           <ServiceSlider />
@@ -210,15 +214,15 @@ const Home = ({ pageContext }) => {
           );
         }
         // Trường hợp 2: Script inline
-        if (script.resourceType === 'inline-script') {
-          return (
-            <Script
-              key={script.id}
-              strategy="idle" // Script inline cũng có thể có chiến lược
-              dangerouslySetInnerHTML={{ __html: script.content }}
-            />
-          );
-        }
+        // if (script.resourceType === 'inline-script') {
+        //   return (
+        //     <Script
+        //       key={script.id}
+        //       strategy="idle" // Script inline cũng có thể có chiến lược
+        //       dangerouslySetInnerHTML={{ __html: script.content }}
+        //     />
+        //   );
+        // }
 
         return null;
       })}
