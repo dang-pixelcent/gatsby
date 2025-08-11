@@ -5,7 +5,8 @@ import React, { useState, useEffect } from "react"
 // import "../styles/main.min.scss"
 // // import "../styles/lightbox.min.css"
 // import "../styles/slick.css"
-import "../styles/main.scss"
+// import "../styles/main.scss"
+// import "../styles/aos.css"
 // import "../styles/customStyle.scss"
 // import "../styles/dashicons.min.css"
 import Header from './Header'
@@ -13,6 +14,7 @@ import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
 import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
+import { Script } from "gatsby"
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -104,6 +106,19 @@ const DefaultLayout = ({ children }) => {
       <Footer />
       <ScrollTop />
       <ChatWidget />
+
+      {/* Global AOS Script */}
+      <Script 
+        src="/js/aos.js" 
+        strategy="idle"
+        onLoad={() => {
+          if (window.AOS) {
+            window.AOS.init({
+              offset: 150,
+            });
+          }
+        }}
+      />
     </div>
   )
 }
