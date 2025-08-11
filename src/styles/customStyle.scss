@@ -195,7 +195,7 @@
 .fs-28{font-size:28px !important;line-height:150% !important;}
 .fs-48{font-size:48px !important;line-height:150% !important;}
 .fs-56{font-size:56px !important;line-height:1.5 !important;}
-.btn-bg{padding:8px 20px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.btn-bg{padding:8px 20px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:20px;}
 .bg-F2771A{background-color:#F2771A;color:#fff;}
 .bg-0659A9{background:#0659A9 !important;color:#fff !important;border:1px solid #0659A9 !important; }
 .bg-F2771A:focus{color:#fff;}
@@ -372,6 +372,7 @@ header .custom-logo-link img.custom-logo{ aspect-ratio: 250 / 72;}
     display:flex;
     align-items:center;
     justify-content: center;
+    border-radius: 20px;
 }
 @media only screen and (min-width:1200px) and (max-width:1280px)
 {
@@ -647,6 +648,24 @@ footer a:hover{color:#F2771A;}
     .h2-title{font-size:2.5vw;/*48px;*/}
     .btn-h-72{height:3.75vw;/*72px;*/}
     .header-call{padding:0px 1.04vw;/*0px 20px;*/}
+}
+.list .blog-items{margin-bottom:2em;}
+.list .blog-items .item .image{width:25%;overflow:hidden;}
+.list .blog-items .item .image img{transform: scale(1);transition: transform .5s ease;}
+.list .blog-items .item .image:hover img{transform: scale(1.1);}
+.list .blog-items .item .info{width:75%;padding:1.5em;}
+.list .blog-items .item .info a .blog-title,.list .blog-items .item .info .blog-title a{font-family:'Soleto'; font-size:1.11rem;font-weight:700;color:#000;}
+.list .blog-items .item .info a .description,.list .blog-items .item .info .description a{font-size:0.89rem;font-weight:300;color:#000;}
+.ast-article-post .post-content .cat-links a,
+.ast-article-post .post-content .posted-by a,
+.ast-article-post .post-content .posted-by a span,
+.ast-article-post .ast-excerpt-container p{color:#000;font-weight:300;}
+.ast-article-post .post-content .entry-title a{font-family:'Soleto'; font-weight:700;color:#000;}
+.ast-pagination .page-numbers{font-weight:400;}
+.ast-pagination .page-numbers:not(.prev, .next){border-radius:50%;background:#A6B9D9;color:#fff;}
+.ast-pagination .page-numbers.current{background: #2A5293;}
+@media only screen and (max-width:768px){
+.list .blog-items .item .image,.list .blog-items .item .info{width:100%;}
 }
 .gallery-slider .slick-arrow:before {
     display: table;
