@@ -559,8 +559,8 @@ const Home = () => {
                                     {
                                         howWeCanHelp.boxs?.map((item, key) => (
                                             <div key={key} item={item} className={`circle-box box-${key + 1}`}>
-                                                <figure>
-                                                    <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
+                                                <figure data-aos="fade-down-right" data-aos-duration="1500" class="aos-init">
+                                                    <img decoding="async" className="animation-wiggle" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
                                                 </figure>
                                                 <h3 className="h3-title fs-26 f-soleto fw-800 color-000000 text-center">
                                                     {item.title}

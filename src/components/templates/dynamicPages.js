@@ -20,6 +20,7 @@ import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptM
 import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
 // import { ScheduleForm } from '@components/Blocks/GetStarted';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
+// const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
@@ -173,6 +174,12 @@ const Home = ({ pageContext }) => {
             <LazyServiceSlider />
           </Suspense>
         </DomInjector>
+        {/* <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
+          <SpecialtySlider />
+        </Suspense> */}
+        {/* <DomInjector selector=".sc-specialty .specialty-list">
+          <SpecialtySliderFromHtml  htmlContent={flexibleContentHtml} />
+        </DomInjector> */}
 
 
         {/* {(slug === "streamlining-operations-and-boosting-patient-engagement-with-crm-automation-for-medspa-marketing") && (
