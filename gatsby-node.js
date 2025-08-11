@@ -527,6 +527,7 @@ exports.createPages = async ({ actions, graphql }) => {
     };
   };
 
+  /** PHẦN TẠO TRANG */
   const createPageFromNode = (node, pathPrefix = '') => {
     actions.createPage({
       path: `${pathPrefix}${node.uri}`,
