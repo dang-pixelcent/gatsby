@@ -9,7 +9,7 @@ if (!WPGRAPHQL_URL) {
 
 module.exports = {
   flags: {
-    DEV_SSR: true
+    DEV_SSR: true,
   },
   plugins: [
     {
@@ -31,7 +31,16 @@ module.exports = {
         },
       }
     },
-    // `gatsby-plugin-react-helmet`,
+    // {
+    //   resolve: `gatsby-plugin-postcss`,
+    //   options: {
+    //     postCssPlugins: [
+    //       require("tailwindcss"),
+    //       require("autoprefixer"),
+    //     ],
+    //   },
+    // },
+      // `gatsby-plugin-react-helmet`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
@@ -65,18 +74,18 @@ module.exports = {
         typeName: `GraphCMS`,
       }
     },
-    // {
-    //   resolve: 'gatsby-plugin-web-font-loader',
-    //   options: {
-    //     google: {
-    //       families: [
-    //         'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
-    //         'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
-    //         'Assistant:wght@200..800'                // Lấy dải weight từ 200-800
-    //       ]
-    //     }
-    //   }
-    // },
+    {
+      resolve: 'gatsby-plugin-web-font-loader',
+      options: {
+        google: {
+          families: [
+            'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
+            'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
+            'Assistant:wght@200..800'                // Lấy dải weight từ 200-800
+          ]
+        }
+      }
+    },
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
