@@ -2,7 +2,7 @@
 import React from 'react';
 import { RadioGroup } from '@headlessui/react';
 import { motion } from 'framer-motion';
-import { CheckIcon } from './icons/checkIcon';
+import { CheckIcon } from './icons/CheckIcon';
 
 const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
     if (!data) return null;
