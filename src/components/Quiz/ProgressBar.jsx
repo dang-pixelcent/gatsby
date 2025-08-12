@@ -21,11 +21,11 @@ const ProgressBar = ({ onBack, progressInfo }) => {
                 <span
                     key={i}
                     aria-hidden="true"
-                     className={`flex justify-center aspect-square`}
+                    className="flex justify-center items-center aspect-square"
                     style={{
-                        width: 'var(--space-s)',
-                        height: 'var(--space-s)',
-                        padding: 'calc(var(--space-s) / 6)',
+                        width: 'calc(var(--space-s) * var(--quiz-scale))',
+                        height: 'calc(var(--space-s) * var(--quiz-scale))',
+                        padding: 'calc(var(--space-s) * var(--quiz-scale) / 6)',
                         backgroundColor: 'inherit',
                         color: 'inherit'
                     }}
@@ -39,16 +39,16 @@ const ProgressBar = ({ onBack, progressInfo }) => {
 
     return (
         <>
-            <div className="relative flex w-full text-neutral-faded text-sm font-sans tracking-wider uppercase items-center justify-between pb-2">
+            <div className="relative flex w-full text-neutral-faded text-[calc(0.875rem_*_var(--quiz-scale))] font-sans tracking-wider uppercase items-center justify-between pb-2">
                 {currentStep > 0 ? (
-                    <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-l py-[calc(1em*0.9)] pl-0 shadow-none">
-                        <span className="flex justify-center aspect-square" style={{ width: 'var(--space-l)', height: 'var(--space-l)', padding: 'calc(var(--space-l) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
+                    <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none">
+                        <span className="flex justify-center aspect-square" style={{ width: 'calc(var(--space-l) * var(--quiz-scale))', height: 'calc(var(--space-l) * var(--quiz-scale))', padding: 'calc(var(--space-l) * var(--quiz-scale) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
                             <ArrowLeft />
                         </span>
                         Back
                     </button>
-                ) : <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-l py-[calc(1em*0.9)] pl-0 shadow-none" style={{ cursor: 'default' }}>
-                    <span className="flex justify-center aspect-square" style={{ width: 'var(--space-l)', height: 'var(--space-l)', padding: 'calc(var(--space-l) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
+                ) : <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none" style={{ cursor: 'default' }}>
+                    <span className="flex justify-center aspect-square" style={{ width: 'calc(var(--space-l) * var(--quiz-scale))', height: 'calc(var(--space-l) * var(--quiz-scale))', padding: 'calc(var(--space-l) * var(--quiz-scale) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
                     </span>
                 </button>}
 
@@ -58,9 +58,9 @@ const ProgressBar = ({ onBack, progressInfo }) => {
                 <span className="font-semibold text-neutral">{currentStep + 1} / {totalSteps}</span>
             </div>
 
-            <div className="relative mb-l flex h-s w-full justify-between rounded-full overflow-hidden bg-neutral-faded">
+            <div className="relative mb-[calc(var(--space-l)_*_var(--quiz-scale))] flex h-[calc(var(--space-s)_*_var(--quiz-scale))] w-full justify-between rounded-full overflow-hidden bg-neutral-faded">
                 <div
-                    className="absolute h-s rounded-xl bg-primary bg-opacity-50"
+                    className="absolute h-[calc(var(--space-s)_*_var(--quiz-scale))] rounded-xl bg-primary bg-opacity-50"
                     style={{ width: `${overallProgress * 100}%`, transition: 'width 0.5s ease-in-out' }}
                 ></div>
                 <div></div>

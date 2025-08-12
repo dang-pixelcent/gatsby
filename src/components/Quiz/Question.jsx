@@ -26,30 +26,30 @@ const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
             transition={{ duration: 0.3 }}
         >
             <div>
-                <h1 className="text-xl text-neutral mt-s">{question}</h1>
+                <h1 className="text-[calc(var(--size-xl)_*_var(--quiz-scale))] text-neutral mt-s">{question}</h1>
 
                 {type === 'radio' && (
                     <RadioGroup value={currentAnswer} onChange={(value) => onAnswer(id, value)} className="mt-xl">
                         <RadioGroup.Label className="sr-only">{question}</RadioGroup.Label>
-                        <div className="column gap-m mt-xl text-l select-none">
+                        <div className="column gap-[calc(var(--space-m)_*_var(--quiz-scale))] mt-xl text-l select-none">
                             {options.map((option) => (
                                 <RadioGroup.Option key={option} value={option}
                                     className={({ checked }) =>
                                         ` ${checked ? 'bg-primary border-primary' : 'bg-transparent border-neutral'} 
-                                    border-2 rounded-base group relative flex cursor-pointer p-s shadow-raised sm:hover:bg-primary-highlighted focus:outline-none`
+                                    border-2 rounded-base group relative flex cursor-pointer px-[calc(var(--space-m)_*_var(--quiz-scale))] py-[calc(var(--space-m)_*_var(--quiz-scale-60))] shadow-raised sm:hover:bg-primary-highlighted focus:outline-none`
                                     }
                                 >
                                     {({ checked }) => (
-                                        <span className="flex flex-1 items-center gap-m">
-                                            <div className={`${checked ? 'bg-[#fff]' : 'border border-black'} flex h-l w-[var(--space-l)] shrink-0 items-center group-hover:border-[#fff] justify-center rounded-full overflow-hidden`}>
-                                                {checked && <span className="flex justify-center aspect-square" style={{ width: 'var(--space-xl)', height: 'var(--space-xl)', padding: 'calc(var(--space-xl) / 6)', backgroundColor: 'rgba(var(--color-background-primary))', color: 'var(--color-on-background-primary)' }}>
+                                        <span className="flex flex-1 items-center gap-[calc(var(--space-m)_*_var(--quiz-scale))]">
+                                            <div className={`${checked ? 'bg-[#fff]' : 'border border-black'} flex h-[calc(var(--space-l)_*_var(--quiz-scale))] w-[calc(var(--space-l)_*_var(--quiz-scale))] shrink-0 items-center group-hover:border-[#fff] justify-center rounded-full overflow-hidden`}>
+                                                {checked && <span className="flex justify-center aspect-square" style={{ width: '100%', height: '100%', backgroundColor: 'rgba(var(--color-background-primary))', color: 'var(--color-on-background-primary)' }}>
                                                     <CheckIcon />
                                                 </span>}
                                             </div>
                                             {/* <RadioGroup.Label as="span" className={`${checked ? 'text-on-primary' : 'text-on-neutral'} row items-center gap-m font-semibold text-l`}>
                                                 {option}
                                             </RadioGroup.Label> */}
-                                            <RadioGroup.Label as="span" className="row items-center gap-m font-semibold text-l">
+                                            <RadioGroup.Label as="span" className="row items-center gap-m font-semibold text-[calc(var(--size-l)_*_var(--quiz-scale))]">
                                                 <div className={`${checked ? 'sm:group-hover:text-onprimary text-onprimary' : 'sm:group-hover:text-onprimary text-onneutral'}`}>
                                                     <div>{option}</div>
                                                     <div className="text-m"></div>

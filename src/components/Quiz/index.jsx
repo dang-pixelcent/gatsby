@@ -76,12 +76,16 @@ const Quiz = () => {
 
     return (
         <div
-            className="flex flex-col min-h-screen bg-page"
+            className="flex flex-col bg-page"
             style={{ textRendering: 'optimizeSpeed' }}
         >
             <main>
                 <section className="pt-s">
-                    <div className="container max-w-[var(--container-s)] mx-auto flex flex-col px-4">
+                   <div className="@container/quiz container mx-auto flex flex-col px-4 "
+                        style={{
+                            maxWidth: 'calc(var(--container-s) * var(--quiz-scale-90))'
+                        }}
+                    >
                         <ProgressBar
                             progressInfo={progressInfo}
                             onBack={handlePrev}
