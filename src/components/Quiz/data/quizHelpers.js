@@ -57,3 +57,18 @@ export const getProgressInfo = (currentStep) => {
         sectionTitle: currentQuestion.sectionTitle,
     };
 };
+
+export const calculateResult = (answers) => {
+    // Logic đơn giản: Nếu câu trả lời cho 'life_quality_impact' là lựa chọn đầu tiên,
+    // họ được coi là "qualified".
+    // const criticalAnswer = quizData.sections
+    //     .find(s => s.id === 'section3')
+    //     .questions.find(q => q.id === 'life_quality_impact').options[0];
+
+    // if (answers['life_quality_impact'] === criticalAnswer) {
+    //     return 'qualified';
+    // }
+
+    // return 'not-qualified';
+    return 'qualified';
+};

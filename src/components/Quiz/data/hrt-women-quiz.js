@@ -85,9 +85,18 @@ export const quizData = {
             ]
         }
     ],
-    finalPage: {
-        headline: "Based on your answers, you may be experiencing\n symptoms of hormonal imbalance.",
-        message: "Our specialists can help you uncover the root cause and build a plan that works for your body.",
-        ctaButton: "BOOK MY CONSULTATION"
+    finalPages: {
+        qualified: {
+            headline: "Based on your answers, you may be experiencing\n symptoms of hormonal imbalance.",
+            message: "Our specialists can help you uncover the root cause and build a plan that works for your body.\nBook your consultation today — it’s the first step toward feeling like yourself again.",
+            ctaButton: "BOOK MY CONSULTATION",
+            status: "qualified"
+        },
+        'not-qualified': {
+            headline: "Thank you for completing the quiz.",
+            message: "While your symptoms may not strongly indicate a hormonal imbalance at this time, we encourage you to monitor your health. Feel free to explore our resources.",
+            ctaButton: "EXPLORE OUR RESOURCES",
+            status: "not-qualified"
+        }
     }
 };

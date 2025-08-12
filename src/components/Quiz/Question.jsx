@@ -8,7 +8,7 @@ const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
     if (!data) return null;
 
     const { id, question, type, options } = data;
-    const isAnswered = currentAnswer !== undefined;
+    // const isAnswered = currentAnswer !== undefined;
 
     return (
         <motion.div
@@ -66,7 +66,7 @@ const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
 
             <button
                 onClick={onNext}
-                disabled={!isAnswered}
+                // disabled={!isAnswered}
                 className="button-root rounded-full capitalize gap-s bg-primary sm:hover:bg-primary-highlighted text-onprimary w-auto text-left px-l py-[calc(1em*0.9)] min-w-[250px] self-end"
             >
                 Next

@@ -6,6 +6,17 @@
     @tailwind components;
     @tailwind utilities;
 
+
+    /* ================================================================== */
+    /* BẮT ĐẦU: DI CHUYỂN TẤT CẢ KHAI BÁO (VARIABLES & PROPERTIES) VÀO ĐÂY */
+    /* ================================================================== */
+    /* OVERRIDE FONT FAMILY cho toàn bộ scope */
+    font-family: 'Soleto', sans-serif !important;
+
+    --container-result: 90ch;
+    --quiz-scale: 0.8;
+    --quiz-scale-60: 0.6;
+    --quiz-scale-90: 0.9;
     /* Custom CSS variables để match với Gatsby site */
     --radius: 0.25rem;
     --padding-page: 4vw;
@@ -22,16 +33,36 @@
     --color-on-background-dark: #f4f4ea;
     --color-on-background-warm: #f4f4ea;
     --color-on-background-beige: #26180f;
-    --color-background-primary: 253, 209, 124;
-    --color-background-primary-faded: 255, 226, 167;
-    --color-background-primary-highlighted: 255, 202, 95;
-    --color-background-sage: 130, 138, 122;
-    --color-background-sky: 177, 214, 215;
-    --color-background-rust: 156, 75, 58;
-    --color-background-poppy: 236, 103, 67;
-    --color-background-dark: 37, 14, 0;
-    --color-background-warm: 58, 40, 32;
-    --color-background-beige: 226, 219, 206;
+    --color-background-primary: 253,
+        209,
+        124;
+    --color-background-primary-faded: 255,
+        226,
+        167;
+    --color-background-primary-highlighted: 255,
+        202,
+        95;
+    --color-background-sage: 130,
+        138,
+        122;
+    --color-background-sky: 177,
+        214,
+        215;
+    --color-background-rust: 156,
+        75,
+        58;
+    --color-background-poppy: 236,
+        103,
+        67;
+    --color-background-dark: 37,
+        14,
+        0;
+    --color-background-warm: 58,
+        40,
+        32;
+    --color-background-beige: 226,
+        219,
+        206;
     --color-foreground-sage: #828a7a;
     --color-foreground-sky: #b1d6d7;
     --color-foreground-rust: #9c4b3a;
@@ -71,21 +102,51 @@
     --space-7xl: calc(clamp(5.22rem, 11.32vw + 2.95rem, 14.98rem) * 1.1);
     --space-8xl: calc(clamp(6.52rem, 17vw + 3.12rem, 21.18rem) * 1.1);
     --space-9xl: calc(clamp(8.15rem, 25.28vw + 3.09rem, 29.95rem) * 1.1);
-    --color-background-page: 244, 244, 234;
-    --color-background-page-faded: 249, 249, 251;
-    --color-background-critical: 226, 44, 44;
-    --color-background-critical-faded: 253, 242, 242;
-    --color-background-critical-highlighted: 208, 40, 40;
-    --color-background-positive: 17, 136, 80;
-    --color-background-positive-faded: 241, 253, 248;
-    --color-background-positive-highlighted: 15, 125, 73;
-    --color-background-neutral: 223, 226, 234;
-    --color-background-neutral-faded: 241, 242, 246;
-    --color-background-disabled: 236, 238, 242;
-    --color-background-disabled-faded: 245, 246, 249;
-    --color-background-elevation-base: 244, 244, 234;
-    --color-background-elevation-raised: 244, 244, 234;
-    --color-background-elevation-overlay: 244, 244, 234;
+    --color-background-page: 244,
+        244,
+        234;
+    --color-background-page-faded: 249,
+        249,
+        251;
+    --color-background-critical: 226,
+        44,
+        44;
+    --color-background-critical-faded: 253,
+        242,
+        242;
+    --color-background-critical-highlighted: 208,
+        40,
+        40;
+    --color-background-positive: 17,
+        136,
+        80;
+    --color-background-positive-faded: 241,
+        253,
+        248;
+    --color-background-positive-highlighted: 15,
+        125,
+        73;
+    --color-background-neutral: 223,
+        226,
+        234;
+    --color-background-neutral-faded: 241,
+        242,
+        246;
+    --color-background-disabled: 236,
+        238,
+        242;
+    --color-background-disabled-faded: 245,
+        246,
+        249;
+    --color-background-elevation-base: 244,
+        244,
+        234;
+    --color-background-elevation-raised: 244,
+        244,
+        234;
+    --color-background-elevation-overlay: 244,
+        244,
+        234;
     --color-border-primary: #cfa90f;
     --color-border-primary-faded: #faedbb;
     --color-border-critical: #bf2424;
@@ -103,6 +164,16 @@
     --color-foreground-disabled: #c6ccda;
     --color-on-background-neutral: #26180f;
     --shadow-color: rgba(0, 0, 0, .15);
+    /* ================================================================== */
+    /* KẾT THÚC: PHẦN KHAI BÁO                                           */
+    /* BẮT ĐẦU: CÁC QUY TẮC LỒNG NHAU (NESTED RULES)                     */
+    /* ================================================================== */
+
+
+    /* Override cho tất cả elements trong scope */
+    * {
+        font-family: 'Soleto', sans-serif !important;
+    }
 
     .container {
         position: relative;

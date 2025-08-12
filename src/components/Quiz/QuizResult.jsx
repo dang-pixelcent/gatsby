@@ -5,20 +5,36 @@ import { motion } from 'framer-motion';
 const QuizResult = ({ finalPageData }) => {
     return (
         <motion.div
-            className="flex flex-col items-center text-center pt-4xl px-page"
+            className="flex flex-col items-center text-center py-4xl px-page bg-page"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <h1 className="text-4xl md:text-5xl text-neutral font-medium whitespace-pre-line">
+            {/* <h1 className="text-4xl md:text-5xl text-neutral font-medium whitespace-pre-line">
                 {finalPageData.headline}
             </h1>
             <p className="text-lg text-neutral-faded mt-4 max-w-xl">
                 {finalPageData.message}
             </p>
-            <button className="animate-glowing-border button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-onprimary shadow-raised text-center px-l py-[calc(1em*0.9)] mt-8">
+            <button className="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-onprimary shadow-raised text-center px-l py-[calc(1em*0.9)] mt-8">
                 {finalPageData.ctaButton}
-            </button>
+
+            </button> */}
+            <div class="container !max-w-[var(--container-result)] items-center justify-center" bis_skin_checked="1">
+                <div class="column" bis_skin_checked="1">
+                    <h1 class="text-xl text-center" style={{ fontFamily: 'Soleto XBold !important' }}>{finalPageData.headline}</h1>
+                    <p class="text-center whitespace-pre-line">{finalPageData.message}</p>
+                </div>
+                <a class="inline text-underlined hover:decoration-transparent" href="/weight-loss/results">
+                    <button class="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-onprimary shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
+                        {finalPageData.ctaButton}
+                        <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
+                            <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
+                            </span>
+                        </div>
+                    </button>
+                </a>
+            </div>
         </motion.div>
     );
 };

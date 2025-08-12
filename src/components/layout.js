@@ -15,6 +15,7 @@ import ScrollTop from "./ScrollTop";
 import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import { Script } from "gatsby"
+import { Toaster } from 'react-hot-toast';
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -108,8 +109,8 @@ const DefaultLayout = ({ children }) => {
       <ChatWidget />
 
       {/* Global AOS Script */}
-      <Script 
-        src="/js/aos.js" 
+      <Script
+        src="/js/aos.js"
         strategy="idle"
         onLoad={() => {
           if (window.AOS) {
@@ -117,6 +118,27 @@ const DefaultLayout = ({ children }) => {
               offset: 150,
             });
           }
+        }}
+      />
+
+      <Toaster
+        position="top-center" // Vị trí hiển thị
+        toastOptions={{
+          // Tùy chỉnh giao diện
+          className: 'font-sans',
+          style: {
+            border: '1px solid #E2E8F0',
+            padding: '16px',
+            color: '#1A202C',
+          },
+          error: {
+            // Tùy chỉnh riêng cho toast lỗi
+            duration: 3000, // Hiển thị trong 3 giây
+            theme: {
+              primary: '#EF4444', // Màu icon
+              secondary: '#FFFAFA',
+            },
+          },
         }}
       />
     </div>
