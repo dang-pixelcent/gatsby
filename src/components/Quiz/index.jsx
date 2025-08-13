@@ -176,7 +176,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
             style={mode === 'embedded' ? { minHeight: 'unset' } : {}}
         >
             {mode === 'full' && (
-                <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
+                <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded" style={{ backgroundColor: '#F2FCFE' }}>
                     <GatsbyImage
                         objectFit='contain'
                         image={logo}

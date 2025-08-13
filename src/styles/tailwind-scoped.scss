@@ -17,6 +17,8 @@
     --quiz-scale: 0.8;
     --quiz-scale-60: 0.6;
     --quiz-scale-90: 0.9;
+    --color-btn-option: #F2FCFE;
+    --color-background-form: linear-gradient(0deg, #022646 0%, #0659A9 47%);
     /* Custom CSS variables để match với Gatsby site */
     --radius: 0.25rem;
     --padding-page: 4vw;
@@ -39,9 +41,10 @@
     --color-background-primary-faded: 255,
         226,
         167;
-    --color-background-primary-highlighted: 255,
-        202,
-        95;
+    // --color-background-primary-highlighted: 255,
+    //     202,
+    //     95;
+    --color-background-primary-highlighted: 240, 114, 19;
     --color-background-sage: 130,
         138,
         122;
@@ -175,6 +178,14 @@
         font-family: 'Soleto', sans-serif !important;
     }
 
+    .bg-btn-option {
+        background-color: var(--color-btn-option);
+    }
+
+    .bg-form {
+        background: var(--color-background-form);
+    }
+
     .form-body {
         scroll-behavior: smooth;
         text-rendering: optimizespeed;
@@ -183,7 +194,7 @@
         flex-direction: column;
         min-height: 100vh;
         --tw-bg-opacity: 1;
-        background-color: rgba(var(--color-background-page), var(--tw-bg-opacity));
+        background: linear-gradient(0deg, #022646 0%, #0659A9 47%);
         // font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         color: var(--color-foreground-neutral);
     }
@@ -247,6 +258,7 @@
 
     section {
         padding: var(--space-2xl) var(--padding-page);
+
         @media (min-width: 768px) {
             padding: var(--space-2xl) 24px;
         }
@@ -2062,9 +2074,14 @@
         background-color: rgba(var(--color-background-positive-highlighted), var(--tw-bg-opacity))
     }
 
+    // .bg-primary {
+    //     --tw-bg-opacity: 1;
+    //     background-color: rgba(var(--color-background-primary), var(--tw-bg-opacity))
+    // }
+
     .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: rgba(var(--color-background-primary), var(--tw-bg-opacity))
+        background-color: #F2771A;
     }
 
     .bg-primary-faded {
@@ -2700,11 +2717,11 @@
     }
 
     .text-neutral {
-        color: var(--color-foreground-neutral)
+        color: #F2FCFE;
     }
 
     .text-neutral-faded {
-        color: var(--color-foreground-neutral-faded)
+        color: #F2FCFE;
     }
 
     .text-oncritical {
@@ -2719,8 +2736,12 @@
         color: var(--color-on-background-positive)
     }
 
+    // .text-onprimary {
+    //     color: var(--color-on-background-primary)
+    // }
+
     .text-onprimary {
-        color: var(--color-on-background-primary)
+        color: #F2FCFE;
     }
 
     .text-positive {
@@ -3483,7 +3504,7 @@
     }
 
     .group:hover .sm\:group-hover\:text-onprimary {
-        color: var(--color-on-background-primary)
+        color: #F2FCFE;
     }
 }
 
