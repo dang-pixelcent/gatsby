@@ -1,70 +1,47 @@
 // src/components/Blocks/LazyPracticeFlowForm.js
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Script } from 'gatsby';
+import React from 'react';
+import { navigate } from 'gatsby';
+import Quiz from '@components/Quiz';
+import '@styles/tailwind-scoped.scss';
 
-const LazyPracticeFlowForm = () => {
-    // State để theo dõi xem form đã được tải hay chưa
-    const [isLoaded, setIsLoaded] = useState(false);
-    // Ref để tham chiếu đến div placeholder
-    const containerRef = useRef(null);
+const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
-    useEffect(() => {
-        // 1. Tạo một Intersection Observer
-        const observer = new IntersectionObserver(
-            (entries) => {
-                // Khi placeholder bắt đầu xuất hiện trên màn hình...
-                if (entries[0].isIntersecting) {
-                    // 2. ...thì cập nhật state để bắt đầu tải form
-                    setIsLoaded(true);
-                    // 3. Ngừng theo dõi để tiết kiệm tài nguyên
-                    observer.disconnect();
-                }
-            },
-            {
-                // Tải trước 200px trước khi nó thực sự lọt vào màn hình
-                rootMargin: '200px',
-            }
-        );
+// Component này giờ sẽ render ngay lập tức, không còn "lazy" nữa.
+const PracticeFlowForm = () => {
 
-        // Bắt đầu theo dõi div placeholder
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        // Hàm dọn dẹp
-        return () => {
-            if (containerRef.current) {
-                observer.unobserve(containerRef.current);
-            }
+    // Hàm này được gọi khi người dùng nhấn "Next" trên câu hỏi đầu tiên của quiz
+    const handleQuizStart = (answers) => {
+        // 1. Tạo đối tượng tiến trình ban đầu
+        const initialProgress = {
+            savedAnswers: answers,
+            savedStep: 0, // Bắt đầu từ câu hỏi đầu tiên (index 0)
+            isCompleted: false,
         };
-    }, []); // Mảng rỗng đảm bảo effect này chỉ chạy một lần
 
-    // Nếu chưa cần tải, chỉ hiển thị một div giữ chỗ
-    if (!isLoaded) {
-        return (
-            <div
-                ref={containerRef}
-                // Đặt chiều cao tối thiểu để tránh nhảy layout
-                style={{ minHeight: '800px' }}
-            >
-                {/* Bạn có thể đặt một spinner tải ở đây nếu muốn */}
-            </div>
-        );
-    }
+        // 2. Lưu vào localStorage
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialProgress));
 
-    // Khi đã cần tải, render iframe và script của form
+        // 3. Chuyển hướng người dùng đến câu hỏi số 2 trong giao diện quiz đầy đủ
+        navigate('/hrt-quiz/question/2');
+    };
+
+    // Trả về trực tiếp giao diện Quiz mà không cần chờ đợi
     return (
-        <>
-            <iframe
-                id="pZ5us1TDI3kKin0xSGLQ"
-                style={{ width: '100%', border: 'none', minHeight: '800px' }}
-                src="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ"
-                title="Practice Flow Survey Form"
-            ></iframe>
-            <Script src="https://book.practiceflow.md/js/form_embed.js" strategy="post-hydrate" />
-        </>
+        <div class="col-item col-right-custom" id="scheduleform">
+            <div className="tailwind-scope">
+                <div className="w-full">
+                    {/* Thẻ div này sẽ giới hạn chiều rộng, làm cho quiz trông giống như trên điện thoại */}
+                    <div className="shadow-2xl rounded-2xl overflow-hidden border-4 border-neutral">
+                        <Quiz
+                            mode="embedded"
+                            onEmbeddedNext={handleQuizStart}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 
-export default LazyPracticeFlowForm;
+export default PracticeFlowForm;

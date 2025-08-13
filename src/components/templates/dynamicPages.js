@@ -14,6 +14,7 @@ import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // import ComponentPortal from "@components/Tools/ComponentPortal"
 // Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
 import DomInjector from '@components/Tools/DomInjector';
+import DomReplacer from '@components/Tools/DomReplacer';
 // import ScriptLoader from '@components/Tools/ScriptLoader';
 import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
@@ -161,9 +162,9 @@ const Home = ({ pageContext }) => {
         {/* <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
         </ComponentPortal> */}
-        <DomInjector selector="#sdformthree">
+        <DomReplacer selector="#scheduleform">
           <LazyPracticeFlowForm />
-        </DomInjector>
+        </DomReplacer>
 
         {/* <DomInjector selector=".col-slider">
           <ServiceSlider />

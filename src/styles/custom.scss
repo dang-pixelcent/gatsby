@@ -7,7 +7,7 @@
 //   --color-neutral-faded: 107 114 128; /* a.k.a gray-500 */
 //   --color-on-primary: 255 255 255; /* a.k.a white */
 //   --color-on-neutral: 17 24 39; /* a.k.a gray-900 */
-  
+
 //   --color-background-primary: var(--color-primary);
 //   --color-on-background-primary: var(--color-on-primary);
 
@@ -25,3 +25,52 @@
 
 //   --container-s: 600px;
 // }
+
+
+.get-started-video .col-right-custom {
+    position: relative;
+    flex: 0 0 100%;
+    max-width: 24.68vw;
+    /*474px;*/
+    padding-top: 5.20vw;
+    /*100px;*/
+}
+
+.get-started-video .col-right-custom:before {
+    content: "";
+    display: block;
+    position: absolute;
+    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/frm-arrow.png');
+    width: 14.27vw;
+    /*274px;*/
+    height: 10.83vw;
+    /*208px;*/
+    left: -4.16vw;
+    /*-80px;*/
+    top: -6.25vw;
+    /*-120px;*/
+    z-index: 0;
+}
+
+// .get-started-video .h2-title,.get-started-video .col-right-custom *{z-index:1;}
+@media only screen and (max-width:922px) {
+    .get-started-video .col-right-custom {
+        max-width: 50%;
+    }
+
+}
+
+@media only screen and (max-width:768px) {
+    .get-started-video .col-right-custom {
+        padding-top: 50px;
+        order: 1;
+    }
+
+    .get-started-video .col-right-custom:before {
+        width: 150px;
+        height: 114px;
+        top: -70px;
+        left: 40%;
+        transform: translateX(-50%);
+    }
+}

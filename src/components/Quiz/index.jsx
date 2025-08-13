@@ -7,19 +7,36 @@ import Question from './Question.jsx';
 // import QuizResult from './QuizResult.jsx'; // Sẽ tạo ở bước cuối
 import { AnimatePresence } from 'framer-motion';
 import { getQuestionData, getTotalQuestions, getProgressInfo, calculateResult } from './data/quizHelpers.js';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 // IMPORT CSS CHỈ CHO COMPONENT NÀY
 // import '../../styles/tailwind.css';
-import { navigate } from 'gatsby'; // Import navigate của Gatsby
+import { graphql, useStaticQuery, navigate } from 'gatsby'; // Import navigate của Gatsby
 import toast from 'react-hot-toast';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
-const Quiz = ({ questionNumber }) => {
-    // Chuyển đổi questionNumber (1-based) thành currentStep (0-based index)
-    const currentStep = questionNumber - 1;
-    // const allQuestions = quizHelpers.getAllQuestions();
-    // console.log('All Questions:', allQuestions);
-    // const [currentStep, setCurrentStep] = useState(0);
+const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
+    const data = useStaticQuery(graphql`
+        query {
+            logoImage: file(relativePath: { eq: "logo/logo-head.png" }) {
+                childImageSharp {
+                    gatsbyImageData(
+                        width: 250
+                        placeholder: BLURRED
+                        formats: [AUTO, WEBP]
+                        quality: 90
+                    )
+                }
+            }
+        }
+    `);
+
+    const logo = getImage(data.logoImage);
+
+    // Nếu là mode 'embedded', luôn bắt đầu từ câu 1. Nếu không, lấy từ prop.
+    const currentStep = mode === 'embedded' ? 0 : questionNumber - 1;
+    // const [currentStep, setCurrentStep] = useState(initialStep);
+
     const [answers, setAnswers] = useState({});
     // const [isCompleted, setIsCompleted] = useState(false);
     const [direction, setDirection] = useState(1);
@@ -69,6 +86,17 @@ const Quiz = ({ questionNumber }) => {
             return;
         }
 
+
+        // Logic cho chế độ 'embedded'
+        if (mode === 'embedded') {
+            // Nếu là câu hỏi đầu tiên, gọi callback để trang cha xử lý
+            if (currentStep === 0) {
+                onEmbeddedNext(answers);
+                return;
+            }
+        }
+
+        /** Logic chế độ full */
         // 1. Tạo đối tượng tiến trình mới
         const progress = {
             savedAnswers: answers,
@@ -114,7 +142,7 @@ const Quiz = ({ questionNumber }) => {
     // const currentQuestionData = allQuestions[currentStep];
     // const progressInfo = quizHelpers.getProgressInfo(currentStep);
 
-        // Tính toán thông tin tiến trình bằng helper
+    // Tính toán thông tin tiến trình bằng helper
     const progressInfo = useMemo(() => getProgressInfo(currentStep), [currentStep]);
 
     if (!progressInfo || !currentQuestionData) return null;
@@ -144,9 +172,19 @@ const Quiz = ({ questionNumber }) => {
 
     return (
         <div
-            className="flex flex-col bg-page"
-            style={{ textRendering: 'optimizeSpeed' }}
+            className={`form-body`}
+            style={mode === 'embedded' ? { minHeight: 'unset' } : {}}
         >
+            {mode === 'full' && (
+                <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
+                    <GatsbyImage
+                        objectFit='contain'
+                        image={logo}
+                        alt="Wellness Clinic Marketing"
+                        className="w-auto h-2xl my-xs"
+                    />
+                </header>
+            )}
             <main>
                 <section className="pt-s">
                     <div className="@container/quiz container mx-auto flex flex-col px-4 "
@@ -154,10 +192,12 @@ const Quiz = ({ questionNumber }) => {
                             maxWidth: 'calc(var(--container-s) * var(--quiz-scale-90))'
                         }}
                     >
-                        <ProgressBar
-                            progressInfo={progressInfo}
-                            onBack={handlePrev}
-                        />
+                        {mode === 'full' && (
+                            <ProgressBar
+                                progressInfo={progressInfo}
+                                onBack={handlePrev}
+                            />
+                        )}
 
                         <AnimatePresence mode="wait">
                             <Question

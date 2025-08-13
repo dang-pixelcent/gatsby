@@ -175,6 +175,19 @@
         font-family: 'Soleto', sans-serif !important;
     }
 
+    .form-body {
+        scroll-behavior: smooth;
+        text-rendering: optimizespeed;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--color-background-page), var(--tw-bg-opacity));
+        // font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        color: var(--color-foreground-neutral);
+    }
+
     .container {
         position: relative;
         margin-left: auto;
@@ -233,7 +246,10 @@
     }
 
     section {
-        padding: var(--space-2xl) var(--padding-page)
+        padding: var(--space-2xl) var(--padding-page);
+        @media (min-width: 768px) {
+            padding: var(--space-2xl) 24px;
+        }
     }
 
     body {
