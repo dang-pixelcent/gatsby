@@ -41,13 +41,46 @@ const ProgressBar = ({ onBack, progressInfo }) => {
         <>
             <div className="relative flex w-full text-neutral-faded text-[calc(0.875rem_*_var(--quiz-scale))] font-sans tracking-wider uppercase items-center justify-between pb-2">
                 {currentStep > 0 ? (
-                    <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none">
+                    <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-[#F2FCFE] inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none">
+                        <span className="flex justify-center aspect-square" style={{ width: 'calc(var(--space-l) * var(--quiz-scale))', height: 'calc(var(--space-l) * var(--quiz-scale))', padding: 'calc(var(--space-l) * var(--quiz-scale) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
+                            <ArrowLeft />
+                        </span>
+                        Back.25, 0.5, 0.75, 1.0
+            const diamondThreshold = (i + 1) / totalDiamonds;
+            const isCompleted = overallProgress >= diamondThreshold;
+            const isCurrent = !isCompleted && overallProgress > (i / totalDiamonds);
+            
+            diamonds.push(
+                <span
+                    key={i}
+                    aria-hidden="true"
+                    className="flex justify-center items-center aspect-square"
+                    style={{
+                        width: 'calc(var(--space-s) * var(--quiz-scale))',
+                        height: 'calc(var(--space-s) * var(--quiz-scale))',
+                        padding: 'calc(var(--space-s) * var(--quiz-scale) / 6)',
+                        backgroundColor: 'inherit',
+                        color: 'inherit'
+                    }}
+                >
+                    <DiamondIcon />
+                </span>
+            );
+        }
+        return diamonds;
+    };
+
+    return (
+        <>
+            <div className="relative flex w-full text-neutral-faded text-[calc(0.875rem_*_var(--quiz-scale))] font-sans tracking-wider uppercase items-center justify-between pb-2">
+                {currentStep > 0 ? (
+                    <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-[#F2FCFE] inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none">
                         <span className="flex justify-center aspect-square" style={{ width: 'calc(var(--space-l) * var(--quiz-scale))', height: 'calc(var(--space-l) * var(--quiz-scale))', padding: 'calc(var(--space-l) * var(--quiz-scale) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
                             <ArrowLeft />
                         </span>
                         Back
                     </button>
-                ) : <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-inherit inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none" style={{ cursor: 'default' }}>
+                ) : <button onClick={onBack} className="button-root rounded-full capitalize gap-s hover: bg-transparent text-[#F2FCFE] inline-flex items-center gap-[calc(1em/3.5)] w-auto text-left px-[calc(var(--space-l)_*_var(--quiz-scale))] py-[calc(1em*0.9)] pl-0 shadow-none" style={{ cursor: 'default' }}>
                     <span className="flex justify-center aspect-square" style={{ width: 'calc(var(--space-l) * var(--quiz-scale))', height: 'calc(var(--space-l) * var(--quiz-scale))', padding: 'calc(var(--space-l) * var(--quiz-scale) / 6)', backgroundColor: 'inherit', color: 'inherit' }}>
                     </span>
                 </button>}
