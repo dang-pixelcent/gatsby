@@ -14,13 +14,14 @@ module.exports = {
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     // Có thể tăng tốc quá trình lấy dữ liệu trên các máy có nhiều CPU.
     PARALLEL_SOURCING: true,
-    // DEV_SSR: true,
-    // QUERY_ON_DEMAND: true,
-    // LAZY_IMAGES: true,
-    // PRESERVE_WEBPACK_CACHE: true,
-    // PRESERVE_FILE_DOWNLOAD_CACHE: true,
-    // PARALLEL_SOURCING: true,
-    // FAST_DEV: true,
+
+    //     DEV_SSR: true,
+//     QUERY_ON_DEMAND: true,
+//     LAZY_IMAGES: true,
+//     PRESERVE_WEBPACK_CACHE: true,
+//     PRESERVE_FILE_DOWNLOAD_CACHE: true,
+//     PARALLEL_SOURCING: true,
+//     FAST_DEV: true,
   },
   plugins: [
     {
@@ -57,7 +58,7 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-image`,
-    // `gatsby-plugin-preload-fonts`,
+    `gatsby-plugin-preload-fonts`,
     // `gatsby-plugin-webpack-bundle-analyser-v2`,
     // {
     //   resolve: `gatsby-plugin-purgecss`,
@@ -92,18 +93,18 @@ module.exports = {
         typeName: `GraphCMS`,
       }
     },
-    {
-      resolve: 'gatsby-plugin-web-font-loader',
-      options: {
-        google: {
-          families: [
-            'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
-            'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
-            'Assistant:wght@200..800'                // Lấy dải weight từ 200-800
-          ]
-        }
-      }
-    },
+    // {
+    //   resolve: 'gatsby-plugin-web-font-loader',
+    //   options: {
+    //     google: {
+    //       families: [
+    //         'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
+    //         'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
+    //         'Assistant:wght@200..800'                // Lấy dải weight từ 200-800
+    //       ]
+    //     }
+    //   }
+    // },
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
