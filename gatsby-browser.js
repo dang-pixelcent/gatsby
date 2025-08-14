@@ -17,7 +17,7 @@ import './src/styles/main.scss';
 // 4. EXTERNAL LIBRARIES CUỐI CÙNG
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-if (process.env.NODE_ENV === 'development') {
+// if (process.env.NODE_ENV === 'development') {
     console.log(
         '%c EdgeTag Mock Mode: Bật chế độ giả lập EdgeTag. ',
         'background: #7b5ed4; color: #fff; padding: 4px;'
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
         console.log('Payload:', args[2] || 'No payload');
         console.groupEnd();
     };
-}
+// }
 
 
 export const wrapRootElement = wrapWithProvider
