@@ -10,7 +10,7 @@ import { getQuestionData, getTotalQuestions, getProgressInfo, calculateResult } 
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 // IMPORT CSS CHỈ CHO COMPONENT NÀY
 // import '../../styles/tailwind.css';
-import { graphql, useStaticQuery, navigate } from 'gatsby'; // Import navigate của Gatsby
+import { graphql, useStaticQuery, navigate, Link } from 'gatsby'; // Import navigate của Gatsby
 import toast, { Toaster } from 'react-hot-toast';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
@@ -177,12 +177,14 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         >
             {mode === 'full' && (
                 <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
-                    <GatsbyImage
-                        objectFit='contain'
-                        image={logo}
-                        alt="Wellness Clinic Marketing"
-                        className="w-auto h-2xl my-xs"
-                    />
+                    <Link to="/">
+                        <GatsbyImage
+                            objectFit='contain'
+                            image={logo}
+                            alt="Wellness Clinic Marketing"
+                            className="w-auto h-2xl my-xs"
+                        />
+                    </Link>
                 </header>
             )}
             <main>

@@ -26,7 +26,7 @@ const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
             transition={{ duration: 0.3 }}
         >
             <div>
-                <h1 className="text-[calc(var(--size-xl)_*_var(--quiz-scale))] text-neutral mt-s">{question}</h1>
+                <h1 className="text-[calc(var(--size-xl)_*_var(--quiz-scale))] text-neutral mt-s font-Soleto-XBold">{question}</h1>
 
                 {type === 'radio' && (
                     <RadioGroup value={currentAnswer} onChange={(value) => onAnswer(id, value)} className="mt-xl">

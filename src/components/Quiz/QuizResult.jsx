@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
-import { graphql, useStaticQuery } from 'gatsby'; // Import navigate của Gatsby
+import { graphql, useStaticQuery, Link } from 'gatsby'; // Import navigate của Gatsby
 
 const QuizResult = ({ finalPageData }) => {
     const data = useStaticQuery(graphql`
@@ -38,12 +38,14 @@ const QuizResult = ({ finalPageData }) => {
 
             </button> */}
             <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
-                <GatsbyImage
-                    objectFit='contain'
-                    image={logo}
-                    alt="Wellness Clinic Marketing"
-                    className="w-auto h-2xl my-xs"
-                />
+                <Link to="/">
+                    <GatsbyImage
+                        objectFit='contain'
+                        image={logo}
+                        alt="Wellness Clinic Marketing"
+                        className="w-auto h-2xl my-xs"
+                    />
+                </Link>
             </header>
             <main>
                 <section className="pt-4xl px-page">
