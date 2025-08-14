@@ -9,7 +9,18 @@ if (!WPGRAPHQL_URL) {
 
 module.exports = {
   flags: {
-    DEV_SSR: true,
+    // Giúp build lại nhanh hơn bằng cách lưu cache của các lần build trước.
+    PRESERVE_WEBPACK_CACHE: true,
+    PRESERVE_FILE_DOWNLOAD_CACHE: true,
+    // Có thể tăng tốc quá trình lấy dữ liệu trên các máy có nhiều CPU.
+    PARALLEL_SOURCING: true,
+    // DEV_SSR: true,
+    // QUERY_ON_DEMAND: true,
+    // LAZY_IMAGES: true,
+    // PRESERVE_WEBPACK_CACHE: true,
+    // PRESERVE_FILE_DOWNLOAD_CACHE: true,
+    // PARALLEL_SOURCING: true,
+    // FAST_DEV: true,
   },
   plugins: [
     {
@@ -40,7 +51,7 @@ module.exports = {
     //     ],
     //   },
     // },
-      // `gatsby-plugin-react-helmet`,
+    // `gatsby-plugin-react-helmet`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
@@ -60,10 +71,17 @@ module.exports = {
     //     // develop: true,
     //   },
     // },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     path: path.resolve(`./src`),
+    //   },
+    // },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: path.resolve(`./src`),
+        name: `images`,
+        path: `${__dirname}/src/images`,
       },
     },
     {
