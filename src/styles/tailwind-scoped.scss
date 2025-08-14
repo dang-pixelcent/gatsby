@@ -18,6 +18,7 @@
     --quiz-scale-60: 0.6;
     --quiz-scale-90: 0.9;
     --color-btn-option: #F2FCFE;
+    --color-form: #F2FCFE;
     --color-background-form: linear-gradient(0deg, #022646 0%, #0659A9 47%);
     /* Custom CSS variables để match với Gatsby site */
     --radius: 0.25rem;
@@ -35,9 +36,10 @@
     --color-on-background-dark: #f4f4ea;
     --color-on-background-warm: #f4f4ea;
     --color-on-background-beige: #26180f;
-    --color-background-primary: 253,
-        209,
-        124;
+    // --color-background-primary: 253,
+    //     209,
+    //     124;
+    --color-background-primary: 242, 119, 26;
     --color-background-primary-faded: 255,
         226,
         167;
@@ -150,7 +152,9 @@
     --color-background-elevation-overlay: 244,
         244,
         234;
-    --color-border-primary: #cfa90f;
+    // --color-border-primary: #cfa90f;
+    --color-border-primary: #b1530c;
+    // --color-border-primary-faded: #faedbb;
     --color-border-primary-faded: #faedbb;
     --color-border-critical: #bf2424;
     --color-border-critical-faded: #f6dada;
@@ -174,8 +178,12 @@
 
 
     /* Override cho tất cả elements trong scope */
-    * {
-        font-family: 'Soleto', sans-serif !important;
+    // * {
+    //     font-family: 'Soleto', sans-serif !important;
+    // }
+
+    .font-Soleto-XBold {
+        font-family: 'Soleto XBold' !important;
     }
 
     .bg-btn-option {
@@ -194,7 +202,7 @@
         flex-direction: column;
         min-height: 100vh;
         --tw-bg-opacity: 1;
-        background: linear-gradient(0deg, #022646 0%, #0659A9 47%);
+        background: var(--color-background-form);
         // font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         color: var(--color-foreground-neutral);
     }
@@ -2074,14 +2082,13 @@
         background-color: rgba(var(--color-background-positive-highlighted), var(--tw-bg-opacity))
     }
 
-    // .bg-primary {
-    //     --tw-bg-opacity: 1;
-    //     background-color: rgba(var(--color-background-primary), var(--tw-bg-opacity))
-    // }
-
     .bg-primary {
         --tw-bg-opacity: 1;
-        background-color: #F2771A;
+        background-color: rgba(var(--color-background-primary), var(--tw-bg-opacity))
+    }
+    .bg-primary-non-opacity {
+        --tw-bg-opacity: 1;
+        background-color: rgba(var(--color-background-primary))
     }
 
     .bg-primary-faded {
@@ -2699,6 +2706,10 @@
         letter-spacing: .1em
     }
 
+    .text-form {
+        color: var(--color-form);
+    }
+
     .text-\[\#222223\] {
         --tw-text-opacity: 1;
         color: rgb(34 34 35/var(--tw-text-opacity))
@@ -2717,11 +2728,11 @@
     }
 
     .text-neutral {
-        color: #F2FCFE;
+        color: var(--color-form);
     }
 
     .text-neutral-faded {
-        color: #F2FCFE;
+        color: var(--color-form);
     }
 
     .text-oncritical {
@@ -2741,7 +2752,7 @@
     // }
 
     .text-onprimary {
-        color: #F2FCFE;
+        color: var(--color-form);
     }
 
     .text-positive {
@@ -3504,7 +3515,7 @@
     }
 
     .group:hover .sm\:group-hover\:text-onprimary {
-        color: #F2FCFE;
+        color: var(--color-form);
     }
 }
 

@@ -1,12 +1,29 @@
 // src/components/Quiz/QuizResult.js
 import React from 'react';
 import { motion } from 'framer-motion';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { graphql, useStaticQuery } from 'gatsby'; // Import navigate của Gatsby
 
 const QuizResult = ({ finalPageData }) => {
+    const data = useStaticQuery(graphql`
+            query {
+                logoImage: file(relativePath: { eq: "logo/logo-foot.png" }) {
+                    childImageSharp {
+                        gatsbyImageData(
+                            width: 250
+                            placeholder: BLURRED
+                            formats: [AUTO, WEBP]
+                            quality: 90
+                        )
+                    }
+                }
+            }
+        `);
+
+    const logo = getImage(data.logoImage);
     return (
         <motion.div
-            className="flex flex-col items-center text-center py-4xl px-page bg-page"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className={`form-body`}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
         >
@@ -20,21 +37,33 @@ const QuizResult = ({ finalPageData }) => {
                 {finalPageData.ctaButton}
 
             </button> */}
-            <div class="container !max-w-[var(--container-result)] items-center justify-center" bis_skin_checked="1">
-                <div class="column" bis_skin_checked="1">
-                    <h1 class="text-xl text-center" style={{ fontFamily: 'Soleto XBold !important' }}>{finalPageData.headline}</h1>
-                    <p class="text-center whitespace-pre-line">{finalPageData.message}</p>
-                </div>
-                <a class="inline text-underlined hover:decoration-transparent" href="/weight-loss/results">
-                    <button class="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-onprimary shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
-                        {finalPageData.ctaButton}
-                        <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
-                            <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
-                            </span>
+            <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
+                <GatsbyImage
+                    objectFit='contain'
+                    image={logo}
+                    alt="Wellness Clinic Marketing"
+                    className="w-auto h-2xl my-xs"
+                />
+            </header>
+            <main>
+                <section className="pt-4xl px-page">
+                    <div class="container !max-w-[var(--container-result)] items-center justify-center" bis_skin_checked="1">
+                        <div class="column" bis_skin_checked="1">
+                            <h1 class="text-xl text-center text-form font-Soleto-XBold">{finalPageData.headline}</h1>
+                            <p class="text-center whitespace-pre-line text-form">{finalPageData.message}</p>
                         </div>
-                    </button>
-                </a>
-            </div>
+                        <a class="inline text-underlined hover:decoration-transparent mt-[10px]" href="/weight-loss/results">
+                            <button class="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-form shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
+                                {finalPageData.ctaButton}
+                                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
+                                    <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
+                                    </span>
+                                </div>
+                            </button>
+                        </a>
+                    </div>
+                </section>
+            </main>
         </motion.div>
     );
 };

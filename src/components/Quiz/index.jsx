@@ -11,14 +11,14 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 // IMPORT CSS CHỈ CHO COMPONENT NÀY
 // import '../../styles/tailwind.css';
 import { graphql, useStaticQuery, navigate } from 'gatsby'; // Import navigate của Gatsby
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
 const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
     const data = useStaticQuery(graphql`
         query {
-            logoImage: file(relativePath: { eq: "logo/logo-head.png" }) {
+            logoImage: file(relativePath: { eq: "logo/logo-foot.png" }) {
                 childImageSharp {
                     gatsbyImageData(
                         width: 250
@@ -176,7 +176,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
             style={mode === 'embedded' ? { minHeight: 'unset' } : {}}
         >
             {mode === 'full' && (
-                <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded" style={{ backgroundColor: '#F2FCFE' }}>
+                <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
                     <GatsbyImage
                         objectFit='contain'
                         image={logo}
@@ -212,6 +212,27 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
                     </div>
                 </section>
             </main>
+
+            <Toaster
+                position="top-center" // Vị trí hiển thị
+                toastOptions={{
+                    // Tùy chỉnh giao diện
+                    className: 'font-sans',
+                    style: {
+                        border: '1px solid #E2E8F0',
+                        padding: '16px',
+                        color: '#1A202C',
+                    },
+                    error: {
+                        // Tùy chỉnh riêng cho toast lỗi
+                        duration: 3000, // Hiển thị trong 3 giây
+                        theme: {
+                            primary: '#EF4444', // Màu icon
+                            secondary: '#FFFAFA',
+                        },
+                    },
+                }}
+            />
         </div>
     );
 };
