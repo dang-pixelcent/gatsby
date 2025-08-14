@@ -12,6 +12,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 // import '../../styles/tailwind.css';
 import { graphql, useStaticQuery, navigate, Link } from 'gatsby'; // Import navigate của Gatsby
 import toast, { Toaster } from 'react-hot-toast';
+import { trackQuestionAnswered, trackQuizCompleted } from '@src/utils/tracking'; 
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
@@ -86,6 +87,11 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
             return;
         }
 
+        // ✅ GỬI SỰ KIỆN TRACKING
+        // Chỉ gửi khi ở chế độ 'full' để tránh gửi trùng lặp với trang bắt đầu
+        if (mode === 'full') {
+            trackQuestionAnswered(currentQuestionData, answers[currentQuestionData.id], questionNumber);
+        }
 
         // Logic cho chế độ 'embedded'
         if (mode === 'embedded') {
@@ -127,6 +133,11 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
 
     const handleSubmit = () => {
         const resultStatus = calculateResult(answers);
+        
+        // ✅ GỬI SỰ KIỆN TRACKING KHI HOÀN THÀNH
+        trackQuizCompleted(resultStatus, answers);
+
+        // Cập nhật tiến trình cuối cùng
         const finalProgress = {
             savedAnswers: answers,
             savedStep: currentStep,

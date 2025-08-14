@@ -3,6 +3,8 @@
 import React from 'react';
 import { navigate } from 'gatsby';
 import Quiz from '@components/Quiz';
+import { trackQuizStarted, trackQuestionAnswered } from '@src/utils/tracking'; // ✅ Import helper
+import { getQuestionData } from '@components/Quiz/data/quizHelpers'; // ✅ Import helper
 import '@styles/tailwind-scoped.scss';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
@@ -21,6 +23,11 @@ const PracticeFlowForm = () => {
 
         // 2. Lưu vào localStorage
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialProgress));
+
+        // GỬI SỰ KIỆN TRACKING
+        const firstQuestion = getQuestionData(0); // Lấy dữ liệu câu hỏi đầu tiên
+        trackQuizStarted();
+        trackQuestionAnswered(firstQuestion, answers[firstQuestion.id], 1);
 
         // 3. Chuyển hướng người dùng đến câu hỏi số 2 trong giao diện quiz đầy đủ
         navigate('/hrt-quiz/question/2');
