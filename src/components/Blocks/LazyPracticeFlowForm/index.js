@@ -24,12 +24,12 @@ const PracticeFlowForm = () => {
 
             // Bạn có thể thêm logic để xóa các phần tử khác nếu cần.
             // Ví dụ: xóa iframe không phải của Partytown
-            const iframes = document.querySelectorAll('iframe');
-            iframes.forEach(iframe => {
-                if (iframe.src && !iframe.src.includes('partytown')) {
-                    iframe.remove();
-                }
-            });
+            // const iframes = document.querySelectorAll('iframe');
+            // iframes.forEach(iframe => {
+            //     if (iframe.src && !iframe.src.includes('partytown')) {
+            //         iframe.remove();
+            //     }
+            // });
         };
     }, []); // Mảng rỗng [] đảm bảo effect này chỉ thiết lập cleanup một lần.
 

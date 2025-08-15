@@ -5,6 +5,7 @@ import { SEO } from '@components/SEO';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
 import { useQuizData } from '@components/Quiz/data/useQuizData';
+import ChatWidget from "@components/ChatWidget"
 
 // Gatsby sẽ tự động truyền các tham số từ URL vào props
 const HrtQuizQuestionPage = ({ params }) => {
@@ -32,10 +33,14 @@ const HrtQuizQuestionPage = ({ params }) => {
     }
 
     return (
-        <div className="tailwind-scope">
-            {/* Truyền questionNumber vào component Quiz */}
-            <Quiz mode="full" questionNumber={questionNumber} />
-        </div>
+        <>
+            <div className="tailwind-scope">
+                {/* Truyền questionNumber vào component Quiz */}
+                <Quiz mode="full" questionNumber={questionNumber} />
+                <ChatWidget />
+            </div>
+            
+        </>
     );
 };
 

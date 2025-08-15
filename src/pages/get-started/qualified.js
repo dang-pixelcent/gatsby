@@ -6,6 +6,7 @@ import { SEO } from '@components/SEO';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
 import { useQuizData } from '@components/Quiz/data/useQuizData';
+import ChatWidget from "@components/ChatWidget"
 
 const QualifiedResultPage = () => {
     // Sử dụng "người gác cổng"
@@ -27,6 +28,7 @@ const QualifiedResultPage = () => {
     return (
         <div className="tailwind-scope">
             <QuizResult finalPageData={finalPageData} />
+            <ChatWidget />
         </div>
     );
 };
