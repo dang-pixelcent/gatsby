@@ -3,6 +3,16 @@ import "./styles.scss"
 import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { useLocation } from "@reach/router"
+import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
+import iconSexualHealth from "../../assets/expertise/icon-sexual-health.svg" // Thêm dòng này
+import iconMultiLoc from "../../assets/expertise/icon-multi-loc.svg" // Thêm dòng này
+import iconMedspa from "../../assets/expertise/icon-medspa.svg" // Thêm dòng này
+import iconHormoneOpt from "../../assets/expertise/icon-hormone-opt.svg" // Thêm dòng này
+import iconMedicalWellness from "../../assets/expertise/icon-medical-wellness.svg" // Thêm dòng này
+import iconMenHealth from "../../assets/expertise/icon-men-health.svg" // Thêm dòng này
+import iconFranchise from "../../assets/expertise/icon-franchise.svg" // Thêm dòng này
+// import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
+
 
 const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
   // Sử dụng biến môi trường cho WordPress URL
@@ -417,61 +427,115 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                               </li>
                             </ul>
                           </li>
-                          <li className="mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-menu-grid mega-align-bottom-left mega-menu-grid mega-menu-item-1641" id="mega-menu-item-1641">
+                          <li className="full-non-text full-w-columns mega-menu-item mega-menu-item-type-custom mega-menu-item-object-custom mega-menu-item-has-children mega-menu-megamenu mega-menu-grid mega-align-bottom-left mega-menu-grid mega-menu-item-1641" id="mega-menu-item-1641">
                             <Link className="mega-menu-link" to="/expertise" aria-expanded="false" tabIndex={0}>Expertise<span className="mega-indicator" aria-hidden="true" /></Link>
                             <ul className="mega-sub-menu" role="presentation">
-                              <li className="mega-menu-row mega-menu-cols2-style menu-cols2-style" id="mega-menu-1641-0">
+                              <li className="mega-menu-row" id="mega-menu-1641-0">
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
-                                  <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--span": "6" }} id="mega-menu-1641-0-0">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-0-0">
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1644">
-                                        <Link className="mega-menu-link" to={`/service/medical-weight-loss-marketing`}>
-                                          Medical Weight Loss Marketing
-                                        </Link>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-25" id="mega-menu-item-media_image-25">
+                                        <img decoding="async" src={iconmedicalweightloss} className="image wp-image-4050 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        {/* <img decoding="async" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/icon-medical-weight-loss.svg?hash=15c1346527bb82e468466739f2c23ab4" className="image wp-image-4050 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} /> */}
                                       </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1645">
-                                        <Link className="mega-menu-link" to={`/service/sexual-health-marketing`}>
-                                          Sexual Health Marketing
-                                        </Link>
-                                      </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2617">
-                                        <Link className="mega-menu-link" to={`/service/multi-location-marketing`}>
-                                          Multi-Location Clinic Marketing
-                                        </Link>
-                                      </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2033">
-                                        <Link className="mega-menu-link" to={`/service/med-spa-marketing`}>
-                                          Medspa Marketing
-                                        </Link>
-                                      </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-3429">
-                                        <Link className="mega-menu-link" to={`/service/franchise-marketing`}>
-                                          Franchise Marketing
-                                        </Link>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1644" id="mega-menu-item-1644">
+                                        <Link className="mega-menu-link" to="/service/medical-weight-loss-marketing/">Medical Weight Loss Marketing</Link>
                                       </li>
                                     </ul>
                                   </li>
-                                  <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--span": "6" }} id="mega-menu-1641-0-1">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-0-1">
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1643">
-                                        <Link className="mega-menu-link" to={`/service/hormone-clinic-marketing`}>
-                                          Hormone Optimization Marketing
-                                        </Link>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-24" id="mega-menu-item-media_image-24">
+                                        <img decoding="async" src={iconHormoneOpt} className="image wp-image-4052 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
                                       </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2031">
-                                        <Link className="mega-menu-link" to={`/service/wellness-medical-clinic-marketing`}>
-                                          Medical Wellness Clinic Marketing
-                                        </Link>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1643" id="mega-menu-item-1643">
+                                        <Link className="mega-menu-link" to="/service/hormone-clinic-marketing/">Hormone Optimization Marketing</Link>
                                       </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2032">
-                                        <Link className="mega-menu-link" to={`/service/mens-health-clinic-marketing`}>
-                                          Men’s Health Clinic Marketing
-                                        </Link>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li className="mega-menu-row" id="mega-menu-1641-1">
+                                <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-1-0">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-23" id="mega-menu-item-media_image-23">
+                                        <img decoding="async" src={iconSexualHealth} className="image wp-image-4054 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
                                       </li>
-                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-3343">
-                                        <Link className="mega-menu-link" to={`/service/ai-search-optimization`}>
-                                          AI Search Optimization
-                                        </Link>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1645" id="mega-menu-item-1645">
+                                        <Link className="mega-menu-link" to="/service/sexual-health-marketing/">Sexual Health Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-1-1">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-22" id="mega-menu-item-media_image-22">
+                                        <img decoding="async" src={iconMedicalWellness} className="image wp-image-4056 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2031" id="mega-menu-item-2031">
+                                        <Link className="mega-menu-link" to="/service/wellness-medical-clinic-marketing/">Medical Wellness Clinic Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li className="mega-menu-row" id="mega-menu-1641-2">
+                                <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-2-0">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-21" id="mega-menu-item-media_image-21">
+                                        <img decoding="async" src={iconMultiLoc} className="image wp-image-4058 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2617" id="mega-menu-item-2617">
+                                        <Link className="mega-menu-link" to="/service/multi-location-marketing/">Multi-Location Clinic Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-2-1">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-20" id="mega-menu-item-media_image-20">
+                                        <img decoding="async" src={iconMenHealth} className="image wp-image-4060 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2032" id="mega-menu-item-2032">
+                                        <Link className="mega-menu-link" to="/service/mens-health-clinic-marketing/">Men’s Health Clinic Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li className="mega-menu-row" id="mega-menu-1641-3">
+                                <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-3-0">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-19" id="mega-menu-item-media_image-19">
+                                        <img decoding="async" src={iconMedspa} className="image wp-image-4062 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2033" id="mega-menu-item-2033">
+                                        <Link className="mega-menu-link" to="/service/med-spa-marketing/">Medspa Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-3-1">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-18" id="mega-menu-item-media_image-18">
+                                        <img decoding="async" src={iconFranchise} className="image wp-image-4064 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-3429" id="mega-menu-item-3429">
+                                        <Link className="mega-menu-link" to="/service/franchise-marketing/">Franchise Marketing</Link>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                              <li className="mega-menu-row mega-only-col only-col" id="mega-menu-1641-4">
+                                <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6", 'paddingLeft': '0px' }} id="mega-menu-1641-4-0">
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-26" id="mega-menu-item-media_image-26">
+                                        <img decoding="async" width="100" height="100" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-png.webp" className="image wp-image-4090  attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} sizes="(max-width: 1366px) 28px, " data-fluid-image="1" srcSet="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-28w-1x-png.webp 28w, https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-28w-2x-png.webp 56w" />
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-4085" id="mega-menu-item-4085">
+                                        <Link className="mega-menu-link" to="/service/legitscript-certification/">LegitScript Certification</Link>
                                       </li>
                                     </ul>
                                   </li>
