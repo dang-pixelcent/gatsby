@@ -51,7 +51,7 @@ const PracticeFlowForm = () => {
         trackQuestionAnswered(quizData, firstQuestion, answers[firstQuestion.id], 1);
 
         // 3. Chuyển hướng người dùng đến câu hỏi số 2 trong giao diện quiz đầy đủ
-        navigate('/hrt-quiz/question/2');
+        navigate('/get-started/question/2');
     };
 
     // Trả về trực tiếp giao diện Quiz mà không cần chờ đợi

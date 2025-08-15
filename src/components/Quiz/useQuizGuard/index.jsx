@@ -20,7 +20,7 @@ export const useQuizGuard = ({ pageType, questionNumber }) => {
             if (pageType === 'question' && questionNumber === 1) {
                 setIsAllowed(true);
             } else {
-                navigate('/hrt-quiz/question/1', { replace: true });
+                navigate('/get-started/question/1', { replace: true });
             }
             return;
         }
@@ -35,10 +35,10 @@ export const useQuizGuard = ({ pageType, questionNumber }) => {
         let fallbackUrl;
         if (nextAvailableQuestionNumber > totalQuestions) {
             // Nếu "câu tiếp theo" vượt quá giới hạn, thì URL dự phòng là CÂU CUỐI CÙNG.
-            fallbackUrl = `/hrt-quiz/question/${totalQuestions}`;
+            fallbackUrl = `/get-started/question/${totalQuestions}`;
         } else {
             // Nếu không, URL dự phòng là câu tiếp theo như bình thường.
-            fallbackUrl = `/hrt-quiz/question/${nextAvailableQuestionNumber}`;
+            fallbackUrl = `/get-started/question/${nextAvailableQuestionNumber}`;
         }
 
         // Nếu bảo vệ trang CÂU HỎI

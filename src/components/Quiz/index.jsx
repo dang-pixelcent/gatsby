@@ -132,7 +132,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         if (currentStep < totalQuestions - 1) {
             setDirection(1);
             // setCurrentStep(currentStep + 1);
-            navigate(`/hrt-quiz/question/${questionNumber + 1}`);
+            navigate(`/get-started/question/${questionNumber + 1}`);
         } else {
             handleSubmit();
         }
@@ -142,7 +142,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         if (currentStep > 0) {
             setDirection(-1);
             // setCurrentStep(currentStep - 1);
-            navigate(`/hrt-quiz/question/${questionNumber - 1}`);
+            navigate(`/get-started/question/${questionNumber - 1}`);
         }
     };
 
@@ -162,7 +162,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(finalProgress));
 
         // Điều hướng đến trang kết quả tương ứng
-        navigate(`/hrt-quiz/${resultStatus}`);
+        navigate(`/get-started/${resultStatus}`);
     };
 
     if (!progressInfo || !currentQuestionData) return null;
