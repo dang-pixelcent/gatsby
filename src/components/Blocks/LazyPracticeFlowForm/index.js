@@ -6,11 +6,13 @@ import Quiz from '@components/Quiz';
 import { trackQuizStarted, trackQuestionAnswered } from '@src/utils/tracking'; // ✅ Import helper
 import { getQuestionData } from '@components/Quiz/data/quizHelpers'; // ✅ Import helper
 import '@styles/tailwind-scoped.scss';
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
 // Component này giờ sẽ render ngay lập tức, không còn "lazy" nữa.
 const PracticeFlowForm = () => {
+    const quizData = useQuizData();
 
     // Hàm này được gọi khi người dùng nhấn "Next" trên câu hỏi đầu tiên của quiz
     const handleQuizStart = (answers) => {
@@ -25,9 +27,9 @@ const PracticeFlowForm = () => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialProgress));
 
         // GỬI SỰ KIỆN TRACKING
-        const firstQuestion = getQuestionData(0); // Lấy dữ liệu câu hỏi đầu tiên
-        trackQuizStarted();
-        trackQuestionAnswered(firstQuestion, answers[firstQuestion.id], 1);
+        const firstQuestion = getQuestionData(quizData, 0); // Lấy dữ liệu câu hỏi đầu tiên
+        trackQuizStarted(quizData);
+        trackQuestionAnswered(quizData, firstQuestion, answers[firstQuestion.id], 1);
 
         // 3. Chuyển hướng người dùng đến câu hỏi số 2 trong giao diện quiz đầy đủ
         navigate('/hrt-quiz/question/2');

@@ -4,6 +4,7 @@ import Quiz from '@components/Quiz';
 import { SEO } from '@components/SEO';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 
 // Gatsby sẽ tự động truyền các tham số từ URL vào props
 const HrtQuizQuestionPage = ({ params }) => {
@@ -38,8 +39,11 @@ const HrtQuizQuestionPage = ({ params }) => {
     );
 };
 
-export const Head = ({ params }) => (
-    <SEO seoData={`<title>Question ${params.questionNumber} | HRT Women's Health Quiz</title>`} />
-);
+export const Head = ({ params }) => {
+    const quizData = useQuizData();
+    return (
+        <SEO seoData={`<title>Question ${params.questionNumber} | ${quizData?.heading || "HRT Women's Health Quiz"}</title>`} />
+    );
+};
 
 export default HrtQuizQuestionPage;

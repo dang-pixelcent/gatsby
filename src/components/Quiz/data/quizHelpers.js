@@ -1,24 +1,25 @@
 // src/data/quiz-helpers.js
-import { quizData } from './hrt-women-quiz.js';
+// import { quizData } from './hrt-women-quiz.js';
 
 // Chuyển đổi cấu trúc section thành một mảng câu hỏi phẳng để dễ xử lý
-const allQuestions = quizData.sections.flatMap((section, sectionIndex) =>
-    section.questions.map((question, questionIndex) => ({
-        ...question,
-        sectionId: section.id,
-        sectionTitle: section.title,
-        sectionIndex,
-        questionIndexInSection: questionIndex,
-    }))
-);
+const getFlatQuestions = (quizData) =>
+    quizData.sections.flatMap((section, sectionIndex) =>
+        section.questions.map((question, questionIndex) => ({
+            ...question,
+            sectionId: section.id,
+            sectionTitle: section.title,
+            sectionIndex,
+            questionIndexInSection: questionIndex,
+        }))
+    );
 
-export const getQuestionData = (step) => allQuestions[step];
+export const getQuestionData = (quizData, step) => getFlatQuestions(quizData)[step];
 
-export const getTotalQuestions = () => allQuestions.length;
+export const getTotalQuestions = (quizData) => getFlatQuestions(quizData).length;
 
 // Đây là hàm cốt lõi, tính toán tất cả các thông số cho progress bar
-export const getProgressInfo = (currentStep) => {
-    const currentQuestion = getQuestionData(currentStep);
+export const getProgressInfo = (quizData, currentStep) => {
+    const currentQuestion = getQuestionData(quizData, currentStep);
     if (!currentQuestion) return null;
 
     const { sectionIndex, questionIndexInSection } = currentQuestion;
@@ -50,7 +51,7 @@ export const getProgressInfo = (currentStep) => {
 
     return {
         currentStep,
-        totalSteps: getTotalQuestions(),
+        totalSteps: getTotalQuestions(quizData),
         currentSectionIndex: sectionIndex,
         totalSections: totalSections,
         overallProgress: overallProgress,
@@ -58,7 +59,7 @@ export const getProgressInfo = (currentStep) => {
     };
 };
 
-export const calculateResult = (answers) => {
+export const calculateResult = (quizData, answers) => {
     // Logic đơn giản: Nếu câu trả lời cho 'life_quality_impact' là lựa chọn đầu tiên,
     // họ được coi là "qualified".
     // const criticalAnswer = quizData.sections

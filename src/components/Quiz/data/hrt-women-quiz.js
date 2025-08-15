@@ -1,4 +1,3 @@
-// src/data/hrt-women-quiz.js
 
 export const quizData = {
     title: "HRT Women's Health Quiz",

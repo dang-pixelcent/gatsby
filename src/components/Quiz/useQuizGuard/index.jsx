@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { navigate } from 'gatsby';
 // THÊM: Import cả getTotalQuestions
 import { getQuestionData, getTotalQuestions } from '../data/quizHelpers';
+import { useQuizData } from '../data/useQuizData';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
 export const useQuizGuard = ({ pageType, questionNumber }) => {
     const [isAllowed, setIsAllowed] = useState(false);
+    const quizData = useQuizData();
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined' || !quizData) return;
 
         const savedProgress = localStorage.getItem(LOCAL_STORAGE_KEY);
 
@@ -26,7 +28,7 @@ export const useQuizGuard = ({ pageType, questionNumber }) => {
         // --- KỊCH BẢN 2: NGƯỜI DÙNG ĐÃ CÓ TIẾN TRÌNH ---
         const { savedStep, isCompleted, savedAnswers } = JSON.parse(savedProgress);
         const lastAnsweredStep = savedStep ?? -1;
-        const totalQuestions = getTotalQuestions(); // Lấy tổng số câu hỏi
+        const totalQuestions = getTotalQuestions(quizData); // Lấy tổng số câu hỏi
         const nextAvailableQuestionNumber = lastAnsweredStep + 2;
 
         // THAY ĐỔI: Xác định URL chuyển hướng dự phòng một cách an toàn
@@ -41,7 +43,7 @@ export const useQuizGuard = ({ pageType, questionNumber }) => {
 
         // Nếu bảo vệ trang CÂU HỎI
         if (pageType === 'question') {
-            const targetQuestionData = getQuestionData(questionNumber - 1);
+            const targetQuestionData = getQuestionData(quizData, questionNumber - 1);
             
             if (!targetQuestionData) {
                 navigate(fallbackUrl, { replace: true });
@@ -67,7 +69,7 @@ export const useQuizGuard = ({ pageType, questionNumber }) => {
             }
         }
 
-    }, [pageType, questionNumber]);
+    }, [pageType, questionNumber, quizData]);
 
     return isAllowed;
 };

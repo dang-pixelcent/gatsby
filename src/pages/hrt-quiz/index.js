@@ -4,6 +4,7 @@ import { navigate } from 'gatsby';
 import '@styles/tailwind-scoped.scss';
 import { SEO } from '@components/SEO';
 import Quiz from '@components/Quiz';
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
@@ -77,8 +78,11 @@ const HrtQuizRedirectPage = () => {
     );
 };
 
-export const Head = () => (
-    <SEO seoData={`<title>HRT Women's Health Quiz</title>`} />
-);
+export const Head = () => {
+    const quizData = useQuizData();
+    return (
+        <SEO seoData={`<title>${quizData?.heading || "HRT Women's Health Quiz"}</title>`} />
+    );
+};
 
 export default HrtQuizRedirectPage;

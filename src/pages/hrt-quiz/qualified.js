@@ -2,14 +2,15 @@ import React from 'react';
 // import Layout from '@components/layout';
 import QuizResult from '@components/Quiz/QuizResult';
 import { SEO } from '@components/SEO';
-import { quizData } from '@components/Quiz/data/hrt-women-quiz';
+// import { quizData } from '@components/Quiz/data/hrt-women-quiz';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 
 const QualifiedResultPage = () => {
     // Sử dụng "người gác cổng"
     const isAllowed = useQuizGuard({ pageType: 'result' });
-    const finalPageData = quizData.finalPages.qualified;
+    const finalPageData = useQuizData().finalpages.qualified;
 
     if (!isAllowed) {
         // Có thể trả về một spinner loading để trải nghiệm mượt hơn
@@ -30,8 +31,11 @@ const QualifiedResultPage = () => {
     );
 };
 
-export const Head = () => (
-    <SEO seoData={`<title>Quiz Results: Qualified | HRT Women's Health Quiz</title>`} />
-);
+export const Head = () => {
+    const quizData = useQuizData();
+    return (
+        <SEO seoData={`<title>Quiz Results: Qualified | ${quizData?.heading || "HRT Women's Health Quiz"}</title>`} />
+    );
+};
 
 export default QualifiedResultPage;

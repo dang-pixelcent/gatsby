@@ -56,7 +56,7 @@ const QuizResult = ({ finalPageData }) => {
                         </div>
                         <a class="inline text-underlined hover:decoration-transparent mt-[10px]" href="/weight-loss/results">
                             <button class="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-form shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
-                                {finalPageData.ctaButton}
+                                {finalPageData.ctabutton}
                                 <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
                                     <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
                                     </span>

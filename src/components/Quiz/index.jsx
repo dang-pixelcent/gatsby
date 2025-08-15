@@ -1,6 +1,6 @@
 // src/components/Quiz/index.js
 import React, { useState, useEffect, useMemo } from 'react';
-import { quizData } from './data/hrt-women-quiz.js';
+// import { quizData } from './data/hrt-women-quiz.js';
 // import { quizHelpers } from '../../data/quizHelpers.js';
 import ProgressBar from './ProgressBar.jsx';
 import Question from './Question.jsx';
@@ -12,11 +12,17 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 // import '../../styles/tailwind.css';
 import { graphql, useStaticQuery, navigate, Link } from 'gatsby'; // Import navigate của Gatsby
 import toast, { Toaster } from 'react-hot-toast';
-import { trackQuestionAnswered, trackQuizCompleted } from '@src/utils/tracking'; 
+import { trackQuestionAnswered, trackQuizCompleted } from '@src/utils/tracking';
+import { useQuizData } from './data/useQuizData.js'; // Import hook để lấy dữ liệu quiz
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
 const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
+    const quizData = useQuizData();
+    const [answers, setAnswers] = useState({});
+    // const [isCompleted, setIsCompleted] = useState(false);
+    const [direction, setDirection] = useState(1);
+
     const data = useStaticQuery(graphql`
         query {
             logoImage: file(relativePath: { eq: "logo/logo-foot.png" }) {
@@ -32,18 +38,6 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         }
     `);
 
-    const logo = getImage(data.logoImage);
-
-    // Nếu là mode 'embedded', luôn bắt đầu từ câu 1. Nếu không, lấy từ prop.
-    const currentStep = mode === 'embedded' ? 0 : questionNumber - 1;
-    // const [currentStep, setCurrentStep] = useState(initialStep);
-
-    const [answers, setAnswers] = useState({});
-    // const [isCompleted, setIsCompleted] = useState(false);
-    const [direction, setDirection] = useState(1);
-
-    const currentQuestionData = useMemo(() => getQuestionData(currentStep), [currentStep]);
-
     useEffect(() => {
         const savedProgress = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (savedProgress) {
@@ -55,6 +49,27 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         }
     }, []);
 
+    // console.log('quizData', quizData);
+    const logo = getImage(data.logoImage);
+    // Nếu là mode 'embedded', luôn bắt đầu từ câu 1. Nếu không, lấy từ prop.
+    const currentStep = mode === 'embedded' ? 0 : questionNumber - 1;
+    // const [currentStep, setCurrentStep] = useState(initialStep);
+
+    const currentQuestionData = useMemo(() => {
+        if (!quizData) return null; // An toàn: trả về null nếu chưa có dữ liệu
+        return getQuestionData(quizData, currentStep);
+    }, [quizData, currentStep]);
+
+    const progressInfo = useMemo(() => {
+        if (!quizData) return null; // An toàn: trả về null nếu chưa có dữ liệu
+        return getProgressInfo(quizData, currentStep);
+    }, [quizData, currentStep]);
+
+
+    if (!quizData) {
+        // Có thể hiển thị một spinner loading ở đây
+        return null;
+    }
     // useEffect(() => {
     //     if (Object.keys(answers).length > 0 || currentStep > 0) {
     //         const progress = { savedAnswers: answers, savedStep: currentStep };
@@ -90,7 +105,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         // ✅ GỬI SỰ KIỆN TRACKING
         // Chỉ gửi khi ở chế độ 'full' để tránh gửi trùng lặp với trang bắt đầu
         if (mode === 'full') {
-            trackQuestionAnswered(currentQuestionData, answers[currentQuestionData.id], questionNumber);
+            trackQuestionAnswered(quizData, currentQuestionData, answers[currentQuestionData.id], questionNumber);
         }
 
         // Logic cho chế độ 'embedded'
@@ -113,7 +128,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         // 2. Lưu vào localStorage
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(progress));
 
-        const totalQuestions = getTotalQuestions();
+        const totalQuestions = getTotalQuestions(quizData);
         if (currentStep < totalQuestions - 1) {
             setDirection(1);
             // setCurrentStep(currentStep + 1);
@@ -132,10 +147,10 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
     };
 
     const handleSubmit = () => {
-        const resultStatus = calculateResult(answers);
-        
+        const resultStatus = calculateResult(quizData, answers);
+
         // ✅ GỬI SỰ KIỆN TRACKING KHI HOÀN THÀNH
-        trackQuizCompleted(resultStatus, answers);
+        trackQuizCompleted(quizData, resultStatus, answers);
 
         // Cập nhật tiến trình cuối cùng
         const finalProgress = {
@@ -149,12 +164,6 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         // Điều hướng đến trang kết quả tương ứng
         navigate(`/hrt-quiz/${resultStatus}`);
     };
-
-    // const currentQuestionData = allQuestions[currentStep];
-    // const progressInfo = quizHelpers.getProgressInfo(currentStep);
-
-    // Tính toán thông tin tiến trình bằng helper
-    const progressInfo = useMemo(() => getProgressInfo(currentStep), [currentStep]);
 
     if (!progressInfo || !currentQuestionData) return null;
 
