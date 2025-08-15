@@ -1,6 +1,4 @@
-// src/components/Blocks/LazyPracticeFlowForm.js
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { navigate } from 'gatsby';
 import Quiz from '@components/Quiz';
 import { trackQuizStarted, trackQuestionAnswered } from '@src/utils/tracking'; // ✅ Import helper
@@ -13,6 +11,27 @@ const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 // Component này giờ sẽ render ngay lập tức, không còn "lazy" nữa.
 const PracticeFlowForm = () => {
     const quizData = useQuizData();
+
+    useEffect(() => {
+        // Hàm cleanup này sẽ được gọi khi component unmount (khi người dùng chuyển trang)
+        return () => {
+            // Tìm và xóa các thẻ img hoặc iframe không mong muốn mà "hộp đen" có thể đã thêm vào.
+            // Ví dụ: tìm thẻ img có chứa chuỗi "bg-get-started-content.jpg"
+            const leftoverImage = document.querySelector('img[src*="bg-get-started-content.jpg"]');
+            if (leftoverImage) {
+                leftoverImage.remove();
+            }
+
+            // Bạn có thể thêm logic để xóa các phần tử khác nếu cần.
+            // Ví dụ: xóa iframe không phải của Partytown
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                if (iframe.src && !iframe.src.includes('partytown')) {
+                    iframe.remove();
+                }
+            });
+        };
+    }, []); // Mảng rỗng [] đảm bảo effect này chỉ thiết lập cleanup một lần.
 
     // Hàm này được gọi khi người dùng nhấn "Next" trên câu hỏi đầu tiên của quiz
     const handleQuizStart = (answers) => {
