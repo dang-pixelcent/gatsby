@@ -1,9 +1,9 @@
 const path = require(`path`)
 
 //nơi lấy dữ liệu từ GraphQL
-const WPGRAPHQL_URL = process.env.REACT_APP_WPGRAPHQL_URL
+const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL
 if (!WPGRAPHQL_URL) {
-  console.error(`REACT_APP_WPGRAPHQL_URL must be set in .env file`)
+  console.error(`GATSBY_WPGRAPHQL_URL must be set in .env file`)
   process.exit(1)
 }
 

@@ -10,7 +10,7 @@ require('dotenv').config({
 });
 
 // --- CẤU HÌNH ---
-const WPGRAPHQL_URL = process.env.REACT_APP_WPGRAPHQL_URL;
+const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL;
 const OUTPUT_DIR = path.join(__dirname, '../manual-review/inline-scripts'); // Thư mục mới để bạn xem xét
 // -----------------
 
@@ -22,7 +22,7 @@ const colors = {
 };
 
 if (!WPGRAPHQL_URL) {
-    console.error(`${colors.red}Lỗi: REACT_APP_WPGRAPHQL_URL chưa được thiết lập.${colors.reset}`);
+    console.error(`${colors.red}Lỗi: GATSBY_WPGRAPHQL_URL chưa được thiết lập.${colors.reset}`);
     process.exit(1);
 }
 

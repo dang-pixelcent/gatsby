@@ -1,12 +1,12 @@
 import { GraphQLClient, gql } from 'graphql-request';
 
 // Lấy URL của GraphQL endpoint từ biến môi trường
-const endpoint = process.env.REACT_APP_WPGRAPHQL_URL;
+const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
 
 // Tạo một GraphQL client
 const client = new GraphQLClient(endpoint);
 
-// Định nghĩa mutation GraphQL mà bạn đã cung cấp
+// Định nghĩa mutation GraphQL
 const SUBMIT_FORM_MUTATION = gql`
   mutation Submit($input: SubmitScheduleFormInput!) {
     submitScheduleForm(input: $input) {
@@ -53,7 +53,7 @@ const transformAnswersForApi = (answers) => {
 export const submitQuizAnswers = async (answers) => {
     const answersById = transformAnswersForApi(answers);
 
-    // Dữ liệu liên hệ mẫu. Sau này bạn sẽ lấy từ một form khác.
+    // Dữ liệu liên hệ mẫu.
     const contactInfo = {
         name: "Quiz Taker",
         email: "user@example.com"
@@ -61,7 +61,7 @@ export const submitQuizAnswers = async (answers) => {
 
     const variables = {
         input: {
-            formKey: "schedule_form", // Giống như trong ví dụ của bạn
+            formKey: "schedule_form",
             answersById: answersById,
             // API yêu cầu contact là một chuỗi JSON
             contact: JSON.stringify(contactInfo)
