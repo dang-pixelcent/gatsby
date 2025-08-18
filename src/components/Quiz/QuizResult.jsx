@@ -49,15 +49,15 @@ const QuizResult = ({ finalPageData }) => {
             </header>
             <main>
                 <section className="pt-4xl px-page">
-                    <div class="container !max-w-[var(--container-result)] items-center justify-center" bis_skin_checked="1">
-                        <div class="column" bis_skin_checked="1">
-                            <h1 class="text-xl text-center text-form font-Soleto-XBold">{finalPageData.headline}</h1>
-                            <p class="text-center whitespace-pre-line text-form">{finalPageData.message}</p>
+                    <div className="container !max-w-[var(--container-result)] items-center justify-center">
+                        <div className="column">
+                            <h1 className="text-xl text-center text-form font-Soleto-XBold">{finalPageData.headline}</h1>
+                            <p className="text-center whitespace-pre-line text-form">{finalPageData.message}</p>
                         </div>
-                        <a class="inline text-underlined hover:decoration-transparent mt-[10px]" href="/weight-loss/results">
-                            <button class="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-form shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
+                        <a className="inline text-underlined hover:decoration-transparent mt-[10px]" href="/weight-loss/results">
+                            <button className="button-root rounded-full capitalize gap-s hover:bg-primary-highlighted bg-primary text-form shadow-raised w-full text-center px-l py-[calc(1em*0.9)] md:max-w-[400px]">
                                 {finalPageData.ctabutton}
-                                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
+                                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0">
                                     <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
                                     </span>
                                 </div>

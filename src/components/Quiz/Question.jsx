@@ -4,7 +4,7 @@ import { RadioGroup } from '@headlessui/react';
 import { motion } from 'framer-motion';
 import { CheckIcon } from './icons/CheckIcon';
 
-const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
+const Question = ({ data, onAnswer, currentAnswer, onNext, direction, isSubmitting, isLastQuestion }) => {
     if (!data) return null;
 
     const { id, question, type, options } = data;
@@ -66,14 +66,38 @@ const Question = ({ data, onAnswer, currentAnswer, onNext, direction }) => {
 
             <button
                 onClick={onNext}
-                // disabled={!isAnswered}
-                className="button-root rounded-full capitalize gap-s bg-primary sm:hover:bg-primary-highlighted text-onprimary w-auto text-left px-l py-[calc(1em*0.9)] min-w-[250px] self-end"
+                disabled={isSubmitting}
+                className="button-root relative rounded-full capitalize gap-s bg-primary sm:hover:bg-primary-highlighted text-onprimary w-auto text-left px-l py-[calc(1em*0.9)] min-w-[250px] self-end flex items-center justify-center"
             >
-                Next
-                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0" bis_skin_checked="1">
+                <span className="z-10">
+                    {/* {isSubmitting ? 'Submitting...' : (isLastQuestion ? 'Submit' : 'Next')} */}
+                    {(isLastQuestion ? 'Submit' : 'Next')}
+                </span>
+                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0">
                     <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
                     </span>
                 </div>
+                {isSubmitting && (
+                    <svg
+                        className="absolute h-6 w-6 opacity-50"
+                        style={{ animation: 'brush-stroke-spin 1.5s linear infinite' }}
+                        viewBox="25 25 50 50"
+                    >
+                        <circle
+                            className="text-white"
+                            style={{
+                                animation: 'brush-stroke-draw 1.4s ease-in-out infinite',
+                                stroke: 'currentColor',
+                                strokeWidth: '6',
+                                strokeLinecap: 'round',
+                            }}
+                            cx="50"
+                            cy="50"
+                            r="20"
+                            fill="none"
+                        />
+                    </svg>
+                )}
             </button>
 
         </motion.div>

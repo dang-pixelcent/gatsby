@@ -11,7 +11,8 @@ import ChatWidget from "@components/ChatWidget"
 const NotQualifiedResultPage = () => {
     // Sử dụng "người gác cổng"
     const isAllowed = useQuizGuard({ pageType: 'result' });
-    const finalPageData = useQuizData().finalpages['not-qualified'];
+    // const finalPageData = useQuizData().finalpages['not-qualified'];
+    const finalPageData = useQuizData().finalpages.not_qualified;
 
     if (!isAllowed) {
         // Có thể trả về một spinner loading để trải nghiệm mượt hơn

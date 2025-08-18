@@ -14,6 +14,7 @@ import { graphql, useStaticQuery, navigate, Link } from 'gatsby'; // Import navi
 import toast, { Toaster } from 'react-hot-toast';
 import { trackQuestionAnswered, trackQuizCompleted } from '@src/utils/tracking';
 import { useQuizData } from './data/useQuizData.js'; // Import hook để lấy dữ liệu quiz
+import { submitQuizAnswers } from '@src/utils/api/submitFormQuiz.js';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
 
@@ -22,6 +23,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
     const [answers, setAnswers] = useState({});
     // const [isCompleted, setIsCompleted] = useState(false);
     const [direction, setDirection] = useState(1);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const data = useStaticQuery(graphql`
         query {
@@ -54,6 +56,11 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
     // Nếu là mode 'embedded', luôn bắt đầu từ câu 1. Nếu không, lấy từ prop.
     const currentStep = mode === 'embedded' ? 0 : questionNumber - 1;
     // const [currentStep, setCurrentStep] = useState(initialStep);
+
+    const isLastQuestion = useMemo(() => {
+        if (!quizData) return false;
+        return currentStep === getTotalQuestions(quizData) - 1;
+    }, [quizData, currentStep]);
 
     const currentQuestionData = useMemo(() => {
         if (!quizData) return null; // An toàn: trả về null nếu chưa có dữ liệu
@@ -146,23 +153,45 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
         }
     };
 
-    const handleSubmit = () => {
-        const resultStatus = calculateResult(quizData, answers);
+    const handleSubmit = async () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        try {
+            // ✅ 4. Gọi API và chờ kết quả
+            const result = await submitQuizAnswers(answers);
 
-        // ✅ GỬI SỰ KIỆN TRACKING KHI HOÀN THÀNH
-        trackQuizCompleted(quizData, resultStatus, answers);
+            // Nếu API trả về lỗi, hiển thị và dừng lại
+            if (!result.success || result.errors.length > 0) {
+                toast.error('An error occurred while submitting your quiz. Please try again.');
+                console.error("API submission errors:", result.errors);
+                setIsSubmitting(false);
+                return;
+            }
 
-        // Cập nhật tiến trình cuối cùng
-        const finalProgress = {
-            savedAnswers: answers,
-            savedStep: currentStep,
-            isCompleted: true,
-            resultStatus: resultStatus
-        };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(finalProgress));
+            // Lấy trạng thái qualified từ API thay vì tự tính toán
+            const resultStatus = result.finalPage || (result.qualified ? 'qualified' : 'notQualified');
 
-        // Điều hướng đến trang kết quả tương ứng
-        navigate(`/get-started/${resultStatus}`);
+            // Gửi sự kiện tracking với dữ liệu từ API
+            trackQuizCompleted(quizData, resultStatus, answers);
+
+            // Cập nhật tiến trình cuối cùng với submissionId từ API
+            const finalProgress = {
+                savedAnswers: answers,
+                savedStep: currentStep,
+                isCompleted: true,
+                resultStatus: resultStatus,
+                submissionId: result.submissionId // Lưu lại ID từ server
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(finalProgress));
+
+            // Điều hướng đến trang kết quả
+            navigate(`/get-started/${resultStatus}`);
+
+        } catch (error) {
+            // Xử lý lỗi mạng hoặc lỗi từ GraphQL client
+            toast.error('Could not connect to the server. Please check your connection.');
+            setIsSubmitting(false); // Cho phép thử lại
+        }
     };
 
     if (!progressInfo || !currentQuestionData) return null;
@@ -227,8 +256,10 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
                                 direction={direction}
                                 data={currentQuestionData}
                                 onAnswer={handleAnswer}
-                                currentAnswer={answers[currentQuestionData.id]}
+                                currentAnswer={answers[currentQuestionData.id] || ''}
                                 onNext={handleNext}
+                                isSubmitting={isSubmitting}
+                                isLastQuestion={isLastQuestion}
                             />
                         </AnimatePresence>
                     </div>

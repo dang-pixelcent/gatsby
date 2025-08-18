@@ -56,7 +56,7 @@ const PracticeFlowForm = () => {
 
     // Trả về trực tiếp giao diện Quiz mà không cần chờ đợi
     return (
-        <div class="col-item col-right-custom" id="scheduleform">
+        <div className="col-item col-right-custom" id="scheduleform">
             <div className="tailwind-scope">
                 <div className="w-full">
                     {/* Thẻ div này sẽ giới hạn chiều rộng, làm cho quiz trông giống như trên điện thoại */}

@@ -18,7 +18,7 @@ const track = (eventName, properties = {}) => {
  */
 const getBasePayload = (quizData) => ({
     quiz_id: 'hrt-women-quiz',
-    quiz_title: quizData.title,
+    quiz_title: quizData.heading,
 });
 
 /**
@@ -37,7 +37,7 @@ export const trackQuizStarted = (quizData) => {
  * @param {string} answer - Câu trả lời người dùng đã chọn.
  * @param {number} stepNumber - Số thứ tự của câu hỏi (1-based).
  */
-export const trackQuestionAnswered = (questionData, answer, stepNumber, quizData) => {
+export const trackQuestionAnswered = (quizData, questionData, answer, stepNumber) => {
     track('question_answered', {
         ...getBasePayload(quizData),
         step_number: stepNumber,
@@ -54,7 +54,7 @@ export const trackQuestionAnswered = (questionData, answer, stepNumber, quizData
  * @param {string} resultStatus - Trạng thái kết quả ('qualified' hoặc 'not-qualified').
  * @param {object} allAnswers - Toàn bộ các câu trả lời của người dùng.
  */
-export const trackQuizCompleted = (resultStatus, allAnswers, quizData) => {
+export const trackQuizCompleted = (quizData, resultStatus, allAnswers) => {
     track('quiz_completed', {
         ...getBasePayload(quizData),
         final_status: resultStatus,
