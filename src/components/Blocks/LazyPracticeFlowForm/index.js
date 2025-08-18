@@ -7,10 +7,28 @@ import '@styles/tailwind-scoped.scss';
 import { useQuizData } from '@components/Quiz/data/useQuizData';
 
 const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
+const QUIZ_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 ngày
 
 // Component này giờ sẽ render ngay lập tức, không còn "lazy" nữa.
 const PracticeFlowForm = () => {
     const quizData = useQuizData();
+
+    // Âm thầm dọn localStorage nếu hết hạn, không chuyển hướng
+    useEffect(() => {
+        const savedProgressJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedProgressJSON) {
+            const savedProgress = JSON.parse(savedProgressJSON);
+            const now = Date.now();
+            if (!savedProgress.timestamp || (now - savedProgress.timestamp > QUIZ_EXPIRY_MS)) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+            }
+            else {
+                // Nếu dữ liệu hợp lệ, cập nhật lại timestamp để "reset bộ đếm 7 ngày"
+                savedProgress.timestamp = now;
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(savedProgress));
+            }
+        }
+    }, []);
 
     useEffect(() => {
         // Hàm cleanup này sẽ được gọi khi component unmount (khi người dùng chuyển trang)
@@ -40,6 +58,7 @@ const PracticeFlowForm = () => {
             savedAnswers: answers,
             savedStep: 0, // Bắt đầu từ câu hỏi đầu tiên (index 0)
             isCompleted: false,
+            timestamp: new Date().getTime()
         };
 
         // 2. Lưu vào localStorage

@@ -130,6 +130,7 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
             savedAnswers: answers,
             savedStep: currentStep, // `currentStep` là bước của câu hỏi vừa hoàn thành
             isCompleted: false,
+            timestamp: new Date().getTime()
         };
 
         // 2. Lưu vào localStorage
@@ -180,7 +181,8 @@ const Quiz = ({ mode = 'full', questionNumber, onEmbeddedNext }) => {
                 savedStep: currentStep,
                 isCompleted: true,
                 resultStatus: resultStatus,
-                submissionId: result.submissionId // Lưu lại ID từ server
+                submissionId: result.submissionId, // Lưu lại ID từ server
+                timestamp: new Date().getTime()
             };
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(finalProgress));
 
