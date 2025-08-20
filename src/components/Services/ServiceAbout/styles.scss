@@ -1,3 +1,4 @@
+$base-url: "https://a.wellnessclinicmarketing.com";
 .service-about {
     padding: 66px 0px;
     background: #fff;
@@ -23,7 +24,7 @@
 
 .service-features {
     padding: 75px 0px;
-    background: no-repeat bottom/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/bg-service-sec2.jpg');
+    background: no-repeat bottom/cover url('#{base-url}/wp-content/themes/agencymarketing/assets/img/bg-service-sec2.jpg');
 }
 
 .service-features .list {
@@ -59,13 +60,13 @@
 
 .circle-item-2:after,
 .circle-item-3:after {
-    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/arrow-orange.png');
+    background: no-repeat center/cover url('#{base-url}/wp-content/themes/agencymarketing/assets/img/arrow-orange.png');
 }
 
 .circle-item-1:after,
 .circle-item-4:after {
 
-    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/arrow-orange-2.png');
+    background: no-repeat center/cover url('#{base-url}/wp-content/themes/agencymarketing/assets/img/arrow-orange-2.png');
 }
 
 .circle-item-1:after {

@@ -1,3 +1,4 @@
+$base-url: "https://a.wellnessclinicmarketing.com";
 /* =================================================================
    BANNER STYLES
    ================================================================= */
@@ -40,7 +41,7 @@
     padding: 7.70vw 0px 6.04vw;
     /* 148px 0 116px */
     overflow: hidden;
-    background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/blog-background.png');
+    background: no-repeat center/cover url('#{$base-url}/wp-content/themes/agencymarketing/assets/img/blog-background.png');
 }
 
 .sc-blog .main {

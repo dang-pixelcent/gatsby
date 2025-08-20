@@ -1,6 +1,7 @@
+$base-url: "https://a.wellnessclinicmarketing.com";
 .service-about {
     padding: 85px 0px 100px;
-    background: no-repeat bottom/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/bg-facebook-service.png');
+    background: no-repeat bottom/cover url('#{base-url}/wp-content/themes/agencymarketing/assets/img/bg-facebook-service.png');
 }
 
 .service-about .cols-2 {
