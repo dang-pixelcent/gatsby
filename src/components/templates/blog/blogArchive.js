@@ -6,11 +6,12 @@ import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
 import Pagination from '@components/Blog/Pagination';
 
+const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
 const BlogArchive = ({ pageContext }) => {
     const { posts, pageNumber, numPages, pageInfo } = pageContext;
 
     const bannerBlogs = (
-        <section className="banner cus-height" style={{ background: "no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
+        <section className="banner cus-height" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2025/03/default-page-banner.jpg')` }}>
             <div className="cus-container h-100">
                 <div className="ast-full-width h-100 ast-flex align-items-center justify-content-center banner-inner">
                     <h1 className="h1-title fw-800 f-soletoxbold text-white text-center">{pageInfo ? pageInfo.name : ''}</h1>
@@ -20,7 +21,7 @@ const BlogArchive = ({ pageContext }) => {
     );
 
     const bannerCategory = (
-        <section className="banner cus-height" style={{ background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
+        <section className="banner cus-height" style={{ background: `no-repeat center/cover #0659A9 url('${WP_BASE_URL}/wp-content/uploads/2025/03/default-page-banner.jpg')` }}>
             <div className="cus-container h-100 ast-flex align-items-center">
                 <div className="ast-full-width text-left text-white">
                     <h1 className="h1-title fs-56 f-soletoxbold fw-800 text-white" style={{ marginBottom: '24px' }}>

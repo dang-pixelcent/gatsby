@@ -14,7 +14,7 @@
 @import "dashicons.min.css";
 @import "aos.css";
 
-
+$base-url: "https://a.wellnessclinicmarketing.com";
 :root {
   --ast-post-nav-space: 0;
   --ast-container-default-xlg-padding: 2.5em;
@@ -5106,7 +5106,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   transform: translateY(-50%);
   right: -3.64vw;
   /*-70px*/
-  background: no-repeat center/cover url("https://agencysite.bwpsites.com/wp-content/themes/agencymarketing/assets/img/arrow-blue.svg");
+  background: no-repeat center/cover url("#{$base-url}/wp-content/themes/agencymarketing/assets/img/arrow-blue.svg");
 }
 
 .practice-item:last-child:after {
@@ -5234,7 +5234,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   /*16px;*/
   height: 0.83vw;
   /*16px;*/
-  background: no-repeat center/cover url("https://agencysite.bwpsites.com/wp-content/themes/agencymarketing/assets/img/right-arrow-b.svg");
+  background: no-repeat center/cover url("#{$base-url}/wp-content/themes/agencymarketing/assets/img/right-arrow-b.svg");
   top: 50%;
   transform: translateY(-50%);
   right: -1.77vw;
@@ -5352,7 +5352,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   content: "";
   display: inline-block;
   position: relative;
-  background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/cus-arrow-dashed.svg');
+  background: no-repeat center/cover url('#{$base-url}/wp-content/themes/agencymarketing/assets/img/cus-arrow-dashed.svg');
   width: 1.25vw;
   /*24px;*/
   height: 13.17vw;
@@ -6135,7 +6135,8 @@ blockquote:before {
   /*40px;*/
   height: 2.08vw;
   /*40px;*/
-  background: no-repeat center/cover url('https://agencysitestaging.mystagingwebsite.com/wp-content/themes/agencymarketing/assets/img/arrow-blue.svg');
+  // background: no-repeat center/cover url('https://a.wellnessclinicmarketing.com/wp-content/themes/agencymarketing/assets/img/arrow-blue.svg');
+  background: no-repeat center/cover url('#{$base-url}/wp-content/themes/agencymarketing/assets/img/right-arrow-b.svg');
   right: -2.86vw;
   /*-55px;*/
   top: 50%;

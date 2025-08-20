@@ -255,6 +255,15 @@ const Home = () => {
                       node {
                         altText
                         sourceUrl
+                        localFile {
+                            childImageSharp {
+                                gatsbyImageData(
+                                placeholder: BLURRED
+                                formats: [AUTO, WEBP]
+                                # quality: 100
+                                )
+                            }
+                        }
                         id
                       }
                     }
@@ -732,7 +741,7 @@ const Home = () => {
                                 <div className="item ast-flex">
                                     <div className="col-video">
                                         {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
-                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials?.video} rootMargin="50px"/></div>
+                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials?.video} rootMargin="50px" /></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
@@ -876,11 +885,37 @@ const Home = () => {
                             <div className="sc-free-gift ast-flex">
                                 <div className="free-gift-content display-mobile">
                                     <h2 className="fs-36 fw-800 color-00255B">
-                                        <a href={giftBook?.link?.url} target="_blank">{giftBook?.title}</a>
+                                        <Link href={giftBook?.link?.url} target="_blank">{giftBook?.title}</Link>
                                     </h2>
                                 </div>
                                 <figure>
-                                    <img src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/06/book-only-png.webp" alt={giftBook?.image?.node?.altText} width={150} height={180} />
+                                    <img
+                                        src={giftBook?.image?.node?.sourceUrl}
+                                        alt={giftBook?.image?.node?.altText}
+                                        width={150}
+                                        height={180}
+                                    />
+                                    {/* {(() => {
+                                        const giftBookImageData = getImage(giftBook?.image?.node?.localFile);
+                                        if (giftBookImageData) {
+                                            return (
+                                                <GatsbyImage
+                                                    image={giftBookImageData}
+                                                    alt={giftBook?.image?.node?.altText || ""}
+                                                    style={{ width: 150, height: 180 }}
+                                                />
+                                            );
+                                        }
+                                        // fallback nếu không có GatsbyImageData
+                                        return (
+                                            <img
+                                                src={giftBook?.image?.node?.sourceUrl}
+                                                alt={giftBook?.image?.node?.altText}
+                                                width={150}
+                                                height={180}
+                                            />
+                                        );
+                                    })()} */}
                                 </figure>
                                 <div className="free-gift-content display-desktop">
                                     <h2 className="fs-36 fw-800 color-00255B">

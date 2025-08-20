@@ -30,9 +30,14 @@ import { useLocation } from '@reach/router';
 //     }
 // }
 
+//mock url
+const WP_GRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL
+const REACT_APP_DOMAIN = process.env.REACT_APP_DOMAIN
+const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+
 // Hàm để gọi GraphQL API phía client
 async function fetchSearchResults(searchTerm) {
-    const response = await fetch("https://agencysitestaging.mystagingwebsite.com/graphql", {
+    const response = await fetch(`${WP_GRAPHQL_URL}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -109,7 +114,7 @@ const SearchResultPage = ({ location }) => {
     return (
         <Layout>
             {/* Banner tĩnh */}
-            <section className="banner cus-height" style={{ background: "no-repeat center/cover #0659A9 url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
+            <section className="banner cus-height" style={{ background: "no-repeat center/cover #0659A9 url('https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/default-page-banner.jpg')" }}>
                 <div className="cus-container h-100 ast-flex align-items-center">
                     <div className="ast-full-width text-left text-white">
                         <h1 className="h1-title fs-56 f-soletoxbold fw-800 text-white" style={{ marginBottom: '24px' }}>
@@ -202,14 +207,14 @@ export const Head = () => {
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": "https://gatsby-mu-eight.vercel.app/#organization",
+                "@id": `${REACT_APP_DOMAIN}/#organization`,
                 "name": siteName,
-                "url": "https://gatsby-mu-eight.vercel.app",
+                "url": `${REACT_APP_DOMAIN}`,
                 "logo": {
                     "@type": "ImageObject",
-                    "@id": "https://gatsby-mu-eight.vercel.app/#logo",
-                    "url": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
-                    "contentUrl": "https://agencysitestaging.mystagingwebsite.com/wp-content/uploads/2025/03/logo-head.png",
+                    "@id": `${REACT_APP_DOMAIN}/#logo`,
+                    "url": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
+                    "contentUrl": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
                     "caption": siteName,
                     "inLanguage": "en-US",
                     "width": "1038",
@@ -218,11 +223,11 @@ export const Head = () => {
             },
             {
                 "@type": "WebSite",
-                "@id": "https://gatsby-mu-eight.vercel.app/#website",
-                "url": "https://gatsby-mu-eight.vercel.app",
+                "@id": `${REACT_APP_DOMAIN}/#website`,
+                "url": `${REACT_APP_DOMAIN}`,
                 "name": siteName,
                 "publisher": {
-                    "@id": "https://gatsby-mu-eight.vercel.app/#organization"
+                    "@id": `${REACT_APP_DOMAIN}/#organization`
                 },
                 "inLanguage": "en-US"
             },
@@ -232,7 +237,7 @@ export const Head = () => {
                 "url": pageUrl,
                 "name": fullTitle,
                 "isPartOf": {
-                    "@id": "https://gatsby-mu-eight.vercel.app/#website"
+                    "@id": `${REACT_APP_DOMAIN}/#website`
                 },
                 "inLanguage": "en-US"
             }
