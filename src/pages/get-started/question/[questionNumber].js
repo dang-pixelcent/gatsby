@@ -7,6 +7,9 @@ import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
 import { useQuizData } from '@components/Quiz/data/useQuizData';
 import ChatWidget from "@components/ChatWidget"
 
+// flag Kiểm soát truy cập page
+const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
+
 // Gatsby sẽ tự động truyền các tham số từ URL vào props
 const HrtQuizQuestionPage = ({ params }) => {
     // Lấy số thứ tự câu hỏi từ URL và chuyển thành số nguyên
@@ -14,6 +17,13 @@ const HrtQuizQuestionPage = ({ params }) => {
 
     // Sử dụng "người gác cổng"
     const isAllowed = useQuizGuard({ pageType: 'question', questionNumber });
+    // Kiểm tra tính năng mới
+    if (!isNewFormEnabled) {
+        if (typeof window !== "undefined") {
+            window.location.replace("/");
+        }
+        return null;
+    }
 
     // Nếu questionNumber không phải là một số hợp lệ, không render gì cả
     if (isNaN(questionNumber)) {
@@ -39,7 +49,7 @@ const HrtQuizQuestionPage = ({ params }) => {
                 <Quiz mode="full" questionNumber={questionNumber} />
                 <ChatWidget />
             </div>
-            
+
         </>
     );
 };

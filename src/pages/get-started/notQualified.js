@@ -5,14 +5,24 @@ import { SEO } from '@components/SEO';
 // import { quizData } from '@components/Quiz/data/hrt-women-quiz';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
-import { useQuizData } from '@components/Quiz/data/useQuizData'; 
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 import ChatWidget from "@components/ChatWidget"
 
+// flag Kiểm soát truy cập page
+const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
+
 const NotQualifiedResultPage = () => {
-    // Sử dụng "người gác cổng"
     const isAllowed = useQuizGuard({ pageType: 'result' });
-    // const finalPageData = useQuizData().finalpages['not-qualified'];
-    const finalPageData = useQuizData().finalpages.not_qualified;
+    const quizData = useQuizData();
+    const finalPageData = quizData?.finalpages?.not_qualified;
+    // Kiểm tra tính năng mới
+    if (!isNewFormEnabled) {
+        if (typeof window !== "undefined") {
+            window.location.replace("/");
+        }
+        return null;
+    }
+
 
     if (!isAllowed) {
         // Có thể trả về một spinner loading để trải nghiệm mượt hơn

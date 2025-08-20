@@ -19,10 +19,15 @@ import DomReplacer from '@components/Tools/DomReplacer';
 import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
+import OldScheduleForm from '@components/Blocks/OldScheduleForm'; // Đảm bảo đường dẫn đúng
 // import { ScheduleForm } from '@components/Blocks/GetStarted';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
+// flag kiểm soát tính năng
+const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
+const isPublicProd = process.env.FEATURE_PUBLIC_PROD === "true";
+const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
 const getScriptConfig = (src) => {
@@ -162,13 +167,18 @@ const Home = ({ pageContext }) => {
         {/* <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
         </ComponentPortal> */}
-        <DomReplacer selector="#scheduleform">
-          <LazyPracticeFlowForm />
-        </DomReplacer>
 
-        {/* <DomInjector selector=".col-slider">
-          <ServiceSlider />
-        </DomInjector> */}
+        {/* Phần form mới */}
+        {isNewFormEnabled ? (
+          <DomReplacer selector="#scheduleform">
+            <LazyPracticeFlowForm />
+          </DomReplacer>
+        ) : (
+          <DomInjector selector="#sdformthree">
+            <OldScheduleForm />
+          </DomInjector>
+        )}
+
         <DomInjector selector=".col-slider">
           {/* 4. Bọc component "lười biếng" trong Suspense */}
           <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
