@@ -11,7 +11,7 @@ function ServiceSlider() {
     ];
 
     const backgroundStyle = {
-        background: "no-repeat center/cover url('https://www.wellnessclinicmarketing.com/wp-content/uploads/2024/12/slider-iframe-bg.png')"
+        background: "no-repeat center/cover url('https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/slider-iframe-bg.png')"
     };
 
     return (
