@@ -297,17 +297,17 @@ const Home = () => {
     // const giftBook = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentGiftBookLayout");
 
     // Log giá trị các biến để kiểm tra undefined
-    console.log('experts:', experts);
-    console.log('patients:', patients);
-    console.log('practice:', practice);
-    console.log('getMore:', getMore);
-    console.log('howWeCanHelp:', howWeCanHelp);
-    console.log('awards:', awards);
-    console.log('testimonials:', testimonials);
-    console.log('stats:', stats);
-    console.log('special:', special);
-    console.log('giftBook:', giftBook);
-    console.log(awards?.featuredAwards?.awardGallery?.nodes);
+    // console.log('experts:', experts);
+    // console.log('patients:', patients);
+    // console.log('practice:', practice);
+    // console.log('getMore:', getMore);
+    // console.log('howWeCanHelp:', howWeCanHelp);
+    // console.log('awards:', awards);
+    // console.log('testimonials:', testimonials);
+    // console.log('stats:', stats);
+    // console.log('special:', special);
+    // console.log('giftBook:', giftBook);
+    // console.log(awards?.featuredAwards?.awardGallery?.nodes);
 
     // /**
     //  * xử lý SEO cho trang chủ
@@ -625,7 +625,7 @@ const Home = () => {
                                     {
                                         howWeCanHelp?.boxs?.map((item, key) => (
                                             <div key={key} item={item} className={`circle-box box-${key + 1}`}>
-                                                <figure data-aos="fade-down-right" data-aos-duration="1500" class="aos-init">
+                                                <figure data-aos="fade-down-right" data-aos-duration="1500" className="aos-init">
                                                     <img decoding="async" className="animation-wiggle" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
                                                 </figure>
                                                 <h3 className="h3-title fs-26 f-soleto fw-800 color-000000 text-center">
@@ -682,7 +682,7 @@ const Home = () => {
                                                 <GatsbyImage
                                                     image={imageData}
                                                     alt={awardNode?.altText || ""}
-                                                    sizes="(max-width: 150px) 100vw, 150px"
+                                                    sizes="(max-width: 412px) 352px, (max-width: 1366px) 323px"
                                                     // style={{ maxWidth: "245px", width: "100vw", height: "auto" }}
                                                     style={{ height: "auto" }}
                                                 />
@@ -704,8 +704,8 @@ const Home = () => {
                                                 <GatsbyImage
                                                     image={featuredImageData}
                                                     alt={featuredNode?.altText || ""}
-                                                    // sizes="(max-width: 412px) 352px, (max-width: 1366px) 304px"
-                                                    style={{ height: "auto" }}
+                                                    sizes="(max-width: 412px) 352px, (max-width: 1366px) 304px"
+                                                    style={{ height: "416px" }}
                                                 />
                                             </div>
                                         );
