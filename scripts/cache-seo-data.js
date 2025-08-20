@@ -30,7 +30,7 @@ async function fetchSeoData(url, retries = 3) {
 
       const response = await axios.get(`${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(url)}`, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; GatsbyJS/4.0; +https://agencysitestaging.mystagingwebsite.com/)',
+          'User-Agent': 'Mozilla/5.0 (compatible; GatsbyJS/4.0; +https://www.wellnessclinicmarketing.com/)',
           'Accept': 'application/json',
         },
         timeout: 10000
