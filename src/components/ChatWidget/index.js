@@ -107,6 +107,31 @@ const ChatWidget = () => {
             if (typeof cleanupEventListenersRef.current === 'function') {
                 cleanupEventListenersRef.current();
             }
+
+            // // --- PHẦN BỔ SUNG QUAN TRỌNG ---
+            // // Tìm và gỡ bỏ các element mà script đã tạo ra
+
+            // // 1. Gỡ bỏ thẻ <chat-widget> chính
+            // const chatWidgetElement = document.querySelector('chat-widget');
+            // if (chatWidgetElement) {
+            //     chatWidgetElement.remove();
+            //     console.log('ChatWidget: <chat-widget> element removed.');
+            // }
+
+            // // 2. Gỡ bỏ iframe (nếu có) - các widget chat thường tạo iframe
+            // // Chúng ta tìm theo một phần của URL để chắc chắn
+            // const widgetIframe = document.querySelector('iframe[src*="leadconnectorhq.com"]');
+            // if (widgetIframe) {
+            //     widgetIframe.remove();
+            //     console.log('ChatWidget: Iframe removed.');
+            // }
+
+            // // 3. Gỡ bỏ các container khác mà script có thể đã thêm vào body
+            // // (Thêm các selector khác nếu bạn phát hiện ra)
+            // const otherWidgetContainer = document.getElementById('some-widget-id-if-exists');
+            // if (otherWidgetContainer) {
+            //     otherWidgetContainer.remove();
+            // }
         };
     }, [customizeWidget]);
 

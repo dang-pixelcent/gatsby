@@ -75,7 +75,7 @@ async function cacheSeoData() {
 
   // Fetch URLs from GraphQL
   const { GraphQLClient } = require('graphql-request')
-  const client = new GraphQLClient(process.env.REACT_APP_WPGRAPHQL_URL)
+  const client = new GraphQLClient(process.env.GATSBY_WPGRAPHQL_URL)
 
   const query = `
   query {

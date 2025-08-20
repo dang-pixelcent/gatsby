@@ -12,7 +12,7 @@ require('dotenv').config({
 });
 
 // --- CẤU HÌNH ---
-const WPGRAPHQL_URL = process.env.REACT_APP_WPGRAPHQL_URL;
+const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL;
 const OUTPUT_DIR = path.join(__dirname, '../extracted-scripts');
 const BLOCKS_DIR = path.join(__dirname, '../src/components/Blocks');
 // -----------------
@@ -28,7 +28,7 @@ const colors = {
 
 // Kiểm tra xem URL của GraphQL đã được cấu hình chưa
 if (!WPGRAPHQL_URL) {
-    console.error(`${colors.red}Lỗi: Biến môi trường REACT_APP_WPGRAPHQL_URL chưa được thiết lập trong tệp .env của bạn.${colors.reset}`);
+    console.error(`${colors.red}Lỗi: Biến môi trường GATSBY_WPGRAPHQL_URL chưa được thiết lập trong tệp .env của bạn.${colors.reset}`);
     process.exit(1);
 }
 

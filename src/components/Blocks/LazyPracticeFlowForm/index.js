@@ -1,70 +1,94 @@
-// src/components/Blocks/LazyPracticeFlowForm.js
+import React, { useEffect } from 'react';
+import { navigate } from 'gatsby';
+import Quiz from '@components/Quiz';
+import { trackQuizStarted, trackQuestionAnswered } from '@src/utils/tracking'; // ✅ Import helper
+import { getQuestionData } from '@components/Quiz/data/quizHelpers'; // ✅ Import helper
+import '@styles/tailwind-scoped.scss';
+import { useQuizData } from '@components/Quiz/data/useQuizData';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Script } from 'gatsby';
+const LOCAL_STORAGE_KEY = 'hrt_quiz_progress';
+const QUIZ_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 ngày
 
-const LazyPracticeFlowForm = () => {
-    // State để theo dõi xem form đã được tải hay chưa
-    const [isLoaded, setIsLoaded] = useState(false);
-    // Ref để tham chiếu đến div placeholder
-    const containerRef = useRef(null);
+// Component này giờ sẽ render ngay lập tức, không còn "lazy" nữa.
+const PracticeFlowForm = () => {
+    const quizData = useQuizData();
+
+    // Âm thầm dọn localStorage nếu hết hạn, không chuyển hướng
+    useEffect(() => {
+        const savedProgressJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedProgressJSON) {
+            const savedProgress = JSON.parse(savedProgressJSON);
+            const now = Date.now();
+            if (!savedProgress.timestamp || (now - savedProgress.timestamp > QUIZ_EXPIRY_MS)) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+            }
+            else {
+                // Nếu dữ liệu hợp lệ, cập nhật lại timestamp để "reset bộ đếm 7 ngày"
+                savedProgress.timestamp = now;
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(savedProgress));
+            }
+        }
+    }, []);
 
     useEffect(() => {
-        // 1. Tạo một Intersection Observer
-        const observer = new IntersectionObserver(
-            (entries) => {
-                // Khi placeholder bắt đầu xuất hiện trên màn hình...
-                if (entries[0].isIntersecting) {
-                    // 2. ...thì cập nhật state để bắt đầu tải form
-                    setIsLoaded(true);
-                    // 3. Ngừng theo dõi để tiết kiệm tài nguyên
-                    observer.disconnect();
-                }
-            },
-            {
-                // Tải trước 200px trước khi nó thực sự lọt vào màn hình
-                rootMargin: '200px',
-            }
-        );
-
-        // Bắt đầu theo dõi div placeholder
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        // Hàm dọn dẹp
+        // Hàm cleanup này sẽ được gọi khi component unmount (khi người dùng chuyển trang)
         return () => {
-            if (containerRef.current) {
-                observer.unobserve(containerRef.current);
+            // Tìm và xóa các thẻ img hoặc iframe không mong muốn mà "hộp đen" có thể đã thêm vào.
+            // Ví dụ: tìm thẻ img có chứa chuỗi "bg-get-started-content.jpg"
+            const leftoverImage = document.querySelector('img[src*="bg-get-started-content.jpg"]');
+            if (leftoverImage) {
+                leftoverImage.remove();
             }
+
+            // Bạn có thể thêm logic để xóa các phần tử khác nếu cần.
+            // Ví dụ: xóa iframe không phải của Partytown
+            // const iframes = document.querySelectorAll('iframe');
+            // iframes.forEach(iframe => {
+            //     if (iframe.src && !iframe.src.includes('partytown')) {
+            //         iframe.remove();
+            //     }
+            // });
         };
-    }, []); // Mảng rỗng đảm bảo effect này chỉ chạy một lần
+    }, []); // Mảng rỗng [] đảm bảo effect này chỉ thiết lập cleanup một lần.
 
-    // Nếu chưa cần tải, chỉ hiển thị một div giữ chỗ
-    if (!isLoaded) {
-        return (
-            <div
-                ref={containerRef}
-                // Đặt chiều cao tối thiểu để tránh nhảy layout
-                style={{ minHeight: '800px' }}
-            >
-                {/* Bạn có thể đặt một spinner tải ở đây nếu muốn */}
-            </div>
-        );
-    }
+    // Hàm này được gọi khi người dùng nhấn "Next" trên câu hỏi đầu tiên của quiz
+    const handleQuizStart = (answers) => {
+        // 1. Tạo đối tượng tiến trình ban đầu
+        const initialProgress = {
+            savedAnswers: answers,
+            savedStep: 0, // Bắt đầu từ câu hỏi đầu tiên (index 0)
+            isCompleted: false,
+            timestamp: new Date().getTime()
+        };
 
-    // Khi đã cần tải, render iframe và script của form
+        // 2. Lưu vào localStorage
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialProgress));
+
+        // GỬI SỰ KIỆN TRACKING
+        const firstQuestion = getQuestionData(quizData, 0); // Lấy dữ liệu câu hỏi đầu tiên
+        trackQuizStarted(quizData);
+        trackQuestionAnswered(quizData, firstQuestion, answers[firstQuestion.id], 1);
+
+        // 3. Chuyển hướng người dùng đến câu hỏi số 2 trong giao diện quiz đầy đủ
+        navigate('/get-started/question/2');
+    };
+
+    // Trả về trực tiếp giao diện Quiz mà không cần chờ đợi
     return (
-        <>
-            <iframe
-                id="pZ5us1TDI3kKin0xSGLQ"
-                style={{ width: '100%', border: 'none', minHeight: '800px' }}
-                src="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ"
-                title="Practice Flow Survey Form"
-            ></iframe>
-            <Script src="https://book.practiceflow.md/js/form_embed.js" strategy="post-hydrate" />
-        </>
+        <div className="col-item col-right-custom" id="scheduleform">
+            <div className="tailwind-scope">
+                <div className="w-full">
+                    {/* Thẻ div này sẽ giới hạn chiều rộng, làm cho quiz trông giống như trên điện thoại */}
+                    <div className="shadow-2xl rounded-2xl overflow-hidden border-4 border-neutral">
+                        <Quiz
+                            mode="embedded"
+                            onEmbeddedNext={handleQuizStart}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 };
 
-export default LazyPracticeFlowForm;
+export default PracticeFlowForm;

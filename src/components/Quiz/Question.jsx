@@ -1,0 +1,107 @@
+// src/components/Quiz/Question.js
+import React from 'react';
+import { RadioGroup } from '@headlessui/react';
+import { motion } from 'framer-motion';
+import { CheckIcon } from './icons/CheckIcon';
+
+const Question = ({ data, onAnswer, currentAnswer, onNext, direction, isSubmitting, isLastQuestion }) => {
+    if (!data) return null;
+
+    const { id, question, type, options } = data;
+    // const isAnswered = currentAnswer !== undefined;
+
+    return (
+        <motion.div
+            key={id}
+            className="flex flex-col gap-l"
+            custom={direction}
+            variants={{
+                enter: (direction) => ({ opacity: 0, x: direction > 0 ? 50 : -50 }),
+                center: { opacity: 1, x: 0 },
+                exit: (direction) => ({ opacity: 0, x: direction < 0 ? 50 : -50 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+        >
+            <div>
+                <h1 className="text-[calc(var(--size-xl)_*_var(--quiz-scale))] text-neutral mt-s font-Soleto-XBold">{question}</h1>
+
+                {type === 'radio' && (
+                    <RadioGroup value={currentAnswer} onChange={(value) => onAnswer(id, value)} className="mt-xl">
+                        <RadioGroup.Label className="sr-only">{question}</RadioGroup.Label>
+                        <div className="column gap-[calc(var(--space-m)_*_var(--quiz-scale))] mt-xl text-l select-none">
+                            {options.map((option) => (
+                                <RadioGroup.Option key={option} value={option}
+                                    className={({ checked }) =>
+                                        ` ${checked ? 'bg-primary border-primary' : 'bg-btn-option border-neutral'} 
+                                    border-2 rounded-base group relative flex cursor-pointer px-[calc(var(--space-m)_*_var(--quiz-scale))] py-[calc(var(--space-m)_*_var(--quiz-scale-60))] shadow-raised sm:hover:bg-primary-highlighted focus:outline-none`
+                                    }
+                                >
+                                    {({ checked }) => (
+                                        <span className="flex flex-1 items-center gap-[calc(var(--space-m)_*_var(--quiz-scale))]">
+                                            <div className={`${checked ? 'bg-[#fff]' : 'border border-black'} flex h-[calc(var(--space-l)_*_var(--quiz-scale))] w-[calc(var(--space-l)_*_var(--quiz-scale))] shrink-0 items-center group-hover:border-[#fff] justify-center rounded-full overflow-hidden`}>
+                                                {checked && <span className="flex justify-center aspect-square" style={{ width: '100%', height: '100%', backgroundColor: 'rgba(var(--color-background-primary))', color: 'var(--color-form)' }}>
+                                                    <CheckIcon />
+                                                </span>}
+                                            </div>
+                                            {/* <RadioGroup.Label as="span" className={`${checked ? 'text-on-primary' : 'text-on-neutral'} row items-center gap-m font-semibold text-l`}>
+                                                {option}
+                                            </RadioGroup.Label> */}
+                                            <RadioGroup.Label as="span" className="row items-center gap-m font-semibold text-[calc(var(--size-l)_*_var(--quiz-scale))]">
+                                                <div className={`${checked ? 'sm:group-hover:text-onprimary text-onprimary' : 'sm:group-hover:text-onprimary text-onneutral'}`}>
+                                                    <div>{option}</div>
+                                                    <div className="text-m"></div>
+                                                </div>
+                                            </RadioGroup.Label>
+                                        </span>
+                                    )}
+                                </RadioGroup.Option>
+                            ))}
+                        </div>
+                    </RadioGroup>
+                )}
+            </div>
+
+            <button
+                onClick={onNext}
+                disabled={isSubmitting}
+                className="button-root relative rounded-full capitalize gap-s bg-primary sm:hover:bg-primary-highlighted text-onprimary w-auto text-left px-l py-[calc(1em*0.9)] min-w-[250px] self-end flex items-center justify-center"
+            >
+                <span className="z-10">
+                    {/* {isSubmitting ? 'Submitting...' : (isLastQuestion ? 'Submit' : 'Next')} */}
+                    {(isLastQuestion ? 'Submit' : 'Next')}
+                </span>
+                <div className="inline-c-c flex-shrink-0 absolute bottom-0 w-full left-0">
+                    <span role="progressbar" aria-label="action is loading" className="animate-glowing-border" style={{ '--loader-size': 'var(--size-l)', '--loader-stroke': 'calc(var(--size-l)*0.25)' }}>
+                    </span>
+                </div>
+                {isSubmitting && (
+                    <svg
+                        className="absolute h-6 w-6 opacity-50"
+                        style={{ animation: 'brush-stroke-spin 1.5s linear infinite' }}
+                        viewBox="25 25 50 50"
+                    >
+                        <circle
+                            className="text-white"
+                            style={{
+                                animation: 'brush-stroke-draw 1.4s ease-in-out infinite',
+                                stroke: 'currentColor',
+                                strokeWidth: '6',
+                                strokeLinecap: 'round',
+                            }}
+                            cx="50"
+                            cy="50"
+                            r="20"
+                            fill="none"
+                        />
+                    </svg>
+                )}
+            </button>
+
+        </motion.div>
+    );
+};
+
+export default Question;

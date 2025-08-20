@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
+import { GatsbyImage, getImage } from "gatsby-plugin-image";
 import Layout from "@components/layout"
 import Slider from "react-slick";
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
-
+import "./awards.scss"
 import LazyEmbed from '@components/Video/LazyEmbed';
 
 
@@ -132,6 +133,45 @@ const Home = () => {
                       target
                     }
                   }
+                ... on GraphCMS_HomeContentFlexibleContentFeaturedAwardsLayout {
+                    featuredAwards {
+                        awardGallery {
+                            nodes {
+                                altText
+                                sourceUrl
+                                localFile {
+                                    childImageSharp {
+                                        gatsbyImageData(       
+                                        placeholder: BLURRED 
+                                        formats: [AUTO, WEBP] 
+                                        quality: 100        
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        title
+                    }
+                    featuredOn {
+                        gallery {
+                            nodes {
+                                altText
+                                sourceUrl
+                                localFile {
+                                    childImageSharp {
+                                        gatsbyImageData(
+                                        placeholder: BLURRED
+                                        formats: [AUTO, WEBP]
+                                        quality: 100
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        title
+                    }
+                }
+
                   ... on GraphCMS_HomeContentFlexibleContentTestimonialsLayout {
                     authorName
                     blockquote
@@ -238,10 +278,36 @@ const Home = () => {
     const practice = query.cms.pageBy.template?.homeContent?.flexibleContent[3];
     const getMore = query.cms.pageBy.template?.homeContent?.flexibleContent[4];
     const howWeCanHelp = query.cms.pageBy.template?.homeContent?.flexibleContent[5];
-    const testimonials = query.cms.pageBy.template?.homeContent?.flexibleContent[6];
-    const stats = query.cms.pageBy.template?.homeContent?.flexibleContent[7];
-    const special = query.cms.pageBy.template?.homeContent?.flexibleContent[8];
-    const giftBook = query.cms.pageBy.template?.homeContent?.flexibleContent[9];
+    const awards = query.cms.pageBy.template?.homeContent?.flexibleContent[6];
+    const testimonials = query.cms.pageBy.template?.homeContent?.flexibleContent[7];
+    const stats = query.cms.pageBy.template?.homeContent?.flexibleContent[8];
+    const special = query.cms.pageBy.template?.homeContent?.flexibleContent[9];
+    const giftBook = query.cms.pageBy.template?.homeContent?.flexibleContent[10];
+
+    // const flexibleContent = query.cms.pageBy.template?.homeContent?.flexibleContent || [];
+
+    // const experts = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentExpertsLayout");
+    // const patients = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentPatientsLayout");
+    // const practice = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentYourPracticeLayout");
+    // const getMore = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentGetMoreLayout");
+    // const howWeCanHelp = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentHowWeCanHelpLayout");
+    // const testimonials = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentTestimonialsLayout");
+    // const stats = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentStatsLayout");
+    // const special = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentSpecialtyLayout");
+    // const giftBook = flexibleContent.find(item => item.__typename === "GraphCMS_HomeContentFlexibleContentGiftBookLayout");
+
+    // Log giá trị các biến để kiểm tra undefined
+    // console.log('experts:', experts);
+    // console.log('patients:', patients);
+    // console.log('practice:', practice);
+    // console.log('getMore:', getMore);
+    // console.log('howWeCanHelp:', howWeCanHelp);
+    // console.log('awards:', awards);
+    // console.log('testimonials:', testimonials);
+    // console.log('stats:', stats);
+    // console.log('special:', special);
+    // console.log('giftBook:', giftBook);
+    // console.log(awards?.featuredAwards?.awardGallery?.nodes);
 
     // /**
     //  * xử lý SEO cho trang chủ
@@ -403,7 +469,7 @@ const Home = () => {
                             <div className="ast-flex col-patients">
                                 <div className="col-content ast-flex flex-column">
                                     <div className="col-content-text">
-                                        <h3 className="fs-48 f-soletoxbold" dangerouslySetInnerHTML={{ __html: patients?.title }}></h3>
+                                        <h3 className="fs-48 f-soletoxbold" dangerouslySetInnerHTML={{ __html: patients?.title || '' }}></h3>
                                         <div className="desc f-soleto fs-26">
                                             {patients?.desc}
                                         </div>
@@ -413,7 +479,7 @@ const Home = () => {
                                             to={extractPathname(patients?.button?.url, '#')}
                                             className="btn-bg bg-F2771A patients-button btn-size-18 fw-700"
                                         >
-                                            {patients.button?.title}
+                                            {patients?.button?.title}
                                         </Link>
                                     </div>
                                 </div>
@@ -459,7 +525,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div> */}
-                                    <LazyEmbed embedCode={patients.video} />
+                                    <LazyEmbed embedCode={patients?.video} rootMargin="50px" />
                                 </div>
                             </div>
                         </div>
@@ -475,11 +541,11 @@ const Home = () => {
                                 {practice?.title}
                             </h2>
                             <div className="desc text-white fs-22 text-center">
-                                {practice.desc}
+                                {practice?.desc}
                             </div>
                             <div className="boxies-practice-list">
                                 {
-                                    practice.item?.map((item, key) => (
+                                    practice?.item?.map((item, key) => (
                                         <div key={key} className="practice-item position-relative ast-flex justify-content-center">
                                             <div className="inner ast-flex flex-column">
                                                 <img src={item?.icon?.node?.sourceUrl} alt={item?.icon?.node?.altText} />
@@ -498,10 +564,10 @@ const Home = () => {
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
                                 <Link
-                                    to={extractPathname(practice.button?.url, '#')}
+                                    to={extractPathname(practice?.button?.url, '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
-                                    {practice.button?.title}
+                                    {practice?.button?.title}
                                 </Link>
                             </div>
                         </div>
@@ -509,11 +575,11 @@ const Home = () => {
                     <section className="section sc-get-more">
                         <div className="cus-container flex-column">
                             <h2 className="h2-title fs-48 f-soleto fw-800 color-00255B text-center mb-0">
-                                {getMore.title}
+                                {getMore?.title}
                             </h2>
                             <div className="steps ast-flex justify-content-center align-items-center">
                                 {
-                                    getMore.item?.map((item, key) => (
+                                    getMore?.item?.map((item, key) => (
                                         <Link key={key} to="/" className="step f-soleto fw-500">
                                             {item.title}
                                         </Link>
@@ -533,7 +599,7 @@ const Home = () => {
                                 <div className="sub-title f-soleto fs-32 fw-500 color-00255B text-uppercase">
                                     {howWeCanHelp?.subTitle}
                                 </div>
-                                <h2 className="h2-title f-soletoxbold fs-56 color-2c2c2c" dangerouslySetInnerHTML={{ __html: howWeCanHelp?.title }}></h2>
+                                <h2 className="h2-title f-soletoxbold fs-56 color-2c2c2c" dangerouslySetInnerHTML={{ __html: howWeCanHelp?.title || '' }}></h2>
                             </div>
                             <div className="box-circle-list position-relative">
                                 <div className="box-center position-absolute ast-flex justify-content-center">
@@ -557,10 +623,10 @@ const Home = () => {
                                 </div>
                                 <div className="boxies-outer position-relative ast-flex">
                                     {
-                                        howWeCanHelp.boxs?.map((item, key) => (
+                                        howWeCanHelp?.boxs?.map((item, key) => (
                                             <div key={key} item={item} className={`circle-box box-${key + 1}`}>
-                                                <figure>
-                                                    <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
+                                                <figure data-aos="fade-down-right" data-aos-duration="1500" className="aos-init">
+                                                    <img decoding="async" className="animation-wiggle" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
                                                 </figure>
                                                 <h3 className="h3-title fs-26 f-soleto fw-800 color-000000 text-center">
                                                     {item.title}
@@ -587,13 +653,77 @@ const Home = () => {
                             </div>
                         </div>
                     </section>
+
+                    {/* phần awards */}
+                    <section
+                        className="section sc-featured-awards"
+                        style={{
+                            background: "no-repeat top center /cover url('https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/08/bg-awards-jpg.webp')"
+                        }}
+                    >
+                        <div className="cus-container">
+                            <div className="featured-awards">
+                                <h2 className="h2-title f-soleto fw-800 fs-48 color-0659A9 text-center">
+                                    {awards?.featuredAwards?.title}
+                                </h2>
+                                <div className="awards-list">
+                                    {awards?.featuredAwards?.awardGallery?.nodes?.map((awardNode, idx) => {
+                                        // 1. Dùng `getImage` để lấy dữ liệu ảnh
+                                        const imageData = getImage(awardNode?.localFile);
+
+                                        // 2. Kiểm tra nếu không có ảnh thì không render gì cả
+                                        if (!imageData) {
+                                            return null;
+                                        }
+
+                                        // 3. Render component <GatsbyImage>
+                                        return (
+                                            <div className="item" key={idx}>
+                                                <GatsbyImage
+                                                    image={imageData}
+                                                    alt={awardNode?.altText || ""}
+                                                    sizes="(max-width: 412px) 352px, (max-width: 1366px) 323px"
+                                                    // style={{ maxWidth: "245px", width: "100vw", height: "auto" }}
+                                                    style={{ height: "auto" }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="featured-on">
+                                <h2 className="h2-title f-soleto fw-800 fs-48 color-0659A9 text-center">
+                                    {awards?.featuredOn?.title}
+                                </h2>
+                                <div className="list">
+                                    {awards?.featuredOn?.gallery?.nodes?.map((featuredNode, idx) => {
+                                        const featuredImageData = getImage(featuredNode?.localFile);
+                                        if (!featuredImageData) return null;
+                                        return (
+                                            <div className="item" key={idx}>
+                                                <GatsbyImage
+                                                    image={featuredImageData}
+                                                    alt={featuredNode?.altText || ""}
+                                                    sizes="(max-width: 412px) 352px, (max-width: 1366px) 304px"
+                                                    style={{ height: "416px" }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {/* kết thúc phần awards */}
+
+                    {/* Phần testimonials */}
                     <section className="section sc-testimonials">
                         <div className="cus-container">
                             <h2 className="h2-title f-soleto fs-32 fw-500 color-00255B text-center text-uppercase">
                                 {testimonials?.title}
                             </h2>
                             <div className="blockquote text-center">
-                                <blockquote dangerouslySetInnerHTML={{ __html: testimonials?.blockquote }}></blockquote>
+                                <blockquote dangerouslySetInnerHTML={{ __html: testimonials?.blockquote || '' }}></blockquote>
                                 <div className="author f-soleto">
                                     - {testimonials?.authorName}
                                 </div>
@@ -602,12 +732,12 @@ const Home = () => {
                                 <div className="item ast-flex">
                                     <div className="col-video">
                                         {/* <div className="video-inner-home" dangerouslySetInnerHTML={{ __html: testimonials?.video }}></div> */}
-                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials.video} /></div>
+                                        <div className="video-inner-home"><LazyEmbed embedCode={testimonials?.video} rootMargin="50px"/></div>
                                     </div>
                                     <div className="col-content ast-flex flex-column">
                                         <div className="boxies ast-flex">
                                             {
-                                                testimonials.testimonialContent.box?.map((item, key) => (
+                                                testimonials?.testimonialContent?.box?.map((item, key) => (
                                                     <div className="box" key={key}>
                                                         <div className="testi-box-number ast-flex justify-content-center align-items-center">
                                                             <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
@@ -623,18 +753,18 @@ const Home = () => {
                                         <div className="testi-content">
                                             <div className="tags ast-flex">
                                                 {
-                                                    testimonials.testimonialContent.tags?.map((item, key) => (
+                                                    testimonials?.testimonialContent?.tags?.map((item, key) => (
                                                         <a href="#" key={key}>{item?.tag}</a>
                                                     ))
                                                 }
                                             </div>
-                                            <div className="content" dangerouslySetInnerHTML={{ __html: testimonials?.testimonialContent?.content }}></div>
+                                            <div className="content" dangerouslySetInnerHTML={{ __html: testimonials?.testimonialContent?.content || '' }}></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="desc f-soleto fw-500 text-center">
-                                {testimonials.desc}
+                                {testimonials?.desc}
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
                                 <Link
@@ -648,24 +778,24 @@ const Home = () => {
                     </section>
                     <section
                         className="section sc-how-we-do-it"
-                        style={{ background: `no-repeat center/cover url(${stats.backgroundImage?.node?.sourceUrl})` }}
+                        style={{ background: `no-repeat center/cover url(${stats?.backgroundImage?.node?.sourceUrl})` }}
                     >
                         <div className="cus-container">
                             <h2 className="h2-title f-soletoxbold text-white mb-0 text-center">
-                                {stats.title}
+                                {stats?.title}
                             </h2>
                             <div className="number-infor ast-flex align-items-center">
                                 {
-                                    stats.item?.map((x, key) => (
+                                    stats?.item?.map((x, key) => (
                                         <div key={key} className="box-number ast-flex align-items-center">
                                             <div className="ast-flex align-items-center">
                                                 <div className="box-img">
                                                     <figure className="mb-0">
-                                                        <img src={x.icon?.node?.sourceUrl} alt={x.icon?.node?.altText} />
+                                                        <img src={x?.icon?.node?.sourceUrl} alt={x?.icon?.node?.altText} />
                                                     </figure>
                                                 </div>
                                                 <div className="desc f-soleto fw-800 text-white">
-                                                    {x.desc}
+                                                    {x?.desc}
                                                 </div>
                                             </div>
                                         </div>
@@ -674,25 +804,25 @@ const Home = () => {
                             </div>
                             <div className="sc-btn ast-flex justify-content-center">
                                 <Link
-                                    to={extractPathname(stats.button?.url, '#')}
+                                    to={extractPathname(stats?.button?.url, '#')}
                                     className="btn-bg bg-F2771A btn-size-18 fw-700"
                                 >
-                                    {stats.button?.title}
+                                    {stats?.button?.title}
                                 </Link>
                             </div>
                         </div>
                     </section>
                     <section
                         className="section sc-specialty"
-                        style={{ background: `no-repeat center/cover url(${special.backgroundImage?.node?.sourceUrl})` }}
+                        style={{ background: `no-repeat center/cover url(${special?.backgroundImage?.node?.sourceUrl})` }}
                     >
                         <div className="ast-container-fluid padding-left padding-right">
                             <h2 className="h2-title f-soletoxbold fs-56 color-2c2c2c text-center">
-                                {special.title}
+                                {special?.title}
                             </h2>
                             <Slider {...settings2} className="specialty-list ast-flex">
                                 {
-                                    special.items?.map((item, key) => (
+                                    special?.items?.map((item, key) => (
                                         <div key={key} className="s-box-slide">
                                             <div className="s-box  position-relative first">
                                                 <svg
@@ -746,7 +876,7 @@ const Home = () => {
                             <div className="sc-free-gift ast-flex">
                                 <div className="free-gift-content display-mobile">
                                     <h2 className="fs-36 fw-800 color-00255B">
-                                        <a href={giftBook?.link?.url} target="_blank">{giftBook.title}</a>
+                                        <a href={giftBook?.link?.url} target="_blank">{giftBook?.title}</a>
                                     </h2>
                                 </div>
                                 <figure>
@@ -754,9 +884,9 @@ const Home = () => {
                                 </figure>
                                 <div className="free-gift-content display-desktop">
                                     <h2 className="fs-36 fw-800 color-00255B">
-                                        <a href={giftBook?.link?.url} target="_blank">{giftBook.title}</a>
+                                        <a href={giftBook?.link?.url} target="_blank">{giftBook?.title}</a>
                                     </h2>
-                                    <div className="desc color-00255B" dangerouslySetInnerHTML={{ __html: giftBook?.content }}></div>
+                                    <div className="desc color-00255B" dangerouslySetInnerHTML={{ __html: giftBook?.content || '' }}></div>
                                 </div>
                             </div>
                         </div>

@@ -1,15 +1,19 @@
+
 @forward 'layouts/blog';
 @forward "customStyle.scss";
 @forward "main.min.scss";
+@forward "custom.scss";
 
-// 1. Import từ node_modules
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
+// // 1. Import từ node_modules
+// @import "~slick-carousel/slick/slick.css";
+// @import "~slick-carousel/slick/slick-theme.css";
 
 // 2. Import các file CSS cục bộ khác
 @import "lightbox.min.css";
 @import "slick.css"; // File tùy chỉnh nếu có
 @import "dashicons.min.css";
+@import "aos.css";
+
 
 :root {
   --ast-post-nav-space: 0;
@@ -60,8 +64,8 @@ textarea,
 .ast-custom-button {
   font-family: "Inter", sans-serif;
   font-weight: inherit;
-  font-size: 18px;
-  font-size: 1rem;
+  font-size: 14px;
+  // font-size: 1rem;
   line-height: var(--ast-body-line-height, 1.65);
 }
 
@@ -2630,11 +2634,7 @@ h6,
 }
 
 .ast-header-button-1[data-section*="section-hb-button-"] .ast-builder-button-wrap .ast-custom-button {
-  // font-family: "Inter", sans-serif !important;
-  font-weight: 500;
-  // font-size: 18px !important;
-  font-size: 1rem;
-  line-height: 27px;
+
   text-transform: uppercase;
 }
 
@@ -2999,6 +2999,7 @@ h6,
 
 .ast-builder-grid-row-3-equal .ast-builder-grid-row {
   grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: auto auto auto;
 }
 
 @media (max-width: 921px) {
@@ -3383,6 +3384,7 @@ h6,
 }
 
 #ast-scroll-top .ast-icon.icon-arrow svg {
+  display: unset !important;
   margin-left: 0px;
   vertical-align: middle;
   transform: translate(0, -20%) rotate(180deg);
@@ -4669,6 +4671,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   font-size: 1.35vw;
   /*26px;*/
   line-height: 150%;
+  font-family: 'Inter';
 }
 
 // .banner-list .link-item {
@@ -4800,6 +4803,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
     text-align: center;
     font-size: 16px;
     /*16px;*/
+    font-family: 'Inter';
   }
 
   .box-ser {
@@ -5454,26 +5458,27 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 
 // chỉnh z-index của video trong banner
 .cols2-banner .col-video {
-  position:relative;
-  z-index:2;
+  position: relative;
+  z-index: 2;
 }
 
 // ẩn nút điều hướng của slick slider mặc định
 .slick-prev:before,
 .slick-next:before {
-    display: none !important;
-    /* Hoặc bạn cũng có thể dùng content: ''; */
+  display: none !important;
+  /* Hoặc bạn cũng có thể dùng content: ''; */
 }
 
 .featured-case-study .box-content {
   /* Reset các thuộc tính của .box-content */
-  margin-top: initial; /* hoặc 0, unset, revert */
+  margin-top: initial;
+  /* hoặc 0, unset, revert */
   font-size: initial;
   background: initial;
   border-radius: initial;
   padding: initial;
   text-align: initial;
-  
+
   /* Áp dụng styles mới */
   order: 1;
   flex: 1;
