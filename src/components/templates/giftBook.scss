@@ -1,0 +1,13 @@
+.gift-book-image {
+    width: auto;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .gift-book-image {
+        width: 150px;
+        height: 180px;
+        object-fit: cover;
+    }
+}
