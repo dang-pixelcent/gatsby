@@ -1,4 +1,3 @@
-
 @forward 'layouts/blog';
 @forward "customStyle.scss";
 @forward "main.min.scss";
@@ -15,6 +14,7 @@
 @import "aos.css";
 
 $base-url: "https://a.wellnessclinicmarketing.com";
+
 :root {
   --ast-post-nav-space: 0;
   --ast-container-default-xlg-padding: 2.5em;
@@ -4825,7 +4825,12 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   }
 
   .home-banner .box-mobile {
-    display: block;
+    // display: block;
+    align-items: center;
+    /* align-content: center; */
+    display: flex;
+    /* text-align: center; */
+    justify-content: center;
   }
 
   .home-banner .box-desktop {
@@ -6470,6 +6475,20 @@ blockquote:before {
   }
 }
 
+.slick-dots {
+  list-style: none !important;
+  display: flex !important;
+  gap: 10px;
+  margin: 37px 0px 0px !important;
+  justify-content: center;
+  align-items: center;
+  position: static !important;
+  bottom: auto;
+  width: auto !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
 @media only screen and (max-width:768px) {
 
   .sc-specialty .ast-container-fluid {
@@ -6485,7 +6504,7 @@ blockquote:before {
 
   .specialty-list {
     margin: 0px;
-    padding: 0px 35px 0px 25px !important;
+    padding: 0px 35px 0px 35px !important;
     display: block !important;
   }
 
