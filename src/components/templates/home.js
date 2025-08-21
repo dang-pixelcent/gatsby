@@ -7,6 +7,7 @@ import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
 import { extractPathname } from "/src/utils/urlUtils"
 import "./awards.scss"
+import "./giftBook.scss"
 import LazyEmbed from '@components/Video/LazyEmbed';
 
 
@@ -35,6 +36,15 @@ const Home = () => {
                         node {
                           id
                           sourceUrl
+                          localFile {
+                            childImageSharp {
+                              gatsbyImageData(
+                                quality: 90
+                                formats: [AUTO, WEBP, AVIF]
+                                placeholder: BLURRED
+                              )
+                            }
+                          }
                           link
                         }
                       }
@@ -48,6 +58,16 @@ const Home = () => {
                         id
                         link
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                              layout: FULL_WIDTH
+                            )
+                          }
+                        }
                         altText
                       }
                     }
@@ -60,6 +80,15 @@ const Home = () => {
                       node {
                         id
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                            )
+                          }
+                        }
                         link
                         altText
                       }
@@ -76,6 +105,16 @@ const Home = () => {
                         id
                         link
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                              layout: FULL_WIDTH
+                            )
+                          }
+                        }
                       }
                     }
                     button {
@@ -125,6 +164,16 @@ const Home = () => {
                       node {
                         id
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                              layout: FULL_WIDTH
+                            )
+                          }
+                        }
                       }
                     }
                     button {
@@ -134,6 +183,23 @@ const Home = () => {
                     }
                   }
                 ... on GraphCMS_HomeContentFlexibleContentFeaturedAwardsLayout {
+                    backgroundImage {
+                        node {
+                            sourceUrl
+                            localFile {
+                                childImageSharp {
+                                    gatsbyImageData(
+                                    quality: 90
+                                    formats: [AUTO, WEBP, AVIF]
+                                    placeholder: BLURRED
+                                    layout: FULL_WIDTH
+                                    )
+                                }
+                            }
+                            title
+                            altText
+                        }
+                    }
                     featuredAwards {
                         awardGallery {
                             nodes {
@@ -209,6 +275,16 @@ const Home = () => {
                       node {
                         id
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                              layout: FULL_WIDTH
+                            )
+                          }
+                        }
                       }
                     }
                     item {
@@ -216,9 +292,9 @@ const Home = () => {
                       title
                       icon {
                         node {
-                          altText
-                          id
-                          sourceUrl
+                            altText
+                            id
+                            sourceUrl
                         }
                       }
                     }
@@ -234,14 +310,33 @@ const Home = () => {
                       node {
                         id
                         sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                              layout: FULL_WIDTH
+                            )
+                          }
+                        }
                       }
                     }
                     items {
                       image {
                         node {
-                          altText
-                          id
-                          sourceUrl
+                            altText
+                            id
+                            sourceUrl
+                            localFile {
+                                childImageSharp {
+                                    gatsbyImageData(
+                                    quality: 90
+                                    formats: [AUTO, WEBP, AVIF]
+                                    placeholder: BLURRED
+                                    )
+                                }
+                            }
                         }
                       }
                       title
@@ -256,13 +351,13 @@ const Home = () => {
                         altText
                         sourceUrl
                         localFile {
-                            childImageSharp {
-                                gatsbyImageData(
-                                placeholder: BLURRED
-                                formats: [AUTO, WEBP]
-                                # quality: 100
-                                )
-                            }
+                          childImageSharp {
+                            gatsbyImageData(
+                              quality: 90
+                              formats: [AUTO, WEBP, AVIF]
+                              placeholder: BLURRED
+                            )
+                          }
                         }
                         id
                       }
@@ -292,6 +387,42 @@ const Home = () => {
     const stats = query.cms.pageBy.template?.homeContent?.flexibleContent[8];
     const special = query.cms.pageBy.template?.homeContent?.flexibleContent[9];
     const giftBook = query.cms.pageBy.template?.homeContent?.flexibleContent[10];
+
+    // lấy các hình ảnh nền cho các section
+    const bgImagePatients = getImage(patients?.backgroundImage?.node?.localFile);
+    const bgImagePractice = getImage(practice?.backgroundImage?.node?.localFile);
+    const bgImageHowWeCanHelp = getImage(howWeCanHelp?.backgroundImage?.node?.localFile);
+    const bgImageAwards = getImage(awards?.backgroundImage?.node?.localFile);
+    const bgImageStats = getImage(stats?.backgroundImage?.node?.localFile);
+    const bgImageSpecial = getImage(special?.backgroundImage?.node?.localFile);
+
+    // Lấy các hình ảnh cho các section khác
+    const expertsImages = experts?.logo?.map(item => ({
+        imageData: getImage(item?.image?.node?.localFile),
+        sourceUrl: item?.image?.node?.sourceUrl,
+        altText: `Expert partner logo`,
+        link: item?.image?.node?.link
+    }));
+
+    const patientImage = {
+        imageData: getImage(patients?.image?.node?.localFile),
+        sourceUrl: patients?.image?.node?.sourceUrl,
+        altText: patients?.image?.node?.altText || "Patient image"
+    };
+
+    const specialItemsImages = special?.items?.map(item => ({
+        imageData: getImage(item?.image?.node?.localFile),
+        sourceUrl: item?.image?.node?.sourceUrl,
+        altText: item?.image?.node?.altText || "Specialty image",
+        title: item.title,
+        link: item.link
+    }));
+
+    const giftBookImage = {
+        imageData: getImage(giftBook?.image?.node?.localFile),
+        sourceUrl: giftBook?.image?.node?.sourceUrl,
+        altText: giftBook?.image?.node?.altText || "Gift book image"
+    };
 
     // const flexibleContent = query.cms.pageBy.template?.homeContent?.flexibleContent || [];
 
@@ -459,14 +590,29 @@ const Home = () => {
                                 {experts?.title}
                             </h2>
                             <Slider {...settings} className="experts-list ast-flex align-items-center">
-                                {
-                                    experts?.logo?.map((item, key) => (
-                                        // <Link key={key} href={item?.image?.node?.link ?? '#'}>
-                                        <a key={key} href='#' aria-label={`Expert partner ${key + 1}`} title={`View expert partner ${key + 1}`}>
-                                            <img src={item?.image?.node?.sourceUrl} alt={`Expert partner logo ${key + 1}`} decoding="async" />
-                                        </a>
-                                    ))
-                                }
+                                {expertsImages?.map((item, key) => (
+                                    <a
+                                        key={key}
+                                        href='#'
+                                        aria-label={`Expert partner ${key + 1}`}
+                                        title={`View expert partner ${key + 1}`}
+                                    >
+                                        {item.imageData ? (
+                                            <GatsbyImage
+                                                image={item.imageData}
+                                                alt={`Expert partner logo ${key + 1}`}
+                                                style={{ maxWidth: "150px", height: "auto" }}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={item.sourceUrl}
+                                                alt={`Expert partner logo ${key + 1}`}
+                                                decoding="async"
+                                                style={{ maxWidth: "150px", height: "auto" }}
+                                            />
+                                        )}
+                                    </a>
+                                ))}
                             </Slider>
                         </div>
                     </section>
@@ -474,6 +620,22 @@ const Home = () => {
                         className="section sc-patients"
                         style={{ backgroundColor: "#F3F3F3" }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImagePatients && (
+                            <GatsbyImage
+                                image={bgImagePatients}
+                                alt={patients?.backgroundImage?.node?.altText || "Patients background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="cus-container">
                             <div className="ast-flex col-patients">
                                 <div className="col-content ast-flex flex-column">
@@ -541,10 +703,26 @@ const Home = () => {
                     </section>
                     <section
                         className="section sc-practice"
-                        style={{
-                            background: `no-repeat center/cover url(${practice?.backgroundImage?.node?.sourceUrl})`
-                        }}
+                    // style={{
+                    //     background: `no-repeat center/cover url(${practice?.backgroundImage?.node?.sourceUrl})`
+                    // }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImagePractice && (
+                            <GatsbyImage
+                                image={bgImagePractice}
+                                alt={practice?.backgroundImage?.node?.altText || "Practice background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="cus-container">
                             <h2 className="h2-title fs-48 f-soletoxbold text-white text-center">
                                 {practice?.title}
@@ -599,10 +777,26 @@ const Home = () => {
                     </section>
                     <section
                         className="section sc-how-we-can-help pt-100 pb-100"
-                        style={{
-                            background: `no-repeat center/cover url(${howWeCanHelp?.backgroundImage?.node?.sourceUrl})`
-                        }}
+                    // style={{
+                    //     background: `no-repeat center/cover url(${howWeCanHelp?.backgroundImage?.node?.sourceUrl})`
+                    // }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImageHowWeCanHelp && (
+                            <GatsbyImage
+                                image={bgImageHowWeCanHelp}
+                                alt={howWeCanHelp?.backgroundImage?.node?.altText || "How we can help background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="cus-container">
                             <div className="header-title ast-flex flex-column align-items-center text-center">
                                 <div className="sub-title f-soleto fs-32 fw-500 color-00255B text-uppercase">
@@ -666,10 +860,26 @@ const Home = () => {
                     {/* phần awards */}
                     <section
                         className="section sc-featured-awards"
-                        style={{
-                            background: "no-repeat top center /cover url('https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/08/bg-awards-jpg.webp')"
-                        }}
+                    // style={{
+                    //     background: `no-repeat top center /cover url('${awards?.backgroundImage?.node?.sourceUrl}')`
+                    // }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImageAwards && (
+                            <GatsbyImage
+                                image={bgImageAwards}
+                                alt={awards?.backgroundImage?.node?.altText || "Awards background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="cus-container">
                             <div className="featured-awards">
                                 <h2 className="h2-title f-soleto fw-800 fs-48 color-0659A9 text-center">
@@ -787,8 +997,24 @@ const Home = () => {
                     </section>
                     <section
                         className="section sc-how-we-do-it"
-                        style={{ background: `no-repeat center/cover url(${stats?.backgroundImage?.node?.sourceUrl})` }}
+                    // style={{ background: `no-repeat center/cover url(${stats?.backgroundImage?.node?.sourceUrl})` }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImageStats && (
+                            <GatsbyImage
+                                image={bgImageStats}
+                                alt={stats?.backgroundImage?.node?.altText || "Stats background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="cus-container">
                             <h2 className="h2-title f-soletoxbold text-white mb-0 text-center">
                                 {stats?.title}
@@ -823,17 +1049,35 @@ const Home = () => {
                     </section>
                     <section
                         className="section sc-specialty"
-                        style={{ background: `no-repeat center/cover url(${special?.backgroundImage?.node?.sourceUrl})` }}
+                    // style={{ background: `no-repeat center/cover url(${special?.backgroundImage?.node?.sourceUrl})` }}
                     >
+                        {/* Thay thế background image bằng GatsbyImage */}
+                        {bgImageSpecial && (
+                            <GatsbyImage
+                                image={bgImageSpecial}
+                                alt={special?.backgroundImage?.node?.altText || "Specialty background"}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    width: "100%",
+                                    height: "100%",
+                                    zIndex: -1,
+                                }}
+                                className="section-bg-image"
+                            />
+                        )}
                         <div className="ast-container-fluid padding-left padding-right">
                             <h2 className="h2-title f-soletoxbold fs-56 color-2c2c2c text-center">
                                 {special?.title}
                             </h2>
                             <Slider {...settings2} className="specialty-list ast-flex">
-                                {
-                                    special?.items?.map((item, key) => (
+                                {specialItemsImages?.map((item, key) => {
+                                    const path = extractPathname(item?.link, '#');
+
+                                    return (
                                         <div key={key} className="s-box-slide">
-                                            <div className="s-box  position-relative first">
+                                            <div className="s-box position-relative first">
                                                 <svg
                                                     width={144}
                                                     height={145}
@@ -855,28 +1099,66 @@ const Home = () => {
                                                     />
                                                 </svg>
                                                 <div className="s-box-inner">
-                                                    <div
-                                                        onMouseDown={handleMouseDown}
-                                                        onMouseMove={handleMouseMove}
-                                                        onTouchStart={handleMouseDown}
-                                                        onTouchMove={handleMouseMove}
-                                                        onClick={(e) => handleItemClick(e, item?.link)}
-                                                        style={{ cursor: 'pointer' }}
-                                                    >
-                                                        <figure className="mb-0">
-                                                            <img src={item.image?.node?.sourceUrl} alt={item.image?.node?.altText} />
-                                                        </figure>
-                                                        <div className="s-content">
-                                                            <h3 className="h3-title f-soleto fw-700 fs-32 mb-0">
-                                                                {item.title}
-                                                            </h3>
+                                                    {path && path !== '#' ? (
+                                                        <Link
+                                                            to={path}
+                                                            style={{
+                                                                cursor: 'pointer',
+                                                                display: 'block',
+                                                                textDecoration: 'none',
+                                                                color: 'inherit'
+                                                            }}
+                                                        >
+                                                            <figure className="mb-0">
+                                                                {item.imageData ? (
+                                                                    <GatsbyImage
+                                                                        image={item.imageData}
+                                                                        alt={item.altText}
+                                                                        style={{ width: "100%", height: "auto" }}
+                                                                    />
+                                                                ) : (
+                                                                    <img
+                                                                        src={item.sourceUrl}
+                                                                        alt={item.altText}
+                                                                        style={{ width: "100%", height: "auto" }}
+                                                                    />
+                                                                )}
+                                                            </figure>
+                                                            <div className="s-content">
+                                                                <h3 className="h3-title f-soleto fw-700 fs-32 mb-0">
+                                                                    {item.title}
+                                                                </h3>
+                                                            </div>
+                                                        </Link>
+                                                    ) : (
+                                                        <div style={{ cursor: 'default' }}>
+                                                            <figure className="mb-0">
+                                                                {item.imageData ? (
+                                                                    <GatsbyImage
+                                                                        image={item.imageData}
+                                                                        alt={item.altText}
+                                                                        style={{ width: "100%", height: "auto" }}
+                                                                    />
+                                                                ) : (
+                                                                    <img
+                                                                        src={item.sourceUrl}
+                                                                        alt={item.altText}
+                                                                        style={{ width: "100%", height: "auto" }}
+                                                                    />
+                                                                )}
+                                                            </figure>
+                                                            <div className="s-content">
+                                                                <h3 className="h3-title f-soleto fw-700 fs-32 mb-0">
+                                                                    {item.title}
+                                                                </h3>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
-                                    ))
-                                }
+                                    );
+                                })}
                             </Slider>
                         </div>
                     </section>
@@ -889,33 +1171,22 @@ const Home = () => {
                                     </h2>
                                 </div>
                                 <figure>
-                                    <img
-                                        src={giftBook?.image?.node?.sourceUrl}
-                                        alt={giftBook?.image?.node?.altText}
-                                        width={150}
-                                        height={180}
-                                    />
-                                    {/* {(() => {
-                                        const giftBookImageData = getImage(giftBook?.image?.node?.localFile);
-                                        if (giftBookImageData) {
-                                            return (
-                                                <GatsbyImage
-                                                    image={giftBookImageData}
-                                                    alt={giftBook?.image?.node?.altText || ""}
-                                                    style={{ width: 150, height: 180 }}
-                                                />
-                                            );
-                                        }
-                                        // fallback nếu không có GatsbyImageData
-                                        return (
-                                            <img
-                                                src={giftBook?.image?.node?.sourceUrl}
-                                                alt={giftBook?.image?.node?.altText}
-                                                width={150}
-                                                height={180}
-                                            />
-                                        );
-                                    })()} */}
+                                    {giftBookImage.imageData ? (
+                                        <GatsbyImage
+                                            image={giftBookImage.imageData}
+                                            alt={giftBookImage.altText}
+                                            // style={{ width: "auto", height: "auto" }}
+                                            className="gift-book-image"
+                                            sizes="(max-width: 249px) 100vw, 249px"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={giftBookImage.sourceUrl}
+                                            alt={giftBookImage.altText}
+                                            width={150}
+                                            height={180}
+                                        />
+                                    )}
                                 </figure>
                                 <div className="free-gift-content display-desktop">
                                     <h2 className="fs-36 fw-800 color-00255B">
@@ -935,7 +1206,7 @@ const Home = () => {
 export const Head = ({ pageContext }) => (
     <SEO
         seoData={pageContext.seoData || {}}
-        lcpImageUrl="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp"
+    // lcpImageUrl="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp"
     >
         <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
     </SEO>
