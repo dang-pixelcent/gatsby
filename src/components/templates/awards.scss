@@ -91,9 +91,14 @@
 
 
      @media (max-width: 600px) {
-         .awards-list .item .gatsby-image-wrapper {
-             width: calc(100vw - 150px);
-             /* 32px là tổng padding/margin bạn muốn trừ */
-             max-width: 100vw;
-         }
+        //  .awards-list .item .gatsby-image-wrapper {
+        //      width: calc(100vw - 150px);
+        //      /* 32px là tổng padding/margin bạn muốn trừ */
+        //      max-width: 100vw;
+        //  }
+        //  .awards-list .item img {
+        //      width: calc(100vw - 150px);
+        //      /* 32px là tổng padding/margin bạn muốn trừ */
+        //      max-width: 100vw;
+        //  }
      }
