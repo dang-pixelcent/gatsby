@@ -1,3 +1,9 @@
 .img-badge.gatsby-image-wrapper {
     position: absolute !important;
 }
+
+@media screen and (max-width: 768px) {
+    .img-badge.gatsby-image-wrapper {
+        position: relative !important;
+    }
+}
