@@ -55,7 +55,7 @@ const Footer = () => {
               <div className="site-footer-primary-section-2 site-footer-section site-footer-section-2">
                 <aside className="footer-widget-area widget-area site-footer-focus-item footer-widget-area-inner" data-section="sidebar-widgets-footer-widget-3" aria-label="Footer Widget 3">
                   <section id="text-5" className="widget widget_text">
-                    <h2 className="widget-title">Working Hours</h2>
+                    <div className="widget-title">Working Hours</div>
                     <div className="textwidget"><div className="schedule">
                       <div className="item">
                         <div className="day">Monday to Friday</div>
@@ -65,7 +65,7 @@ const Footer = () => {
                     </div>
                   </section>
                   <section id="text-6" className="widget widget_text">
-                    <h2 className="widget-title">Connect with Us</h2>
+                    <div className="widget-title">Connect with Us</div>
                     <div className="textwidget">
                       <div className="ast-flex socials">
                         <a className="fb" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.facebook} target="_blank" rel="noopener noreferrer">
@@ -91,7 +91,7 @@ const Footer = () => {
               <div className="site-footer-primary-section-3 site-footer-section site-footer-section-3">
                 <aside className="footer-widget-area widget-area site-footer-focus-item footer-widget-area-inner" data-section="sidebar-widgets-footer-widget-4" aria-label="Footer Widget 4">
                   <section id="text-7" className="widget widget_text">
-                    <h2 className="widget-title">Find Us</h2>
+                    <div className="widget-title">Find Us</div>
                     <div className="textwidget"><div className="footer-address">
                       <a className="text-underline" href="#" target="_blank" rel="noopener">1470 Biscayne Blvd, Miami, FL 33132
                       </a>
