@@ -1,6 +1,4 @@
 const path = require(`path`)
-const { createHttpLink } = require(`gatsby-source-graphql`)
-const { RetryLink } = require(`@apollo/client/link/retry`)
 
 //nơi lấy dữ liệu từ GraphQL
 const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL
@@ -97,6 +95,9 @@ module.exports = {
         // BỔ SUNG CÁC TÙY CHỌN RETRY VÀ RATE LIMITING Ở ĐÂY
         // refetchInterval: 60,
         createLink: (pluginOptions) => {
+          const { createHttpLink } = require(`@apollo/client`)
+          const { RetryLink } = require(`@apollo/client/link/retry`)
+
           const httpLink = createHttpLink({
             uri: pluginOptions.url,
             headers: {
