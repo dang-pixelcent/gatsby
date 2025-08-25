@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "author": "agencysite",
   "dependencies": {
-    "@apollo/client": "^3.13.1",
+    "@apollo/client": "^3.14.0",
     "@fancyapps/ui": "^5.0.36",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",

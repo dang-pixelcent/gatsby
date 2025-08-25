@@ -15,13 +15,14 @@ module.exports = {
     // Có thể tăng tốc quá trình lấy dữ liệu trên các máy có nhiều CPU.
     PARALLEL_SOURCING: true,
 
-    //     DEV_SSR: true,
-//     QUERY_ON_DEMAND: true,
-//     LAZY_IMAGES: true,
-//     PRESERVE_WEBPACK_CACHE: true,
-//     PRESERVE_FILE_DOWNLOAD_CACHE: true,
-//     PARALLEL_SOURCING: true,
-//     FAST_DEV: true,
+    // Tăng tốc độ SSR trong quá trình phát triển
+    // DEV_SSR: true,
+    // QUERY_ON_DEMAND: true,
+    // LAZY_IMAGES: true,
+    // PRESERVE_WEBPACK_CACHE: true,
+    // PRESERVE_FILE_DOWNLOAD_CACHE: true,
+    // // PARALLEL_SOURCING: true,
+    // FAST_DEV: true,
   },
   plugins: [
     {
@@ -91,6 +92,41 @@ module.exports = {
         url: WPGRAPHQL_URL,
         fieldName: `cms`,
         typeName: `GraphCMS`,
+        // BỔ SUNG CÁC TÙY CHỌN RETRY VÀ RATE LIMITING Ở ĐÂY
+        // refetchInterval: 60,
+        createLink: (pluginOptions) => {
+          const { createHttpLink } = require(`@apollo/client`)
+          const { RetryLink } = require(`@apollo/client/link/retry`)
+
+          const httpLink = createHttpLink({
+            uri: pluginOptions.url,
+            headers: {
+              // Nếu WordPress cần Authorization, hãy thêm vào đây
+              // 'Authorization': `Bearer ${process.env.WP_ACCESS_TOKEN}`,
+            },
+            fetchOptions: {
+              timeout: 60000, // Tăng timeout lên 60 giây
+            },
+          })
+
+          const retryLink = new RetryLink({
+            attempts: (count, operation, error) => {
+              // Retry tối đa 5 lần cho các lỗi 429
+              if (error && error.statusCode === 429 && count <= 5) {
+                console.log(`Retry attempt #${count} for ${operation.operationName} due to 429`)
+                // Tính toán thời gian chờ tăng dần (exponential backoff)
+                const delay = Math.pow(2, count) * 1000
+                setTimeout(() => true, delay)
+                return true
+              }
+              // Không retry cho các lỗi khác
+              return false
+            },
+          })
+
+          // Kết hợp retryLink và httpLink
+          return retryLink.concat(httpLink)
+        },
       }
     },
     // {

@@ -23,7 +23,7 @@ if (!fs.existsSync(CACHE_DIR)) {
   fs.mkdirSync(CACHE_DIR, { recursive: true })
 }
 
-async function fetchSeoData(url, retries = 3) {
+async function fetchSeoData(url, retries = 5) {
   for (let i = 0; i < retries; i++) {
     try {
       console.log(`${colors.blue}Fetching SEO data for ${url} (attempt ${i + 1}/${retries})${colors.reset}`)
@@ -50,12 +50,16 @@ async function fetchSeoData(url, retries = 3) {
       }
       return result
     } catch (error) {
-      console.error(`${colors.red}✗ Error fetching SEO data for ${url} (attempt ${i + 1}): ${error.message}${colors.reset}`)
+      // Kiểm tra lỗi 429
+      const is429 = error.response && error.response.status === 429;
+      let delay = is429 ? 1000 * Math.pow(2, i) : 500 * (i + 1); // tăng dần nếu 429
+      console.error(`${colors.red}✗ Error fetching SEO data for ${url} (attempt ${i + 1}): ${error.message}${colors.reset}`);
       if (i === retries - 1) {
-        console.error(`${colors.red}Failed to fetch SEO data for ${url} after ${retries} attempts${colors.reset}`)
-        return null
+        console.error(`${colors.red}Failed to fetch SEO data for ${url} after ${retries} attempts${colors.reset}`);
+        return null;
       }
-      await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)))
+      console.warn(`${colors.yellow}Delaying ${delay}ms before retry${colors.reset}`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
 }

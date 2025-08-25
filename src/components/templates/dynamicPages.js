@@ -55,7 +55,7 @@ const Home = ({ pageContext }) => {
       const embedCode = placeholder.dataset.embedCode;
       if (embedCode) {
         const placeholderTop = placeholder.offsetTop;
-        const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '400px' : '100px';
+        const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '500px' : '200px';
 
         ReactDOM.render(
           <LazyEmbed

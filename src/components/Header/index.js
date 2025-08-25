@@ -422,7 +422,22 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                       </li>
                                     </ul>
                                   </li>
-                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-3-1" />
+                                  <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-3-1" >
+                                    <ul className="mega-sub-menu">
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-15">
+                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-4.svg`} className="image wp-image-244 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjkwOjM1MQ==-1" src={`/services/improvement-4.svg`} /></li>
+                                      <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-863" id="mega-menu-item-863">
+                                        <Link className="mega-menu-link" to={`/service/ai-search-optimization`}>
+                                          AI Search Optimization
+                                        </Link>
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-14" id="mega-menu-item-text-14">
+                                        <div className="textwidget">
+                                          <p></p>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </li>
                                 </ul>
                               </li>
                             </ul>
@@ -786,6 +801,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <span className="menu-text">Google Paid Advertising</span>
                               </Link>
                             </li>
+                            <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-863">
+                              <Link className="menu-link" to={`/service/ai-search-optimization`}>
+                                <span className="ast-icon icon-arrow">
+                                  <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
+                                    <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
+                                  </svg>
+                                </span>
+                                <span className="menu-text">AI Search Optimization</span>
+                              </Link>
+                            </li>
                           </ul>
                         </li>
                         <li className="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-1641">
@@ -883,16 +908,6 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                 <span className="menu-text">Multi-Location Clinic Marketing</span>
                               </Link>
                             </li>
-                            <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-3343">
-                              <Link className="menu-link" to={`/service/ai-search-optimization`}>
-                                <span className="ast-icon icon-arrow">
-                                  <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
-                                    <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
-                                  </svg>
-                                </span>
-                                <span className="menu-text">AI Search Optimization</span>
-                              </Link>
-                            </li>
                             <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-3429">
                               <Link className="menu-link" to={`/service/franchise-marketing`}>
                                 <span className="ast-icon icon-arrow">
@@ -901,6 +916,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   </svg>
                                 </span>
                                 <span className="menu-text">Franchise Marketing</span>
+                              </Link>
+                            </li>
+                            <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-3343">
+                              <Link className="menu-link" to={`/service/legitscript-certification`}>
+                                <span className="ast-icon icon-arrow">
+                                  <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
+                                    <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z" />
+                                  </svg>
+                                </span>
+                                <span className="menu-text">LegitScript Certification</span>
                               </Link>
                             </li>
                           </ul>
