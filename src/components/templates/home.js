@@ -39,7 +39,7 @@ const Home = () => {
                           localFile {
                             childImageSharp {
                               gatsbyImageData(
-                                quality: 90
+                                quality: 60
                                 formats: [AUTO, WEBP, AVIF]
                                 placeholder: BLURRED
                               )

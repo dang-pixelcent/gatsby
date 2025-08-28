@@ -135,6 +135,7 @@ const HomeBanner = () => {
             alt="Wellness Clinic Marketing Hero Banner"
             className="banner-bg"
             loading="eager"
+            fetchPriority="high"
             style={{
               position: "absolute",
               top: 0,
@@ -234,6 +235,7 @@ const HomeBanner = () => {
                 image={boxMobileImage}
                 alt="Mobile Box"
                 loading="eager"
+                sizes="(max-width: 412px) 303px, 303px"
               />
             )}
             {/* <img alt="Mobile Box" decoding="async" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile-png.webp" sizes="(max-width: 412px) 303px, " data-fluid-image="1" srcset="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile-303w-1x-png.webp 303w, https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-mobile-303w-2x-png.webp 606w, "></img> */}

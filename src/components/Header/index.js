@@ -2,6 +2,7 @@ import * as React from "react"
 import "./styles.scss"
 import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
+import { StaticImage } from "gatsby-plugin-image"
 import { useLocation } from "@reach/router"
 import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
 import iconSexualHealth from "../../assets/expertise/icon-sexual-health.svg" // Thêm dòng này
@@ -274,8 +275,18 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                     <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
-                          {/* <img width={250} height={72} src={content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl} className="custom-logo" alt="MD Marketing Agency" decoding="async" srcSet={`${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-250x72.png 250w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-300x87.png 300w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head-768x222.png 768w, ${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png 1038w`} sizes="(max-width: 250px) 100vw, 250px" /> */}
-                          <img width={250} height={72} src={`/logo/footer-logo.png`} className="custom-logo" alt="MD Marketing Agency" decoding="async" srcSet={`/logo/logo-head-250x72.png 250w, /logo/logo-head-300x87.png 300w, /logo/logo-head-1024x296.png 1024w, /logo/logo-head-768x222.png 768w, /logo/logo-head.png 1038w`} sizes="(max-width: 250px) 100vw, 250px" />
+                          <StaticImage
+                            quality={90}
+                            src="../../assets/logo/logo-head.png"
+                            alt="MD Marketing Agency"
+                            width={250}
+                            height={72}
+                            placeholder="none"
+                            loading="eager" // LCP
+                            formats={["auto", "webp", "avif"]}
+                            className="custom-logo"
+                            sizes="(max-width: 250px) 100vw, 250px"
+                          />
                         </Link>
                       </span>
                     </div>
