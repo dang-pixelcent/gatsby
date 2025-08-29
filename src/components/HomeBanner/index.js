@@ -46,7 +46,7 @@ const HomeBanner = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 60
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
@@ -63,7 +63,7 @@ const HomeBanner = () => {
                             gatsbyImageData(
                               width: 303
                               height: 216
-                              quality: 90
+                              quality: 60
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
