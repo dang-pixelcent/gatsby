@@ -277,7 +277,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                             formats={["auto", "webp", "avif"]}
                             className="custom-logo"
                             sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 250px" // Thêm dòng này
-                            quality={70}
+                            quality={50}
                           />
                         </Link>
                       </span>

@@ -46,7 +46,7 @@ const HomeBanner = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 60
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
@@ -63,7 +63,7 @@ const HomeBanner = () => {
                             gatsbyImageData(
                               width: 303
                               height: 216
-                              quality: 90
+                              quality: 60
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
@@ -223,6 +223,7 @@ const HomeBanner = () => {
                 image={boxDesktopImage}
                 alt="Desktop Box"
                 loading="eager"
+                fetchPriority="high"
                 sizes="(max-width: 600px) 100vw, 518px"
               />
             )}
@@ -238,6 +239,7 @@ const HomeBanner = () => {
                 image={boxMobileImage}
                 alt="Mobile Box"
                 loading="eager"
+                fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"
               />
             )}
