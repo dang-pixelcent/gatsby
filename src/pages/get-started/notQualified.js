@@ -6,7 +6,7 @@ import { SEO } from '@components/SEO';
 import '@styles/tailwind-scoped.scss';
 import { useQuizGuard } from '@components/Quiz/useQuizGuard'; // Import hook
 import { useQuizData } from '@components/Quiz/data/useQuizData';
-import ChatWidget from "@components/ChatWidget"
+// import ChatWidget from "@components/ChatWidget"
 
 // flag Kiểm soát truy cập page
 const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";

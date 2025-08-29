@@ -221,6 +221,7 @@ const HomeBanner = () => {
                 image={boxDesktopImage}
                 alt="Desktop Box"
                 loading="eager"
+                sizes="(max-width: 600px) 100vw, 518px"
               />
             )}
             {/* <img alt="Desktop Box" decoding="async" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop-png.webp" sizes="(max-width: 1366px) 524px, " data-fluid-image="1" srcset="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop-524w-1x-png.webp 524w, https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/hero-orange-icons-desktop-524w-2x-png.webp 1048w, "></img> */}

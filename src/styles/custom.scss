@@ -452,3 +452,7 @@
 .gallery-slider .slick-next {
     right: 0px;
 }
+
+.slick-dots li button:before {
+    width: 0px !important;
+}

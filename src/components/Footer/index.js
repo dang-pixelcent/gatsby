@@ -1,7 +1,7 @@
 import * as React from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
-// import "./styles.scss"
+import "./styles.scss"
 
 const Footer = () => {
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
@@ -29,7 +29,22 @@ const Footer = () => {
   return (
     <>
       <footer className="site-footer" id="colophon" itemType="https://schema.org/WPFooter" itemScope="itemscope" itemID="#colophon">
-        <div className="site-primary-footer-wrap ast-builder-grid-row-container site-footer-focus-item ast-builder-grid-row-3-equal ast-builder-grid-row-tablet-3-equal ast-builder-grid-row-mobile-full ast-footer-row-stack ast-footer-row-tablet-stack ast-footer-row-mobile-stack" data-section="section-primary-footer-builder">
+        <div className="site-primary-footer-wrap ast-builder-grid-row-container site-footer-focus-item ast-builder-grid-row-3-equal ast-builder-grid-row-tablet-3-equal ast-builder-grid-row-mobile-full ast-footer-row-stack ast-footer-row-tablet-stack ast-footer-row-mobile-stack" data-section="section-primary-footer-builder" style={{ position: "relative" }}>
+          <StaticImage
+            src="../../assets/img/bg-footer-2.jpg"
+            alt="Footer Background"
+            layout="fullWidth"
+            placeholder="blurred"
+            loading="lazy"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: -1,
+            }}
+          />
           <div className="ast-builder-grid-row-container-inner">
             <div className="ast-builder-footer-grid-columns site-primary-footer-inner-wrap ast-builder-grid-row">
               <div className="site-footer-primary-section-1 site-footer-section site-footer-section-1">
@@ -43,9 +58,8 @@ const Footer = () => {
                       placeholder="blurred"
                       loading="lazy"
                       formats={["auto", "webp", "avif"]}
-                      className="image wp-image-1952 attachment-medium size-medium"
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      quality={100}
+                      className="image wp-image-1952 attachment-medium size-medium footer-logo"
+                      quality={80}
                     />
                   </section>
                   <section id="text-3" className="widget widget_text">
@@ -65,7 +79,7 @@ const Footer = () => {
                           placeholder="none"
                           loading="lazy"
                           className="alignnone size-full wp-image-38"
-                          quality={100}
+                          quality={90}
                         />
                       </div>
                     </div>
@@ -96,7 +110,7 @@ const Footer = () => {
                             height={32}
                             placeholder="none"
                             loading="lazy"
-                            quality={100}
+                            quality={90}
                           />
                         </a>
                         <a className="youtube" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.youtube} target="_blank" rel="noopener noreferrer">
@@ -107,7 +121,7 @@ const Footer = () => {
                             height={32}
                             placeholder="none"
                             loading="lazy"
-                            quality={100}
+                            quality={90}
                           />
                         </a>
                         <a className="twitter" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.twitter} target="_blank" rel="noopener noreferrer">
@@ -118,7 +132,7 @@ const Footer = () => {
                             height={32}
                             placeholder="none"
                             loading="lazy"
-                            quality={100}
+                            quality={90}
                           />
                         </a>
                         <a className="instagram" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.instagram} target="_blank" rel="noopener noreferrer">
@@ -129,7 +143,7 @@ const Footer = () => {
                             height={32}
                             placeholder="none"
                             loading="lazy"
-                            quality={100}
+                            quality={90}
                           />
                         </a>
                         <a className="linkedin" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.linkedin} target="_blank" rel="noopener noreferrer">
@@ -140,7 +154,7 @@ const Footer = () => {
                             height={32}
                             placeholder="none"
                             loading="lazy"
-                            quality={100}
+                            quality={90}
                           />
                         </a>
                       </div>
@@ -170,7 +184,7 @@ const Footer = () => {
                           height={60}
                           placeholder="none"
                           loading="lazy"
-                          quality={100}
+                          quality={90}
                         />
                       </div>
                     </div>

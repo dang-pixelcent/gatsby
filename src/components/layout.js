@@ -12,7 +12,7 @@ import React, { useState, useEffect } from "react"
 import Header from './Header'
 import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
-import ChatWidget from "./ChatWidget"
+// import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import { Script } from "gatsby"
 
@@ -109,15 +109,17 @@ const DefaultLayout = ({ children }) => {
 
       {/* Global AOS Script */}
       <Script
-        src="/js/aos.js"
+        src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"
         strategy="idle"
         onLoad={() => {
           if (window.AOS) {
-            window.AOS.init({
-              offset: 150,
-            });
+            window.AOS.init({ offset: 150 });
           }
         }}
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
       />
     </div>
   )

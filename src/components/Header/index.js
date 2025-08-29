@@ -4,14 +4,6 @@ import { Link } from "gatsby"
 import { graphql, useStaticQuery } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import { useLocation } from "@reach/router"
-import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
-import iconSexualHealth from "../../assets/expertise/icon-sexual-health.svg" // Thêm dòng này
-import iconMultiLoc from "../../assets/expertise/icon-multi-loc.svg" // Thêm dòng này
-import iconMedspa from "../../assets/expertise/icon-medspa.svg" // Thêm dòng này
-import iconHormoneOpt from "../../assets/expertise/icon-hormone-opt.svg" // Thêm dòng này
-import iconMedicalWellness from "../../assets/expertise/icon-medical-wellness.svg" // Thêm dòng này
-import iconMenHealth from "../../assets/expertise/icon-men-health.svg" // Thêm dòng này
-import iconFranchise from "../../assets/expertise/icon-franchise.svg" // Thêm dòng này
 // import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
 
 
@@ -276,7 +268,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
                           <StaticImage
-                            quality={90}
+                            quality={70}
                             src="../../assets/logo/logo-head.png"
                             alt="MD Marketing Agency"
                             width={250}
@@ -312,7 +304,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-0-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-8" id="mega-menu-item-media_image-8">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-1.svg`} className="image wp-image-238 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjUxOjM0OQ==-1" src={`/services/improvement-1.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-1.svg"
+                                          alt="Hormone Optimization"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-238 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-857" id="mega-menu-item-857">
                                         <Link className="mega-menu-link" to={`/service/website-development`}>
                                           Website Development & Design
@@ -328,7 +330,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-0-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-9" id="mega-menu-item-media_image-9">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-5.svg`} className="image wp-image-239 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjU2OjM0OQ==-1" src={`/services/improvement-5.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-5.svg"
+                                          alt="Improvement 5"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-239 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-858" id="mega-menu-item-858">
                                         <Link className="mega-menu-link" to={`/service/facebook-advertising`}>
                                           Meta Advertising (Facebook & Instagram)
@@ -348,7 +360,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-1-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-11" id="mega-menu-item-media_image-11">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-2.svg`} className="image wp-image-240 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY0OjM1MQ==-1" src={`/services/improvement-2.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-2.svg"
+                                          alt="Improvement 2"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-240 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-859" id="mega-menu-item-859">
                                         <Link className="mega-menu-link" to={`/service/search-engine-optimization`}>
                                           Search Engine Marketing
@@ -364,7 +386,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-1-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-12" id="mega-menu-item-media_image-12">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-6.svg`} className="image wp-image-241 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjY5OjM1MQ==-1" src={`/services/improvement-6.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-6.svg"
+                                          alt="Improvement 6"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-241 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-860" id="mega-menu-item-860">
                                         <Link className="mega-menu-link" to={`/service/lead-management`}>
                                           Lead Management (CRM)
@@ -384,7 +416,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-2-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-13" id="mega-menu-item-media_image-13">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-3.svg`} className="image wp-image-242 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="Mjc3OjM1MQ==-1" src={`/services/improvement-3.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-3.svg"
+                                          alt="Improvement 3"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-242 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-861" id="mega-menu-item-861">
                                         <Link className="mega-menu-link" to={`/service/google-maps-marketing`}>
                                           Google Maps Marketing
@@ -400,7 +442,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-2-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-16" id="mega-menu-item-media_image-16">
-                                        <img width={40} height={40} alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/icon-reputation-management.png`} className="image wp-image-864 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjgyOjM4Nw==-1" src={`/services/icon-reputation-management.png`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/icon-reputation-management.png"
+                                          alt="Reputation Management"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-864 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-862" id="mega-menu-item-862">
                                         <Link className="mega-menu-link" to={`/service/reputation-management`}>
                                           Reputation Management
@@ -420,7 +472,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-3-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-15">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-4.svg`} className="image wp-image-244 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjkwOjM1MQ==-1" src={`/services/improvement-4.svg`} /></li>
+                                        <StaticImage
+                                          src="../../assets/images/services/improvement-4.svg"
+                                          alt="Improvement 4"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-244 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-863" id="mega-menu-item-863">
                                         <Link className="mega-menu-link" to={`/service/google-advertising`}>
                                           Google Paid Advertising
@@ -435,8 +497,18 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--span": "6" }} id="mega-menu-31-3-1" >
                                     <ul className="mega-sub-menu">
-                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-15">
-                                        <img alt style={{ maxWidth: "100%", "height": "auto" }} nitro-lazy-src={`/services/improvement-4.svg`} className="image wp-image-244 attachment-full size-full lazyloaded" decoding="async" nitro-lazy-empty="true" id="MjkwOjM1MQ==-1" src={`/services/improvement-4.svg`} /></li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-15" id="mega-menu-item-media_image-17">
+                                        <StaticImage
+                                          src="../../assets/images/services/icon-ai.svg"
+                                          alt="AI Icon"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4048 attachment-full size-full"
+                                          quality={90}
+                                        />
+                                      </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-863" id="mega-menu-item-863">
                                         <Link className="mega-menu-link" to={`/service/ai-search-optimization`}>
                                           AI Search Optimization
@@ -461,7 +533,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-0-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-25" id="mega-menu-item-media_image-25">
-                                        <img decoding="async" src={iconmedicalweightloss} className="image wp-image-4050 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-medical-weight-loss.svg"
+                                          alt="Medical Weight Loss"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4050 attachment-full size-full"
+                                          quality={90}
+                                        />
                                         {/* <img decoding="async" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/icon-medical-weight-loss.svg?hash=15c1346527bb82e468466739f2c23ab4" className="image wp-image-4050 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} /> */}
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1644" id="mega-menu-item-1644">
@@ -472,7 +553,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-0-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-24" id="mega-menu-item-media_image-24">
-                                        <img decoding="async" src={iconHormoneOpt} className="image wp-image-4052 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-hormone-opt.svg"
+                                          alt="Hormone Optimization"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4052 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1643" id="mega-menu-item-1643">
                                         <Link className="mega-menu-link" to="/service/hormone-clinic-marketing/">Hormone Optimization Marketing</Link>
@@ -486,7 +576,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-1-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-23" id="mega-menu-item-media_image-23">
-                                        <img decoding="async" src={iconSexualHealth} className="image wp-image-4054 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-sexual-health.svg"
+                                          alt="Sexual Health"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4054 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1645" id="mega-menu-item-1645">
                                         <Link className="mega-menu-link" to="/service/sexual-health-marketing/">Sexual Health Marketing</Link>
@@ -496,7 +595,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-1-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-22" id="mega-menu-item-media_image-22">
-                                        <img decoding="async" src={iconMedicalWellness} className="image wp-image-4056 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-medical-wellness.svg"
+                                          alt="Medical Wellness"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4056 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2031" id="mega-menu-item-2031">
                                         <Link className="mega-menu-link" to="/service/wellness-medical-clinic-marketing/">Medical Wellness Clinic Marketing</Link>
@@ -510,7 +618,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-2-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-21" id="mega-menu-item-media_image-21">
-                                        <img decoding="async" src={iconMultiLoc} className="image wp-image-4058 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-multi-loc.svg"
+                                          alt="Multi-Location"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4058 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2617" id="mega-menu-item-2617">
                                         <Link className="mega-menu-link" to="/service/multi-location-marketing/">Multi-Location Clinic Marketing</Link>
@@ -520,7 +637,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-2-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-20" id="mega-menu-item-media_image-20">
-                                        <img decoding="async" src={iconMenHealth} className="image wp-image-4060 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-men-health.svg"
+                                          alt="Men's Health"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4060 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2032" id="mega-menu-item-2032">
                                         <Link className="mega-menu-link" to="/service/mens-health-clinic-marketing/">Men’s Health Clinic Marketing</Link>
@@ -534,7 +660,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-3-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-19" id="mega-menu-item-media_image-19">
-                                        <img decoding="async" src={iconMedspa} className="image wp-image-4062 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-medspa.svg"
+                                          alt="Medspa"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4062 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2033" id="mega-menu-item-2033">
                                         <Link className="mega-menu-link" to="/service/med-spa-marketing/">Medspa Marketing</Link>
@@ -544,7 +679,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-3-1">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-18" id="mega-menu-item-media_image-18">
-                                        <img decoding="async" src={iconFranchise} className="image wp-image-4064 attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} />
+                                        <StaticImage
+                                          src="../../assets/expertise/icon-franchise.svg"
+                                          alt="Franchise"
+                                          width={40}
+                                          height={40}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4064 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-3429" id="mega-menu-item-3429">
                                         <Link className="mega-menu-link" to="/service/franchise-marketing/">Franchise Marketing</Link>
@@ -558,7 +702,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6", 'paddingLeft': '0px' }} id="mega-menu-1641-4-0">
                                     <ul className="mega-sub-menu">
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_media_image mega-menu-item-media_image-26" id="mega-menu-item-media_image-26">
-                                        <img decoding="async" width="100" height="100" src="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-png.webp" className="image wp-image-4090  attachment-full size-full" alt="" style={{ maxWidth: '100%', height: 'auto' }} sizes="(max-width: 1366px) 28px, " data-fluid-image="1" srcSet="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-28w-1x-png.webp 28w, https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2025/07/legitscript-logo-2-28w-2x-png.webp 56w" />
+                                        <StaticImage
+                                          src="../../assets/expertise/legitscript-logo-2.png"
+                                          alt="LegitScript Logo"
+                                          width={100}
+                                          height={100}
+                                          loading="lazy"
+                                          placeholder="none"
+                                          className="image wp-image-4090 attachment-full size-full"
+                                          quality={90}
+                                        />
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-4085" id="mega-menu-item-4085">
                                         <Link className="mega-menu-link" to="/service/legitscript-certification/">LegitScript Certification</Link>
@@ -672,15 +825,17 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                     <span className="site-logo-img">
                       <Link to="/" className="custom-logo-link" rel="home">
                         {/* Sử dụng dữ liệu động từ GraphQL */}
-                        <img
+                        <StaticImage
+                          src="../../assets/logo/logo-head.png"
+                          alt={logoAlt}
                           width={250}
                           height={72}
-                          src={`/logo/footer-logo.png`}
+                          placeholder="none"
+                          loading="eager"
+                          formats={["auto", "webp", "avif"]}
                           className="custom-logo"
-                          alt={logoAlt}
-                          decoding="async"
-                          srcSet={`/logo/logo-head-250x72.png 250w, /logo/logo-head-300x87.png 300w, /logo/logo-head-1024x296.png 1024w, /logo/logo-head-768x222.png 768w, /logo/logo-head.png 1038w`}
-                        // sizes="(max-width: 250px) 100vw, 250px"
+                          sizes="(max-width: 250px) 100vw, 250px"
+                          quality={70}
                         />
                       </Link>
                     </span>
