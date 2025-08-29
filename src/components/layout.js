@@ -1,36 +1,32 @@
-import React, { useState, useEffect, useCallback, useRef } from "react"
+import React, { useState, useEffect } from "react"
+// import { Script } from "gatsby"
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+// import "../styles/main.min.scss"
+// // import "../styles/lightbox.min.css"
+// import "../styles/slick.css"
+// import "../styles/main.scss"
+// import "../styles/aos.css"
+// import "../styles/customStyle.scss"
+// import "../styles/dashicons.min.css"
 import Header from './Header'
 import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
+import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import { Script } from "gatsby"
 
-// Simple debounce implementation
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
 const DefaultLayout = ({ children }) => {
-  const location = useLocation();
-  const [bodyClass, setBodyClass] = useState("");
+  const location = useLocation(); // Lấy thông tin về trang hiện tại
+  const [bodyClass, setBodyClass] = useState(""); // Dùng state để lưu trữ class
+
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const lastWidthRef = useRef(0);
 
-  const updateBodyClass = useCallback(() => {
-    const currentWidth = window.innerWidth;
-
-    // Only update if width changed significantly (5px threshold)
-    if (Math.abs(currentWidth - lastWidthRef.current) > 5) {
-      const isMobile = currentWidth <= 921;
-      const isHomePage = location.pathname === '/';
+  // bodyClass sẽ được cập nhật mỗi khi trang thay đổi hoặc kích thước cửa sổ thay đổi
+  useEffect(() => {
+    const updateBodyClass = () => {
+      const isMobile = window.innerWidth <= 921; // Ngưỡng breakpoint của bạn
+      const isHomePage = location.pathname === '/'; // Kiểm tra có phải trang chủ không
 
       let classes = [
         "wp-custom-logo",
@@ -56,6 +52,7 @@ const DefaultLayout = ({ children }) => {
       if (isMobile) {
         classes.push("ast-header-break-point");
         if (isMobileMenuOpen) {
+          // 2. Thêm class khi menu mở trên mobile
           classes.push("ast-main-header-nav-open");
         }
       } else {
@@ -64,48 +61,43 @@ const DefaultLayout = ({ children }) => {
 
       if (isHomePage) {
         classes.push("page-template-front-page");
+        // Thêm các class khác chỉ dành cho trang chủ
       }
 
       setBodyClass(classes.join(" "));
-      lastWidthRef.current = currentWidth;
-    }
-  }, [location.pathname, isMobileMenuOpen]);
+    };
 
-  useEffect(() => {
-    // Create debounced version
-    const debouncedUpdate = debounce(updateBodyClass, 100);
-
-    // Initial call
+    // Chạy lần đầu khi component được render
     updateBodyClass();
 
-    // Add resize event with debounce
-    window.addEventListener('resize', debouncedUpdate);
+    // Thêm sự kiện resize để cập nhật class khi thay đổi kích thước cửa sổ
+    window.addEventListener('resize', updateBodyClass);
 
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', debouncedUpdate);
-    };
-  }, [updateBodyClass]);
+    // Dọn dẹp sự kiện khi component unmount
+    return () => window.removeEventListener('resize', updateBodyClass);
 
+  }, [location.pathname, isMobileMenuOpen]); // Chạy lại hook này mỗi khi đường dẫn trang thay đổi
+
+
+  // Hook này sẽ theo dõi sự thay đổi của `bodyClass` và cập nhật DOM
   useEffect(() => {
-    // Use requestAnimationFrame to avoid forced reflow
-    const rafId = requestAnimationFrame(() => {
-      document.body.className = bodyClass;
-    });
+    // Gán trực tiếp chuỗi class vào thẻ body
+    // Thao tác này sẽ ghi đè lên tất cả các class cũ và áp dụng bộ class mới
+    document.body.className = bodyClass;
 
+    // Trả về một hàm cleanup (không bắt buộc nhưng là good practice)
+    // để xóa các class khi component unmount, đưa body về trạng thái sạch sẽ.
     return () => {
-      cancelAnimationFrame(rafId);
-      // Cleanup also in requestAnimationFrame
-      requestAnimationFrame(() => {
-        if (document.body.className === bodyClass) {
-          document.body.className = '';
-        }
-      });
+      document.body.className = '';
     };
-  }, [bodyClass]);
+  }, [bodyClass]); // Chỉ chạy lại effect này khi `bodyClass` thay đổi
+  // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
   return (
     <div>
+      {/* <Helmet>
+        <body className={bodyClass} />
+      </Helmet> */}
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
@@ -113,13 +105,17 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Footer />
       <ScrollTop />
+      <ChatWidget />
 
+      {/* Global AOS Script */}
       <Script
-        src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"
+        src="/js/aos.js"
         strategy="idle"
         onLoad={() => {
           if (window.AOS) {
-            window.AOS.init({ offset: 150 });
+            window.AOS.init({
+              offset: 150,
+            });
           }
         }}
       />
@@ -127,4 +123,4 @@ const DefaultLayout = ({ children }) => {
   )
 }
 
-export default DefaultLayout;
+export default DefaultLayout
