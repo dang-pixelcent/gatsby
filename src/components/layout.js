@@ -105,7 +105,7 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Footer />
       <ScrollTop />
-      <ChatWidget />
+      {/* <ChatWidget /> */}
 
       {/* Global AOS Script */}
       <Script
