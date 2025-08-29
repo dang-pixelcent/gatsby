@@ -1,5 +1,5 @@
 import wrapWithProvider from "./wrap-with-provider"
-
+import './src/styles/customFonts.scss';
 // Import Tailwind CSS trước
 // import './src/styles/tailwind.css';
 

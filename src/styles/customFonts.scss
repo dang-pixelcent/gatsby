@@ -1,0 +1,198 @@
+/* Custom style */
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Regular.eot');
+    src: local('Soleto'), local('Soleto-Regular'),
+        url('/fonts/Soleto-Regular.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Regular.woff2') format('woff2'),
+        url('/fonts/Soleto-Regular.woff') format('woff'),
+        url('/fonts/Soleto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Medium.eot');
+    src: local('Soleto Medium'), local('Soleto-Medium'),
+        url('/fonts/Soleto-Medium.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Medium.woff2') format('woff2'),
+        url('/fonts/Soleto-Medium.woff') format('woff'),
+        url('/fonts/Soleto-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto XBold';
+    src: url('/fonts/Soleto-XBold.eot');
+    src: local('Soleto XBold'), local('Soleto-XBold'),
+        url('/fonts/Soleto-XBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-XBold.woff2') format('woff2'),
+        url('/fonts/Soleto-XBold.woff') format('woff'),
+        url('/fonts/Soleto-XBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-ThinItalic.eot');
+    src: local('Soleto Thin Italic'), local('Soleto-ThinItalic'),
+        url('/fonts/Soleto-ThinItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-ThinItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-ThinItalic.woff') format('woff'),
+        url('/fonts/Soleto-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto XBold';
+    src: url('/fonts/Soleto-XBoldItalic.eot');
+    src: local('Soleto XBold Italic'), local('Soleto-XBoldItalic'),
+        url('/fonts/Soleto-XBoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-XBoldItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-XBoldItalic.woff') format('woff'),
+        url('/fonts/Soleto-XBoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Bold.eot');
+    src: local('Soleto Bold'), local('Soleto-Bold'),
+        url('/fonts/Soleto-Bold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Bold.woff2') format('woff2'),
+        url('/fonts/Soleto-Bold.woff') format('woff'),
+        url('/fonts/Soleto-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Light.eot');
+    src: local('Soleto Light'), local('Soleto-Light'),
+        url('/fonts/Soleto-Light.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Light.woff2') format('woff2'),
+        url('/fonts/Soleto-Light.woff') format('woff'),
+        url('/fonts/Soleto-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-MediumItalic.eot');
+    src: local('Soleto Medium Italic'), local('Soleto-MediumItalic'),
+        url('/fonts/Soleto-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-MediumItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-MediumItalic.woff') format('woff'),
+        url('/fonts/Soleto-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Italic.eot');
+    src: local('Soleto Italic'), local('Soleto-Italic'),
+        url('/fonts/Soleto-Italic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Italic.woff2') format('woff2'),
+        url('/fonts/Soleto-Italic.woff') format('woff'),
+        url('/fonts/Soleto-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-BoldItalic.eot');
+    src: local('Soleto Bold Italic'), local('Soleto-BoldItalic'),
+        url('/fonts/Soleto-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-BoldItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-BoldItalic.woff') format('woff'),
+        url('/fonts/Soleto-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Black.eot');
+    src: local('Soleto Black'), local('Soleto-Black'),
+        url('/fonts/Soleto-Black.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Black.woff2') format('woff2'),
+        url('/fonts/Soleto-Black.woff') format('woff'),
+        url('/fonts/Soleto-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-BlackItalic.eot');
+    src: local('Soleto Black Italic'), local('Soleto-BlackItalic'),
+        url('/fonts/Soleto-BlackItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-BlackItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-BlackItalic.woff') format('woff'),
+        url('/fonts/Soleto-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-LightItalic.eot');
+    src: local('Soleto Light Italic'), local('Soleto-LightItalic'),
+        url('/fonts/Soleto-LightItalic.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-LightItalic.woff2') format('woff2'),
+        url('/fonts/Soleto-LightItalic.woff') format('woff'),
+        url('/fonts/Soleto-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Soleto';
+    src: url('/fonts/Soleto-Thin.eot');
+    src: local('Soleto Thin'), local('Soleto-Thin'),
+        url('/fonts/Soleto-Thin.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Soleto-Thin.woff2') format('woff2'),
+        url('/fonts/Soleto-Thin.woff') format('woff'),
+        url('/fonts/Soleto-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Minion";
+    src: url(/fonts/Minion-Condensed-Regular.otf) format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap
+}
+
+@font-face {
+    font-family: "Minion Bold";
+    src: url(/fonts/Minion-Bold-Condensed.otf) format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap
+}
