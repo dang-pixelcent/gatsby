@@ -268,16 +268,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
                           <StaticImage
-                            quality={70}
                             src="../../assets/logo/logo-head.png"
-                            alt="MD Marketing Agency"
+                            alt={logoAlt}
                             width={250}
                             height={72}
                             placeholder="none"
-                            loading="eager" // LCP
+                            loading="eager"
                             formats={["auto", "webp", "avif"]}
                             className="custom-logo"
-                            sizes="(max-width: 250px) 100vw, 250px"
+                            sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 250px" // Thêm dòng này
+                            quality={70}
                           />
                         </Link>
                       </span>

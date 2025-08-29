@@ -151,7 +151,12 @@ export const onRenderBody = ({
       type="font/woff2"
       crossOrigin="anonymous"
       key="soleto-xbold"
-    />
+    />,
+    <link rel="preload" href="/fonts/Soleto-XBoldItalic.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />,
+    <link rel="preload" href="/fonts/Soleto-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />,
+    <link rel="preload" href="/fonts/Soleto-Light.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />,
+    <link rel="preload" href="/fonts/Soleto-Italic.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />,
+    <link rel="preload" href="/fonts/Soleto-Black.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />,
   );
 
   if (scriptsForHeadString_fromHeadField) {
