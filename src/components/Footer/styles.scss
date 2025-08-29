@@ -1,0 +1,13 @@
+.footer-logo {
+  width: 300px;
+  height: 86px;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .footer-logo {
+    width: calc(100% - 30%); /* 2/3 của 300px */
+    height: auto;
+  }
+}

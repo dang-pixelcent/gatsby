@@ -39,7 +39,7 @@ const Home = () => {
                           localFile {
                             childImageSharp {
                               gatsbyImageData(
-                                quality: 60
+                                quality: 50
                                 formats: [AUTO, WEBP, AVIF]
                                 placeholder: BLURRED
                               )
@@ -61,7 +61,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                               layout: FULL_WIDTH
@@ -83,7 +83,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
@@ -108,7 +108,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                               layout: FULL_WIDTH
@@ -167,7 +167,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 70
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                               layout: FULL_WIDTH
@@ -189,7 +189,7 @@ const Home = () => {
                             localFile {
                                 childImageSharp {
                                     gatsbyImageData(
-                                    quality: 90
+                                    quality: 60
                                     formats: [AUTO, WEBP, AVIF]
                                     placeholder: BLURRED
                                     layout: FULL_WIDTH
@@ -210,7 +210,7 @@ const Home = () => {
                                         gatsbyImageData(       
                                         placeholder: BLURRED 
                                         formats: [AUTO, WEBP] 
-                                        quality: 100        
+                                        quality: 60      
                                         )
                                     }
                                 }
@@ -278,7 +278,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                               layout: FULL_WIDTH
@@ -313,7 +313,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                               layout: FULL_WIDTH
@@ -331,7 +331,7 @@ const Home = () => {
                             localFile {
                                 childImageSharp {
                                     gatsbyImageData(
-                                    quality: 90
+                                    quality: 80
                                     formats: [AUTO, WEBP, AVIF]
                                     placeholder: BLURRED
                                     )
@@ -353,7 +353,7 @@ const Home = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
-                              quality: 90
+                              quality: 80
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
                             )
@@ -423,6 +423,12 @@ const Home = () => {
         sourceUrl: giftBook?.image?.node?.sourceUrl,
         altText: giftBook?.image?.node?.altText || "Gift book image"
     };
+
+    const awardSizes = [
+        { width: 235, height: 469 },
+        { width: 313, height: 242 },
+        { width: 313, height: 242 },
+    ];
 
     // const flexibleContent = query.cms.pageBy.template?.homeContent?.flexibleContent || [];
 
@@ -536,8 +542,8 @@ const Home = () => {
         slidesToShow: 6,
         slidesToScroll: 1,
         arrows: true,
-        prevArrow: (<div className="slick-arrow slick-prev" aria-label="Previous experts"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.6625 18.4567L0 9.65669L8.8 0.856689L9.7625 1.81919L1.925 9.65669L9.625 17.3567L8.6625 18.4567Z" fill="#AAAAAA" /></svg></div>),
-        nextArrow: (<div className="slick-arrow slick-next" aria-label="Next experts"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.33726 18.4567L9.99976 9.65669L1.19976 0.856689L0.237257 1.81919L8.07476 9.65669L0.374756 17.3567L1.33726 18.4567Z" fill="#AAAAAA" /></svg></div>),
+        prevArrow: (<div className="slick-arrow slick-prev"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.6625 18.4567L0 9.65669L8.8 0.856689L9.7625 1.81919L1.925 9.65669L9.625 17.3567L8.6625 18.4567Z" fill="#AAAAAA" /></svg></div>),
+        nextArrow: (<div className="slick-arrow slick-next"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.33726 18.4567L9.99976 9.65669L1.19976 0.856689L0.237257 1.81919L8.07476 9.65669L0.374756 17.3567L1.33726 18.4567Z" fill="#AAAAAA" /></svg></div>),
         responsive: [{
             breakpoint: 1024,
             settings: {
@@ -618,6 +624,7 @@ const Home = () => {
                                                 alt={`Expert partner logo ${key + 1}`}
                                                 decoding="async"
                                                 style={{ maxWidth: "150px", height: "auto" }}
+                                                loading="lazy"
                                             />
                                         )}
                                     </a>
@@ -744,7 +751,7 @@ const Home = () => {
                                     practice?.item?.map((item, key) => (
                                         <div key={key} className="practice-item position-relative ast-flex justify-content-center">
                                             <div className="inner ast-flex flex-column">
-                                                <img src={item?.icon?.node?.sourceUrl} alt={item?.icon?.node?.altText} />
+                                                <img src={item?.icon?.node?.sourceUrl} alt={item?.icon?.node?.altText} loading="lazy" />
                                                 <div className="practice-content f-soleto color-0659A9">
                                                     <h3 className="h3-title f-soletoxbold color-0659A9">
                                                         {item.title}
@@ -838,7 +845,7 @@ const Home = () => {
                                         howWeCanHelp?.boxs?.map((item, key) => (
                                             <div key={key} item={item} className={`circle-box box-${key + 1}`}>
                                                 <figure data-aos="fade-down-right" data-aos-duration="1500" className="aos-init">
-                                                    <img decoding="async" className="animation-wiggle" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
+                                                    <img decoding="async" className="animation-wiggle" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} loading="lazy" />
                                                 </figure>
                                                 <h3 className="h3-title fs-26 f-soleto fw-800 color-000000 text-center">
                                                     {item.title}
@@ -904,15 +911,16 @@ const Home = () => {
                                             return null;
                                         }
 
+                                        const size = awardSizes[idx];
+
                                         // 3. Render component <GatsbyImage>
                                         return (
                                             <div className="item" key={idx}>
                                                 <GatsbyImage
                                                     image={imageData}
                                                     alt={awardNode?.altText || ""}
-                                                    sizes="(max-width: 412px) 352px, (max-width: 1366px) 323px"
-                                                    // style={{ maxWidth: "245px", width: "100vw", height: "auto" }}
-                                                    style={{ height: "auto" }}
+                                                    sizes={`(max-width: 600px) 100vw, ${size.width}px`}
+                                                    style={{ height: `auto` }}
                                                 />
                                             </div>
                                         );
@@ -968,7 +976,7 @@ const Home = () => {
                                                 testimonials?.testimonialContent?.box?.map((item, key) => (
                                                     <div className="box" key={key}>
                                                         <div className="testi-box-number ast-flex justify-content-center align-items-center">
-                                                            <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} />
+                                                            <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} loading="lazy" />
                                                             <span className="number f-soleto fw-800">{item.number}</span>
                                                         </div>
                                                         <span className="box-text f-soleto fw-700 text-center">
@@ -1035,7 +1043,7 @@ const Home = () => {
                                             <div className="ast-flex align-items-center">
                                                 <div className="box-img">
                                                     <figure className="mb-0">
-                                                        <img src={x?.icon?.node?.sourceUrl} alt={x?.icon?.node?.altText} />
+                                                        <img src={x?.icon?.node?.sourceUrl} alt={x?.icon?.node?.altText} loading="lazy" />
                                                     </figure>
                                                 </div>
                                                 <div className="desc f-soleto fw-800 text-white">
@@ -1135,6 +1143,7 @@ const Home = () => {
                                                                         src={item.sourceUrl}
                                                                         alt={item.altText}
                                                                         style={{ width: "100%", height: "auto" }}
+                                                                        loading="lazy"
                                                                     />
                                                                 )}
                                                             </figure>
@@ -1158,6 +1167,7 @@ const Home = () => {
                                                                         src={item.sourceUrl}
                                                                         alt={item.altText}
                                                                         style={{ width: "100%", height: "auto" }}
+                                                                        loading="lazy"
                                                                     />
                                                                 )}
                                                             </figure>
@@ -1199,6 +1209,7 @@ const Home = () => {
                                             alt={giftBookImage.altText}
                                             width={150}
                                             height={180}
+                                            loading="lazy"
                                         />
                                     )}
                                 </figure>
