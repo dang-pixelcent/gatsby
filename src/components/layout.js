@@ -12,7 +12,7 @@ import React, { useState, useEffect } from "react"
 import Header from './Header'
 import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
-import ChatWidget from "./ChatWidget"
+// import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import { Script } from "gatsby"
 

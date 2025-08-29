@@ -47,15 +47,15 @@ export const SEO = ({
             <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
             <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-            <link rel="preconnect" href="https://widgets.leadconnectorhq.com" />
-            <link rel="dns-prefetch" href="https://widgets.leadconnectorhq.com" />
+            {/* <link rel="preconnect" href="https://widgets.leadconnectorhq.com" />
+            <link rel="dns-prefetch" href="https://widgets.leadconnectorhq.com" /> */}
 
-            <link rel="preconnect" href="https://fonts.bunny.net" crossOrigin="true" />
-            <link rel="dns-prefetch" href="https://fonts.bunny.net" />
-
+            {/* <link rel="preconnect" href="https://fonts.bunny.net" crossOrigin="true" />
+            <link rel="dns-prefetch" href="https://fonts.bunny.net" /> */}
+{/* 
             <link rel="preconnect" href="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ" />
             
-            <link rel="dns-prefetch" href="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ" />
+            <link rel="dns-prefetch" href="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ" /> */}
 
             {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
 
