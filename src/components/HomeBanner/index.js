@@ -61,6 +61,8 @@ const HomeBanner = () => {
                         localFile {
                           childImageSharp {
                             gatsbyImageData(
+                              width: 303
+                              height: 216
                               quality: 90
                               formats: [AUTO, WEBP, AVIF]
                               placeholder: BLURRED
