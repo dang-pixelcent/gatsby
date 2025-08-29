@@ -127,6 +127,30 @@ export const onRenderBody = ({
       key="google-fonts"
       rel="stylesheet"
     // href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Anek+Devanagari:wght@100..800&family=Assistant:wght@200..800&display=swap"
+    />,
+    <link
+      rel="preload"
+      href="/fonts/Soleto-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossOrigin="anonymous"
+      key="soleto-regular"
+    />,
+    <link
+      rel="preload"
+      href="/fonts/Soleto-Medium.woff2"
+      as="font"
+      type="font/woff2"
+      crossOrigin="anonymous"
+      key="soleto-medium"
+    />,
+    <link
+      rel="preload"
+      href="/fonts/Soleto-XBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossOrigin="anonymous"
+      key="soleto-xbold"
     />
   );
 
