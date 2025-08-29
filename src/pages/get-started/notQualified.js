@@ -39,7 +39,7 @@ const NotQualifiedResultPage = () => {
     return (
         <div className="tailwind-scope">
             <QuizResult finalPageData={finalPageData} />
-            <ChatWidget />
+            {/* <ChatWidget /> */}
         </div>
     );
 };

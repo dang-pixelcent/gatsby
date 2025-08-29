@@ -179,8 +179,16 @@ async function createPaginatedBlogPages({ graphql, actions }) {
         `, { first: postsPerPage, after: endCursor });
 
     if (pageResult.errors) {
+      const error429 = pageResult.errors.find(
+        err => err.message && err.message.includes('429')
+      );
+      if (error429) {
+        const delay = 2000 * pageNumber; // tăng dần theo số lần thử
+        console.warn(`${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue; // thử lại vòng lặp này
+      }
       console.error(`GraphQL query for blog page ${pageNumber} failed`, pageResult.errors);
-      // Nếu lỗi, dừng vòng lặp
       hasNextPage = false;
       continue;
     }
@@ -321,6 +329,15 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
       });
 
       if (pageResult.errors) {
+        const error429 = pageResult.errors.find(
+          err => err.message && err.message.includes('429')
+        );
+        if (error429) {
+          const delay = 2000 * pageNumber; // tăng dần theo số lần thử
+          console.warn(`${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue; // thử lại vòng lặp này
+        }
         console.error(`GraphQL query for category ${category.name}, page ${pageNumber} failed`, pageResult.errors);
         hasNextPage = false;
         continue;

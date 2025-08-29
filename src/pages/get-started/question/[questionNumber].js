@@ -47,7 +47,7 @@ const HrtQuizQuestionPage = ({ params }) => {
             <div className="tailwind-scope">
                 {/* Truyền questionNumber vào component Quiz */}
                 <Quiz mode="full" questionNumber={questionNumber} />
-                <ChatWidget />
+                {/* <ChatWidget /> */}
             </div>
 
         </>
