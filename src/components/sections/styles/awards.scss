@@ -1,0 +1,104 @@
+     .sc-featured-awards {
+         padding: 96px 0px 172px;
+     }
+
+     .awards-list {
+         display: grid;
+         align-items: center;
+         gap: 40px;
+         grid-template-columns: 1.5fr 2fr 2fr;
+         justify-content: center;
+     }
+
+     .awards-list img {
+         object-fit: cover;
+     }
+
+     .featured-on {
+         margin-top: 60px;
+         padding-top: 60px;
+         border-top: 1px solid #D3D3D3;
+     }
+
+     .featured-on .list {
+         margin-top: 40px;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: center;
+         gap: 28px;
+     }
+
+     .featured-on .list .item {
+         flex: 0 0 100%;
+         max-width: calc((100% - 56px)/3);
+     }
+
+     .featured-on .list .item img {
+         height: 100%;
+     }
+
+     @media only screen and (max-width:922px) {
+         .sc-featured-awards {
+             padding: 60px 0px;
+         }
+
+         .awards-list {
+             gap: 24px;
+         }
+
+         .featured-on .list {
+             gap: 20px;
+         }
+
+         .featured-on .list .item {
+             max-width: calc((100% - 40px)/3);
+         }
+     }
+
+     @media only screen and (max-width:768px) {
+         .awards-list {
+             display: flex;
+             flex-wrap: wrap;
+             align-items: center;
+             justify-content: center;
+         }
+
+         .awards-list .item {
+             max-width: calc((100% - 24px)/2);
+         }
+
+         .featured-on {
+             margin-top: 48px;
+             padding-top: 48px;
+         }
+
+         .featured-on .list {
+             margin-top: 24px;
+         }
+
+         .featured-on .list .item {
+             max-width: calc((100% - 20px)/2);
+         }
+     }
+
+     @media only screen and (max-width:544px) {
+
+         .awards-list .item,
+         .featured-on .list .item {
+             max-width: 100%;
+         }
+     }
+
+
+     @media (max-width: 600px) {
+        //  .awards-list .item .gatsby-image-wrapper {
+        //      width: calc(100vw - 150px);
+        //      /* 32px là tổng padding/margin bạn muốn trừ */
+        //      max-width: 100vw;
+        //  }
+        //  .awards-list .item img {
+        //      width: calc(100vw - 150px);
+        //      /* 32px là tổng padding/margin bạn muốn trừ */
+        //      max-width: 100vw;
+        //  }
+     }
