@@ -73,11 +73,22 @@ const transformAndParseScripts = (htmlString, baseKey) => {
   }
 
   // Bước 1: Dùng Regex để tìm và thêm type="text/partytown" vào tất cả thẻ script.
-  // Cách này không phụ thuộc vào thư viện parse và rất an toàn.
-  const transformedHtml = htmlString.replace(/<script/g, '<script type="text/partytown"');
+  // Chỉ thêm type="text/partytown" vào các thẻ script có thuộc tính `src`
+  // Regex này sẽ tìm <script ... src="..." ...> và thêm type vào
+  // const transformedHtml = htmlString.replace(
+  //   /(<script[^>]*?src\s*=\s*["'][^"']+["'][^>]*?>)/g,
+  //   (match) => {
+  //     // Nếu thẻ script đã có type="text/partytown" rồi thì không làm gì cả
+  //     if (match.includes('type="text/partytown"')) {
+  //       return match;
+  //     }
+  //     // Thêm type vào thẻ script
+  //     return match.replace('<script', '<script type="text/partytown"');
+  //   }
+  // );
 
   // Bước 2: Gọi hàm parse ban đầu của bạn để chuyển HTML đã được biến đổi sang React.
-  return parseHtmlToReact(transformedHtml, baseKey);
+  return parseHtmlToReact(htmlString, baseKey);
 };
 
 

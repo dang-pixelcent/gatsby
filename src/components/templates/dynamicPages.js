@@ -21,6 +21,7 @@ import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptM
 import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
 import OldScheduleForm from '@components/Blocks/OldScheduleForm'; // Đảm bảo đường dẫn đúng
 // import { ScheduleForm } from '@components/Blocks/GetStarted';
+import SpecialScriptInjector from '@components/Tools/SpecialScriptInjector';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
@@ -38,7 +39,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], uri } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -195,6 +196,9 @@ const Home = ({ pageContext }) => {
         {/* <ComponentPortal selector="#sdformthree">
           <ScheduleForm />
         </ComponentPortal> */}
+
+        {/* Component này sẽ tự động xử lý tất cả các script đặc biệt được tìm thấy */}
+        <SpecialScriptInjector scripts={specialScripts} />
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (
