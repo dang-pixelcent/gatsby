@@ -25,25 +25,38 @@ module.exports = {
     // FAST_DEV: true,
   },
   plugins: [
-    {
-      resolve: `gatsby-plugin-partytown`,
-      options: {
-        // Chuyển tiếp các lệnh gọi này đến luồng Partytown
-        forward: [`dataLayer.push`, `fbq`],
-        // proxyUrl: `/__partytown-proxy`,
+    // {
+    //   resolve: `gatsby-plugin-partytown`,
+    //   options: {
+    //     // Chuyển tiếp các lệnh gọi này đến luồng Partytown
+    //     forward: [`dataLayer.push`, `fbq`],
+    //     partytownConfig: {
+    //       // --- BƯỚC 4: BẬT LẠI CẤU HÌNH PROXY ---
+    //       resolveUrl: function (url, location, type) {
+    //         // Danh sách các domain cần được proxy để tránh lỗi CORS
+    //         const proxyingDomains = [
+    //           'www.googletagmanager.com',
+    //           'connect.facebook.net',
+    //           'cdn.aimtell.com',
+    //           'js.ubembed.com',
+    //           'www.google-analytics.com',
+    //           'wellnessclinicmarketing.exactmatchmarketing.com' // Thêm domain từ script của page
+    //         ];
 
-        partytownConfig: {
-          // Thêm tất cả các tên miền của bên thứ ba vào đây
-          proxyingDomains: [
-            'www.googletagmanager.com',
-            'connect.facebook.net',
-            'cdn.aimtell.com',
-            'js.ubembed.com', // <--- Thêm Unbounce vào
-            'www.google-analytics.com'
-          ],
-        },
-      }
-    },
+    //         if (proxyingDomains.some(domain => url.hostname.includes(domain))) {
+    //           // Tạo một URL proxy mới mà Gatsby sẽ xử lý
+    //           const proxyUrl = new URL(location.origin + '/__partytown-proxy');
+    //           proxyUrl.searchParams.append('url', url.href);
+    //           return proxyUrl;
+    //         }
+
+    //         // Trả về URL gốc cho các script không nằm trong danh sách
+    //         return url;
+    //       },
+    //       // ------------------------------------
+    //     },
+    //   }
+    // },
     // {
     //   resolve: `gatsby-plugin-postcss`,
     //   options: {
@@ -144,7 +157,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
-        // Tùy chọn nếu cần
+        // Tùy chọn nếu cần  
       },
     },
     /**

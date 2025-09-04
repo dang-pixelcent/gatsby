@@ -70,63 +70,100 @@ function getCachedSeoData(url) {
   return null;
 }
 
+
+// --- START: CẤU HÌNH SCRIPT ĐẶC BIỆT : XỬ LÝ VỊ TRÍ ĐỨNG CỦA SCRIPTs ---
+const SPECIAL_SCRIPT_HANDLERS = {
+  // Từ khóa để nhận diện script
+  'form.jotform.com/jsform/': {
+    // Hàm này sẽ được gọi khi tìm thấy script
+    // Nó nhận vào element script (dưới dạng cheerio) và cheerio instance ($)
+    createPlaceholder: (element, $) => {
+      const src = $(element).attr('src');
+      const formId = src.split('/').pop();
+      if (!formId) return null;
+
+      const placeholderId = `jotform-placeholder-${formId}`;
+      // Thay thế thẻ <script> bằng một thẻ <div> placeholder
+      $(element).replaceWith(`<div id="${placeholderId}"></div>`);
+
+      // Trả về thông tin cần thiết cho client-side
+      return { type: 'jotform', id: formId, placeholderId: placeholderId };
+    }
+  },
+  // Bạn có thể thêm các handler khác ở đây trong tương lai
+  // 'some-other-service.com/widget.js': {
+  //   createPlaceholder: (element, $) => { ... }
+  // }
+};
+// --- END: CẤU HÌNH SCRIPT ĐẶC BIỆT ---
+
 /**
  * Trích xuất tất cả các thẻ script từ một chuỗi HTML,
  * lấy toàn bộ thuộc tính của chúng và trả về HTML đã được làm sạch.
  * @param {string} html - Chuỗi HTML đầu vào.
  * @param {string} pageSlug - Slug của trang để tạo ID duy nhất.
- * @returns {{cleanedHtml: string, scripts: Array<Object>}}
+ * @returns {{cleanedHtml: string, scripts: Array<Object>, specialScripts: Array<Object>}}
  */
 function processAllScripts(html = '', pageSlug) {
   if (!html || !pageSlug) {
-    return { cleanedHtml: html || '', scripts: [] };
+    return { cleanedHtml: html || '', scripts: [], specialScripts: [] };
   }
 
   const $ = cheerio.load(html);
   const scriptTags = $('script');
   const extractedScripts = [];
+  const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
 
   scriptTags.each((index, element) => {
-    // element.attribs chứa một object với tất cả các thuộc tính của thẻ
-    // Ví dụ: { src: '...', async: '', type: 'module' }
     const attributes = { ...element.attribs };
+    const src = attributes.src || '';
+    let isSpecial = false;
 
-    // Chúng ta vẫn chỉ quan tâm đến các script có nguồn bên ngoài (có src)
+    // 1. Kiểm tra xem có phải script đặc biệt không
+    for (const key in SPECIAL_SCRIPT_HANDLERS) {
+      if (src.includes(key)) {
+        const handler = SPECIAL_SCRIPT_HANDLERS[key];
+        const specialScriptInfo = handler.createPlaceholder(element, $);
+        if (specialScriptInfo) {
+          specialScriptsFound.push(specialScriptInfo);
+        }
+        isSpecial = true;
+        break; // Đã xử lý, chuyển sang script tiếp theo
+      }
+    }
+
+    // 2. Nếu là script đặc biệt, bỏ qua và không làm gì thêm
+    if (isSpecial) {
+      return;
+    }
+
+    // 3. Xử lý script thông thường (như cũ)
     if (attributes.src) {
-      // Đảm bảo script luôn có một ID duy nhất để làm key trong React
       if (!attributes.id) {
         attributes.id = `external-script-${pageSlug}-${index}`;
       }
-
-      // Thêm thông tin metadata nếu cần, ví dụ 'type' ở đây là để phân biệt
-      // với các loại tài nguyên khác sau này, không phải thuộc tính 'type' của script.
       extractedScripts.push({
         resourceType: 'external-script',
         attributes: attributes,
       });
-    }
-    else {
-      // Xử lý script inline (không có src)
-      const inlineContent = $(element).html(); // Lấy nội dung bên trong thẻ <script>
-
-      // Chỉ thêm vào nếu có nội dung
+    } else {
+      const inlineContent = $(element).html();
       if (inlineContent) {
         extractedScripts.push({
           resourceType: 'inline-script',
           content: `(function(){\n${inlineContent}\n})();`,
-          id: `inline-script-${pageSlug}-${index}` // Tạo ID để làm key
+          id: `inline-script-${pageSlug}-${index}`
         });
       }
     }
-    // Các script inline (không có src) sẽ bị xóa cùng với các script khác mà không được xử lý
+    // Xóa thẻ script thông thường sau khi đã trích xuất thông tin
+    $(element).remove();
   });
-
-  // Xóa tất cả các thẻ script khỏi HTML
-  scriptTags.remove();
 
   return {
     cleanedHtml: $.html(),
     scripts: extractedScripts,
+    specialScripts: specialScriptsFound, // Trả về danh sách script đặc biệt
   };
 }
 
@@ -544,7 +581,7 @@ exports.createPages = async ({ actions, graphql }) => {
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
-    const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
+    const { cleanedHtml, scripts, specialScripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
     // Bước 3: lưu snippets riêng vào cache
     if (node.htmlSnippets) {
       const slug = node.uri.replace(/\//g, '') || 'homepage';
@@ -561,6 +598,7 @@ exports.createPages = async ({ actions, graphql }) => {
       ...node,
       flexibleContentHtml: cleanedHtml,
       scripts: scripts,
+      specialScripts: specialScripts,
       seoData: seoData,
     };
   };
