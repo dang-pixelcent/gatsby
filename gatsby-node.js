@@ -8,6 +8,25 @@ const getTerminalColors = require('./src/utils/terminalColors.js');
 
 const { createRemoteFileNode } = require("gatsby-source-filesystem");
 
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        '@src': path.resolve(__dirname, 'src'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@templates': path.resolve(__dirname, 'src/components/templates'),
+        '@hooks': path.resolve(__dirname, 'src/hooks'),
+        '@context': path.resolve(__dirname, 'src/context'),
+        '@styles': path.resolve(__dirname, 'src/styles'),
+        '@helpers': path.resolve(__dirname, 'src/helpers'),
+        '@config': path.resolve(__dirname, 'src/config'),
+        '@assets': path.resolve(__dirname, 'src/assets'),
+        '@utils': path.resolve(__dirname, 'src/utils'),
+      },
+    },
+  });
+};
+
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 });

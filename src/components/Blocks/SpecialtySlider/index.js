@@ -6,8 +6,8 @@ import parse from 'html-react-parser';
 import { Link } from 'gatsby'; // Dùng Link của Gatsby cho internal link
 
 // Import CSS cho react-slick nếu bạn chưa làm ở layout chính
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 
 const SpecialtySliderFromHtml = ({ htmlContent }) => {
 
