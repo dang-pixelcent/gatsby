@@ -15,6 +15,7 @@ import ScrollTop from "./ScrollTop";
 // import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import { Script } from "gatsby"
+import AOS from 'aos';
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -93,6 +94,26 @@ const DefaultLayout = ({ children }) => {
   }, [bodyClass]); // Chỉ chạy lại effect này khi `bodyClass` thay đổi
   // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
+  // Khởi tạo AOS
+  useEffect(() => {
+    // Khởi tạo AOS
+    AOS.init({
+      offset: 250,
+      once: false, // Hiệu ứng chỉ chạy nhiều lần
+    });
+
+    // Lắng nghe sự kiện để refresh AOS khi trang thay đổi (quan trọng cho Gatsby)
+    const handleRouteChange = () => {
+      AOS.refresh();
+    };
+
+    window.addEventListener('gatsby:route-update', handleRouteChange);
+
+    return () => {
+      window.removeEventListener('gatsby:route-update', handleRouteChange);
+    };
+  }, []);
+
   return (
     <div>
       {/* <Helmet>
@@ -108,7 +129,7 @@ const DefaultLayout = ({ children }) => {
       {/* <ChatWidget /> */}
 
       {/* Global AOS Script */}
-      <Script
+      {/* <Script
         src="/js/aos.js"
         strategy="idle"
         onLoad={() => {
@@ -118,7 +139,7 @@ const DefaultLayout = ({ children }) => {
             });
           }
         }}
-      />
+      /> */}
     </div>
   )
 }

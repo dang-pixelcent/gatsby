@@ -835,7 +835,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                           formats={["auto", "webp", "avif"]}
                           className="custom-logo"
                           sizes="(max-width: 250px) 100vw, 250px"
-                          quality={70}
+                          quality={50}
                         />
                       </Link>
                     </span>
