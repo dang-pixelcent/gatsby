@@ -24,6 +24,7 @@ const HomeBanner = ({ content }) => {
             className="banner-bg"
             loading="eager"
             fetchPriority="high"
+            placeholder="none"
             style={{
               position: "absolute",
               top: 0,
@@ -41,7 +42,9 @@ const HomeBanner = ({ content }) => {
                 image={badgeImage}
                 alt="Badge"
                 className="img-badge position-absolute"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
+                placeholder="none"
               />
             )}
             <div className="sub-title f-soleto fw-500 text-white">
@@ -76,7 +79,9 @@ const HomeBanner = ({ content }) => {
               <GatsbyImage
                 image={boxDesktopImage}
                 alt="Desktop Box"
-                loading="lazy"
+                loading="eager"
+                placeholder="none"
+                fetchPriority="high"
                 sizes="(max-width: 600px) 100vw, 518px"
               />
             )}
@@ -86,7 +91,9 @@ const HomeBanner = ({ content }) => {
               <GatsbyImage
                 image={boxMobileImage}
                 alt="Mobile Box"
-                loading="lazy"
+                loading="eager"
+                placeholder="none"
+                fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"
               />
             )}

@@ -503,6 +503,85 @@ exports.createPages = async ({ actions, graphql }) => {
    *  - Tạo trang home với template riêng
    *  - Lưu các snippets HTML riêng cho trang home vào cache
    */
+
+  // 1. Chạy query cho trang chủ một cách thủ công
+  const homePageDataResult = await graphql(`
+    query HomePageQueryForNode {
+      cms {
+        pageBy(uri: "/") {
+          title
+          id
+          template {
+            templateName
+            ... on GraphCMS_Template_Home {
+              templateName
+              homeContent {
+                flexibleContent {
+                  ... on GraphCMS_HomeContentFlexibleContentBannerLayout {
+                    __typename
+                    desc
+                    title
+                    subTitle
+                    sepText
+                    serviceList {
+                      link
+                      title
+                    }
+                    boxDesktop {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    boxMobile {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(width: 303, height: 216, quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    badgeLogo {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    backgroundImage {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE, layout: FULL_WIDTH)
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+    if (homePageDataResult.errors) {
+    console.error(`${colors.red}Homepage query in gatsby-node.js failed!${colors.reset}`, homePageDataResult.errors);
+    throw new Error("Homepage query in gatsby-node.js failed!");
+  }
+
   // trang home riêng + SEO
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
 
@@ -527,7 +606,8 @@ exports.createPages = async ({ actions, graphql }) => {
     component: path.resolve(`./src/components/templates/home.js`),
     context: {
       seoData: homeDataSeo || null,
-      htmlSnippets: homepageSnippets
+      htmlSnippets: homepageSnippets,
+      pageData: homePageDataResult.data
     },
   });
   /**
