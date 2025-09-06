@@ -1,13 +1,12 @@
 import * as React from "react"
 import "./styles.scss"
 import { Link } from "gatsby"
-import { graphql, useStaticQuery } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import { useLocation } from "@reach/router"
 // import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
 
 
-const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
+const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
   // Sử dụng biến môi trường cho WordPress URL
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
@@ -43,49 +42,10 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
     };
   }, []);
 
-  const data = useStaticQuery(graphql`
-    query {
-      cms {
-        themeSettings {
-          menuTitle
-          pageTitle
-          themeOptionsSettings {
-            defaultLogo {
-              node {
-                altText
-                id
-                sourceUrl
-              }
-            }
-          }
-        }
-        menuItems(where: {location: PRIMARY}) {
-          nodes {
-            uri
-            title
-            url
-            path
-            id
-            cssClasses
-            label
-            locations
-            menuItemId
-            parentDatabaseId
-            childItems {
-              nodes {
-                label
-                id
-                uri
-              }
-            }
-          }
-        }
-      }
-    }
-  `);
+
   const content = data.cms.themeSettings
-  const menu = data.cms.menuItems
-  const logoUrl = content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl;
+  // const menu = data.cms.menuItems
+  // const logoUrl = content?.themeOptionsSettings?.defaultLogo?.node?.sourceUrl;
   const logoAlt = content?.themeOptionsSettings?.defaultLogo?.node?.altText || "Wellness Clinic Marketing";
 
   // === FIXED HEADER ===
@@ -267,17 +227,12 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen }) => {
                     <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
-                          <StaticImage
-                            src="../../assets/logo/logo-head.png"
-                            alt={logoAlt}
+                          <img
+                            src={logoSrc}
+                            alt="Wellness Clinic Marketing"
                             width={250}
                             height={72}
-                            placeholder="none"
-                            loading="eager"
-                            formats={["auto", "webp", "avif"]}
                             className="custom-logo"
-                            sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 250px" // Thêm dòng này
-                            quality={50}
                           />
                         </Link>
                       </span>
