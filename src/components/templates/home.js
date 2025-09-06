@@ -1,5 +1,4 @@
 import React from "react"
-import { graphql, useStaticQuery } from "gatsby"
 import Layout from "@components/layout"
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
@@ -8,94 +7,22 @@ import loadable from '@loadable/component';
 
 
 // Dùng loadable để import động tất cả các section
-const ExpertsSection = loadable(() => import('@components/sections/ExpertsSection'), { ssr: false });
-const PatientsSection = loadable(() => import('@components/sections/PatientsSection'), { ssr: false });
-const PracticeSection = loadable(() => import('@components/sections/PracticeSection'), { ssr: false });
-const GetMoreSection = loadable(() => import('@components/sections/GetMoreSection'), { ssr: false });
-const HowWeCanHelpSection = loadable(() => import('@components/sections/HowWeCanHelpSection'), { ssr: false });
-const AwardsSection = loadable(() => import('@components/sections/AwardsSection'), { ssr: false });
-const TestimonialsSection = loadable(() => import('@components/sections/TestimonialsSection'), { ssr: false });
-const StatsSection = loadable(() => import('@components/sections/StatsSection'), { ssr: false });
-const SpecialtySection = loadable(() => import('@components/sections/SpecialtySection'), { ssr: false });
-const GiftBookSection = loadable(() => import('@components/sections/GiftBookSection'), { ssr: false });
+const ExpertsSection = loadable(() => import('@components/sections/ExpertsSection'));
+const PatientsSection = loadable(() => import('@components/sections/PatientsSection'));
+const PracticeSection = loadable(() => import('@components/sections/PracticeSection'));
+const GetMoreSection = loadable(() => import('@components/sections/GetMoreSection'));
+const HowWeCanHelpSection = loadable(() => import('@components/sections/HowWeCanHelpSection'));
+const AwardsSection = loadable(() => import('@components/sections/AwardsSection'));
+const TestimonialsSection = loadable(() => import('@components/sections/TestimonialsSection'));
+const StatsSection = loadable(() => import('@components/sections/StatsSection'));
+const SpecialtySection = loadable(() => import('@components/sections/SpecialtySection'));
+const GiftBookSection = loadable(() => import('@components/sections/GiftBookSection'));
 
 
-const Home = () => {
-    const query = useStaticQuery(graphql`
-    query {
-      cms {
-        pageBy(uri: "/") {
-          title
-          id
-          template {
-            templateName
-            
-            ... on GraphCMS_Template_Home {
-              templateName
-              homeContent {
-                flexibleContent {
-                    ... on GraphCMS_HomeContentFlexibleContentBannerLayout {
-                        __typename
-                        desc
-                        title
-                        subTitle
-                        sepText
-                        serviceList {
-                            link
-                            title
-                        }
-                        boxDesktop {
-                            node {
-                                sourceUrl
-                                localFile {
-                                    childImageSharp {
-                                        gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
-                                    }
-                                }
-                            }
-                        }
-                        boxMobile {
-                            node {
-                                sourceUrl
-                                localFile {
-                                    childImageSharp {
-                                        gatsbyImageData(width: 303, height: 216, quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
-                                    }
-                                }
-                            }
-                        }
-                        badgeLogo {
-                            node {
-                                sourceUrl
-                                localFile {
-                                    childImageSharp {
-                                        gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
-                                    }
-                                }
-                            }
-                        }
-                        backgroundImage {
-                            node {
-                                sourceUrl
-                                localFile {
-                                    childImageSharp {
-                                        gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE, layout: FULL_WIDTH)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `);
-
-    // Tìm đúng dữ liệu cho Banner
-    const bannerContent = query.cms.pageBy.template?.homeContent?.flexibleContent.find(
+// Component `Home` giờ nhận `pageContext`
+const Home = ({ pageContext }) => {
+    // Dữ liệu được lấy từ `pageContext.pageData`
+    const bannerContent = pageContext.pageData?.cms.pageBy.template?.homeContent?.flexibleContent.find(
         item => item.__typename === "GraphCMS_HomeContentFlexibleContentBannerLayout"
     );
 
@@ -122,13 +49,43 @@ const Home = () => {
     )
 }
 
-export const Head = ({ pageContext }) => (
-    <SEO
-        seoData={pageContext.seoData || {}}
-    // lcpImageUrl="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com/cache/www.wellnessclinicmarketing.com/wp-content/uploads/2024/11/hero-banner-v2-png.webp"
-    >
-        <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-    </SEO>
-);
+// Component `Head` cũng nhận `pageContext`
+export const Head = ({ pageContext }) => {
+    // Dữ liệu được lấy từ `pageContext.pageData`
+    const bannerContent = pageContext.pageData?.cms.pageBy.template?.homeContent?.flexibleContent.find(
+        item => item.__typename === "GraphCMS_HomeContentFlexibleContentBannerLayout"
+    );
+
+    // Lấy ra tất cả các đối tượng ảnh cần preload
+    const imagesToPreload = [
+        bannerContent?.backgroundImage?.node?.localFile?.childImageSharp?.gatsbyImageData,
+        bannerContent?.badgeLogo?.node?.localFile?.childImageSharp?.gatsbyImageData,
+        bannerContent?.boxDesktop?.node?.localFile?.childImageSharp?.gatsbyImageData,
+        bannerContent?.boxMobile?.node?.localFile?.childImageSharp?.gatsbyImageData,
+    ].filter(Boolean); // Lọc bỏ các giá trị null hoặc undefined
+
+    return (
+        <SEO
+            seoData={pageContext.seoData || {}}
+        >
+            {/* Tạo thẻ link preload cho mỗi ảnh */}
+            {imagesToPreload.map(image => {
+                // `gatsby-plugin-image` cung cấp sẵn các thuộc tính cần thiết
+                const { src, srcSet, sizes } = image.images.fallback;
+                return (
+                    <link
+                        key={src}
+                        rel="preload"
+                        as="image"
+                        href={src}
+                        imageSrcSet={srcSet}
+                        imageSizes={sizes}
+                    />
+                );
+            })}
+            <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
+        </SEO>
+    );
+};
 
 export default Home;
