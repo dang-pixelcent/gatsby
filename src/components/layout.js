@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useStaticQuery, graphql } from "gatsby"
 // import { Script } from "gatsby"
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
@@ -14,8 +15,11 @@ import Footer from './Footer'
 import ScrollTop from "./ScrollTop";
 // import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
-import { Script } from "gatsby"
+import Helmet from "react-helmet"
 import AOS from 'aos';
+
+// 1. Import trực tiếp file logo
+import logoSrc from '@assets/logo/logo-head.png';
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -94,6 +98,48 @@ const DefaultLayout = ({ children }) => {
   }, [bodyClass]); // Chỉ chạy lại effect này khi `bodyClass` thay đổi
   // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
+  // 1. Lấy dữ liệu tập trung tại Layout
+  const data = useStaticQuery(graphql`
+    query LayoutQuery {
+      cms {
+        themeSettings {
+          menuTitle
+          pageTitle
+          themeOptionsSettings {
+            socials {
+              facebook
+              instagram
+              linkedin
+              twitter
+              youtube
+            }
+          }
+        }
+        menuItems(where: {location: PRIMARY}) {
+          nodes {
+            uri
+            title
+            url
+            path
+            id
+            cssClasses
+            label
+            locations
+            menuItemId
+            parentDatabaseId
+            childItems {
+              nodes {
+                label
+                id
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
   // Khởi tạo AOS
   useEffect(() => {
     // Trì hoãn việc khởi tạo AOS để nó không chặn luồng chính trong quá trình tải ban đầu
@@ -122,12 +168,17 @@ const DefaultLayout = ({ children }) => {
       {/* <Helmet>
         <body className={bodyClass} />
       </Helmet> */}
+      <Helmet>
+        <link rel="preload" as="image" href={logoSrc} fetchpriority="high" />
+      </Helmet>
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
+        data={data}
+        logoSrc={logoSrc}
       />
       {children}
-      <Footer />
+      <Footer data={data} />
       <ScrollTop />
       {/* <ChatWidget /> */}
 

@@ -1,30 +1,11 @@
 import * as React from "react"
-import { graphql, useStaticQuery, Link } from "gatsby"
+import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import "./styles.scss"
 
-const Footer = () => {
+const Footer = ( { data}) => {
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
-
-  const data = useStaticQuery(graphql`
-    query {
-      cms {
-        themeSettings {
-          themeOptionsSettings {
-            socials {
-              facebook
-              fieldGroupName
-              instagram
-              linkedin
-              twitter
-              youtube
-            }
-          }
-        }
-      }
-    }
-  `);
 
   return (
     <>

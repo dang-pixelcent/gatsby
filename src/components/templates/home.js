@@ -5,10 +5,11 @@ import { SEO } from '@components/SEO'
 
 import loadable from '@loadable/component';
 
+// 1. Import trực tiếp các component trong khung nhìn đầu tiên
+import ExpertsSection from '@components/sections/ExpertsSection';
+import PatientsSection from '@components/sections/PatientsSection';
 
 // Dùng loadable để import động tất cả các section
-const ExpertsSection = loadable(() => import('@components/sections/ExpertsSection'));
-const PatientsSection = loadable(() => import('@components/sections/PatientsSection'));
 const PracticeSection = loadable(() => import('@components/sections/PracticeSection'));
 const GetMoreSection = loadable(() => import('@components/sections/GetMoreSection'));
 const HowWeCanHelpSection = loadable(() => import('@components/sections/HowWeCanHelpSection'));
@@ -32,9 +33,11 @@ const Home = ({ pageContext }) => {
                 <div className="main-content">
                     {bannerContent && <HomeBanner content={bannerContent} />}
 
-                    {/* Các component này sẽ chỉ được tải khi người dùng cuộn đến */}
+                    {/* Các component này giờ sẽ được render ngay từ đầu */}
                     <ExpertsSection />
                     <PatientsSection />
+
+                    {/* Các component này vẫn được lazy-load */}
                     <PracticeSection />
                     <GetMoreSection />
                     <HowWeCanHelpSection />
