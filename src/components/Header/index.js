@@ -224,7 +224,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
               <div className="ast-builder-grid-row ast-builder-grid-row-has-sides ast-builder-grid-row-no-center">
                 <div className="site-header-primary-section-left site-header-section ast-flex site-header-section-left">
                   <div className="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
-                    <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
+                    <div className="site-branding ast-site-identity">
                       <span className="site-logo-img">
                         <Link className="custom-logo-link" to="/" rel="home">
                           <img
@@ -776,7 +776,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
               <div className="site-header-primary-section-left site-header-section ast-flex site-header-section-left">
                 <div className="ast-builder-layout-element ast-flex site-header-focus-item" data-section="title_tagline">
                   {/* <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope"> <span className="site-logo-img"><Link to="/" className="custom-logo-link" rel="home"><img width={250} height={72} alt="Wellness Clinic Marketing" sizes="(max-width: 250px) 100vw, 250px" nitro-lazy-srcSet="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png 250w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-300x87.png 300w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-1024x296.png 1024w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-768x222.png 768w, https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png 1038w" nitro-lazy-src="https://cdn-ildkbbb.nitrocdn.com/fkaQeaaaKzvRPORNguIPgjvTQBtCcEbQ/assets/images/optimized/rev-22f84eb/www.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head-250x72.png" className="custom-logo nitro-lazy" decoding="async" nitro-lazy-empty="true" id="NTgxOjgyOA==-1" src="data:image/svg+xml;nitro-empty-id=NTgxOjgyOA==-1;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjUwIDcyIiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjcyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" /></Link></span> </div> */}
-                  <div className="site-branding ast-site-identity" itemType="https://schema.org/Organization" itemScope="itemscope">
+                  <div className="site-branding ast-site-identity">
                     <span className="site-logo-img">
                       <Link to="/" className="custom-logo-link" rel="home">
                         {/* Sử dụng dữ liệu động từ GraphQL */}
@@ -824,7 +824,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
             <div className="ast-builder-menu-mobile ast-builder-menu ast-builder-menu-mobile-focus-item ast-builder-layout-element site-header-focus-item" data-section="section-header-mobile-menu">
               <div className="ast-main-header-bar-alignment">
                 <div className="main-header-bar-navigation">
-                  <nav className="site-navigation ast-flex-grow-1 navigation-accessibility site-header-focus-item" id="ast-mobile-site-navigation" aria-label="Site Navigation: Primary Menu" itemType="https://schema.org/SiteNavigationElement" itemScope="itemscope">
+                  <nav className="site-navigation ast-flex-grow-1 navigation-accessibility site-header-focus-item" id="ast-mobile-site-navigation" aria-label="Site Navigation: Primary Menu">
                     <div className="main-navigation">
                       <ul id="ast-hf-mobile-menu" className="main-header-menu ast-nav-menu ast-flex  submenu-with-border astra-menu-animation-fade  stack-on-mobile ast-mega-menu-enabled">
                         <li className="full-w-columns menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-31">
