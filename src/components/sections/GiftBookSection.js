@@ -74,6 +74,9 @@ const GiftBookSection = () => {
                     <figure>
                         {giftBookImage.imageData ? (
                             <GatsbyImage
+                                decoding="async"
+                                loading="lazy"
+                                fadeIn={false}
                                 image={giftBookImage.imageData}
                                 alt={giftBookImage.altText}
                                 // style={{ width: "auto", height: "auto" }}
@@ -87,6 +90,7 @@ const GiftBookSection = () => {
                                 width={150}
                                 height={180}
                                 loading="lazy"
+                                decoding="async"
                             />
                         )}
                     </figure>

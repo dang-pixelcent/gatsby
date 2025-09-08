@@ -83,7 +83,7 @@ const TestimonialsSection = () => {
                                     testimonials?.testimonialContent?.box?.map((item, key) => (
                                         <div className="box" key={key}>
                                             <div className="testi-box-number ast-flex justify-content-center align-items-center">
-                                                <img src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} loading="lazy" />
+                                                <img decoding="async" src={item.icon?.node?.sourceUrl} alt={item.icon?.node?.altText} loading="lazy" />
                                                 <span className="number f-soleto fw-800">{item.number}</span>
                                             </div>
                                             <span className="box-text f-soleto fw-700 text-center">

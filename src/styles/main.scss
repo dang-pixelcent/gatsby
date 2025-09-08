@@ -5111,7 +5111,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   transform: translateY(-50%);
   right: -3.64vw;
   /*-70px*/
-  background: no-repeat center/cover url("#{$base-url}/wp-content/themes/agencymarketing/assets/img/arrow-blue.svg");
+  background: no-repeat center/cover url("/images/svg/arrow-blue.svg");
 }
 
 .practice-item:last-child:after {

@@ -40,6 +40,9 @@ const QuizResult = ({ finalPageData }) => {
             <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
                 <Link to="/">
                     <GatsbyImage
+                        decoding="async"
+                        loading="eager"
+                        fadeIn={false}
                         objectFit='contain'
                         image={logo}
                         alt="Wellness Clinic Marketing"

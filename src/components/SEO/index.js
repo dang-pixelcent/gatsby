@@ -19,12 +19,16 @@ export const SEO = ({
     if (!seoData) {
         return (
             <>
-                <html lang="en-US" />
-                {/* <body className={bodyClass} /> */}
-                <link rel="icon" href="/favicon.png" sizes="32x32" />
-                <link rel="icon" href="/favicon.png" sizes="192x192" />
-                <link rel="apple-touch-icon" href="/favicon.png" />
-                <meta name="msapplication-TileImage" content="/favicon.png" />
+                {/* Preload favicon ngay lập tức để tránh delay */}
+                <link rel="preload" href="/favicon/favicon.ico" as="image" type="image/x-icon" fetchpriority="high" />
+
+                {/* Favicon setup tối ưu */}
+                <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+                <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+                <link rel="shortcut icon" href="/favicon/favicon.ico" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+                <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
+                <link rel="manifest" href="/favicon/site.webmanifest" />
                 {children}
             </>
         )
@@ -32,10 +36,6 @@ export const SEO = ({
 
     return (
         <>
-            <html lang="en-US" />
-            <meta charSet="utf-8" />
-            <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-
             {/* --- TỐI ƯU HÓA KẾT NỐI SỚM --- */}
             {/* Preconnect đến các domain của bên thứ ba quan trọng */}
             <link rel="preconnect" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
@@ -52,7 +52,7 @@ export const SEO = ({
 
             {/* <link rel="preconnect" href="https://fonts.bunny.net" crossOrigin="true" />
             <link rel="dns-prefetch" href="https://fonts.bunny.net" /> */}
-{/* 
+            {/* 
             <link rel="preconnect" href="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ" />
             
             <link rel="dns-prefetch" href="https://book.practiceflow.md/widget/survey/pZ5us1TDI3kKin0xSGLQ" /> */}
@@ -68,10 +68,12 @@ export const SEO = ({
             {/* dữ liệu-seo từ wp */}
             {canParseSeoData && parse(seoData)}
 
-            <link rel="icon" href="/favicon.png" sizes="32x32" />
-            <link rel="icon" href="/favicon.png" sizes="192x192" />
-            <link rel="apple-touch-icon" href="/favicon.png" />
-            <meta name="msapplication-TileImage" content="/favicon.png" />
+            <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+            <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+            <link rel="shortcut icon" href="/favicon/favicon.ico" />
+            <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+            <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
+            <link rel="manifest" href="/favicon/site.webmanifest" />
 
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}

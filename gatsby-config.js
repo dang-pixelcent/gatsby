@@ -147,9 +147,11 @@ module.exports = {
       options: {
         google: {
           families: [
-            'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
-            'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
-            'Assistant:wght@200..800'                // Lấy dải weight từ 200-800
+            // 'Inter:ital,wght@0,100..900;1,100..900', // Lấy cả normal và italic, với dải weight từ 100-900
+            // 'Anek Devanagari:wght@100..800',         // Lấy dải weight từ 100-800
+            // 'Assistant:wght@200..800',                // Lấy dải weight từ 200-800
+            'Inter:wght@400;600;700',
+            'Assistant:wght@600;700'
           ]
         }
       }

@@ -75,6 +75,9 @@ const StatsSection = () => {
             {/* Thay thế background image bằng GatsbyImage */}
             {bgImageStats && (
                 <GatsbyImage
+                    decoding="async"
+                    loading="lazy"
+                    fadeIn={false}
                     image={bgImageStats}
                     alt={stats?.backgroundImage?.node?.altText || "Stats background"}
                     style={{
@@ -99,7 +102,7 @@ const StatsSection = () => {
                                 <div className="ast-flex align-items-center">
                                     <div className="box-img">
                                         <figure className="mb-0">
-                                            <img src={x?.icon?.node?.sourceUrl} alt={x?.icon?.node?.altText} loading="lazy" />
+                                            <img decoding="async" src={x?.icon?.node?.sourceUrl} alt={x?.icon?.node?.altText} loading="lazy" />
                                         </figure>
                                     </div>
                                     <div className="desc f-soleto fw-800 text-white">
