@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import { graphql, useStaticQuery, Link } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Slider from 'react-slick';
@@ -164,6 +164,9 @@ const SpecialtySection = () => {
         >
             {bgImageSpecial && (
                 <GatsbyImage
+                    decoding="async"
+                    loading="lazy"
+                    fadeIn={false}
                     image={bgImageSpecial}
                     alt={special?.backgroundImage?.node?.altText || "Specialty background"}
                     style={{
@@ -227,12 +230,16 @@ const SpecialtySection = () => {
                                                 <figure className="mb-0">
                                                     {item.imageData ? (
                                                         <GatsbyImage
+                                                            decoding="async"
+                                                            loading="lazy"
+                                                            fadeIn={false}
                                                             image={item.imageData}
                                                             alt={item.altText}
                                                             style={{ width: "100%", height: "auto" }}
                                                         />
                                                     ) : (
                                                         <img
+                                                            decoding="async"
                                                             src={item.sourceUrl}
                                                             alt={item.altText}
                                                             style={{ width: "100%", height: "auto" }}
@@ -251,12 +258,16 @@ const SpecialtySection = () => {
                                                 <figure className="mb-0">
                                                     {item.imageData ? (
                                                         <GatsbyImage
+                                                            decoding="async"
+                                                            loading="lazy"
+                                                            fadeIn={false}
                                                             image={item.imageData}
                                                             alt={item.altText}
                                                             style={{ width: "100%", height: "auto" }}
                                                         />
                                                     ) : (
                                                         <img
+                                                            decoding="async"
                                                             src={item.sourceUrl}
                                                             alt={item.altText}
                                                             style={{ width: "100%", height: "auto" }}

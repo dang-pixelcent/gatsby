@@ -20,13 +20,22 @@ const PracticeSection = () => {
                                             node {
                                                 altText
                                                 sourceUrl
+                                                mediaDetails {
+                                                    sizes {
+                                                        name
+                                                        sourceUrl
+                                                        width
+                                                        height
+                                                    }
+                                                }
                                                 localFile {
+                                                    publicURL
                                                     childImageSharp {
                                                         gatsbyImageData(
-                                                            quality: 80
+                                                            quality: 90
                                                             formats: [AUTO, WEBP, AVIF]
                                                             placeholder: BLURRED
-                                                            layout: FULL_WIDTH
+                                                            height: 80
                                                         )
                                                     }
                                                 }
@@ -70,6 +79,9 @@ const PracticeSection = () => {
         <section className="section sc-practice">
             {bgImagePractice && (
                 <GatsbyImage
+                    decoding="async"
+                    loading="lazy"
+                    fadeIn={false}
                     image={bgImagePractice}
                     alt={practice?.backgroundImage?.node?.altText || "Practice background"}
                     style={{
@@ -91,21 +103,51 @@ const PracticeSection = () => {
                     {practice?.desc}
                 </div>
                 <div className="boxies-practice-list">
-                    {practice?.item?.map((item, key) => (
-                        <div key={key} className="practice-item position-relative ast-flex justify-content-center">
-                            <div className="inner ast-flex flex-column">
-                                <img src={item?.icon?.node?.sourceUrl} alt={item?.icon?.node?.altText} loading="lazy" />
-                                <div className="practice-content f-soleto color-0659A9">
-                                    <h3 className="h3-title f-soletoxbold color-0659A9">
-                                        {item.title}
-                                    </h3>
-                                    <div className="desc f-soleto fw-500">
-                                        {item.desc}
+                    {practice?.item?.map((item, key) => {
+                        const iconNode = item?.icon?.node;
+                        const iconImage = getImage(iconNode?.localFile);
+
+                        return (
+                            <div key={key} className="practice-item position-relative ast-flex justify-content-center">
+                                <div className="inner ast-flex flex-column">
+                                    {iconImage ? (
+                                        // Dùng GatsbyImage cho images đã được optimize
+                                        <GatsbyImage
+                                            decoding="async"
+                                            image={iconImage}
+                                            alt={iconNode?.altText || item.title}
+                                            loading="lazy"
+                                            fadeIn={false}
+                                            style={{
+                                                maxWidth: "100%",
+                                                height: "auto"
+                                            }}
+                                        />
+                                    ) : (
+                                        // Fallback cho SVG hoặc images không có localFile
+                                        <img
+                                            decoding="async"
+                                            src={iconNode?.localFile?.publicURL || iconNode?.sourceUrl}
+                                            alt={iconNode?.altText || item.title}
+                                            loading="lazy"
+                                            style={{
+                                                maxWidth: "100%",
+                                                height: "auto"
+                                            }}
+                                        />
+                                    )}
+                                    <div className="practice-content f-soleto color-0659A9">
+                                        <h3 className="h3-title f-soletoxbold color-0659A9">
+                                            {item.title}
+                                        </h3>
+                                        <div className="desc f-soleto fw-500">
+                                            {item.desc}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
                 <div className="sc-btn ast-flex justify-content-center">
                     <Link

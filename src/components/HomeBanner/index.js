@@ -19,10 +19,12 @@ const HomeBanner = ({ content }) => {
       <section className="home-banner">
         {backgroundImage && (
           <GatsbyImage
+            decoding="async"
             image={backgroundImage}
             alt="Wellness Clinic Marketing Hero Banner"
             className="banner-bg"
             loading="eager"
+            fadeIn={false}
             fetchPriority="high"
             placeholder="none"
             style={{
@@ -39,10 +41,12 @@ const HomeBanner = ({ content }) => {
           <div className="banner-title position-relative text-center">
             {badgeImage && (
               <GatsbyImage
+                decoding="async"
                 image={badgeImage}
                 alt="Badge"
                 className="img-badge position-absolute"
                 loading="eager"
+                fadeIn={false}
                 fetchPriority="high"
                 placeholder="none"
               />
@@ -77,9 +81,11 @@ const HomeBanner = ({ content }) => {
           <div className="box-desktop">
             {boxDesktopImage && (
               <GatsbyImage
+                decoding="async"
                 image={boxDesktopImage}
                 alt="Desktop Box"
                 loading="eager"
+                fadeIn={false}
                 placeholder="none"
                 fetchPriority="high"
                 sizes="(max-width: 600px) 100vw, 518px"
@@ -89,9 +95,11 @@ const HomeBanner = ({ content }) => {
           <div className="box-mobile">
             {boxMobileImage && (
               <GatsbyImage
+                decoding="async"
                 image={boxMobileImage}
                 alt="Mobile Box"
                 loading="eager"
+                fadeIn={false}
                 placeholder="none"
                 fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"

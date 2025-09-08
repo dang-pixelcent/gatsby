@@ -103,6 +103,9 @@ const AwardsSection = () => {
             {/* Thay thế background image bằng GatsbyImage */}
             {bgImageAwards && (
                 <GatsbyImage
+                    decoding="async"
+                    loading="lazy"
+                    fadeIn={false}
                     image={bgImageAwards}
                     alt={awards?.backgroundImage?.node?.altText || "Awards background"}
                     style={{
@@ -137,6 +140,9 @@ const AwardsSection = () => {
                             return (
                                 <div className="item" key={idx}>
                                     <GatsbyImage
+                                        decoding="async"
+                                        loading="lazy"
+                                        fadeIn={false}
                                         image={imageData}
                                         alt={awardNode?.altText || ""}
                                         sizes={`(max-width: 600px) 100vw, ${size.width}px`}
@@ -158,6 +164,9 @@ const AwardsSection = () => {
                             return (
                                 <div className="item" key={idx}>
                                     <GatsbyImage
+                                        decoding="async"
+                                        loading="lazy"
+                                        fadeIn={false}
                                         image={featuredImageData}
                                         alt={featuredNode?.altText || ""}
                                         sizes="(max-width: 412px) 352px, (max-width: 1366px) 304px"

@@ -3,13 +3,13 @@ import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import "./styles.scss"
 
-const Footer = ( { data}) => {
+const Footer = ({ data }) => {
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
   const siteBaseUrl = process.env.GATSBY_SITE_URL
 
   return (
     <>
-      <footer className="site-footer" id="colophon" itemType="https://schema.org/WPFooter" itemScope="itemscope" itemID="#colophon">
+      <footer className="site-footer" id="colophon">
         <div className="site-primary-footer-wrap ast-builder-grid-row-container site-footer-focus-item ast-builder-grid-row-3-equal ast-builder-grid-row-tablet-3-equal ast-builder-grid-row-mobile-full ast-footer-row-stack ast-footer-row-tablet-stack ast-footer-row-mobile-stack" data-section="section-primary-footer-builder" style={{ position: "relative" }}>
           <StaticImage
             src="../../assets/img/bg-footer-2.jpg"

@@ -92,9 +92,15 @@ const ExpertsSection = () => {
                         {expertsImages?.map((item, key) => (
                             <a key={key} href={item.link || '#'} aria-label={`Expert partner ${key + 1}`}>
                                 {item.imageData ? (
-                                    <GatsbyImage image={item.imageData} alt={item.altText} style={{ maxWidth: "150px", height: "auto" }} />
+                                    <GatsbyImage
+                                        decoding="async"
+                                        loading="lazy"
+                                        fadeIn={false}
+                                        image={item.imageData} alt={item.altText}
+                                        style={{ maxWidth: "150px", height: "auto" }}
+                                    />
                                 ) : (
-                                    <img src={item.sourceUrl} alt={item.altText} style={{ maxWidth: "150px", height: "auto" }} loading="lazy" />
+                                    <img src={item.sourceUrl} alt={item.altText} style={{ maxWidth: "150px", height: "auto" }} loading="lazy" decoding="async" />
                                 )}
                             </a>
                         ))}

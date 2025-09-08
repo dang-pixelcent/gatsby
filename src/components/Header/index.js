@@ -216,7 +216,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
 
 
   return (
-    <header className="site-header header-main-layout-1 ast-primary-menu-enabled ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline" id="masthead" itemType="https://schema.org/WPHeader" itemScope="itemscope" itemID="#masthead">
+    <header className="site-header header-main-layout-1 ast-primary-menu-enabled ast-hide-custom-menu-mobile ast-builder-menu-toggle-icon ast-mobile-header-inline" id="masthead">
       <div id="ast-desktop-header" data-toggle-type="dropdown" className="lazyloaded">
         <div className="ast-main-header-wrap main-header-bar-wrap ">
           <div className="ast-primary-header-bar ast-primary-header main-header-bar site-header-focus-item" data-section="section-primary-header-builder">

@@ -59,6 +59,9 @@ const PatientsSection = () => {
         >
             {bgImagePatients && (
                 <GatsbyImage
+                    decoding="async"
+                    loading="lazy"
+                    fadeIn={false}
                     image={bgImagePatients}
                     alt={patients?.backgroundImage?.node?.altText || "Patients background"}
                     style={{

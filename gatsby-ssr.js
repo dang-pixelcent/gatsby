@@ -134,6 +134,9 @@ export const onRenderBody = ({
   // --- 1. Cấu hình cho <head> ---
   const headItems = [];
   headItems.push(
+    <html lang="en-US" />,
+    <meta charSet="utf-8" />,
+    <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />,
     // <link
     //   key="google-fonts"
     //   rel="stylesheet"
