@@ -193,7 +193,14 @@ async function cacheSeoData() {
     console.log(`${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`)
 
   } catch (error) {
-    console.error(`${colors.red}✗ Error caching SEO data: ${error}${colors.reset}`)
+    console.error(`${colors.red}✗ Error caching SEO data (attempt ${i + 1}/${retries}): ${error.message}${colors.reset}`)
+    if (i === retries - 1) {
+      console.error(`${colors.red}Failed to cache SEO data after ${retries} attempts.${colors.reset}`)
+      process.exit(1); // Thoát tiến trình nếu thất bại sau tất cả các lần thử
+    }
+    const delay = 1000 * Math.pow(2, i); // Thời gian chờ tăng dần (1s, 2s, 4s, ...)
+    console.warn(`${colors.yellow}Retrying after ${delay}ms...${colors.reset}`)
+    await new Promise(resolve => setTimeout(resolve, delay))
   }
 }
 
