@@ -1,8 +1,7 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { extractPathname } from "/src/utils/urlUtils"
-import loadable from '@loadable/component';
 import "./styles.scss"
 import * as styles from './HomeBanner.module.scss';
 
