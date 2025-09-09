@@ -75,6 +75,7 @@ const StatsSection = () => {
             {/* Thay thế background image bằng GatsbyImage */}
             {bgImageStats && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}

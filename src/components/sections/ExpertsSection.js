@@ -93,6 +93,7 @@ const ExpertsSection = () => {
                             <a key={key} href={item.link || '#'} aria-label={`Expert partner ${key + 1}`}>
                                 {item.imageData ? (
                                     <GatsbyImage
+                                        imgStyle={{ transition: 'none' }}
                                         decoding="async"
                                         loading="lazy"
                                         fadeIn={false}

@@ -79,6 +79,7 @@ const PracticeSection = () => {
         <section className="section sc-practice">
             {bgImagePractice && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}
@@ -113,6 +114,7 @@ const PracticeSection = () => {
                                     {iconImage ? (
                                         // Dùng GatsbyImage cho images đã được optimize
                                         <GatsbyImage
+                                            imgStyle={{ transition: 'none' }}
                                             decoding="async"
                                             image={iconImage}
                                             alt={iconNode?.altText || item.title}

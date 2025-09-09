@@ -82,6 +82,7 @@ const HowWeCanHelpSection = () => {
             {/* Thay thế background image bằng GatsbyImage */}
             {bgImageHowWeCanHelp && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}

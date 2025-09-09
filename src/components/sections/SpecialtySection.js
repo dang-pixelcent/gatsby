@@ -164,6 +164,7 @@ const SpecialtySection = () => {
         >
             {bgImageSpecial && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}
@@ -230,6 +231,7 @@ const SpecialtySection = () => {
                                                 <figure className="mb-0">
                                                     {item.imageData ? (
                                                         <GatsbyImage
+                                                            imgStyle={{ transition: 'none' }}
                                                             decoding="async"
                                                             loading="lazy"
                                                             fadeIn={false}
@@ -258,6 +260,7 @@ const SpecialtySection = () => {
                                                 <figure className="mb-0">
                                                     {item.imageData ? (
                                                         <GatsbyImage
+                                                            imgStyle={{ transition: 'none' }}
                                                             decoding="async"
                                                             loading="lazy"
                                                             fadeIn={false}

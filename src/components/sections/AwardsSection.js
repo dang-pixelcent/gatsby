@@ -103,6 +103,7 @@ const AwardsSection = () => {
             {/* Thay thế background image bằng GatsbyImage */}
             {bgImageAwards && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}
@@ -140,6 +141,7 @@ const AwardsSection = () => {
                             return (
                                 <div className="item" key={idx}>
                                     <GatsbyImage
+                                        imgStyle={{ transition: 'none' }}
                                         decoding="async"
                                         loading="lazy"
                                         fadeIn={false}
@@ -164,6 +166,7 @@ const AwardsSection = () => {
                             return (
                                 <div className="item" key={idx}>
                                     <GatsbyImage
+                                        imgStyle={{ transition: 'none' }}
                                         decoding="async"
                                         loading="lazy"
                                         fadeIn={false}

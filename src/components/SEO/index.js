@@ -34,6 +34,21 @@ export const SEO = ({
         )
     }
 
+    // --- THÊM VÀO ĐỂ DEBUG ---
+    // Biến này sẽ lưu kết quả của hàm parse()
+    let parsedSeoElements = null;
+    if (canParseSeoData) {
+        // 1. Chạy hàm parse và lưu kết quả
+        parsedSeoElements = parse(seoData);
+
+        // 2. Log kết quả ra console để bạn xem
+        console.log("--- [DEBUG SEO] Output of parse(seoData): ---");
+        console.log(parsedSeoElements);
+        console.log("--------------------------------------------");
+    }
+    // --- KẾT THÚC PHẦN DEBUG ---
+
+
     return (
         <>
             {/* --- TỐI ƯU HÓA KẾT NỐI SỚM --- */}
@@ -66,7 +81,7 @@ export const SEO = ({
             {/* <body className={bodyClass} /> */}
 
             {/* dữ liệu-seo từ wp */}
-            {canParseSeoData && parse(seoData)}
+            {parsedSeoElements}
 
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
