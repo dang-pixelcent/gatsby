@@ -61,7 +61,7 @@ export const Head = ({ pageContext }) => {
 
     // Lấy ra tất cả các đối tượng ảnh cần preload
     const imagesToPreload = [
-        bannerContent?.backgroundImage?.node?.localFile?.childImageSharp?.gatsbyImageData,
+        // bannerContent?.backgroundImage?.node?.localFile?.childImageSharp?.gatsbyImageData,
         bannerContent?.badgeLogo?.node?.localFile?.childImageSharp?.gatsbyImageData,
         bannerContent?.boxDesktop?.node?.localFile?.childImageSharp?.gatsbyImageData,
         bannerContent?.boxMobile?.node?.localFile?.childImageSharp?.gatsbyImageData,

@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { extractPathname } from "/src/utils/urlUtils"
 import "./styles.scss"
+import * as styles from './HomeBanner.module.scss';
 
 // Component giờ sẽ nhận `content` từ props, không tự query nữa
 const HomeBanner = ({ content }) => {
@@ -16,8 +17,8 @@ const HomeBanner = ({ content }) => {
 
   return (
     <>
-      <section className="home-banner">
-        {backgroundImage && (
+      <section className={`home-banner ${styles.bannerSection}`}>
+        {/* {backgroundImage && (
           <GatsbyImage
             decoding="async"
             image={backgroundImage}
@@ -37,7 +38,7 @@ const HomeBanner = ({ content }) => {
               zIndex: -1,
             }}
           />
-        )}
+        )} */}
         <div className="cus-container">
           <div className="banner-title position-relative text-center">
             {badgeImage && (
