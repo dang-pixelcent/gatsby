@@ -102,10 +102,9 @@ const HomeBanner = ({ content }) => {
                 decoding="async"
                 image={boxMobileImage}
                 alt="Mobile Box"
-                loading="eager"
+                loading="lazy"
                 fadeIn={false}
                 placeholder="none"
-                fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"
                 imgStyle={{ transition: 'none' }}
               />
