@@ -577,7 +577,7 @@ exports.createPages = async ({ actions, graphql }) => {
     }
   `);
 
-    if (homePageDataResult.errors) {
+  if (homePageDataResult.errors) {
     console.error(`${colors.red}Homepage query in gatsby-node.js failed!${colors.reset}`, homePageDataResult.errors);
     throw new Error("Homepage query in gatsby-node.js failed!");
   }
