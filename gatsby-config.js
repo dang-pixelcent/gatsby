@@ -124,8 +124,8 @@ module.exports = {
 
           const retryLink = new RetryLink({
             attempts: (count, operation, error) => {
-              // Retry tối đa 5 lần cho các lỗi 429
-              if (error && error.statusCode === 429 && count <= 5) {
+              // Retry tối đa 7 lần cho các lỗi 429
+              if (error && error.statusCode === 429 && count <= 7) {
                 console.log(`Retry attempt #${count} for ${operation.operationName} due to 429`)
                 // Tính toán thời gian chờ tăng dần (exponential backoff)
                 const delay = Math.pow(2, count) * 1000

@@ -23,7 +23,7 @@ if (!fs.existsSync(CACHE_DIR)) {
   fs.mkdirSync(CACHE_DIR, { recursive: true })
 }
 
-async function fetchSeoData(url, retries = 5) {
+async function fetchSeoData(url, retries = 7) {
   for (let i = 0; i < retries; i++) {
     try {
       console.log(`${colors.blue}Fetching SEO data for ${url} (attempt ${i + 1}/${retries})${colors.reset}`)
@@ -121,7 +121,7 @@ async function processBatches(urls) {
 async function cacheSeoData() {
   console.log(`${colors.cyan}${colors.bright}Starting SEO data caching...${colors.reset}`)
 
-  const retries = 5; // Định nghĩa số lần thử lại
+  const retries = 7; // Định nghĩa số lần thử lại
   for (let i = 0; i < retries; i++) { // Bắt đầu vòng lặp for, định nghĩa biến i
     try {
       // List of URLs to cache
