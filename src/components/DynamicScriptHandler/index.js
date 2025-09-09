@@ -24,7 +24,7 @@ const HANDLER_REGISTRY = [
     initializeHeightEqualizer,
     initializeJotForm,
     initializeResultsNavigation,
-    // initializeTrackingPixels,
+    initializeTrackingPixels,
     initializeSearchForm,
     // initializeFormEmbed
 ];

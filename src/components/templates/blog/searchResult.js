@@ -182,103 +182,103 @@ const SearchResultPage = ({ location }) => {
     );
 };
 
-export const Head = () => {
-    const location = useLocation();
+// export const Head = () => {
+//     const location = useLocation();
 
-    const params = new URLSearchParams(location.search);
-    const searchTerm = params.get('q') || '';
-    const page = parseInt(params.get('page')) || 1;
+//     const params = new URLSearchParams(location.search);
+//     const searchTerm = params.get('q') || '';
+//     const page = parseInt(params.get('page')) || 1;
 
-    const siteName = "Wellness Clinic Marketing";
-    // Lấy tổng số trang từ URL nếu có (hoặc bạn có thể truyền qua context/props nếu cần)
-    // Ở đây sẽ không có totalPages, nên chỉ hiển thị số trang hiện tại nếu page > 1
-    let fullTitle = searchTerm ? `${searchTerm}` : 'Search';
-    if (page > 1) {
-        fullTitle = `${searchTerm} - Page ${page} - ${siteName}`;
-    } else {
-        fullTitle = `${searchTerm ? searchTerm : 'Search'} - ${siteName}`;
-    }
-    const pageUrl = location.href;
+//     const siteName = "Wellness Clinic Marketing";
+//     // Lấy tổng số trang từ URL nếu có (hoặc bạn có thể truyền qua context/props nếu cần)
+//     // Ở đây sẽ không có totalPages, nên chỉ hiển thị số trang hiện tại nếu page > 1
+//     let fullTitle = searchTerm ? `${searchTerm}` : 'Search';
+//     if (page > 1) {
+//         fullTitle = `${searchTerm} - Page ${page} - ${siteName}`;
+//     } else {
+//         fullTitle = `${searchTerm ? searchTerm : 'Search'} - ${siteName}`;
+//     }
+//     const pageUrl = location.href;
 
-    // Tạo cấu trúc Schema JSON-LD động
-    // Schema JSON-LD động với thông tin logo đầy đủ
-    const schemaData = {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "Organization",
-                "@id": `${REACT_APP_DOMAIN}/#organization`,
-                "name": siteName,
-                "url": `${REACT_APP_DOMAIN}`,
-                "logo": {
-                    "@type": "ImageObject",
-                    "@id": `${REACT_APP_DOMAIN}/#logo`,
-                    "url": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
-                    "contentUrl": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
-                    "caption": siteName,
-                    "inLanguage": "en-US",
-                    "width": "1038",
-                    "height": "300"
-                }
-            },
-            {
-                "@type": "WebSite",
-                "@id": `${REACT_APP_DOMAIN}/#website`,
-                "url": `${REACT_APP_DOMAIN}`,
-                "name": siteName,
-                "publisher": {
-                    "@id": `${REACT_APP_DOMAIN}/#organization`
-                },
-                "inLanguage": "en-US"
-            },
-            {
-                "@type": "WebPage",
-                "@id": `${pageUrl}#webpage`,
-                "url": pageUrl,
-                "name": fullTitle,
-                "isPartOf": {
-                    "@id": `${REACT_APP_DOMAIN}/#website`
-                },
-                "inLanguage": "en-US"
-            }
-        ]
-    };
+//     // Tạo cấu trúc Schema JSON-LD động
+//     // Schema JSON-LD động với thông tin logo đầy đủ
+//     const schemaData = {
+//         "@context": "https://schema.org",
+//         "@graph": [
+//             {
+//                 "@type": "Organization",
+//                 "@id": `${REACT_APP_DOMAIN}/#organization`,
+//                 "name": siteName,
+//                 "url": `${REACT_APP_DOMAIN}`,
+//                 "logo": {
+//                     "@type": "ImageObject",
+//                     "@id": `${REACT_APP_DOMAIN}/#logo`,
+//                     "url": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
+//                     "contentUrl": `${WP_BASE_URL}/wp-content/uploads/2025/03/logo-head.png`,
+//                     "caption": siteName,
+//                     "inLanguage": "en-US",
+//                     "width": "1038",
+//                     "height": "300"
+//                 }
+//             },
+//             {
+//                 "@type": "WebSite",
+//                 "@id": `${REACT_APP_DOMAIN}/#website`,
+//                 "url": `${REACT_APP_DOMAIN}`,
+//                 "name": siteName,
+//                 "publisher": {
+//                     "@id": `${REACT_APP_DOMAIN}/#organization`
+//                 },
+//                 "inLanguage": "en-US"
+//             },
+//             {
+//                 "@type": "WebPage",
+//                 "@id": `${pageUrl}#webpage`,
+//                 "url": pageUrl,
+//                 "name": fullTitle,
+//                 "isPartOf": {
+//                     "@id": `${REACT_APP_DOMAIN}/#website`
+//                 },
+//                 "inLanguage": "en-US"
+//             }
+//         ]
+//     };
 
-    return (
-        <SEO>
-            {/* Thẻ Title */}
-            <title>{fullTitle}</title>
+//     return (
+//         <SEO>
+//             {/* Thẻ Title */}
+//             <title>{fullTitle}</title>
 
-            <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            {/* Thẻ Robots quan trọng nhất cho trang search */}
-            <meta name="robots" content="noindex, follow" />
+//             <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
+//             {/* Thẻ Robots quan trọng nhất cho trang search */}
+//             <meta name="robots" content="noindex, follow" />
 
-            {/* Các thẻ Open Graph */}
-            <meta property="og:locale" content="en_US" />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={fullTitle} />
-            <meta property="og:url" content={pageUrl} />
-            <meta property="og:site_name" content={siteName} />
+//             {/* Các thẻ Open Graph */}
+//             <meta property="og:locale" content="en_US" />
+//             <meta property="og:type" content="website" />
+//             <meta property="og:title" content={fullTitle} />
+//             <meta property="og:url" content={pageUrl} />
+//             <meta property="og:site_name" content={siteName} />
 
-            {/* Các thẻ Twitter Card */}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={fullTitle} />
+//             {/* Các thẻ Twitter Card */}
+//             <meta name="twitter:card" content="summary_large_image" />
+//             <meta name="twitter:title" content={fullTitle} />
 
-            {/* Thẻ Schema JSON-LD động */}
-            <script type="application/ld+json" className="rank-math-schema-pro">
-                {JSON.stringify(schemaData)}
-            </script>
-        </SEO>
-    );
+//             {/* Thẻ Schema JSON-LD động */}
+//             <script type="application/ld+json" className="rank-math-schema-pro">
+//                 {JSON.stringify(schemaData)}
+//             </script>
+//         </SEO>
+//     );
 
 
-    // // Nếu không có dữ liệu SEO (API lỗi), hiển thị các thẻ mặc định
-    // return (
-    //     <>
-    //         <title>{`${defaultTitle} | Your Site Name`}</title>
-    //         <meta name="robots" content="noindex, follow" />
-    //     </>
-    // );
-};
+//     // // Nếu không có dữ liệu SEO (API lỗi), hiển thị các thẻ mặc định
+//     // return (
+//     //     <>
+//     //         <title>{`${defaultTitle} | Your Site Name`}</title>
+//     //         <meta name="robots" content="noindex, follow" />
+//     //     </>
+//     // );
+// };
 
 export default SearchResultPage;
