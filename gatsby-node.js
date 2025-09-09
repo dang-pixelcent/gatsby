@@ -105,66 +105,67 @@ const SPECIAL_SCRIPT_HANDLERS = {
  * @returns {{cleanedHtml: string, scripts: Array<Object>, specialScripts: Array<Object>}}
  */
 function processAllScripts(html = '', pageSlug) {
-  if (!html || !pageSlug) {
-    return { cleanedHtml: html || '', scripts: [], specialScripts: [] };
-  }
+  // if (!html || !pageSlug) {
+  //   return { cleanedHtml: html || '', scripts: [], specialScripts: [] };
+  // }
 
-  const $ = cheerio.load(html);
-  const scriptTags = $('script');
-  const extractedScripts = [];
-  const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
+  // const $ = cheerio.load(html);
+  // const scriptTags = $('script');
+  // const extractedScripts = [];
+  // const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
 
-  scriptTags.each((index, element) => {
-    const attributes = { ...element.attribs };
-    const src = attributes.src || '';
-    let isSpecial = false;
+  // scriptTags.each((index, element) => {
+  //   const attributes = { ...element.attribs };
+  //   const src = attributes.src || '';
+  //   let isSpecial = false;
 
-    // 1. Kiểm tra xem có phải script đặc biệt không
-    for (const key in SPECIAL_SCRIPT_HANDLERS) {
-      if (src.includes(key)) {
-        const handler = SPECIAL_SCRIPT_HANDLERS[key];
-        const specialScriptInfo = handler.createPlaceholder(element, $);
-        if (specialScriptInfo) {
-          specialScriptsFound.push(specialScriptInfo);
-        }
-        isSpecial = true;
-        break; // Đã xử lý, chuyển sang script tiếp theo
-      }
-    }
+  //   // 1. Kiểm tra xem có phải script đặc biệt không
+  //   for (const key in SPECIAL_SCRIPT_HANDLERS) {
+  //     if (src.includes(key)) {
+  //       const handler = SPECIAL_SCRIPT_HANDLERS[key];
+  //       const specialScriptInfo = handler.createPlaceholder(element, $);
+  //       if (specialScriptInfo) {
+  //         specialScriptsFound.push(specialScriptInfo);
+  //       }
+  //       isSpecial = true;
+  //       break; // Đã xử lý, chuyển sang script tiếp theo
+  //     }
+  //   }
 
-    // 2. Nếu là script đặc biệt, bỏ qua và không làm gì thêm
-    if (isSpecial) {
-      return;
-    }
+  //   // 2. Nếu là script đặc biệt, bỏ qua và không làm gì thêm
+  //   if (isSpecial) {
+  //     return;
+  //   }
 
-    // 3. Xử lý script thông thường (như cũ)
-    if (attributes.src) {
-      if (!attributes.id) {
-        attributes.id = `external-script-${pageSlug}-${index}`;
-      }
-      extractedScripts.push({
-        resourceType: 'external-script',
-        attributes: attributes,
-      });
-    } else {
-      const inlineContent = $(element).html();
-      if (inlineContent) {
-        extractedScripts.push({
-          resourceType: 'inline-script',
-          content: `(function(){\n${inlineContent}\n})();`,
-          id: `inline-script-${pageSlug}-${index}`
-        });
-      }
-    }
-    // Xóa thẻ script thông thường sau khi đã trích xuất thông tin
-    $(element).remove();
-  });
+  //   // 3. Xử lý script thông thường (như cũ)
+  //   if (attributes.src) {
+  //     if (!attributes.id) {
+  //       attributes.id = `external-script-${pageSlug}-${index}`;
+  //     }
+  //     extractedScripts.push({
+  //       resourceType: 'external-script',
+  //       attributes: attributes,
+  //     });
+  //   } else {
+  //     const inlineContent = $(element).html();
+  //     if (inlineContent) {
+  //       extractedScripts.push({
+  //         resourceType: 'inline-script',
+  //         content: `(function(){\n${inlineContent}\n})();`,
+  //         id: `inline-script-${pageSlug}-${index}`
+  //       });
+  //     }
+  //   }
+  //   // Xóa thẻ script thông thường sau khi đã trích xuất thông tin
+  //   $(element).remove();
+  // });
 
-  return {
-    cleanedHtml: $.html(),
-    scripts: extractedScripts,
-    specialScripts: specialScriptsFound, // Trả về danh sách script đặc biệt
-  };
+  // return {
+  //   cleanedHtml: $.html(),
+  //   scripts: extractedScripts,
+  //   specialScripts: specialScriptsFound, // Trả về danh sách script đặc biệt
+  // };
+  return { cleanedHtml: html, scripts: [], specialScripts: [] };
 }
 
 
