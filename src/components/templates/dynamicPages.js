@@ -1,6 +1,7 @@
 // các import cơ bản phải có
 import { Script } from "gatsby"
 import React, { Suspense, lazy, useEffect } from "react";
+import loadable from '@loadable/component';
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 
@@ -13,17 +14,22 @@ import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
 // import ComponentPortal from "@components/Tools/ComponentPortal"
 // Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
-import DomInjector from '@components/Tools/DomInjector';
-import DomReplacer from '@components/Tools/DomReplacer';
-// import ScriptLoader from '@components/Tools/ScriptLoader';
-import DynamicScriptHandler from '@components/DynamicScriptHandler'
+// import DomInjector from '@components/Tools/DomInjector';
+// import DomReplacer from '@components/Tools/DomReplacer';
+// import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
-import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
-import OldScheduleForm from '@components/Blocks/OldScheduleForm'; // Đảm bảo đường dẫn đúng
-// import { ScheduleForm } from '@components/Blocks/GetStarted';
-import SpecialScriptInjector from '@components/Tools/SpecialScriptInjector';
+// import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
+// import OldScheduleForm from '@components/Blocks/OldScheduleForm'; // Đảm bảo đường dẫn đúng
+// import SpecialScriptInjector from '@components/Tools/SpecialScriptInjector';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
+
+const DomReplacer = loadable(() => import('@components/Tools/DomReplacer'));
+const DomInjector = loadable(() => import('@components/Tools/DomInjector'));
+const SpecialScriptInjector = loadable(() => import('@components/Tools/SpecialScriptInjector'));
+const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHandler'));
+const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
+const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
 
 // flag kiểm soát tính năng
 const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -198,17 +204,23 @@ const Home = ({ pageContext }) => {
         </ComponentPortal> */}
 
         {/* Component này sẽ tự động xử lý tất cả các script đặc biệt được tìm thấy */}
-        <SpecialScriptInjector scripts={specialScripts} />
+        <Suspense fallback={<div></div>}>
+          <SpecialScriptInjector scripts={specialScripts} />
+        </Suspense>
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (
-          <DomReplacer selector="#scheduleform">
-            <LazyPracticeFlowForm />
-          </DomReplacer>
+          <Suspense fallback={<div></div>}>
+            <DomReplacer selector="#scheduleform">
+              <LazyPracticeFlowForm />
+            </DomReplacer>
+          </Suspense>
         ) : (
-          <DomInjector selector="#sdformthree">
-            <OldScheduleForm />
-          </DomInjector>
+          <Suspense fallback={<div></div>}>
+            <DomInjector selector="#sdformthree">
+              <OldScheduleForm />
+            </DomInjector>
+          </Suspense>
         )}
 
         <DomInjector selector=".col-slider">
@@ -247,7 +259,9 @@ const Home = ({ pageContext }) => {
 
       </Layout>
       {/* Tiêm các script động vào cuối body */}
-      <DynamicScriptHandler />
+      <Suspense fallback={null}>
+        <DynamicScriptHandler />
+      </Suspense>
       {scripts.map((script) => {
         if (script.resourceType === 'external-script') {
           return (
