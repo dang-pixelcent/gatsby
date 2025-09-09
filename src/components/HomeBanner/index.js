@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { extractPathname } from "/src/utils/urlUtils"
+import loadable from '@loadable/component';
 import "./styles.scss"
 import * as styles from './HomeBanner.module.scss';
 
@@ -14,6 +15,19 @@ const HomeBanner = ({ content }) => {
   const badgeImage = getImage(content?.badgeLogo?.node?.localFile)
   const boxDesktopImage = getImage(content?.boxDesktop?.node?.localFile)
   const boxMobileImage = getImage(content?.boxMobile?.node?.localFile)
+
+  // State để kiểm soát việc hiển thị các box
+  const [areBoxesVisible, setBoxesVisible] = useState(false);
+
+  useEffect(() => {
+    // Sau khi component render, đặt một timeout nhỏ để hiển thị các box.
+    // Khoảng trễ này cho phép h1 được tính là LCP trước khi ảnh xuất hiện.
+    const timer = setTimeout(() => {
+      setBoxesVisible(true);
+    }, 100); // 100ms là đủ và không ảnh hưởng trải nghiệm người dùng
+
+    return () => clearTimeout(timer); // Dọn dẹp timer
+  }, []);
 
   return (
     <>
@@ -96,15 +110,16 @@ const HomeBanner = ({ content }) => {
               />
             )}
           </div>
-          <div className="box-mobile">
+          <div className={`box-mobile ${styles.boxImage} ${areBoxesVisible ? styles.visible : styles.initiallyHidden}`}>
             {boxMobileImage && (
               <GatsbyImage
                 decoding="async"
                 image={boxMobileImage}
                 alt="Mobile Box"
-                loading="lazy"
+                loading="eager"
                 fadeIn={false}
                 placeholder="none"
+                fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"
                 imgStyle={{ transition: 'none' }}
               />

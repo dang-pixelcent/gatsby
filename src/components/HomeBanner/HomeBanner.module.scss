@@ -26,3 +26,17 @@
         /* Thay bằng màu nền (hoặc màu bạn muốn) */
     }
 }
+
+.boxImage {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.initiallyHidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.visible {
+    opacity: 1;
+    visibility: visible;
+}
