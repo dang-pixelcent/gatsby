@@ -74,6 +74,7 @@ const GiftBookSection = () => {
                     <figure>
                         {giftBookImage.imageData ? (
                             <GatsbyImage
+                                imgStyle={{ transition: 'none' }}
                                 decoding="async"
                                 loading="lazy"
                                 fadeIn={false}

@@ -40,6 +40,7 @@ const QuizResult = ({ finalPageData }) => {
             <header className="flex-v-c text-neutral border-b-2 border-b-neutral-faded">
                 <Link to="/">
                     <GatsbyImage
+                        imgStyle={{ transition: 'none' }}
                         decoding="async"
                         loading="eager"
                         fadeIn={false}

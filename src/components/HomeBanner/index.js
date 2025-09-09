@@ -26,6 +26,7 @@ const HomeBanner = ({ content }) => {
             loading="eager"
             fadeIn={false}
             fetchPriority="high"
+            imgStyle={{ transition: 'none' }}
             placeholder="none"
             style={{
               position: "absolute",
@@ -49,6 +50,7 @@ const HomeBanner = ({ content }) => {
                 fadeIn={false}
                 fetchPriority="high"
                 placeholder="none"
+                imgStyle={{ transition: 'none' }}
               />
             )}
             <div className="sub-title f-soleto fw-500 text-white">
@@ -89,6 +91,7 @@ const HomeBanner = ({ content }) => {
                 placeholder="none"
                 fetchPriority="high"
                 sizes="(max-width: 600px) 100vw, 518px"
+                imgStyle={{ transition: 'none' }}
               />
             )}
           </div>
@@ -103,6 +106,7 @@ const HomeBanner = ({ content }) => {
                 placeholder="none"
                 fetchPriority="high"
                 sizes="(max-width: 412px) 303px, 303px"
+                imgStyle={{ transition: 'none' }}
               />
             )}
           </div>

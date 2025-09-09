@@ -59,6 +59,7 @@ const PatientsSection = () => {
         >
             {bgImagePatients && (
                 <GatsbyImage
+                    imgStyle={{ transition: 'none' }}
                     decoding="async"
                     loading="lazy"
                     fadeIn={false}
