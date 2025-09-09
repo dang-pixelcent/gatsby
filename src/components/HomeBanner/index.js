@@ -4,33 +4,95 @@ import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import { extractPathname } from "/src/utils/urlUtils"
 import "./styles.scss"
 import * as styles from './HomeBanner.module.scss';
+import useIsMobile from '@hooks/useIsMobile';
 
 // Component giờ sẽ nhận `content` từ props, không tự query nữa
 const HomeBanner = ({ content }) => {
   const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
+  const isMobile = useIsMobile();
 
   // Dữ liệu đã được truyền vào, chỉ cần sử dụng
+  // const bgImageUrl = content?.backgroundImage?.node?.sourceUrl;
   const backgroundImage = getImage(content?.backgroundImage?.node?.localFile)
   const badgeImage = getImage(content?.badgeLogo?.node?.localFile)
   const boxDesktopImage = getImage(content?.boxDesktop?.node?.localFile)
   const boxMobileImage = getImage(content?.boxMobile?.node?.localFile)
 
   // State để kiểm soát việc hiển thị các box
-  const [areBoxesVisible, setBoxesVisible] = useState(false);
+  const [isLcpDelayed, setLcpDelayed] = useState(false);
 
   useEffect(() => {
-    // Sau khi component render, đặt một timeout nhỏ để hiển thị các box.
-    // Khoảng trễ này cho phép h1 được tính là LCP trước khi ảnh xuất hiện.
-    const timer = setTimeout(() => {
-      setBoxesVisible(true);
-    }, 100); // 100ms là đủ và không ảnh hưởng trải nghiệm người dùng
+    // Chỉ thực hiện trì hoãn nếu là mobile
+    if (isMobile) {
+      const timer = setTimeout(() => {
+        setLcpDelayed(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]);
 
-    return () => clearTimeout(timer); // Dọn dẹp timer
-  }, []);
+  // ⭐️ Tạo đối tượng style cho ảnh nền
+  // const bannerStyle = {};
+  // if (bgImageUrl) {
+  //   // Nếu là desktop, áp dụng ảnh nền ngay
+  //   if (!isMobile) {
+  //     bannerStyle.backgroundImage = `url(${bgImageUrl})`;
+  //   }
+  //   // Nếu là mobile và đã hết thời gian trì hoãn, mới áp dụng ảnh nền
+  //   else if (isMobile && isLcpDelayed) {
+  //     bannerStyle.backgroundImage = `url(${bgImageUrl})`;
+  //   }
+  // }
+
+  // ⭐️ Xác định xem các box có nên hiển thị hay không
+  // Desktop: luôn hiển thị. Mobile: hiển thị sau khi trì hoãn.
+  const areBoxesVisible = !isMobile || (isMobile && isLcpDelayed);
 
   return (
     <>
       <section className={`home-banner ${styles.bannerSection}`}>
+        {
+          !isMobile ? (
+            <GatsbyImage
+              decoding="async"
+              image={backgroundImage}
+              alt="Wellness Clinic Marketing Hero Banner"
+              className="banner-bg"
+              loading="eager"
+              fadeIn={false}
+              fetchPriority="high"
+              imgStyle={{ transition: 'none' }}
+              placeholder="none"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: -1,
+              }}
+            />
+          ) : (isMobile && isLcpDelayed) && (
+            <GatsbyImage
+              decoding="async"
+              image={backgroundImage}
+              alt="Wellness Clinic Marketing Hero Banner"
+              className="banner-bg"
+              loading="eager"
+              fadeIn={false}
+              fetchPriority="high"
+              imgStyle={{ transition: 'none' }}
+              placeholder="none"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                zIndex: -1,
+              }}
+            />
+          )}
         {/* {backgroundImage && (
           <GatsbyImage
             decoding="async"

@@ -1,16 +1,16 @@
-.bannerSection {
-    /*
-  * Đây là phần quan trọng nhất:
-  * Webpack sẽ đọc dòng này, tìm file ảnh, hash nó,
-  * và tự động thay thế đường dẫn này bằng đường dẫn đã được hash.
-  */
-    background-image: url('../../assets/images/banner/hero-banner-v2.png');
+// .bannerSection {
+//     /*
+//   * Đây là phần quan trọng nhất:
+//   * Webpack sẽ đọc dòng này, tìm file ảnh, hash nó,
+//   * và tự động thay thế đường dẫn này bằng đường dẫn đã được hash.
+//   */
+//     background-image: url('../../assets/images/banner/hero-banner-v2.png');
 
-    /* Thêm các thuộc tính khác cho ảnh nền */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+//     /* Thêm các thuộc tính khác cho ảnh nền */
+//     background-size: cover;
+//     background-position: center;
+//     background-repeat: no-repeat;
+// }
 
 /* 
  * Tối ưu cho Mobile:
@@ -20,12 +20,32 @@
 */
 @media (max-width: 767px) {
     .bannerSection {
-        background-image: none;
-        /* Tắt ảnh nền */
+        /*
+     * Giữ lại các thuộc tính layout, nhưng XÓA background-image ở đây.
+     * Thay vào đó, đặt một màu nền mặc định.
+     */
         background-color: #0659A9;
-        /* Thay bằng màu nền (hoặc màu bạn muốn) */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        /* Giữ các thuộc tính khác nếu có */
     }
 }
+
+// @media (max-width: 767px) {
+//     .bannerSection {
+//         // background-image: url('../../assets/images/banner/hero-banner-v2.png');
+
+//         /* Thêm các thuộc tính khác cho ảnh nền */
+//         background-size: cover;
+//         background-position: center;
+//         background-repeat: no-repeat;
+//         background-image: none;
+//         /* Tắt ảnh nền */
+//         background-color: #0659A9;
+//         /* Thay bằng màu nền (hoặc màu bạn muốn) */
+//     }
+// }
 
 .boxImage {
     transition: opacity 0.3s ease-in-out;
