@@ -11,3 +11,18 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+/* 
+ * Tối ưu cho Mobile:
+ * Dưới 768px, chúng ta không tải ảnh nền nữa.
+ * Thay vào đó, chỉ sử dụng một màu nền đơn giản.
+ * Điều này ngăn trình duyệt tải file ảnh không cần thiết trên mobile.
+*/
+@media (max-width: 767px) {
+    .bannerSection {
+        background-image: none;
+        /* Tắt ảnh nền */
+        background-color: #0659A9;
+        /* Thay bằng màu nền (hoặc màu bạn muốn) */
+    }
+}
