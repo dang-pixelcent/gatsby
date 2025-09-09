@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run clean-and-fetch-seo:stag && env-cmd -f .env.staging gatsby build",
+  "buildCommand": "npm run clean-seo-cache && env-cmd -f .env.staging gatsby build",
   "git": {
     "deploymentEnabled": {
       "development": true
