@@ -115,12 +115,6 @@ function processAllScripts(html = '', pageSlug) {
   const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
 
   scriptTags.each((index, element) => {
-    const scriptType = $(element).attr('type');
-
-    // BỎ QUA script JSON-LD để tránh trích xuất nhầm
-    if (scriptType === 'application/ld+json') {
-      return; // Dùng return để tiếp tục vòng lặp (tương tự continue)
-    }
     const attributes = { ...element.attribs };
     const src = attributes.src || '';
     let isSpecial = false;
