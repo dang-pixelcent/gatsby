@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Layout from '@components/layout';
-import { SEO } from "@components/SEO"
+import { SEO } from "@components/SEO";
+import loadable from '@loadable/component';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
-import Pagination from '@components/Blog/Pagination';
+const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
 const BlogArchive = ({ pageContext }) => {
@@ -47,11 +48,13 @@ const BlogArchive = ({ pageContext }) => {
                             {posts.map(post => (
                                 <PostItem key={post.id} post={post} />
                             ))}
-                            <Pagination
-                                currentPage={pageNumber}
-                                numPages={numPages}
-                                basePath={`${pageInfo ? `${pageInfo.uri}` : null}`}
-                            />
+                            <Suspense fallback={<div></div>}>
+                                <Pagination
+                                    currentPage={pageNumber}
+                                    numPages={numPages}
+                                    basePath={`${pageInfo ? `${pageInfo.uri}` : null}`}
+                                />
+                            </Suspense>
                         </div>
 
                         {/* Cột phải */}

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import loadable from '@loadable/component';
 // import { Script } from "gatsby"
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
@@ -11,8 +12,6 @@ import { useStaticQuery, graphql } from "gatsby"
 // import "../styles/customStyle.scss"
 // import "../styles/dashicons.min.css"
 import Header from './Header'
-import Footer from './Footer'
-import ScrollTop from "./ScrollTop";
 // import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import Helmet from "react-helmet"
@@ -20,6 +19,9 @@ import AOS from 'aos';
 
 // 1. Import trực tiếp file logo
 import logoSrc from '@assets/logo/logo-head.png';
+
+const Footer = loadable(() => import('./Footer'));
+const ScrollTop = loadable(() => import('./ScrollTop'));
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -178,8 +180,10 @@ const DefaultLayout = ({ children }) => {
         logoSrc={logoSrc}
       />
       {children}
-      <Footer data={data} />
-      <ScrollTop />
+      <Suspense fallback={<div></div>}>
+        <Footer data={data} />
+        <ScrollTop />
+      </Suspense>
       {/* <ChatWidget /> */}
 
       {/* Global AOS Script */}

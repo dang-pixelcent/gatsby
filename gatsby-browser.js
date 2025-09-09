@@ -13,6 +13,13 @@ import './src/styles/customFonts.scss';
 
 // 3. GATSBY THEME STYLES - với lower priority
 import './src/styles/main.scss';
+import './src/styles/aos.css';
+import './src/styles/customStyle.scss';
+import './src/styles/dashicons.min.css';
+import './src/styles/slick.css';
+import './src/styles/custom.scss';
+import './src/styles/main.min.scss';
+import './src/styles/layouts/_blog.scss';
 
 // 4. EXTERNAL LIBRARIES CUỐI CÙNG
 import 'slick-carousel/slick/slick.css';

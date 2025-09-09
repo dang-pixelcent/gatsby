@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
+import loadable from '@loadable/component';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
-import Pagination from '@components/Blog/Pagination';
+const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 import { useLocation } from '@reach/router';
 
@@ -159,11 +160,13 @@ const SearchResultPage = ({ location }) => {
                                         <PostItem key={post.id} post={post} />
                                     ))}
                                     {numPages > 1 && (
-                                        <Pagination
-                                            currentPage={currentPage}
-                                            numPages={numPages}
-                                            basePath={basePath}
-                                        />
+                                        <Suspense fallback={<div></div>}>
+                                            <Pagination
+                                                currentPage={currentPage}
+                                                numPages={numPages}
+                                                basePath={basePath}
+                                            />
+                                        </Suspense>
                                     )}
                                 </>
                             ) : (
