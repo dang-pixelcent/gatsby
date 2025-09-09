@@ -121,86 +121,91 @@ async function processBatches(urls) {
 async function cacheSeoData() {
   console.log(`${colors.cyan}${colors.bright}Starting SEO data caching...${colors.reset}`)
 
-  // List of URLs to cache
-  const urls = [
-    `${SEO_QUERY_URL}/`, // Home page
-    // Add more URLs here or fetch from GraphQL
-  ]
+  const retries = 5; // Định nghĩa số lần thử lại
+  for (let i = 0; i < retries; i++) { // Bắt đầu vòng lặp for, định nghĩa biến i
+    try {
+      // List of URLs to cache
+      const urls = [
+        `${SEO_QUERY_URL}/`, // Home page
+        // Add more URLs here or fetch from GraphQL
+      ]
 
-  // Fetch URLs from GraphQL
-  const { GraphQLClient } = require('graphql-request')
-  const client = new GraphQLClient(process.env.GATSBY_WPGRAPHQL_URL)
+      // Fetch URLs from GraphQL
+      const { GraphQLClient } = require('graphql-request')
+      const client = new GraphQLClient(process.env.GATSBY_WPGRAPHQL_URL)
 
-  const query = `
-  query {
-    pages(where: {status: PUBLISH}, first: 999) {
-      edges {
-        node {
-        uri
-        slug
+      const query = `
+      query {
+        pages(where: {status: PUBLISH}, first: 999) {
+          edges {
+            node {
+            uri
+            slug
+            }
+          }
+        }
+        services(first: 999) {
+          nodes {
+            uri
+            slug
+          }
+        }
+        events(first: 999) {
+          nodes {
+            uri
+            slug
+          }
+        }
+        posts(first: 999) {
+          nodes {
+            uri
+            slug
+          }
+        }
+        caseStudiesPost(first: 999) {
+          nodes {
+            uri
+            slug
+          }
+        }
+        categories(first: 999) {
+          nodes {
+            slug
+            uri
+          }
         }
       }
-    }
-    services(first: 999) {
-      nodes {
-        uri
-        slug
+      `
+      const data = await client.request(query)
+
+      // Add all URLs to cache list using helper function
+      addUrlsToCache(urls, data, 'pages')
+      addUrlsToCache(urls, data, 'services')
+      addUrlsToCache(urls, data, 'events')
+      addUrlsToCache(urls, data, 'posts')
+      addUrlsToCache(urls, data, 'caseStudiesPost')
+      addUrlsToCache(urls, data, 'categories')
+
+      console.log(`${colors.magenta}Found ${urls.length} URLs to cache${colors.reset}`)
+
+      // Tối ưu: Xử lý song song với giới hạn concurrency
+      await processBatches(urls)
+
+      console.log(`${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`)
+
+      return; // Thoát khỏi hàm và vòng lặp nếu thành công
+
+    } catch (error) {
+      // Bây giờ i và retries đã được định nghĩa
+      console.error(`${colors.red}✗ Error caching SEO data (attempt ${i + 1}/${retries}): ${error.message}${colors.reset}`)
+      if (i === retries - 1) {
+        console.error(`${colors.red}Failed to cache SEO data after ${retries} attempts.${colors.reset}`)
+        process.exit(1); // Thoát tiến trình nếu thất bại sau tất cả các lần thử
       }
+      const delay = 1000 * Math.pow(2, i); // Thời gian chờ tăng dần (1s, 2s, 4s, ...)
+      console.warn(`${colors.yellow}Retrying after ${delay}ms...${colors.reset}`)
+      await new Promise(resolve => setTimeout(resolve, delay))
     }
-    events(first: 999) {
-      nodes {
-        uri
-        slug
-      }
-    }
-    posts(first: 999) {
-      nodes {
-        uri
-        slug
-      }
-    }
-    caseStudiesPost(first: 999) {
-      nodes {
-        uri
-        slug
-      }
-    }
-    categories(first: 999) {
-      nodes {
-        slug
-        uri
-      }
-    }
-  }
-  `
-
-  try {
-    const data = await client.request(query)
-
-    // Add all URLs to cache list using helper function
-    addUrlsToCache(urls, data, 'pages')
-    addUrlsToCache(urls, data, 'services')
-    addUrlsToCache(urls, data, 'events')
-    addUrlsToCache(urls, data, 'posts')
-    addUrlsToCache(urls, data, 'caseStudiesPost')
-    addUrlsToCache(urls, data, 'categories')
-
-    console.log(`${colors.magenta}Found ${urls.length} URLs to cache${colors.reset}`)
-
-    // Tối ưu: Xử lý song song với giới hạn concurrency
-    await processBatches(urls)
-
-    console.log(`${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`)
-
-  } catch (error) {
-    console.error(`${colors.red}✗ Error caching SEO data (attempt ${i + 1}/${retries}): ${error.message}${colors.reset}`)
-    if (i === retries - 1) {
-      console.error(`${colors.red}Failed to cache SEO data after ${retries} attempts.${colors.reset}`)
-      process.exit(1); // Thoát tiến trình nếu thất bại sau tất cả các lần thử
-    }
-    const delay = 1000 * Math.pow(2, i); // Thời gian chờ tăng dần (1s, 2s, 4s, ...)
-    console.warn(`${colors.yellow}Retrying after ${delay}ms...${colors.reset}`)
-    await new Promise(resolve => setTimeout(resolve, delay))
   }
 }
 
