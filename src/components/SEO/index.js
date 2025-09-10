@@ -3,9 +3,7 @@ import React from "react"
 import parse from 'html-react-parser';
 
 export const SEO = ({
-    metaHtml,
-    schemas,
-    // bodyClass,
+    seoData, // Chỉ nhận một prop duy nhất là chuỗi HTML thô
     children,
     lcpImageUrl
 }) => {

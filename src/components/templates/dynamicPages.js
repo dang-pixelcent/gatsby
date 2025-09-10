@@ -296,7 +296,7 @@ const Home = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
   <SEO
     metaHtml={pageContext.metaHtml || {}}
-    schemas={pageContext.schemas || []}
+  // schemas={pageContext.schemas || []}
   />
 );
 
