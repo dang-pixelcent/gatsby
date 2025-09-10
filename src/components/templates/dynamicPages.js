@@ -296,55 +296,7 @@ const Home = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
   <SEO
     seoData={pageContext.seoData || {}}
-  >
-    {/* {pageContext.uri === "/about-us/" && (
-      <script
-        type="application/ld+json"
-        className="rank-math-schema-pro"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "Organization",
-                "@id": "https://www.wellnessclinicmarketing.com/#organization",
-                "name": "Wellness Clinic Marketing",
-                "logo": {
-                  "@type": "ImageObject",
-                  "@id": "https://www.wellnessclinicmarketing.com/#logo",
-                  "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                  "contentUrl": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                  "caption": "Wellness Clinic Marketing",
-                  "inLanguage": "en-US",
-                  "width": "1038",
-                  "height": "300"
-                }
-              },
-              {
-                "@type": "WebSite",
-                "@id": "https://www.wellnessclinicmarketing.com/#website",
-                "url": "https://www.wellnessclinicmarketing.com",
-                "name": "Wellness Clinic Marketing",
-                "publisher": {
-                  "@id": "https://www.wellnessclinicmarketing.com/#organization"
-                },
-                "inLanguage": "en-US"
-              }
-            ]
-          })
-        }}
-      />
-    )} */}
-    {pageContext.uri === "/about-us/" && (
-      <script
-        type="application/ld+json"
-        className="rank-math-schema-pro"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({ "@context": "https://schema.org", "@graph": [{ "@type": "Organization", "@id": "https://www.wellnessclinicmarketing.com/#organization", "name": "Wellness Clinic Marketing", "logo": { "@type": "ImageObject", "@id": "https://www.wellnessclinicmarketing.com/#logo", "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png", "contentUrl": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png", "caption": "Wellness Clinic Marketing", "inLanguage": "en-US", "width": "1038", "height": "300" } }, { "@type": "WebSite", "@id": "https://www.wellnessclinicmarketing.com/#website", "url": "https://www.wellnessclinicmarketing.com", "name": "Wellness Clinic Marketing", "publisher": { "@id": "https://www.wellnessclinicmarketing.com/#organization" }, "inLanguage": "en-US" }, { "@type": "ImageObject", "@id": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/facebook.png", "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/facebook.png", "width": "225", "height": "225", "inLanguage": "en-US" }, { "@type": "BreadcrumbList", "@id": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/#breadcrumb", "itemListElement": [{ "@type": "ListItem", "position": "1", "item": { "@id": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/", "name": "Meta Advertising (Facebook & Instagram)" } }] }, { "@type": ["ItemPage", "FAQPage"], "@id": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/#webpage", "url": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/", "name": "Facebook Advertising for Medical Practices | Patient Lead Generation", "datePublished": "2024-12-02T02:40:23+00:00", "dateModified": "2025-09-08T08:50:08+00:00", "isPartOf": { "@id": "https://www.wellnessclinicmarketing.com/#website" }, "primaryImageOfPage": { "@id": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/facebook.png" }, "inLanguage": "en-US", "breadcrumb": { "@id": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/#breadcrumb" }, "mainEntity": [{ "@type": "Question", "name": "How can you get Botox patients with Facebook ads?", "acceptedAnswer": { "@type": "Answer", "text": "Facebook ads are an effective way to target women and men in an ideal age range. Our ads are crafted in a way that speaks to people who can benefit from a fresher look and are familiar with aesthetic procedures. Combining these creatives with a qualifying funnel, we entice prospective patients to reach out for an appointment," } }, { "@type": "Question", "name": "What types of medical practices can benefit from Facebook ads?", "acceptedAnswer": { "@type": "Answer", "text": "Med Spas and Medical Wellness Centers that offer aesthetic, wellness, and body contouring procedures are having great success with Facebook ads. However, due to platform restrictions, other strategies may be needed for sensitive services like hormone therapy or sexual wellness." } }, { "@type": "Question", "name": "How much does Facebook advertising cost?", "acceptedAnswer": { "@type": "Answer", "text": "The fee for implementing and managing Facebook/ Instagram advertising will range from $1,500-2,500/mo, depending on the total marketing program. In terms of an advertising budget, you want to allocate a minimum of $1,000/mo per procedure advertised. In a busy season, you want to scale that 3x and more, as long as you get a positive RO." } }] }, { "@type": "Product", "name": "Meta Advertising (Facebook & Instagram)", "url": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/", "description": "Grow your medical practice with targeted Facebook & Instagram ads. Convert high-quality leads into paying patients with expert ad strategies. ☎️ (800) 401-7046", "brand": { "@type": "Brand", "name": "Wellness Clinic Marketing" }, "image": { "@type": "ImageObject", "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/facebook.png" }, "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "bestRating": "5", "ratingCount": "120" } }, { "@type": "Service", "name": "Meta Advertising (Facebook & Instagram)", "url": "https://www.wellnessclinicmarketing.com/service/facebook-advertising/", "description": "Grow your medical practice with targeted Facebook & Instagram ads. Convert high-quality leads into paying patients with expert ad strategies. ☎️ (800) 401-7046", "image": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2024/12/facebook.png", "provider": { "@type": "Organization", "name": "Wellness Clinic Marketing", "url": "https://www.wellnessclinicmarketing.com/", "logo": { "@type": "ImageObject", "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png" } }, "areaServed": { "@type": "Country", "name": "United States" }, "audience": { "@type": "Audience", "audienceType": "Medical & Wellness Practices" } }] })
-        }}
-      />
-    )}
-  </SEO>
+  />
 );
 
 export default Home
