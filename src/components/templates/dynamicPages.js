@@ -46,7 +46,8 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
+  console.log("schemas:", schemas); // Debug toàn bộ pageContext
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -189,19 +190,20 @@ const Home = ({ pageContext }) => {
 
   return (
     <React.Fragment>
-      <Helmet>
-        {pageContext.schemas && pageContext.schemas.length > 0 && pageContext.schemas.map((schema, index) => (
-          <script
-            key={`schema-ld-${index}`}
-            type="application/ld+json"
-            className="rank-math-schema-pro"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(schema)
-            }}
-          />
-        ))}
-      </Helmet>
       <Layout>
+        <Helmet>
+          {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+            <Script
+              key={`schema-ld-${index}`}
+              type="application/ld+json"
+              className="rank-math-schema-pro"
+              strategy="idle"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(schema)
+              }}
+            />
+          ))}
+        </Helmet>
         {/* <SEO
           seoData={seoData}
         /> */}

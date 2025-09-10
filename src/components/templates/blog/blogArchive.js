@@ -3,6 +3,7 @@ import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
 import loadable from '@loadable/component';
 import { Helmet } from 'react-helmet';
+import { Script } from "gatsby"
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
@@ -38,11 +39,12 @@ const BlogArchive = ({ pageContext }) => {
     return (
         <Layout>
             <Helmet>
-                {pageContext.schemas && pageContext.schemas.length > 0 && pageContext.schemas.map((schema, index) => (
-                    <script
+                {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+                    <Script
                         key={`schema-ld-${index}`}
                         type="application/ld+json"
                         className="rank-math-schema-pro"
+                        strategy="idle"
                         dangerouslySetInnerHTML={{
                             __html: JSON.stringify(schema)
                         }}

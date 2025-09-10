@@ -3,6 +3,7 @@ import Layout from "@components/layout"
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
 import { Helmet } from "react-helmet"
+import { Script } from "gatsby"
 
 import loadable from '@loadable/component';
 
@@ -23,6 +24,7 @@ const GiftBookSection = loadable(() => import('@components/sections/GiftBookSect
 
 // Component `Home` giờ nhận `pageContext`
 const Home = ({ pageContext }) => {
+    const { schemas } = pageContext;
     // Dữ liệu được lấy từ `pageContext.pageData`
     const bannerContent = pageContext.pageData?.cms.pageBy.template?.homeContent?.flexibleContent.find(
         item => item.__typename === "GraphCMS_HomeContentFlexibleContentBannerLayout"
@@ -31,12 +33,12 @@ const Home = ({ pageContext }) => {
     return (
         <Layout>
             <Helmet>
-                {/* Render thẻ schema từ dữ liệu đã được trích xuất */}
-                {pageContext.schemas && pageContext.schemas.length > 0 && pageContext.schemas.map((schema, index) => (
-                    <script
+                {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+                    <Script
                         key={`schema-ld-${index}`}
                         type="application/ld+json"
                         className="rank-math-schema-pro"
+                        strategy="idle"
                         dangerouslySetInnerHTML={{
                             __html: JSON.stringify(schema)
                         }}
