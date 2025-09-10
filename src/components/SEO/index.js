@@ -1,6 +1,7 @@
 import React from "react"
 // import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
+import * as cheerio from 'cheerio';
 
 export const SEO = ({
     seoData, // Chỉ nhận một prop duy nhất là chuỗi HTML thô
