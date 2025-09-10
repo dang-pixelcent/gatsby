@@ -300,7 +300,7 @@ async function createPaginatedBlogPages({ graphql, actions }) {
         pageNumber: pageNumber,
         numPages: numPages, // Tổng số trang vẫn được truyền xuống
         hasNextPage: pageInfo.hasNextPage,
-        seoData: processedBlogsSeo.metaHtml || null,
+        metaHtml: processedBlogsSeo.metaHtml || null,
         schemas: processedBlogsSeo.schemas || [],
         pageInfo: {
           name: 'Blogs',
@@ -456,7 +456,7 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
           pageNumber: pageNumber,
           numPages: numPages,
           hasNextPage: pageInfo.hasNextPage,
-          seoData: processedCategorySeo.metaHtml || null,
+          metaHtml: processedCategorySeo.metaHtml || null,
           schemas: processedCategorySeo.schemas || [],
           pageInfo: {
             name: category.name,
@@ -651,7 +651,7 @@ exports.createPages = async ({ actions, graphql }) => {
     context: {
       // seoData: homeDataSeo || null,
       // [THAY ĐỔI] Truyền dữ liệu đã xử lý vào context
-      seoData: processedSeo.metaHtml || null,
+      metaHtml: processedSeo.metaHtml || null,
       schemas: processedSeo.schemas || [],
       htmlSnippets: homepageSnippets,
       pageData: homePageDataResult.data
@@ -728,7 +728,7 @@ exports.createPages = async ({ actions, graphql }) => {
       flexibleContentHtml: cleanedHtml,
       scripts: scripts,
       specialScripts: specialScripts,
-      seoData: processedSeo.metaHtml || null,
+      metaHtml: processedSeo.metaHtml || null,
       schemas: processedSeo.schemas || []
     };
   };

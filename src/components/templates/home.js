@@ -69,7 +69,7 @@ export const Head = ({ pageContext }) => {
 
     return (
         <SEO
-            seoData={pageContext.seoData || {}}
+            metaHtml={pageContext.metaHtml || {}}
             schemas={pageContext.schemas || []}
         >
             {/* Tạo thẻ link preload cho mỗi ảnh */}

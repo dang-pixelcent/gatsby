@@ -3,7 +3,7 @@ import React from "react"
 import parse from 'html-react-parser';
 
 export const SEO = ({
-    seoData,
+    metaHtml,
     schemas,
     // bodyClass,
     children,
@@ -17,10 +17,10 @@ export const SEO = ({
     // // Sử dụng hook để tính toán chuỗi class cho thẻ body
     // const calculatedBodyClass = useBodyClass(isMobileMenuOpen);
     //if (!bodyClass) console.warn("[SEO] bodyClass is not provided, this may cause issues with styling or functionality.");
-    // Kiểm tra xem seoData có phải là một chuỗi hợp lệ và không rỗng hay không
-    const canParseSeoData = typeof seoData === 'string' && seoData.trim().length > 0;
+    // Kiểm tra xem metaHtml có phải là một chuỗi hợp lệ và không rỗng hay không
+    const canParsemetaHtml = typeof metaHtml === 'string' && metaHtml.trim().length > 0;
 
-    if (!seoData) {
+    if (!metaHtml) {
         return (
             <>
                 {/* Preload favicon ngay lập tức để tránh delay */}
@@ -41,62 +41,13 @@ export const SEO = ({
     // --- THÊM VÀO ĐỂ DEBUG ---
     // Biến này sẽ lưu kết quả của hàm parse()
     let parsedSeoElements = null;
-    if (canParseSeoData) {
+    if (canParsemetaHtml) {
         // 1. Chạy hàm parse và lưu kết quả
-        parsedSeoElements = parse(seoData);
+        parsedSeoElements = parse(metaHtml);
 
 
     }
     // --- KẾT THÚC PHẦN DEBUG ---
-    // Nó là một MẢNG chứa một OBJECT, cấu trúc này là hoàn toàn chính xác.
-    const hardcodedSchemas = [{
-        "@context": "https://schema.org",
-        "@graph": [{
-            "@type": "Organization",
-            "@id": "https://www.wellnessclinicmarketing.com/#organization",
-            "name": "Wellness Clinic Marketing",
-            "logo": {
-                "@type": "ImageObject",
-                "@id": "https://www.wellnessclinicmarketing.com/#logo",
-                "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                "contentUrl": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                "caption": "Wellness Clinic Marketing",
-                "inLanguage": "en-US",
-                "width": "1038",
-                "height": "300"
-            }
-        }, {
-            "@type": "WebSite",
-            "@id": "https://www.wellnessclinicmarketing.com/#website",
-            "url": "https://www.wellnessclinicmarketing.com",
-            "name": "Wellness Clinic Marketing",
-            "publisher": {
-                "@id": "https://www.wellnessclinicmarketing.com/#organization"
-            },
-            "inLanguage": "en-US",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://www.wellnessclinicmarketing.com/?s={search_term_string}",
-                "query-input": "required name=search_term_string"
-            }
-        }, {
-            "@type": "WebPage",
-            "@id": "https://www.wellnessclinicmarketing.com/#webpage",
-            "url": "https://www.wellnessclinicmarketing.com/",
-            "name": "Medical Marketing Company For Med Spa & Medical Wellness Centers",
-            "datePublished": "2024-11-04T03:41:46+00:00",
-            "dateModified": "2025-09-08T11:38:03+00:00",
-            "about": {
-                "@id": "https://www.wellnessclinicmarketing.com/#organization"
-            },
-            "isPartOf": {
-                "@id": "https://www.wellnessclinicmarketing.com/#website"
-            },
-            "inLanguage": "en-US"
-        }]
-    }];
-
-    // console.log("[SEO Component]schemas:", hardcodedSchemas);
 
     return (
         <>
@@ -134,7 +85,7 @@ export const SEO = ({
 
             {/* JSON-LD schemas */}
             {/* Render các schema JSON-LD một cách an toàn */}
-            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
                 <script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
@@ -143,20 +94,7 @@ export const SEO = ({
                         __html: JSON.stringify(schema),
                     }}
                 />
-            ))} */}
-
-            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => ( */}
-
-            {schemas && schemas.length > 0 && (
-                <script
-                    // key={`schema-ld-${index}`}
-                    type="application/ld+json"
-                    className="rank-math-schema-pro"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(schemas[0]), // Chỉ dùng phần tử đầu tiên
-                    }}
-                />
-            )}
+            ))}
 
 
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
