@@ -5,9 +5,10 @@ import loadable from '@loadable/component';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
-const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 import { useLocation } from '@reach/router';
+const Pagination = loadable(() => import('@components/Blog/Pagination'));
+
 
 
 // async function fetchSeoData(searchTerm) {
