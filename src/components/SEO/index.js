@@ -43,9 +43,9 @@ export const SEO = ({
         parsedSeoElements = parse(seoData);
 
         // // 2. Log kết quả ra console để bạn xem
-        // console.log("--- [DEBUG SEO] Output of parse(seoData): ---");
-        // console.log(parsedSeoElements);
-        // console.log("--------------------------------------------");
+        console.log("--- [DEBUG SEO] Output of parse(seoData): ---");
+        console.log(parsedSeoElements);
+        console.log("--------------------------------------------");
     }
     // --- KẾT THÚC PHẦN DEBUG ---
 
@@ -86,7 +86,7 @@ export const SEO = ({
 
             {/* JSON-LD schemas */}
             {/* Render các schema JSON-LD một cách an toàn */}
-            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
                 <script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
@@ -95,7 +95,7 @@ export const SEO = ({
                         __html: JSON.stringify(schema),
                     }}
                 />
-            ))}
+            ))} */}
 
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
