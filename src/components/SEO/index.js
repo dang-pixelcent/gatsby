@@ -102,6 +102,8 @@ export const SEO = ({
         }]
     }];
 
+    console.log("[SEO Component]schemas:", hardcodedSchemas);
+
     return (
         <>
             {/* --- TỐI ƯU HÓA KẾT NỐI SỚM --- */}
@@ -155,7 +157,7 @@ export const SEO = ({
                 type="application/ld+json"
                 className="rank-math-schema-pro"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(hardcodedSchemas[0]), // Chỉ dùng phần tử đầu tiên
+                    __html: JSON.stringify(schemas[0]), // Chỉ dùng phần tử đầu tiên
                 }}
             />
             {/* ))} */}
