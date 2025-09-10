@@ -196,7 +196,7 @@ module.exports = {
         icon: `static/favicon.png`, // Đường dẫn đến icon của bạn
       },
     },
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`,
   ],
   siteMetadata: {
     title: `Gatsby Redux`,
