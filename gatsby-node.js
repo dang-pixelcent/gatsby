@@ -70,42 +70,6 @@ function getCachedSeoData(url) {
   return null;
 }
 
-/**
- * Hàm xử lý seoData, tách riêng meta tags và schema JSON.
- * @param {string} seoDataString - Chuỗi HTML SEO từ WordPress.
- * @returns {{metaHtml: string, schemas: Array<Object>}}
- */
-function processSeoData(seoDataString) {
-  if (!seoDataString) {
-    return { metaHtml: '', schemas: [] };
-  }
-
-  const $ = cheerio.load(seoDataString);
-  const schemas = [];
-
-  // Tìm tất cả các script JSON-LD
-  $('script[type="application/ld+json"]').each((i, el) => {
-    try {
-      const scriptContent = $(el).html();
-      if (scriptContent) {
-        // Parse nội dung JSON và đẩy vào mảng schemas
-        schemas.push(JSON.parse(scriptContent));
-      }
-    } catch (e) {
-      console.error('Error parsing JSON-LD schema:', e);
-    }
-    // Xóa thẻ script này khỏi DOM ảo
-    $(el).remove();
-  });
-
-  // HTML còn lại là các thẻ meta, title, link...
-  const metaHtml = $.html();
-
-  console.log(`[processSeoData] Extracted ${schemas.length} schemas. Meta HTML length: ${metaHtml.length}`);
-
-  return { metaHtml, schemas };
-}
-
 
 // --- START: CẤU HÌNH SCRIPT ĐẶC BIỆT : XỬ LÝ VỊ TRÍ ĐỨNG CỦA SCRIPTs ---
 const SPECIAL_SCRIPT_HANDLERS = {
@@ -212,7 +176,6 @@ async function createPaginatedBlogPages({ graphql, actions }) {
   const postsPerPage = 5;
   // lấy date seo cho blogs từ cacche
   const blogsDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/blogs/`);
-  const processedBlogsSeo = processSeoData(blogsDataSeo);
 
   // Bước 1: Vẫn lấy tổng số bài viết để tính tổng số trang (numPages)
   const countResult = await graphql(`
@@ -300,8 +263,7 @@ async function createPaginatedBlogPages({ graphql, actions }) {
         pageNumber: pageNumber,
         numPages: numPages, // Tổng số trang vẫn được truyền xuống
         hasNextPage: pageInfo.hasNextPage,
-        metaHtml: processedBlogsSeo.metaHtml || null,
-        schemas: processedBlogsSeo.schemas || [],
+        seoData: blogsDataSeo || null,
         pageInfo: {
           name: 'Blogs',
           slug: null,
@@ -354,8 +316,6 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
 
     // Lấy cached SEO data cho category
     const categoryDataSeo = getCachedSeoData(`${SEO_QUERY_URL}${category.uri}`);
-    // Xử lý seoData để tách meta và schema
-    const processedCategorySeo = processSeoData(categoryDataSeo);
 
     // Đếm tổng số posts trong category này
     const countResult = await graphql(`
@@ -456,8 +416,7 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
           pageNumber: pageNumber,
           numPages: numPages,
           hasNextPage: pageInfo.hasNextPage,
-          metaHtml: processedCategorySeo.metaHtml || null,
-          schemas: processedCategorySeo.schemas || [],
+          seoData: categoryDataSeo || null,
           pageInfo: {
             name: category.name,
             slug: category.slug,
@@ -626,8 +585,6 @@ exports.createPages = async ({ actions, graphql }) => {
 
   // trang home riêng + SEO
   const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
-  // [THAY ĐỔI] Xử lý seoData cho trang chủ
-  const processedSeo = processSeoData(homeDataSeo);
 
   // Tìm homepage node để xử lý snippets
   const homepageNode = data.cms.pages.edges.find(({ node }) => node.isFrontPage)?.node;
@@ -649,10 +606,7 @@ exports.createPages = async ({ actions, graphql }) => {
     path: `/`,
     component: path.resolve(`./src/components/templates/home.js`),
     context: {
-      // seoData: homeDataSeo || null,
-      // [THAY ĐỔI] Truyền dữ liệu đã xử lý vào context
-      metaHtml: processedSeo.metaHtml || null,
-      schemas: processedSeo.schemas || [],
+      seoData: homeDataSeo || null,
       htmlSnippets: homepageSnippets,
       pageData: homePageDataResult.data
     },
@@ -666,8 +620,6 @@ exports.createPages = async ({ actions, graphql }) => {
    */
   const processNode = (node) => {
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`);
-    const processedSeo = processSeoData(seoData);
-
     let htmlContent = node.flexibleContentHtml;
 
     // --- BƯỚC 1: XỬ LÝ VIDEO EMBEDS ---
@@ -728,8 +680,7 @@ exports.createPages = async ({ actions, graphql }) => {
       flexibleContentHtml: cleanedHtml,
       scripts: scripts,
       specialScripts: specialScripts,
-      metaHtml: processedSeo.metaHtml || null,
-      schemas: processedSeo.schemas || []
+      seoData: seoData,
     };
   };
 
