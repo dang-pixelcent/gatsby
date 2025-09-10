@@ -146,15 +146,17 @@ export const SEO = ({
             ))} */}
 
             {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => ( */}
-            <script
-                // key={`schema-ld-${index}`}
-                type="application/ld+json"
-                className="rank-math-schema-pro"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(schemas[0]), // Chỉ dùng phần tử đầu tiên
-                }}
-            />
-            {/* ))} */}
+
+            {schemas && schemas.length > 0 && (
+                <script
+                    // key={`schema-ld-${index}`}
+                    type="application/ld+json"
+                    className="rank-math-schema-pro"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(schemas[0]), // Chỉ dùng phần tử đầu tiên
+                    }}
+                />
+            )}
 
 
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
