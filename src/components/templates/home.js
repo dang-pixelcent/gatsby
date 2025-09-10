@@ -69,7 +69,7 @@ export const Head = ({ pageContext }) => {
 
     return (
         <SEO
-        // seoData={pageContext.seoData || {}}
+            seoData={pageContext.seoData || {}}
         >
             {/* Tạo thẻ link preload cho mỗi ảnh */}
             {imagesToPreload.map(image => {
@@ -87,62 +87,6 @@ export const Head = ({ pageContext }) => {
                 );
             })}
             <meta name="keywords" data-otto-pixel="dynamic-seo" content="Medical Wellness, Hormone Optimization, Sexual Wellness, Anti-Aging Procedures, Hormones Optimization, Medical Weight Loss, Cash-based Medical Practice, Practice Accelerator Program, Lead Generating Strategies"></meta>
-            <script
-                type="application/ld+json"
-                className="rank-math-schema-pro"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@graph": [
-                            {
-                                "@type": "Organization",
-                                "@id": "https://www.wellnessclinicmarketing.com/#organization",
-                                "name": "Wellness Clinic Marketing",
-                                "logo": {
-                                    "@type": "ImageObject",
-                                    "@id": "https://www.wellnessclinicmarketing.com/#logo",
-                                    "url": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                                    "contentUrl": "https://a.wellnessclinicmarketing.com/wp-content/uploads/2025/03/logo-head.png",
-                                    "caption": "Wellness Clinic Marketing",
-                                    "inLanguage": "en-US",
-                                    "width": "1038",
-                                    "height": "300"
-                                }
-                            },
-                            {
-                                "@type": "WebSite",
-                                "@id": "https://www.wellnessclinicmarketing.com/#website",
-                                "url": "https://www.wellnessclinicmarketing.com",
-                                "name": "Wellness Clinic Marketing",
-                                "publisher": {
-                                    "@id": "https://www.wellnessclinicmarketing.com/#organization"
-                                },
-                                "inLanguage": "en-US",
-                                "potentialAction": {
-                                    "@type": "SearchAction",
-                                    "target": "https://www.wellnessclinicmarketing.com/?s={search_term_string}",
-                                    "query-input": "required name=search_term_string"
-                                }
-                            },
-                            {
-                                "@type": "WebPage",
-                                "@id": "https://www.wellnessclinicmarketing.com/#webpage",
-                                "url": "https://www.wellnessclinicmarketing.com/",
-                                "name": "Medical Marketing Company For Med Spa & Medical Wellness Centers",
-                                "datePublished": "2024-11-04T03:41:46+00:00",
-                                "dateModified": "2025-09-08T11:38:03+00:00",
-                                "about": {
-                                    "@id": "https://www.wellnessclinicmarketing.com/#organization"
-                                },
-                                "isPartOf": {
-                                    "@id": "https://www.wellnessclinicmarketing.com/#website"
-                                },
-                                "inLanguage": "en-US"
-                            }
-                        ]
-                    })
-                }}
-            />
         </SEO>
     );
 };
