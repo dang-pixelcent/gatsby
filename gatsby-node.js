@@ -101,6 +101,8 @@ function processSeoData(seoDataString) {
   // HTML còn lại là các thẻ meta, title, link...
   const metaHtml = $.html();
 
+  console.log(`[processSeoData] Extracted ${schemas.length} schemas. Meta HTML length: ${metaHtml.length}`);
+
   return { metaHtml, schemas };
 }
 
