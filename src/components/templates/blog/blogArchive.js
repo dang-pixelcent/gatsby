@@ -11,7 +11,7 @@ const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
 const BlogArchive = ({ pageContext }) => {
-    const { posts, pageNumber, numPages, pageInfo } = pageContext;
+    const { posts, pageNumber, numPages, pageInfo, schemas } = pageContext;
 
     const bannerBlogs = (
         <section className="banner cus-height" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2025/03/default-page-banner.jpg')` }}>
