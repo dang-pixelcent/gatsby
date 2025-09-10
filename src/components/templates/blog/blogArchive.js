@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
 import loadable from '@loadable/component';
+import { Helmet } from 'react-helmet';
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
@@ -36,6 +37,18 @@ const BlogArchive = ({ pageContext }) => {
 
     return (
         <Layout>
+            <Helmet>
+                {pageContext.schemas && pageContext.schemas.length > 0 && pageContext.schemas.map((schema, index) => (
+                    <script
+                        key={`schema-ld-${index}`}
+                        type="application/ld+json"
+                        className="rank-math-schema-pro"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(schema)
+                        }}
+                    />
+                ))}
+            </Helmet>
             {/* Banner tĩnh cho danh mục hoặc Blogs */}
             {pageInfo.name === 'Blogs' ? bannerBlogs : bannerCategory}
 

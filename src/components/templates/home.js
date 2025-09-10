@@ -2,6 +2,7 @@ import React from "react"
 import Layout from "@components/layout"
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
+import { Helmet } from "react-helmet"
 
 import loadable from '@loadable/component';
 
@@ -29,6 +30,19 @@ const Home = ({ pageContext }) => {
 
     return (
         <Layout>
+            <Helmet>
+                {/* Render thẻ schema từ dữ liệu đã được trích xuất */}
+                {pageContext.schemas && pageContext.schemas.length > 0 && pageContext.schemas.map((schema, index) => (
+                    <script
+                        key={`schema-ld-${index}`}
+                        type="application/ld+json"
+                        className="rank-math-schema-pro"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(schema)
+                        }}
+                    />
+                ))}
+            </Helmet>
             <div id="content" className="site-content">
                 <div className="main-content">
                     {bannerContent && <HomeBanner content={bannerContent} />}
