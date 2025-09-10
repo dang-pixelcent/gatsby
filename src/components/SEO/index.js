@@ -46,7 +46,7 @@ export const SEO = ({
             {metaElements}
 
             {/* Render thẻ schema từ dữ liệu đã được trích xuất */}
-            {schemas.map((schema, index) => (
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
                 <script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
