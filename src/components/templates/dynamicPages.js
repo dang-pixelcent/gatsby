@@ -4,7 +4,6 @@ import React, { Suspense, lazy, useEffect } from "react";
 import loadable from '@loadable/component';
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
-import { Helmet } from "react-helmet"
 
 import ReactDOM from 'react-dom';
 // ⭐️ Import component lazy-load YouTube và CSS của nó
@@ -46,8 +45,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
-  console.log("schemas:", schemas); // Debug toàn bộ pageContext
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -191,19 +189,6 @@ const Home = ({ pageContext }) => {
   return (
     <React.Fragment>
       <Layout>
-        <Helmet>
-          {schemas && schemas.length > 0 && schemas.map((schema, index) => (
-            <Script
-              key={`schema-ld-${index}`}
-              type="application/ld+json"
-              className="rank-math-schema-pro"
-              strategy="idle"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify(schema)
-              }}
-            />
-          ))}
-        </Helmet>
         {/* <SEO
           seoData={seoData}
         /> */}
@@ -311,7 +296,7 @@ const Home = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
   <SEO
     metaHtml={pageContext.metaHtml || {}}
-  // schemas={pageContext.schemas || []}
+    schemas={pageContext.schemas || []}
   />
 );
 

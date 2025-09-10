@@ -1,10 +1,11 @@
 import React from "react"
 // import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
+import { Script } from "gatsby"
 
 export const SEO = ({
     metaHtml,
-    // schemas,
+    schemas,
     // bodyClass,
     children,
     lcpImageUrl
@@ -85,16 +86,17 @@ export const SEO = ({
 
             {/* JSON-LD schemas */}
             {/* Render các schema JSON-LD một cách an toàn */}
-            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
-                <script
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+                <Script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
                     className="rank-math-schema-pro"
+                    strategy="idle" // Tải script khi trình duyệt rảnh rỗi
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(schema),
                     }}
                 />
-            ))} */}
+            ))}
 
 
             <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />

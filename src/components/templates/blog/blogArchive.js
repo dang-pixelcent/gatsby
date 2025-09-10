@@ -2,8 +2,6 @@ import React, { Suspense } from 'react';
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
 import loadable from '@loadable/component';
-import { Helmet } from 'react-helmet';
-import { Script } from "gatsby"
 
 import PostItem from '@components/Blog/PostItem';
 import BlogSidebar from '@components/Blog/BlogSidebar';
@@ -11,7 +9,7 @@ const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
 const BlogArchive = ({ pageContext }) => {
-    const { posts, pageNumber, numPages, pageInfo, schemas } = pageContext;
+    const { posts, pageNumber, numPages, pageInfo } = pageContext;
 
     const bannerBlogs = (
         <section className="banner cus-height" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2025/03/default-page-banner.jpg')` }}>
@@ -38,19 +36,6 @@ const BlogArchive = ({ pageContext }) => {
 
     return (
         <Layout>
-            <Helmet>
-                {schemas && schemas.length > 0 && schemas.map((schema, index) => (
-                    <Script
-                        key={`schema-ld-${index}`}
-                        type="application/ld+json"
-                        className="rank-math-schema-pro"
-                        strategy="idle"
-                        dangerouslySetInnerHTML={{
-                            __html: JSON.stringify(schema)
-                        }}
-                    />
-                ))}
-            </Helmet>
             {/* Banner tĩnh cho danh mục hoặc Blogs */}
             {pageInfo.name === 'Blogs' ? bannerBlogs : bannerCategory}
 
@@ -84,7 +69,7 @@ const BlogArchive = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
     <SEO
         metaHtml={pageContext.metaHtml || {}}
-    // schemas={pageContext.schemas || []}
+        schemas={pageContext.schemas || []}
     />
 );
 
