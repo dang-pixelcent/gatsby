@@ -296,6 +296,7 @@ const Home = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
   <SEO
     seoData={pageContext.seoData || {}}
+    schemas={pageContext.schemas || []}
   />
 );
 
