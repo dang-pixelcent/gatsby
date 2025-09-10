@@ -780,17 +780,12 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                     <span className="site-logo-img">
                       <Link to="/" className="custom-logo-link" rel="home">
                         {/* Sử dụng dữ liệu động từ GraphQL */}
-                        <StaticImage
-                          src="../../assets/logo/logo-head.png"
-                          alt={logoAlt}
+                        <img
+                          src={logoSrc}
+                          alt="Wellness Clinic Marketing"
                           width={250}
                           height={72}
-                          placeholder="none"
-                          loading="eager"
-                          formats={["auto", "webp", "avif"]}
                           className="custom-logo"
-                          sizes="(max-width: 250px) 100vw, 250px"
-                          quality={50}
                         />
                       </Link>
                     </span>

@@ -22,12 +22,12 @@ const HomeBanner = ({ content }) => {
   const [isLcpDelayed, setLcpDelayed] = useState(false);
 
   useEffect(() => {
-    // Chỉ thực hiện trì hoãn nếu là mobile
     if (isMobile) {
-      const timer = setTimeout(() => {
-        setLcpDelayed(true);
-      }, 100);
+      const timer = setTimeout(() => setLcpDelayed(true), 100);
       return () => clearTimeout(timer);
+    } else {
+      // Reset state nếu người dùng resize từ mobile sang desktop
+      setLcpDelayed(false);
     }
   }, [isMobile]);
 

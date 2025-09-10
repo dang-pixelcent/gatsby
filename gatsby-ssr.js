@@ -149,6 +149,14 @@ export const onRenderBody = ({
     // />,
     <link
       rel="preload"
+      href="/fonts/Soleto-XBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossOrigin="anonymous"
+      key="soleto-xbold"
+    />,
+    <link
+      rel="preload"
       href="/fonts/Soleto-Regular.woff2"
       as="font"
       type="font/woff2"
@@ -163,14 +171,7 @@ export const onRenderBody = ({
     //   crossOrigin="anonymous"
     //   key="soleto-medium"
     // />,
-    <link
-      rel="preload"
-      href="/fonts/Soleto-XBold.woff2"
-      as="font"
-      type="font/woff2"
-      crossOrigin="anonymous"
-      key="soleto-xbold"
-    />,
+
   );
 
   if (scriptsForHeadString_fromHeadField) {
