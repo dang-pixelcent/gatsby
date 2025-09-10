@@ -11,10 +11,7 @@ export const SEO = ({
 }) => {
     // LOGGING ĐỂ DEBUG: In ra các props mà component nhận được
     // Bạn hãy mở console của trình duyệt và terminal lúc build để xem kết quả
-    console.log("--- SEO Component Props ---");
-    // console.log("Prop 'metaHtml':", metaHtml);
-    console.log("Prop 'schemas':", schemas);
-    console.log("---------------------------");
+
     // // Lấy giá trị isMobileMenuOpen từ context
     // const { isMobileMenuOpen } = useMobileMenuContext();
     // // Sử dụng hook để tính toán chuỗi class cho thẻ body
@@ -48,10 +45,7 @@ export const SEO = ({
         // 1. Chạy hàm parse và lưu kết quả
         parsedSeoElements = parse(seoData);
 
-        // // 2. Log kết quả ra console để bạn xem
-        console.log("--- [DEBUG SEO] Output of parse(seoData): ---");
-        console.log(parsedSeoElements);
-        console.log("--------------------------------------------");
+
     }
     // --- KẾT THÚC PHẦN DEBUG ---
     // Nó là một MẢNG chứa một OBJECT, cấu trúc này là hoàn toàn chính xác.
@@ -102,7 +96,7 @@ export const SEO = ({
         }]
     }];
 
-    console.log("[SEO Component]schemas:", hardcodedSchemas);
+    // console.log("[SEO Component]schemas:", hardcodedSchemas);
 
     return (
         <>
