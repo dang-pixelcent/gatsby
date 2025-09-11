@@ -197,5 +197,10 @@ module.exports = {
     //   },
     // },
     // `gatsby-plugin-offline`,
-  ]
+  ],
+  siteMetadata: {
+    title: `Gatsby WP Theme`,
+    // description: "Professional marketing services for wellness clinics and healthcare providers. Top Google rankings for keywords your ideal patients are already searching.",
+    siteUrl: process.env.GATSBY_SITE_URL,
+  },
 }
