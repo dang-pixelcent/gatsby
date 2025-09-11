@@ -66,7 +66,7 @@ module.exports = {
     //     ],
     //   },
     // },
-    // `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-react-helmet`,
     `gatsby-plugin-postcss`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
@@ -197,10 +197,5 @@ module.exports = {
     //   },
     // },
     // `gatsby-plugin-offline`,
-  ],
-  siteMetadata: {
-    title: `Gatsby Redux`,
-    // description: "Professional marketing services for wellness clinics and healthcare providers. Top Google rankings for keywords your ideal patients are already searching.",
-    siteUrl: process.env.GATSBY_SITE_URL,
-  },
+  ]
 }
