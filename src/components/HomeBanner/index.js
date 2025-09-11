@@ -24,7 +24,7 @@ const HomeBanner = ({ content }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLcpDelayed(true);
-    }, isMobile ? 150 : 0);
+    }, isMobile ? 100 : 0);
     return () => clearTimeout(timer);
   }, [isMobile]);
 
@@ -48,11 +48,11 @@ const HomeBanner = ({ content }) => {
   return (
     <>
       <section className={`home-banner ${styles.bannerSection}`}>
-        {isLcpDelayed && (<GatsbyImage
+        <GatsbyImage
           decoding="async"
           image={backgroundImage}
           alt="Wellness Clinic Marketing Hero Banner"
-          className="banner-bg"
+          className={`banner-bg ${styles.boxImage} ${isLcpDelayed ? styles.visible : styles.initiallyHidden}`}
           loading="eager"
           fadeIn={false}
           fetchPriority="high"
@@ -66,7 +66,7 @@ const HomeBanner = ({ content }) => {
             height: "100%",
             zIndex: -1,
           }}
-        />)}
+        />
         {/* {backgroundImage && (
           <GatsbyImage
             decoding="async"
