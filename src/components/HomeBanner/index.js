@@ -24,7 +24,7 @@ const HomeBanner = ({ content }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLcpDelayed(true);
-    }, isMobile ? 1500 : 0);
+    }, isMobile ? 150 : 0);
     return () => clearTimeout(timer);
   }, [isMobile]);
 
@@ -130,7 +130,7 @@ const HomeBanner = ({ content }) => {
               })
             }
           </div>
-          {!isMobile && (<div className="box-desktop">
+          <div className="box-desktop">
             {boxDesktopImage && (
               <GatsbyImage
                 decoding="async"
@@ -145,8 +145,7 @@ const HomeBanner = ({ content }) => {
               />
             )}
           </div>
-          )}
-          {isMobile && (<div className={`box-mobile ${styles.boxImage} ${isLcpDelayed ? styles.visible : styles.initiallyHidden}`}>
+          <div className={`box-mobile ${styles.boxImage} ${isLcpDelayed ? styles.visible : styles.initiallyHidden}`}>
             {boxMobileImage && (
               <GatsbyImage
                 decoding="async"
@@ -161,7 +160,6 @@ const HomeBanner = ({ content }) => {
               />
             )}
           </div>
-          )}
           <div className="banner-desc f-soleto fw-500 text-white text-center">
             {content?.desc}
           </div>
