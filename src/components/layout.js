@@ -12,7 +12,7 @@ import loadable from '@loadable/component';
 // import "../styles/customStyle.scss"
 // import "../styles/dashicons.min.css"
 import Header from './Header'
-// import ChatWidget from "./ChatWidget"
+import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import Helmet from "react-helmet"
 import AOS from 'aos';
@@ -184,7 +184,7 @@ const DefaultLayout = ({ children }) => {
         <Footer data={data} />
         <ScrollTop />
       </Suspense>
-      {/* <ChatWidget /> */}
+      <ChatWidget />
 
       {/* Global AOS Script */}
       {/* <Script
