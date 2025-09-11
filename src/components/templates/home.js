@@ -1,4 +1,5 @@
 import React from "react"
+import { Script } from "gatsby"
 import Layout from "@components/layout"
 import HomeBanner from '@components/HomeBanner'
 import { SEO } from '@components/SEO'
@@ -22,33 +23,47 @@ const GiftBookSection = loadable(() => import('@components/sections/GiftBookSect
 
 // Component `Home` giờ nhận `pageContext`
 const Home = ({ pageContext }) => {
+    const { schemas } = pageContext;
     // Dữ liệu được lấy từ `pageContext.pageData`
     const bannerContent = pageContext.pageData?.cms.pageBy.template?.homeContent?.flexibleContent.find(
         item => item.__typename === "GraphCMS_HomeContentFlexibleContentBannerLayout"
     );
 
     return (
-        <Layout>
-            <div id="content" className="site-content">
-                <div className="main-content">
-                    {bannerContent && <HomeBanner content={bannerContent} />}
+        <React.Fragment>
+            <Layout>
+                <div id="content" className="site-content">
+                    <div className="main-content">
+                        {bannerContent && <HomeBanner content={bannerContent} />}
 
-                    {/* Các component này giờ sẽ được render ngay từ đầu */}
-                    <ExpertsSection />
-                    <PatientsSection />
+                        {/* Các component này giờ sẽ được render ngay từ đầu */}
+                        <ExpertsSection />
+                        <PatientsSection />
 
-                    {/* Các component này vẫn được lazy-load */}
-                    <PracticeSection />
-                    <GetMoreSection />
-                    <HowWeCanHelpSection />
-                    <AwardsSection />
-                    <TestimonialsSection />
-                    <StatsSection />
-                    <SpecialtySection />
-                    <GiftBookSection />
+                        {/* Các component này vẫn được lazy-load */}
+                        <PracticeSection />
+                        <GetMoreSection />
+                        <HowWeCanHelpSection />
+                        <AwardsSection />
+                        <TestimonialsSection />
+                        <StatsSection />
+                        <SpecialtySection />
+                        <GiftBookSection />
+                    </div>
                 </div>
-            </div>
-        </Layout>
+            </Layout>
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+                <Script
+                    key={`schema-ld-${index}`}
+                    type="application/ld+json"
+                    className="rank-math-schema-pro"
+                    strategy="post-hydrate" // Tải script khi trình duyệt rảnh rỗi
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(schema),
+                    }}
+                />
+            ))}
+        </React.Fragment>
     )
 }
 
@@ -70,7 +85,7 @@ export const Head = ({ pageContext }) => {
     return (
         <SEO
             metaHtml={pageContext.metaHtml || {}}
-            schemas={pageContext.schemas || []}
+        // schemas={pageContext.schemas || []}
         >
             {/* Tạo thẻ link preload cho mỗi ảnh */}
             {imagesToPreload.map(image => {

@@ -5,7 +5,7 @@ import { Script } from "gatsby"
 
 export const SEO = ({
     metaHtml,
-    schemas,
+    // schemas,
     // bodyClass,
     children,
     lcpImageUrl
@@ -37,8 +37,6 @@ export const SEO = ({
     if (canParsemetaHtml) {
         // 1. Chạy hàm parse và lưu kết quả
         parsedSeoElements = parse(metaHtml);
-
-
     }
     // --- KẾT THÚC PHẦN DEBUG ---
 
@@ -75,7 +73,7 @@ export const SEO = ({
 
             {/* JSON-LD schemas */}
             {/* Render các schema JSON-LD một cách an toàn */}
-            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
                 <Script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
@@ -85,7 +83,7 @@ export const SEO = ({
                         __html: JSON.stringify(schema),
                     }}
                 />
-            ))}
+            ))} */}
 
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}

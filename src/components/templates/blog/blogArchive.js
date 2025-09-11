@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Script } from "gatsby"
 import Layout from '@components/layout';
 import { SEO } from "@components/SEO";
 import loadable from '@loadable/component';
@@ -9,7 +10,7 @@ const Pagination = loadable(() => import('@components/Blog/Pagination'));
 
 const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
 const BlogArchive = ({ pageContext }) => {
-    const { posts, pageNumber, numPages, pageInfo } = pageContext;
+    const { posts, pageNumber, numPages, pageInfo, schemas } = pageContext;
 
     const bannerBlogs = (
         <section className="banner cus-height" style={{ background: `no-repeat center/cover url('${WP_BASE_URL}/wp-content/uploads/2025/03/default-page-banner.jpg')` }}>
@@ -35,41 +36,54 @@ const BlogArchive = ({ pageContext }) => {
     );
 
     return (
-        <Layout>
-            {/* Banner tĩnh cho danh mục hoặc Blogs */}
-            {pageInfo.name === 'Blogs' ? bannerBlogs : bannerCategory}
+        <React.Fragment>
+            <Layout>
+                {/* Banner tĩnh cho danh mục hoặc Blogs */}
+                {pageInfo.name === 'Blogs' ? bannerBlogs : bannerCategory}
 
-            {/* Khung chính của trang blog */}
-            <section className="section sc-blog">
-                <div className="cus-container">
-                    <div className="main ast-flex justify-content-between">
-                        {/* Cột trái */}
-                        <div className="blog-items ast-flex flex-column">
-                            {posts.map(post => (
-                                <PostItem key={post.id} post={post} />
-                            ))}
-                            <Suspense fallback={<div></div>}>
-                                <Pagination
-                                    currentPage={pageNumber}
-                                    numPages={numPages}
-                                    basePath={`${pageInfo ? `${pageInfo.uri}` : null}`}
-                                />
-                            </Suspense>
+                {/* Khung chính của trang blog */}
+                <section className="section sc-blog">
+                    <div className="cus-container">
+                        <div className="main ast-flex justify-content-between">
+                            {/* Cột trái */}
+                            <div className="blog-items ast-flex flex-column">
+                                {posts.map(post => (
+                                    <PostItem key={post.id} post={post} />
+                                ))}
+                                <Suspense fallback={<div></div>}>
+                                    <Pagination
+                                        currentPage={pageNumber}
+                                        numPages={numPages}
+                                        basePath={`${pageInfo ? `${pageInfo.uri}` : null}`}
+                                    />
+                                </Suspense>
+                            </div>
+
+                            {/* Cột phải */}
+                            <BlogSidebar />
                         </div>
-
-                        {/* Cột phải */}
-                        <BlogSidebar />
                     </div>
-                </div>
-            </section>
-        </Layout>
+                </section>
+            </Layout>
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+                <Script
+                    key={`schema-ld-${index}`}
+                    type="application/ld+json"
+                    className="rank-math-schema-pro"
+                    strategy="post-hydrate" // Tải script khi trình duyệt rảnh rỗi
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(schema),
+                    }}
+                />
+            ))}
+        </React.Fragment>
     );
 };
 
 export const Head = ({ pageContext }) => (
     <SEO
         metaHtml={pageContext.metaHtml || {}}
-        schemas={pageContext.schemas || []}
+    // schemas={pageContext.schemas || []}
     />
 );
 

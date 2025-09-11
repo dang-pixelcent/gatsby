@@ -45,7 +45,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -258,6 +258,18 @@ const Home = ({ pageContext }) => {
         {/* {memoizedScriptLoaders} */}
 
       </Layout>
+      {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+        <Script
+          key={`schema-ld-${index}`}
+          type="application/ld+json"
+          className="rank-math-schema-pro"
+          strategy="post-hydrate" // Tải script khi trình duyệt rảnh rỗi
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+      ))}
+
       {/* Tiêm các script động vào cuối body */}
       <Suspense fallback={null}>
         <DynamicScriptHandler />
@@ -296,7 +308,7 @@ const Home = ({ pageContext }) => {
 export const Head = ({ pageContext }) => (
   <SEO
     metaHtml={pageContext.metaHtml || {}}
-    schemas={pageContext.schemas || []}
+  // schemas={pageContext.schemas || []}
   />
 );
 
