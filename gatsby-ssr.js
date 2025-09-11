@@ -138,48 +138,27 @@ export const onRenderBody = ({
 
   // --- 1. Cấu hình cho <head> ---
   const headItems = [];
-  headItems.push(
-    <html lang="en-US" />,
-    <meta charSet="utf-8" />,
-    <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />,
-    // <link
-    //   key="google-fonts"
-    //   rel="stylesheet"
-    // // href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Anek+Devanagari:wght@100..800&family=Assistant:wght@200..800&display=swap"
-    // />,
-    <link
-      rel="preload"
-      href="/fonts/Soleto-XBold.woff2"
-      as="font"
-      type="font/woff2"
-      crossOrigin="anonymous"
-      key="soleto-xbold"
-    />,
-    <link
-      rel="preload"
-      href="/fonts/Soleto-Regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossOrigin="anonymous"
-      key="soleto-regular"
-    />,
-    // <link
-    //   rel="preload"
-    //   href="/fonts/Soleto-Medium.woff2"
-    //   as="font"
-    //   type="font/woff2"
-    //   crossOrigin="anonymous"
-    //   key="soleto-medium"
-    // />,
+  // headItems.push(
+  //   <html lang="en-US" />,
+  //   <meta charSet="utf-8" />,
+  //   <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />,
+  //   // <link
+  //   //   key="google-fonts"
+  //   //   rel="stylesheet"
+  //   // // href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Anek+Devanagari:wght@100..800&family=Assistant:wght@200..800&display=swap"
+  //   // />,
 
-    /* phần favicon */
-    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />,
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />,
-    <link rel="shortcut icon" href="/favicon/favicon.ico" />,
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />,
-    <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />,
-    <link rel="manifest" href="/favicon/site.webmanifest" />,
-  );
+  //   // <link
+  //   //   rel="preload"
+  //   //   href="/fonts/Soleto-Medium.woff2"
+  //   //   as="font"
+  //   //   type="font/woff2"
+  //   //   crossOrigin="anonymous"
+  //   //   key="soleto-medium"
+  //   // />,
+
+
+  // );
 
   if (scriptsForHeadString_fromHeadField) {
     // Phân tích chuỗi HTML thành các React elements

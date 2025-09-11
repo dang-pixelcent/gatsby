@@ -52,7 +52,7 @@ const Home = ({ pageContext }) => {
                     </div>
                 </div>
             </Layout>
-            {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+            {schemas && schemas.length > 0 && schemas.map((schema, index) => (
                 <Script
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
@@ -62,7 +62,7 @@ const Home = ({ pageContext }) => {
                         __html: JSON.stringify(schema),
                     }}
                 />
-            ))} */}
+            ))}
         </React.Fragment>
     )
 }

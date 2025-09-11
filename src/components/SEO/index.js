@@ -1,5 +1,5 @@
 import React from "react"
-// import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
 // import { Script } from "gatsby"
 
@@ -87,6 +87,35 @@ export const SEO = ({
 
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}
+            <Helmet>
+                {metaHtml && (
+                    <div className="meta-html" dangerouslySetInnerHTML={{ __html: metaHtml }} />
+                )}
+
+                <link
+                    rel="preload"
+                    href="/fonts/Soleto-XBold.woff2"
+                    as="font"
+                    type="font/woff2"
+                    crossOrigin="anonymous"
+                    key="soleto-xbold"
+                />,
+                <link
+                    rel="preload"
+                    href="/fonts/Soleto-Regular.woff2"
+                    as="font"
+                    type="font/woff2"
+                    crossOrigin="anonymous"
+                    key="soleto-regular"
+                />,
+
+                <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+                <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+                <link rel="shortcut icon" href="/favicon/favicon.ico" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+                <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
+                <link rel="manifest" href="/favicon/site.webmanifest" />
+            </Helmet>
         </>
     )
 }
