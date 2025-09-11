@@ -88,6 +88,7 @@ export const SEO = ({
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}
             <Helmet>
+                <html lang="en" />
                 {metaHtml && (
                     <div className="meta-html" dangerouslySetInnerHTML={{ __html: metaHtml }} />
                 )}
