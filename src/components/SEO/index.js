@@ -26,14 +26,6 @@ export const SEO = ({
             <>
                 {/* Preload favicon ngay lập tức để tránh delay */}
                 <link rel="preload" href="/favicon/favicon.ico" as="image" type="image/x-icon" fetchpriority="high" />
-
-                {/* Favicon setup tối ưu */}
-                <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
-                <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-                <link rel="shortcut icon" href="/favicon/favicon.ico" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-                <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
-                <link rel="manifest" href="/favicon/site.webmanifest" />
                 {children}
             </>
         )
@@ -54,14 +46,14 @@ export const SEO = ({
         <>
             {/* --- TỐI ƯU HÓA KẾT NỐI SỚM --- */}
             {/* Preconnect đến các domain của bên thứ ba quan trọng */}
-            <link rel="preconnect" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
+            {/* <link rel="preconnect" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
             <link rel="preconnect" href="https://www.googletagmanager.com" />
-            <link rel="preconnect" href="https://www.google-analytics.com" />
+            <link rel="preconnect" href="https://www.google-analytics.com" /> */}
 
             {/* DNS-prefetch như một phương án dự phòng */}
-            <link rel="dns-prefetch" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
+            {/* <link rel="dns-prefetch" href="https://berqwp-cdn.sfo3.cdn.digitaloceanspaces.com" />
             <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-            <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+            <link rel="dns-prefetch" href="https://www.google-analytics.com" /> */}
 
             {/* <link rel="preconnect" href="https://widgets.leadconnectorhq.com" />
             <link rel="dns-prefetch" href="https://widgets.leadconnectorhq.com" /> */}
@@ -78,9 +70,6 @@ export const SEO = ({
             {/* Tối ưu hóa LCP cho ảnh banner */}
             {lcpImageUrl && <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />}
 
-            {/* Thêm bodyClass vào thẻ body */}
-            {/* <body className={bodyClass} /> */}
-
             {/* dữ liệu-seo từ wp */}
             {parsedSeoElements}
 
@@ -91,20 +80,12 @@ export const SEO = ({
                     key={`schema-ld-${index}`}
                     type="application/ld+json"
                     className="rank-math-schema-pro"
-                    strategy="idle" // Tải script khi trình duyệt rảnh rỗi
+                    strategy="post-hydrate" // Tải script khi trình duyệt rảnh rỗi
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(schema),
                     }}
                 />
             ))}
-
-
-            <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
-            <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-            <link rel="shortcut icon" href="/favicon/favicon.ico" />
-            <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-            <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
-            <link rel="manifest" href="/favicon/site.webmanifest" />
 
             {/* tùy chỉnh các thẻ meta SEO khác nếu cần */}
             {children}
