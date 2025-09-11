@@ -22,13 +22,10 @@ const HomeBanner = ({ content }) => {
   const [isLcpDelayed, setLcpDelayed] = useState(false);
 
   useEffect(() => {
-    if (isMobile) {
-      const timer = setTimeout(() => setLcpDelayed(true), 100);
-      return () => clearTimeout(timer);
-    } else {
-      // Reset state nếu người dùng resize từ mobile sang desktop
-      setLcpDelayed(false);
-    }
+    const timer = setTimeout(() => {
+      setLcpDelayed(true);
+    }, isMobile ? 1500 : 0);
+    return () => clearTimeout(timer);
   }, [isMobile]);
 
   // ⭐️ Tạo đối tượng style cho ảnh nền
@@ -46,53 +43,30 @@ const HomeBanner = ({ content }) => {
 
   // ⭐️ Xác định xem các box có nên hiển thị hay không
   // Desktop: luôn hiển thị. Mobile: hiển thị sau khi trì hoãn.
-  const areBoxesVisible = !isMobile || (isMobile && isLcpDelayed);
+  // const areBoxesVisible = !isMobile || (isMobile && isLcpDelayed);
 
   return (
     <>
       <section className={`home-banner ${styles.bannerSection}`}>
-        {
-          !isMobile ? (
-            <GatsbyImage
-              decoding="async"
-              image={backgroundImage}
-              alt="Wellness Clinic Marketing Hero Banner"
-              className="banner-bg"
-              loading="eager"
-              fadeIn={false}
-              fetchPriority="high"
-              imgStyle={{ transition: 'none' }}
-              placeholder="none"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                zIndex: -1,
-              }}
-            />
-          ) : (isMobile && isLcpDelayed) && (
-            <GatsbyImage
-              decoding="async"
-              image={backgroundImage}
-              alt="Wellness Clinic Marketing Hero Banner"
-              className="banner-bg"
-              loading="eager"
-              fadeIn={false}
-              fetchPriority="high"
-              imgStyle={{ transition: 'none' }}
-              placeholder="none"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                zIndex: -1,
-              }}
-            />
-          )}
+        {isLcpDelayed && (<GatsbyImage
+          decoding="async"
+          image={backgroundImage}
+          alt="Wellness Clinic Marketing Hero Banner"
+          className="banner-bg"
+          loading="eager"
+          fadeIn={false}
+          fetchPriority="high"
+          imgStyle={{ transition: 'none' }}
+          placeholder="none"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: -1,
+          }}
+        />)}
         {/* {backgroundImage && (
           <GatsbyImage
             decoding="async"
@@ -156,7 +130,7 @@ const HomeBanner = ({ content }) => {
               })
             }
           </div>
-          <div className="box-desktop">
+          {!isMobile && (<div className="box-desktop">
             {boxDesktopImage && (
               <GatsbyImage
                 decoding="async"
@@ -171,7 +145,8 @@ const HomeBanner = ({ content }) => {
               />
             )}
           </div>
-          <div className={`box-mobile ${styles.boxImage} ${areBoxesVisible ? styles.visible : styles.initiallyHidden}`}>
+          )}
+          {isMobile && (<div className={`box-mobile ${styles.boxImage} ${isLcpDelayed ? styles.visible : styles.initiallyHidden}`}>
             {boxMobileImage && (
               <GatsbyImage
                 decoding="async"
@@ -186,6 +161,7 @@ const HomeBanner = ({ content }) => {
               />
             )}
           </div>
+          )}
           <div className="banner-desc f-soleto fw-500 text-white text-center">
             {content?.desc}
           </div>
