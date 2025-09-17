@@ -680,7 +680,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                           <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-menu-item-2155" id="mega-menu-item-2155">
                             <Link className="mega-menu-link" to={`/our-method-mars/`} tabIndex={0}>Method</Link>
                           </li>
-                          <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-current-menu-item mega-page_item mega-page-item-4343 mega-current_page_item mega-align-bottom-left mega-menu-flyout mega-menu-item-4414" id="mega-menu-item-4414">
+                          <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-page-item-4343" id="mega-menu-item-4414">
                             <Link className="mega-menu-link" to={`/our-programs/`} aria-current="page" tabIndex={0}>Programs</Link>
                           </li>
                           <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-menu-item-has-children mega-align-bottom-left mega-menu-flyout mega-menu-item-372" id="mega-menu-item-372">
@@ -1057,6 +1057,16 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                               </svg>
                             </span>
                             <span className="menu-text1">Method</span>
+                          </Link>
+                        </li>
+                        <li id="menu-item-4414" className="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-4343 current_page_item menu-item-4414">
+                          <Link to={`/our-programs`} className="menu-link">
+                            <span className="ast-icon icon-arrow">
+                              <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
+                                <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z"></path>
+                              </svg>
+                            </span>
+                            <span className="menu-text">Programs</span>
                           </Link>
                         </li>
                         <li className="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-372">
