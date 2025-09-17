@@ -1066,7 +1066,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                 <path d="M57.5,38.193l12.5,12.5l12.5-12.5l-2.5-2.5l-10,10l-10-10L57.5,38.193z"></path>
                               </svg>
                             </span>
-                            <span className="menu-text">Programs</span>
+                            <span className="menu-text1">Programs</span>
                           </Link>
                         </li>
                         <li className="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-372">
