@@ -471,7 +471,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-14" id="mega-menu-item-text-14">
                                         <div className="textwidget">
-                                          <p></p>
+                                          <p>Get your clinic discovered in AI-powered search results like Google’s AI Overviews and ChatGPT.</p>
                                         </div>
                                       </li>
                                     </ul>
@@ -652,7 +652,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                   </li>
                                 </ul>
                               </li>
-                              <li className="mega-menu-row mega-only-col only-col" id="mega-menu-1641-4">
+                              {/* <li className="mega-menu-row mega-only-col only-col" id="mega-menu-1641-4">
                                 <ul className="mega-sub-menu" style={{ "--columns": "12" }} role="presentation">
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6", 'paddingLeft': '0px' }} id="mega-menu-1641-4-0">
                                     <ul className="mega-sub-menu">
@@ -674,7 +674,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                     </ul>
                                   </li>
                                 </ul>
-                              </li>
+                              </li> */}
                             </ul>
                           </li>
                           <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-menu-item-2155" id="mega-menu-item-2155">
@@ -1037,7 +1037,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                 <span className="menu-text">Franchise Marketing</span>
                               </Link>
                             </li>
-                            <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-3343">
+                            {/* <li className="menu-item menu-item-type-post_type menu-item-object-service menu-item-3343">
                               <Link className="menu-link" to={`/service/legitscript-certification`}>
                                 <span className="ast-icon icon-arrow">
                                   <svg className="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enableBackground="new 57 35.171 26 16.043" xmlSpace="preserve">
@@ -1046,7 +1046,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                 </span>
                                 <span className="menu-text">LegitScript Certification</span>
                               </Link>
-                            </li>
+                            </li> */}
                           </ul>
                         </li>
                         <li className="menu-item menu-item-type-post_type menu-item-object-page menu-item-2155">
