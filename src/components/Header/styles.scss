@@ -6,6 +6,34 @@
   content: "Tuesday 1st April 2025 11:26:19 UTC";
 }
 
+// /* Tiêu đề bên trong cột */
+// #mega-menu-wrap-primary #mega-menu-primary li.mega-menu-column a.mega-menu-link {
+//   white-space: nowrap !important;
+//   /* Ép tiêu đề không xuống dòng */
+// }
+
+#mega-menu-wrap-primary #mega-menu-primary>li.mega-menu-megamenu>ul.mega-sub-menu {
+  padding: 1.14vw 1.25vw 1.77vw 1.25vw;
+  max-width: max-content !important;
+  /*22px 24px 34px 24px;*/
+}
+
+
+#mega-menu-wrap-primary #mega-menu-primary>li.mega-menu-megamenu>ul.mega-sub-menu {
+  z-index: 999;
+  border-radius: 0;
+  background: white;
+  border-top: 2px solid #0659a9;
+  border-left: 0px solid #0659a9;
+  border-right: 0px solid #0659a9;
+  border-bottom: 0px solid #0659a9;
+  padding: 22px 24px 34px 24px;
+  position: absolute;
+  width: 105%;
+  max-width: none;
+  left: 0;
+}
+
 #mega-menu-wrap-primary,
 #mega-menu-wrap-primary #mega-menu-primary,
 #mega-menu-wrap-primary #mega-menu-primary ul.mega-sub-menu,
@@ -855,20 +883,6 @@
   width: 100%;
 }
 
-#mega-menu-wrap-primary #mega-menu-primary>li.mega-menu-megamenu>ul.mega-sub-menu {
-  z-index: 999;
-  border-radius: 0;
-  background: white;
-  border-top: 2px solid #0659a9;
-  border-left: 0px solid #0659a9;
-  border-right: 0px solid #0659a9;
-  border-bottom: 0px solid #0659a9;
-  padding: 22px 24px 34px 24px;
-  position: absolute;
-  width: 100%;
-  max-width: none;
-  left: 0;
-}
 
 @media only screen and (max-width: 768px) {
   #mega-menu-wrap-primary #mega-menu-primary>li.mega-menu-megamenu>ul.mega-sub-menu {
@@ -1866,12 +1880,6 @@ body.mega-menu-primary.ast-header-break-point .ast-mobile-menu-buttons {
 /** Push menu onto new line **/
 #mega-menu-wrap-primary {
   clear: both;
-}
-
-#mega-menu-wrap-primary #mega-menu-primary>li.mega-menu-megamenu>ul.mega-sub-menu {
-  padding: 1.14vw 1.25vw 1.77vw 1.25vw;
-  max-width: 100% !important;
-  /*22px 24px 34px 24px;*/
 }
 
 #mega-menu-wrap-primary #mega-menu-primary .two-column .mega-menu-row .mega-sub-menu {
