@@ -105,15 +105,16 @@ const Footer = ({ data }) => {
                             quality={90}
                           />
                         </a>
-                        <a className="twitter" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.twitter} target="_blank" rel="noopener noreferrer">
+                        <a className="twitter" href="https://www.tiktok.com/@wellness_clinic" target="_blank" rel="noopener noreferrer">
                           <StaticImage
-                            src="../../assets/images/socials/icon-twitter.svg"
-                            alt="Twitter"
+                            src="../../assets/images/socials/icon-tiktok.svg"
+                            alt="TikTok"
                             width={32}
                             height={32}
                             placeholder="none"
                             loading="lazy"
                             quality={90}
+                            class="social-icon-rounded"
                           />
                         </a>
                         <a className="instagram" href={data?.cms?.themeSettings?.themeOptionsSettings?.socials?.instagram} target="_blank" rel="noopener noreferrer">

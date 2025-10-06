@@ -7,7 +7,12 @@
 
 @media (max-width: 768px) {
   .footer-logo {
-    width: calc(100% - 30%); /* 2/3 của 300px */
+    width: calc(100% - 30%);
+    /* 2/3 của 300px */
     height: auto;
   }
+}
+
+.social-icon-rounded {
+  border-radius: 50%; // hoặc 50% cho hình tròn
 }
