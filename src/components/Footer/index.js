@@ -45,7 +45,7 @@ const Footer = ({ data }) => {
                   </section>
                   <section id="text-3" className="widget widget_text">
                     <div className="textwidget">
-                      <p>The Complete Patient Acquisition Solution For Cash-Based Medical Practices Offering Sexual Wellness and Hormones Optimization Services</p>
+                      <p>The Complete Patient Acquisition Solution For Cash-Based Medical Practices Offering Hormone Therapy, Medical Weight Loss, Sexual Health and Aesthetic procedures.</p>
                     </div>
                   </section>
                   <section id="text-21" className="widget widget_text">
