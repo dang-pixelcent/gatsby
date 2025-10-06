@@ -29,7 +29,7 @@
   border-bottom: 0px solid #0659a9;
   padding: 22px 24px 34px 24px;
   position: absolute;
-  width: 620px;
+  width: 125%;
   max-width: none;
   left: 0;
 }
@@ -2297,7 +2297,67 @@ body.mega-menu-primary.ast-header-break-point .ast-mobile-menu-buttons {
   }
 }
 
-#mega-menu-wrap-primary #mega-menu-primary .full-w-columns.full-non-text .mega-menu-columns-6-of-12 .mega-sub-menu {
-  display: flex !important;
-  align-items: center;
+// #mega-menu-wrap-primary #mega-menu-primary .full-w-columns.full-non-text .mega-menu-columns-6-of-12 .mega-sub-menu {
+//   display: flex !important;
+//   align-items: center;
+// }
+
+// phần menu fixed cũ
+.ast-theme-transparent-header #masthead.menu-fixed {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ast-theme-transparent-header #masthead.menu-fixed {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+}
+
+// mặc định header sticky
+.ast-theme-transparent-header #masthead {
+  position: sticky !important;
+  top: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Header minimize khi scroll (chỉ áp dụng cho desktop)
+@media only screen and (min-width: 922px) {
+  .site-header.menu-scroll-scale {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .site-header.menu-scroll-scale .ast-site-identity {
+    padding: 14px 0px;
+    transition: padding 0.3s ease;
+  }
+
+  // Có thể thêm hiệu ứng cho logo nếu cần
+  // .site-header.menu-scroll-scale .custom-logo {
+  //   transform: scale(0.9);
+  //   transition: transform 0.3s ease;
+  // }
+
+  // Điều chỉnh chiều cao menu items khi fixed
+  .site-header.menu-scroll-scale #mega-menu-primary>li.mega-menu-item>a.mega-menu-link {
+    line-height: 70px;
+    height: 70px;
+    transition: all 0.3s ease;
+  }
+}
+
+// Đảm bảo transition mượt mà cho trạng thái bình thường
+@media only screen and (min-width: 922px) {
+  .ast-site-identity {
+    padding: 1.5em 0;
+    transition: padding 0.3s ease;
+  }
+
+  // .custom-logo {
+  //   transition: transform 0.3s ease;
+  // }
+
+  #mega-menu-primary>li.mega-menu-item>a.mega-menu-link {
+    transition: all 0.3s ease;
+  }
 }

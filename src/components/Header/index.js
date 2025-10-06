@@ -64,19 +64,21 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
         // Logic cho desktop
         if (window.scrollY > 100) {
           // Thêm class 'menu-fixed' nếu cuộn xuống hơn 100px
-          headerElement.classList.add('menu-fixed');
-        } else if (window.scrollY <= 0) {
-          headerElement.classList.remove('menu-fixed');
+          headerElement.classList.add('menu-scroll-scale');
+        }
+        else if (window.scrollY <= 0) {
+          headerElement.classList.remove('menu-scroll-scale');
         }
         // Lưu ý: Nếu 0 < window.scrollY <= 100 và 'menu-fixed' đang tồn tại, nó sẽ được giữ lại.
-      } else {
-        // Logic gốc cho mobile (ngưỡng là 0 cho cả việc thêm và xóa class)
-        if (window.scrollY > (isMobileMenuOpen ? 200 : 0)) {
-          headerElement.classList.add('menu-fixed');
-        } else if (window.scrollY <= 0) {
-          headerElement.classList.remove('menu-fixed');
-        }
       }
+      //  else {
+      //   // Logic gốc cho mobile (ngưỡng là 0 cho cả việc thêm và xóa class)
+      //   if (window.scrollY > (isMobileMenuOpen ? 200 : 0)) {
+      //     headerElement.classList.add('menu-fixed');
+      //   } else if (window.scrollY <= 0) {
+      //     headerElement.classList.remove('menu-fixed');
+      //   }
+      // }
     };
 
     // Gắn sự kiện scroll và resize
@@ -503,6 +505,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1644" id="mega-menu-item-1644">
                                         <Link className="mega-menu-link" to="/service/medical-weight-loss-marketing/">Medical Weight Loss Marketing</Link>
                                       </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-25" id="mega-menu-item-text-25">
+                                        <div className="textwidget">
+                                          <p>Attract more patients with strategies tailored to weight loss clinics.</p>
+                                        </div>
+                                      </li>
                                     </ul>
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12 mega-hide-on-mobile" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-0-1">
@@ -521,6 +528,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1643" id="mega-menu-item-1643">
                                         <Link className="mega-menu-link" to="/service/hormone-clinic-marketing/">Hormone Optimization Marketing</Link>
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-24" id="mega-menu-item-text-24">
+                                        <div className="textwidget">
+                                          <p>Grow your practice by reaching patients searching for hormone therapy.</p>
+                                        </div>
                                       </li>
                                     </ul>
                                   </li>
@@ -545,6 +557,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-1645" id="mega-menu-item-1645">
                                         <Link className="mega-menu-link" to="/service/sexual-health-marketing/">Sexual Health Marketing</Link>
                                       </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-23" id="mega-menu-item-text-23">
+                                        <div className="textwidget">
+                                          <p>Position your clinic as the trusted choice for sexual wellness care.</p>
+                                        </div>
+                                      </li>
                                     </ul>
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-1-1">
@@ -563,6 +580,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2031" id="mega-menu-item-2031">
                                         <Link className="mega-menu-link" to="/service/wellness-medical-clinic-marketing/">Medical Wellness Clinic Marketing</Link>
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-22" id="mega-menu-item-text-22">
+                                        <div className="textwidget">
+                                          <p>Build visibility and credibility to bring more patients into your wellness clinic.</p>
+                                        </div>
                                       </li>
                                     </ul>
                                   </li>
@@ -587,6 +609,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2617" id="mega-menu-item-2617">
                                         <Link className="mega-menu-link" to="/service/multi-location-marketing/">Multi-Location Clinic Marketing</Link>
                                       </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-21" id="mega-menu-item-text-21">
+                                        <div className="textwidget">
+                                          <p>Streamline marketing across locations and drive patient growth everywhere you operate.</p>
+                                        </div>
+                                      </li>
                                     </ul>
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-2-1">
@@ -605,6 +632,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2032" id="mega-menu-item-2032">
                                         <Link className="mega-menu-link" to="/service/mens-health-clinic-marketing/">Men’s Health Clinic Marketing</Link>
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-20" id="mega-menu-item-text-20">
+                                        <div className="textwidget">
+                                          <p>Connect with men seeking solutions for vitality, performance, and health.</p>
+                                        </div>
                                       </li>
                                     </ul>
                                   </li>
@@ -629,6 +661,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-2033" id="mega-menu-item-2033">
                                         <Link className="mega-menu-link" to="/service/med-spa-marketing/">Medspa Marketing</Link>
                                       </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-19" id="mega-menu-item-text-19">
+                                        <div className="textwidget">
+                                          <p>Boost bookings and brand awareness for your medspa with proven campaigns.</p>
+                                        </div>
+                                      </li>
                                     </ul>
                                   </li>
                                   <li className="mega-menu-column mega-menu-columns-6-of-12" style={{ "--columns": "12", "--span": "6" }} id="mega-menu-1641-3-1">
@@ -647,6 +684,11 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
                                       </li>
                                       <li className="mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-service mega-menu-item-3429" id="mega-menu-item-3429">
                                         <Link className="mega-menu-link" to="/service/franchise-marketing/">Franchise Marketing</Link>
+                                      </li>
+                                      <li className="mega-menu-item mega-menu-item-type-widget widget_text mega-menu-item-text-18" id="mega-menu-item-text-18">
+                                        <div className="textwidget">
+                                          <p>Scale your franchise with marketing built for consistent growth across markets.</p>
+                                        </div>
                                       </li>
                                     </ul>
                                   </li>
