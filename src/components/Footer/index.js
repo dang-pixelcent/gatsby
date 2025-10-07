@@ -45,7 +45,13 @@ const Footer = ({ data }) => {
                   </section>
                   <section id="text-3" className="widget widget_text">
                     <div className="textwidget">
-                      <p>The Complete Patient Acquisition Solution For Cash-Based Medical Practices Offering Hormone Therapy, Medical Weight Loss, Sexual Health and Aesthetic procedures.</p>
+                      <p>
+                        The Complete Patient Acquisition Solution For Cash-Based Medical Practices Offering{" "}
+                        <Link to="/service/hormone-clinic-marketing/" className="footer-link">Hormone Therapy</Link>,{" "}
+                        <Link to="/service/medical-weight-loss-marketing/" className="footer-link">Medical Weight Loss</Link>,{" "}
+                        <Link to="/service/sexual-health-marketing/" className="footer-link">Sexual Health</Link> and{" "}
+                        <Link to="/service/med-spa-marketing/" className="footer-link">Aesthetic procedures</Link>.
+                      </p>
                     </div>
                   </section>
                   <section id="text-21" className="widget widget_text">
