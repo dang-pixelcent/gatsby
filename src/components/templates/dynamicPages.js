@@ -2,7 +2,7 @@
 import { Script } from "gatsby"
 import React, { Suspense, lazy, useEffect } from "react";
 import loadable from '@loadable/component';
-import Layout from "@components/layout"
+import ConditionalLayout from "./tools/conditionalLayout";
 import { SEO } from "@components/SEO"
 
 import ReactDOM from 'react-dom';
@@ -45,7 +45,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas, noLayout } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -188,7 +188,7 @@ const Home = ({ pageContext }) => {
 
   return (
     <React.Fragment>
-      <Layout>
+      <ConditionalLayout noLayout={noLayout}>
         {/* <SEO
           seoData={seoData}
         /> */}
@@ -256,8 +256,7 @@ const Home = ({ pageContext }) => {
 
         {/* Tự động tải tất cả các script có src */}
         {/* {memoizedScriptLoaders} */}
-
-      </Layout>
+      </ConditionalLayout>
       {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script
           key={`schema-ld-${index}`}
