@@ -15,6 +15,8 @@ import Header from './Header'
 import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import Helmet from "react-helmet"
+// làm sạch link
+import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 
 // phần scroll top
 import DomEnhancer from '@components/Tools/DomEnhancer';
@@ -77,6 +79,8 @@ const DefaultLayout = ({ children }) => {
             }
           }
         }
+        headerHtmlall
+        footerHtmlall
       }
     }
   `);
@@ -86,6 +90,7 @@ const DefaultLayout = ({ children }) => {
 
   return (
     <div>
+      <InternalLinkInterceptor />
       {/* <Helmet>
         <body className={bodyClass} />
       </Helmet> */}

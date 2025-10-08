@@ -9,8 +9,6 @@ import ReactDOM from 'react-dom';
 // ⭐️ Import component lazy-load YouTube và CSS của nó
 import LazyEmbed from '@components/Video/LazyEmbed';
 
-// làm sạch link
-import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
 // import ComponentPortal from "@components/Tools/ComponentPortal"
 // Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
@@ -45,7 +43,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas, noLayout } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas, isLayout } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {
@@ -188,12 +186,12 @@ const Home = ({ pageContext }) => {
 
   return (
     <React.Fragment>
-      <ConditionalLayout noLayout={noLayout}>
+      <ConditionalLayout isLayout={isLayout}>
         {/* <SEO
           seoData={seoData}
         /> */}
 
-        <InternalLinkInterceptor />
+
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
         {/* Sử dụng ComponentPortal để tiêm các component khác nhau vào các vị trí khác nhau.
