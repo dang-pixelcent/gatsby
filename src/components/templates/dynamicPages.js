@@ -299,6 +299,18 @@ const Home = ({ pageContext }) => {
         //   );
         // }
 
+        // // Trường hợp 3: Script dữ liệu
+        // if (script.resourceType === 'data-script') {
+        //   // Dùng thẻ <script> thường để trình duyệt tự xử lý các type đặc biệt
+        //   return (
+        //     <script
+        //       key={script.id}
+        //       {...script.attributes} // Truyền lại các attributes gốc như type="speculationrules"
+        //       dangerouslySetInnerHTML={{ __html: script.content }}
+        //     />
+        //   );
+        // }
+
         return null;
       })}
     </React.Fragment>

@@ -145,7 +145,7 @@ function processAllScripts(html = '', pageSlug) {
     return { cleanedHtml: html || '', scripts: [], specialScripts: [] };
   }
 
-  const $ = cheerio.load(html);
+  const $ = cheerio.load(html, null, false);
   const scriptTags = $('script');
   const extractedScripts = [];
   const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
@@ -153,6 +153,7 @@ function processAllScripts(html = '', pageSlug) {
   scriptTags.each((index, element) => {
     const attributes = { ...element.attribs };
     const src = attributes.src || '';
+    const scriptType = attributes.type || 'text/javascript'; // Lấy type, mặc định là JS
     let isSpecial = false;
 
     // 1. Kiểm tra xem có phải script đặc biệt không
@@ -174,7 +175,7 @@ function processAllScripts(html = '', pageSlug) {
     }
 
     // 3. Xử lý script thông thường (như cũ)
-    if (attributes.src) {
+    if (src) {
       if (!attributes.id) {
         attributes.id = `external-script-${pageSlug}-${index}`;
       }
@@ -185,14 +186,25 @@ function processAllScripts(html = '', pageSlug) {
     } else {
       const inlineContent = $(element).html();
       if (inlineContent) {
-        extractedScripts.push({
-          resourceType: 'inline-script',
-          content: `(function(){\n${inlineContent}\n})();`,
-          id: `inline-script-${pageSlug}-${index}`
-        });
+        // Phân loại dựa trên 'type'
+        if (scriptType === 'text/javascript') {
+          // Chỉ bọc IIFE cho các script JavaScript thực thi
+          extractedScripts.push({
+            resourceType: 'inline-script', // Script để chạy
+            content: `(function(){\n${inlineContent}\n})();`,
+            id: `inline-script-${pageSlug}-${index}`
+          });
+        } else {
+          // Đối với 'speculationrules', 'application/ld+json', etc.
+          extractedScripts.push({
+            resourceType: 'data-script', // Script dữ liệu
+            content: inlineContent,
+            attributes: attributes, // Giữ lại các attributes gốc (quan trọng là 'type')
+            id: `data-script-${pageSlug}-${index}`
+          });
+        }
       }
     }
-    // Xóa thẻ script thông thường sau khi đã trích xuất thông tin
     $(element).remove();
   });
 
