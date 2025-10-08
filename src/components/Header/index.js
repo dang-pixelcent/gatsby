@@ -4,7 +4,10 @@ import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import { useLocation } from "@reach/router"
 // import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này
-
+// Import custom hooks
+import { useMegaMenu } from "@hooks/header/useMegaMenu"
+import { useScrollHeader } from "@hooks/header/useScrollHeader"
+import { useMobileMenu } from "@hooks/header/useMobileMenu"
 
 const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
   // Sử dụng biến môi trường cho WordPress URL
@@ -14,33 +17,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
   const location = useLocation();
   const isActive = location.pathname === siteBaseUrl;
 
-  React.useEffect(() => {
-    const menuTriggers = document.querySelectorAll(".mega-menu-item");
-
-    menuTriggers.forEach((menuTrigger) => {
-      const handleMouseEnter = () => {
-        menuTrigger.classList.add("mega-toggle-on");
-      };
-
-      const handleMouseLeave = () => {
-        menuTrigger.classList.remove("mega-toggle-on");
-      };
-
-      menuTrigger.addEventListener("mouseenter", handleMouseEnter);
-      menuTrigger.addEventListener("mouseleave", handleMouseLeave);
-
-      // Lưu lại các hàm để cleanup sau
-      menuTrigger._handleMouseEnter = handleMouseEnter;
-      menuTrigger._handleMouseLeave = handleMouseLeave;
-    });
-
-    return () => {
-      menuTriggers.forEach((menuTrigger) => {
-        menuTrigger.removeEventListener("mouseenter", menuTrigger._handleMouseEnter);
-        menuTrigger.removeEventListener("mouseleave", menuTrigger._handleMouseLeave);
-      });
-    };
-  }, []);
+  useMegaMenu();
 
 
   const content = data.cms.themeSettings
@@ -49,124 +26,14 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data, logoSrc }) => {
   const logoAlt = content?.themeOptionsSettings?.defaultLogo?.node?.altText || "Wellness Clinic Marketing";
 
   // === FIXED HEADER ===
-  React.useEffect(() => {
-    const headerElement = document.getElementById('masthead');
-    if (!headerElement) return;
+  useScrollHeader(isMobileMenuOpen);
 
-    // Định nghĩa ngưỡng breakpoint cho mobile
-    const MOBILE_BREAKPOINT = 921;
-
-    // Hàm để kiểm tra và cập nhật trạng thái "dính"
-    const handleScroll = () => {
-      const isDesktop = window.innerWidth > MOBILE_BREAKPOINT;
-
-      if (isDesktop) {
-        // Logic cho desktop
-        if (window.scrollY > 100) {
-          // Thêm class 'menu-fixed' nếu cuộn xuống hơn 100px
-          headerElement.classList.add('menu-scroll-scale');
-        }
-        else if (window.scrollY <= 0) {
-          headerElement.classList.remove('menu-scroll-scale');
-        }
-        // Lưu ý: Nếu 0 < window.scrollY <= 100 và 'menu-fixed' đang tồn tại, nó sẽ được giữ lại.
-      }
-      //  else {
-      //   // Logic gốc cho mobile (ngưỡng là 0 cho cả việc thêm và xóa class)
-      //   if (window.scrollY > (isMobileMenuOpen ? 200 : 0)) {
-      //     headerElement.classList.add('menu-fixed');
-      //   } else if (window.scrollY <= 0) {
-      //     headerElement.classList.remove('menu-fixed');
-      //   }
-      // }
-    };
-
-    // Gắn sự kiện scroll và resize
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll); // Thêm resize để xử lý khi xoay màn hình hoặc thay đổi kích thước cửa sổ
-
-    // Chạy hàm một lần lúc ban đầu để kiểm tra trạng thái
-    handleScroll();
-
-    // Hàm dọn dẹp để gỡ bỏ cả hai sự kiện
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, [isMobileMenuOpen]); // Mảng rỗng [] đảm bảo useEffect chỉ chạy một lần
   // === END ===
 
 
   // === BẮT ĐẦU PHẦN THÊM MỚI CHO TOGGLE MENU ===
   // === XỬ LÝ MỞ/ĐÓNG MENU VÀ SUB-MENU ===
-  React.useEffect(() => {
-    const mainToggle = document.querySelector('.menu-toggle.main-header-menu-toggle');
-    const mobileHeaderContent = document.querySelector('.ast-mobile-header-content');
-    const mainNav = document.querySelector('#ast-mobile-site-navigation');
-    const allSubMenuToggles = mainNav ? mainNav.querySelectorAll('.ast-menu-toggle') : [];
-
-    if (!mainToggle || !mobileHeaderContent || !mainNav) {
-      return;
-    }
-
-    const handleMainMenuToggle = () => {
-      setMobileMenuOpen(prevState => !prevState);
-    };
-
-    mainToggle.addEventListener('click', handleMainMenuToggle);
-
-    const handleSubMenuToggle = (event) => {
-      event.preventDefault();
-      const parentMenuItem = event.currentTarget.closest('.menu-item-has-children');
-      if (!parentMenuItem) return;
-
-      const subMenu = parentMenuItem.querySelector('.sub-menu');
-      if (!subMenu) return;
-
-      const isExpanded = parentMenuItem.classList.toggle('ast-submenu-expanded');
-      event.currentTarget.setAttribute('aria-expanded', isExpanded.toString());
-      subMenu.style.display = isExpanded ? 'block' : 'none';
-    };
-
-    allSubMenuToggles.forEach(toggle => {
-      toggle.addEventListener('click', handleSubMenuToggle);
-    });
-
-    // Cập nhật DOM dựa trên trạng thái menu chính
-    if (isMobileMenuOpen) {
-      mainToggle.classList.add('toggled');
-      mainNav.classList.add('toggled');
-      mobileHeaderContent.style.display = 'block';
-    } else {
-      mainToggle.classList.remove('toggled');
-      mainNav.classList.remove('toggled');
-      mobileHeaderContent.style.display = 'none';
-
-      // === BẮT ĐẦU PHẦN THÊM MỚI: RESET SUB-MENU ===
-      // Khi menu chính đóng, tìm tất cả các sub-menu đang mở và đóng chúng lại.
-      const openedSubMenus = mainNav.querySelectorAll('.ast-submenu-expanded');
-      openedSubMenus.forEach(item => {
-        item.classList.remove('ast-submenu-expanded');
-        const subMenu = item.querySelector('.sub-menu');
-        const toggleButton = item.querySelector('.ast-menu-toggle');
-        if (subMenu) {
-          subMenu.style.display = 'none';
-        }
-        if (toggleButton) {
-          toggleButton.setAttribute('aria-expanded', 'false');
-        }
-      });
-      // === KẾT THÚC PHẦN THÊM MỚI ===
-    }
-
-    // Hàm dọn dẹp
-    return () => {
-      mainToggle.removeEventListener('click', handleMainMenuToggle);
-      allSubMenuToggles.forEach(toggle => {
-        toggle.removeEventListener('click', handleSubMenuToggle);
-      });
-    };
-  }, [isMobileMenuOpen]);
+  useMobileMenu(isMobileMenuOpen, setMobileMenuOpen);
   // === END ===
 
   // 2. useEffect để xử lý việc click và thêm/xóa class

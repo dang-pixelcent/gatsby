@@ -1,0 +1,214 @@
+import React, { useState, useEffect, Suspense } from "react"
+import { useStaticQuery, graphql } from "gatsby"
+import loadable from '@loadable/component';
+// import { Script } from "gatsby"
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+// import "../styles/main.min.scss"
+// // import "../styles/lightbox.min.css"
+// import "../styles/slick.css"
+// import "../styles/main.scss"
+// import "../styles/aos.css"
+// import "../styles/customStyle.scss"
+// import "../styles/dashicons.min.css"
+// import Header from './Header'
+import ChatWidget from "./ChatWidget"
+import { useLocation } from "@reach/router"
+import Helmet from "react-helmet"
+import AOS from 'aos';
+
+// Import custom hooks
+import { useMegaMenu } from "@hooks/header/useMegaMenu"
+import { useScrollHeader } from "@hooks/header/useScrollHeader"
+import { useMobileMenu } from "@hooks/header/useMobileMenu"
+
+// 1. Import trực tiếp file logo
+import logoSrc from '@assets/logo/logo-head.png';
+
+// const Footer = loadable(() => import('./Footer'));
+const ScrollTop = loadable(() => import('./ScrollTop'));
+
+const NoLayout = ({ children }) => {
+    const location = useLocation(); // Lấy thông tin về trang hiện tại
+    const [bodyClass, setBodyClass] = useState(""); // Dùng state để lưu trữ class
+
+    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    // bodyClass sẽ được cập nhật mỗi khi trang thay đổi hoặc kích thước cửa sổ thay đổi
+    useEffect(() => {
+        const updateBodyClass = () => {
+            const isMobile = window.innerWidth <= 921; // Ngưỡng breakpoint của bạn
+            const isHomePage = location.pathname === '/'; // Kiểm tra có phải trang chủ không
+
+            let classes = [
+                "wp-custom-logo",
+                "wp-theme-astra",
+                "wp-child-theme-agencymarketing",
+                "mega-menu-primary",
+                "ast-plain-container",
+                "ast-no-sidebar",
+                "astra-4.11.1",
+                "ast-single-post",
+                "ast-inherit-site-logo-transparent",
+                "ast-theme-transparent-header",
+                "ast-hfb-header",
+                "ast-sticky-main-shrink",
+                "ast-sticky-above-shrink",
+                "ast-sticky-below-shrink",
+                "ast-sticky-header-shrink",
+                "ast-inherit-site-logo-sticky",
+                "ast-primary-sticky-enabled",
+                "astra-addon-4.11.0"
+            ];
+
+            if (isMobile) {
+                classes.push("ast-header-break-point");
+                if (isMobileMenuOpen) {
+                    // 2. Thêm class khi menu mở trên mobile
+                    classes.push("ast-main-header-nav-open");
+                }
+            } else {
+                classes.push("ast-desktop");
+            }
+
+            if (isHomePage) {
+                classes.push("page-template-front-page");
+                // Thêm các class khác chỉ dành cho trang chủ
+            }
+
+            setBodyClass(classes.join(" "));
+        };
+
+        // Chạy lần đầu khi component được render
+        updateBodyClass();
+
+        // Thêm sự kiện resize để cập nhật class khi thay đổi kích thước cửa sổ
+        window.addEventListener('resize', updateBodyClass);
+
+        // Dọn dẹp sự kiện khi component unmount
+        return () => window.removeEventListener('resize', updateBodyClass);
+
+    }, [location.pathname, isMobileMenuOpen]); // Chạy lại hook này mỗi khi đường dẫn trang thay đổi
+
+
+    // Hook này sẽ theo dõi sự thay đổi của `bodyClass` và cập nhật DOM
+    useEffect(() => {
+        // Gán trực tiếp chuỗi class vào thẻ body
+        // Thao tác này sẽ ghi đè lên tất cả các class cũ và áp dụng bộ class mới
+        document.body.className = bodyClass;
+
+        // Trả về một hàm cleanup (không bắt buộc nhưng là good practice)
+        // để xóa các class khi component unmount, đưa body về trạng thái sạch sẽ.
+        return () => {
+            document.body.className = '';
+        };
+    }, [bodyClass]); // Chỉ chạy lại effect này khi `bodyClass` thay đổi
+    // +++ KẾT THÚC PHẦN THÊM MỚI +++
+
+    // 1. Lấy dữ liệu tập trung tại Layout
+    const data = useStaticQuery(graphql`
+    query LayoutQuery {
+      cms {
+        themeSettings {
+          menuTitle
+          pageTitle
+          themeOptionsSettings {
+            socials {
+              facebook
+              instagram
+              linkedin
+              twitter
+              youtube
+            }
+          }
+        }
+        menuItems(where: {location: PRIMARY}) {
+          nodes {
+            uri
+            title
+            url
+            path
+            id
+            cssClasses
+            label
+            locations
+            menuItemId
+            parentDatabaseId
+            childItems {
+              nodes {
+                label
+                id
+                uri
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+    // Khởi tạo AOS
+    useEffect(() => {
+        // Trì hoãn việc khởi tạo AOS để nó không chặn luồng chính trong quá trình tải ban đầu
+        const timer = setTimeout(() => {
+            AOS.init({
+                offset: 250,
+                once: false, // Hiệu ứng chỉ chạy nhiều lần
+            });
+        }, 500); // Trì hoãn 0.5 giây, đủ để LCP hiển thị
+
+        // Lắng nghe sự kiện để refresh AOS khi trang thay đổi (quan trọng cho Gatsby)
+        const handleRouteChange = () => {
+            AOS.refresh();
+        };
+
+        window.addEventListener('gatsby:route-update', handleRouteChange);
+
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('gatsby:route-update', handleRouteChange);
+        };
+    }, []);
+    // Sử dụng các custom hooks
+    useMegaMenu();
+    useScrollHeader(isMobileMenuOpen);
+    useMobileMenu(isMobileMenuOpen, setMobileMenuOpen);
+
+    return (
+        <div>
+            {/* <Helmet>
+        <body className={bodyClass} />
+      </Helmet> */}
+            <Helmet>
+                <link rel="preload" as="image" href={logoSrc} fetchpriority="high" />
+            </Helmet>
+            {/* <Header
+        isMobileMenuOpen={isMobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        data={data}
+        logoSrc={logoSrc}
+      /> */}
+            {children}
+            <Suspense fallback={<div></div>}>
+                {/* <Footer data={data} /> */}
+                <ScrollTop />
+            </Suspense>
+            <ChatWidget />
+
+            {/* Global AOS Script */}
+            {/* <Script
+        src="/js/aos.js"
+        strategy="idle"
+        onLoad={() => {
+          if (window.AOS) {
+            window.AOS.init({
+              offset: 150,
+            });
+          }
+        }}
+      /> */}
+        </div>
+    )
+}
+
+export default NoLayout
