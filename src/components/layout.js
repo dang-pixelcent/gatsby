@@ -106,10 +106,11 @@ const DefaultLayout = ({ children }) => {
       {children}
       <Suspense fallback={<div></div>}>
         <Footer data={data} />
-        <DomEnhancer
+        {/* <DomEnhancer
           selector="#ast-scroll-top"
           enhancer={ScrollTop}
-        />
+        /> */}
+        <ScrollTop />
       </Suspense>
       <ChatWidget />
 
