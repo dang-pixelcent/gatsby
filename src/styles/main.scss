@@ -5409,7 +5409,6 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 }
 
 .circle-box {
-  overflow: unset !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -5673,7 +5672,7 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
   .circle-box .h3-title {
     font-size: 26px !important;
     /*26px;*/
-    line-height: 2.03 !important;
+    line-height: 2.03;
   }
 
   .sc-how-we-can-help .sc-btn a {
