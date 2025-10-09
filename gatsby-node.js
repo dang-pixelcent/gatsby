@@ -23,8 +23,26 @@ exports.onCreateWebpackConfig = ({ actions }) => {
         '@assets': path.resolve(__dirname, 'src/assets'),
         '@utils': path.resolve(__dirname, 'src/utils'),
       },
+      fallback: {
+        "sqlite3": false,
+        "better-sqlite3": false,
+      }
     },
   });
+
+  // bỏ qua node: sqlite khi build html
+  if (stage === 'build-html' || stage === 'develop-html') {
+    actions.setWebpackConfig({
+      externals: ['sqlite3', 'better-sqlite3'],
+      resolve: {
+        fallback: {
+          "node:sqlite": false,
+          "sqlite3": false,
+          "better-sqlite3": false,
+        }
+      }
+    });
+  }
 };
 
 require('dotenv').config({
