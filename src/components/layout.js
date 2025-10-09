@@ -18,7 +18,7 @@ import Helmet from "react-helmet"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Import replaceInternalLinks helper
-import replaceInternalLinks from '@helpers/replaceButtonLinks'
+import replaceInternalLinksClient from '@helpers/replaceInternalLinksClient'
 
 // phần scroll top
 import DomEnhancer from '@components/Tools/DomEnhancer';
@@ -96,12 +96,12 @@ const DefaultLayout = ({ children }) => {
 
     // Xử lý header HTML
     if (processedHeaderHtml) {
-      processedHeaderHtml = replaceInternalLinks(processedHeaderHtml);
+      processedHeaderHtml = replaceInternalLinksClient(processedHeaderHtml);
     }
 
     // Xử lý footer HTML
     if (processedFooterHtml) {
-      processedFooterHtml = replaceInternalLinks(processedFooterHtml);
+      processedFooterHtml = replaceInternalLinksClient(processedFooterHtml);
     }
 
     return {
