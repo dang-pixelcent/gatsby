@@ -114,12 +114,12 @@ const DefaultLayout = ({ children }) => {
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
-        data={finalData}
+        data={data}
         logoSrc={logoSrc}
       />
       {children}
       <Suspense fallback={<div></div>}>
-        <Footer data={finalData} />
+        <Footer data={data} />
         {/* <DomEnhancer
           selector="#ast-scroll-top"
           enhancer={ScrollTop}
