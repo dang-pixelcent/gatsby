@@ -18,7 +18,7 @@ import Helmet from "react-helmet"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
 // Import replaceInternalLinks helper
-import replaceInternalLinksClient from '@helpers/replaceInternalLinksClient'
+// import replaceInternalLinksClient from '@helpers/replaceInternalLinksClient'
 
 // phần scroll top
 import DomEnhancer from '@components/Tools/DomEnhancer';
@@ -87,21 +87,46 @@ const DefaultLayout = ({ children }) => {
     }
   `);
 
-  // Xử lý replaceInternalLinks cho headerHtmlall và footerHtmlall
+  // Đọc processed HTML từ cache hoặc xử lý runtime
   const processedData = useMemo(() => {
     if (!data?.cms) return data;
 
     let processedHeaderHtml = data.cms.headerHtmlall || "";
     let processedFooterHtml = data.cms.footerHtmlall || "";
 
-    // Xử lý header HTML
-    if (processedHeaderHtml) {
-      processedHeaderHtml = replaceInternalLinksClient(processedHeaderHtml);
+    // Thử đọc từ cache trước (cho production)
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const cachePath = path.join(process.cwd(), '.cache/processed-global-html.json');
+
+      if (fs.existsSync(cachePath)) {
+        const cached = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+        console.log('📁 Using cached processed HTML');
+        return {
+          ...data,
+          cms: {
+            ...data.cms,
+            headerHtmlall: cached.headerHtmlall || data.cms.headerHtmlall,
+            footerHtmlall: cached.footerHtmlall || data.cms.footerHtmlall
+          }
+        };
+      }
+    } catch (error) {
+      console.log('⚠️ Could not read processed HTML cache, using client processing');
     }
 
-    // Xử lý footer HTML
-    if (processedFooterHtml) {
-      processedFooterHtml = replaceInternalLinksClient(processedFooterHtml);
+    // Fallback: xử lý ở client (cho development)
+    if (typeof window !== 'undefined') {
+      const replaceInternalLinksClient = require('@helpers/replaceInternalLinksClient').default;
+
+      if (processedHeaderHtml) {
+        processedHeaderHtml = replaceInternalLinksClient(processedHeaderHtml);
+      }
+
+      if (processedFooterHtml) {
+        processedFooterHtml = replaceInternalLinksClient(processedFooterHtml);
+      }
     }
 
     return {
