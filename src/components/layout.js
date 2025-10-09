@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react"
+import React, { useState, useEffect, Suspense, useMemo } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import loadable from '@loadable/component';
 // import { Script } from "gatsby"
@@ -17,6 +17,8 @@ import { useLocation } from "@reach/router"
 import Helmet from "react-helmet"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
+// Import replaceInternalLinks helper
+import replaceInternalLinks from '@helpers/replaceButtonLinks'
 
 // phần scroll top
 import DomEnhancer from '@components/Tools/DomEnhancer';
@@ -85,6 +87,33 @@ const DefaultLayout = ({ children }) => {
     }
   `);
 
+  // Xử lý replaceInternalLinks cho headerHtmlall và footerHtmlall
+  const processedData = useMemo(() => {
+    if (!data?.cms) return data;
+
+    let processedHeaderHtml = data.cms.headerHtmlall || "";
+    let processedFooterHtml = data.cms.footerHtmlall || "";
+
+    // Xử lý header HTML
+    if (processedHeaderHtml) {
+      processedHeaderHtml = replaceInternalLinks(processedHeaderHtml);
+    }
+
+    // Xử lý footer HTML
+    if (processedFooterHtml) {
+      processedFooterHtml = replaceInternalLinks(processedFooterHtml);
+    }
+
+    return {
+      ...data,
+      cms: {
+        ...data.cms,
+        headerHtmlall: processedHeaderHtml,
+        footerHtmlall: processedFooterHtml
+      }
+    };
+  }, [data]);
+
   // Khởi tạo AOS
   useAos();
 
@@ -100,12 +129,12 @@ const DefaultLayout = ({ children }) => {
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
-        data={data}
+        data={processedData}
         logoSrc={logoSrc}
       />
       {children}
       <Suspense fallback={<div></div>}>
-        <Footer data={data} />
+        <Footer data={processedData} />
         {/* <DomEnhancer
           selector="#ast-scroll-top"
           enhancer={ScrollTop}
