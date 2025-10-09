@@ -44,7 +44,7 @@ const getScriptConfig = (src) => {
 };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas, isLayout } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
 
   useEffect(() => {
     if (uri === "/events/") {

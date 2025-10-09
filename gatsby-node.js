@@ -750,7 +750,7 @@ exports.createPages = async ({ actions, graphql }) => {
     actions.createPage({
       path: `${pathPrefix}${node.uri}`,
       component: path.resolve(`./src/components/templates/dynamicPages.js`),
-      context: { ...node, isLayout },
+      context: { ...node },
     });
   };
 
