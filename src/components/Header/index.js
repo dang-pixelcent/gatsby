@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./styles.scss"
-// import { Link } from "gatsby"
-// import { StaticImage } from "gatsby-plugin-image"
+import { Link } from "gatsby"
+import { StaticImage } from "gatsby-plugin-image"
 import { useLocation } from "@reach/router"
 // import { useStaticQuery, graphql } from "gatsby"
 // import iconmedicalweightloss from "../../assets/expertise/icon-medical-weight-loss.svg" // Thêm dòng này

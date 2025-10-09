@@ -2320,6 +2320,14 @@ body.mega-menu-primary.ast-header-break-point .ast-mobile-menu-buttons {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+#ast-fixed-header {
+  position: fixed;
+  visibility: unset !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
 // Header minimize khi scroll (chỉ áp dụng cho desktop)
 @media only screen and (min-width: 922px) {
   .site-header.menu-scroll-scale {

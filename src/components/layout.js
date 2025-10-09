@@ -89,7 +89,7 @@ const DefaultLayout = ({ children }) => {
   useAos();
 
   return (
-    <div>
+    <React.Fragment>
       <InternalLinkInterceptor />
       {/* <Helmet>
         <body className={bodyClass} />
@@ -126,7 +126,7 @@ const DefaultLayout = ({ children }) => {
           }
         }}
       /> */}
-    </div>
+    </React.Fragment>
   )
 }
 
