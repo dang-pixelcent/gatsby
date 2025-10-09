@@ -8,7 +8,7 @@ const getTerminalColors = require('./src/utils/terminalColors.js');
 
 const { createRemoteFileNode } = require("gatsby-source-filesystem");
 
-exports.onCreateWebpackConfig = ({ actions }) => {
+exports.onCreateWebpackConfig = ({ actions, stage }) => {
   actions.setWebpackConfig({
     resolve: {
       alias: {
