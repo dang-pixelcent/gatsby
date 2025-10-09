@@ -14,6 +14,7 @@ import { initializeHeightEqualizer } from '../../script-handlers/height-equalize
 import { initializeResultsNavigation } from '../../script-handlers/results-navigation-handler';
 import { initializeTrackingPixels } from '../../script-handlers/trackinghandler';
 import { initializeSearchForm } from '../../script-handlers/form-handler';
+import { initializeSpecialtySlider } from '../../script-handlers/specialty-slider-handler';
 
 // 2. Thêm chúng vào danh sách đăng ký
 const HANDLER_REGISTRY = [
@@ -26,6 +27,7 @@ const HANDLER_REGISTRY = [
     initializeResultsNavigation,
     initializeTrackingPixels,
     initializeSearchForm,
+    initializeSpecialtySlider,
     // initializeFormEmbed
 ];
 // const HANDLER_CONFIG = {

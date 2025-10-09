@@ -24,6 +24,7 @@ import './src/styles/layouts/_blog.scss';
 // 4. EXTERNAL LIBRARIES CUỐI CÙNG
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.min.js';
 if (process.env.NODE_ENV === 'development') {
     console.log(
         '%c EdgeTag Mock Mode: Bật chế độ giả lập EdgeTag. ',
