@@ -456,3 +456,13 @@
 .slick-dots li button:before {
     width: 0px !important;
 }
+
+.circle-box {
+    overflow: unset !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .circle-box .h3-title {
+        line-height: 2.03 !important;
+    }
+}
