@@ -15,6 +15,7 @@ import { initializeResultsNavigation } from '../../script-handlers/results-navig
 import { initializeTrackingPixels } from '../../script-handlers/trackinghandler';
 import { initializeSearchForm } from '../../script-handlers/form-handler';
 import { initializeSpecialtySlider } from '../../script-handlers/specialty-slider-handler';
+import { initializeExpertsSlider } from '../../script-handlers/initializeExpertsSlider';
 
 // 2. Thêm chúng vào danh sách đăng ký
 const HANDLER_REGISTRY = [
@@ -28,6 +29,7 @@ const HANDLER_REGISTRY = [
     initializeTrackingPixels,
     initializeSearchForm,
     initializeSpecialtySlider,
+    initializeExpertsSlider,
     // initializeFormEmbed
 ];
 // const HANDLER_CONFIG = {
