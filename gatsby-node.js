@@ -800,50 +800,6 @@ exports.createPages = async ({ actions, graphql }) => {
       console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
     }
   }
-
-
-  // Xử lý và cache headerHtmlall/footerHtmlall
-  console.log(`${colors.cyan}Processing global header/footer HTML...${colors.reset}`);
-
-  // Query để lấy headerHtmlall và footerHtmlall
-  const globalHtmlResult = await graphql(`
-  query GlobalHtmlQuery {
-    cms {
-      headerHtmlall
-      footerHtmlall
-    }
-  }
-`);
-
-  if (!globalHtmlResult.errors && globalHtmlResult.data?.cms) {
-    let processedHeaderHtml = globalHtmlResult.data.cms.headerHtmlall || "";
-    let processedFooterHtml = globalHtmlResult.data.cms.footerHtmlall || "";
-
-    // Xử lý header HTML
-    if (processedHeaderHtml) {
-      console.log(`${colors.cyan}Processing header HTML with replaceInternalLinks...${colors.reset}`);
-      processedHeaderHtml = replaceInternalLinks(processedHeaderHtml);
-    }
-
-    // Xử lý footer HTML
-    if (processedFooterHtml) {
-      console.log(`${colors.cyan}Processing footer HTML with replaceInternalLinks...${colors.reset}`);
-      processedFooterHtml = replaceInternalLinks(processedFooterHtml);
-    }
-
-    // Lưu vào cache
-    const processedHtmlPath = path.join(__dirname, '.cache/processed-global-html.json');
-    try {
-      fs.writeFileSync(processedHtmlPath, JSON.stringify({
-        headerHtmlall: processedHeaderHtml,
-        footerHtmlall: processedFooterHtml
-      }, null, 2));
-      console.log(`${colors.green}✓ Processed global HTML saved to cache${colors.reset}`);
-    } catch (error) {
-      console.error(`${colors.red}Failed to save processed global HTML: ${error.message}${colors.reset}`);
-    }
-  }
-
 };
 
 // Hàm này sẽ "dạy" Gatsby cách tìm URL ảnh và biến nó thành file cục bộ
@@ -888,4 +844,54 @@ exports.createResolvers = ({
       },
     },
   });
+};
+
+
+/**
+ * Hook này chạy một lần trước khi build.
+ * Rất lý tưởng để fetch và cache dữ liệu toàn cục như header/footer.
+ */
+exports.onPreBuild = async ({ graphql }) => {
+  console.log(`${colors.cyan}Processing global header/footer HTML...${colors.reset}`);
+
+  // Query để lấy headerHtmlall và footerHtmlall
+  const globalHtmlResult = await graphql(`
+        query GlobalHtmlQuery {
+            cms {
+                headerHtmlall
+                footerHtmlall
+            }
+        }
+    `);
+
+  if (!globalHtmlResult.errors && globalHtmlResult.data?.cms) {
+    let processedHeaderHtml = globalHtmlResult.data.cms.headerHtmlall || "";
+    let processedFooterHtml = globalHtmlResult.data.cms.footerHtmlall || "";
+
+    // Xử lý header HTML
+    if (processedHeaderHtml) {
+      console.log(`${colors.cyan}Processing header HTML with replaceInternalLinks...${colors.reset}`);
+      processedHeaderHtml = replaceInternalLinks(processedHeaderHtml);
+    }
+
+    // Xử lý footer HTML
+    if (processedFooterHtml) {
+      console.log(`${colors.cyan}Processing footer HTML with replaceInternalLinks...${colors.reset}`);
+      processedFooterHtml = replaceInternalLinks(processedFooterHtml);
+    }
+
+    // Lưu vào cache
+    const processedHtmlPath = path.join(__dirname, '.cache/processed-global-html.json');
+    try {
+      fs.writeFileSync(processedHtmlPath, JSON.stringify({
+        headerHtmlall: processedHeaderHtml,
+        footerHtmlall: processedFooterHtml
+      }, null, 2));
+      console.log(`${colors.green}✓ Processed global HTML saved to cache${colors.reset}`);
+    } catch (error) {
+      console.error(`${colors.red}Failed to save processed global HTML: ${error.message}${colors.reset}`);
+    }
+  } else if (globalHtmlResult.errors) {
+    console.error(`${colors.red}Failed to fetch global HTML:`, globalHtmlResult.errors);
+  }
 };
