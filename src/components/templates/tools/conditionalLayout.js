@@ -4,7 +4,7 @@ import Layout from "@components/layout"
 import NoLayout from "@components/noLayout"
 // Tạo component wrapper có điều kiện
 const ConditionalLayout = ({ children, isLayout }) => {
-    if (isLayout) {
+    if (isLayout !== false) {
         return <Layout>{children}</Layout>;
     }
     return <NoLayout>{children}</NoLayout>;

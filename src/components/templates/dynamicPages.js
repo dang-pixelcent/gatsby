@@ -2,7 +2,8 @@
 import { Script } from "gatsby"
 import React, { Suspense, lazy, useEffect } from "react";
 import loadable from '@loadable/component';
-import ConditionalLayout from "./tools/conditionalLayout";
+// import ConditionalLayout from "./tools/conditionalLayout";
+import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 
 import ReactDOM from 'react-dom';
@@ -186,7 +187,7 @@ const Home = ({ pageContext }) => {
 
   return (
     <React.Fragment>
-      <ConditionalLayout isLayout={isLayout}>
+      <Layout>
         {/* <SEO
           seoData={seoData}
         /> */}
@@ -254,7 +255,7 @@ const Home = ({ pageContext }) => {
 
         {/* Tự động tải tất cả các script có src */}
         {/* {memoizedScriptLoaders} */}
-      </ConditionalLayout>
+      </Layout>
       {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script
           key={`schema-ld-${index}`}

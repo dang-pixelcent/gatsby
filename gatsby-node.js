@@ -746,7 +746,7 @@ exports.createPages = async ({ actions, graphql }) => {
   };
 
   /** PHẦN TẠO TRANG */
-  const createPageFromNode = (node, pathPrefix = '', isLayout = true) => {
+  const createPageFromNode = (node, pathPrefix = '') => {
     actions.createPage({
       path: `${pathPrefix}${node.uri}`,
       component: path.resolve(`./src/components/templates/dynamicPages.js`),
@@ -755,15 +755,13 @@ exports.createPages = async ({ actions, graphql }) => {
   };
 
   // Xử lý và tạo trang cho từng loại
-  const specialPages = [];
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
   data.cms.pages.edges
     .filter(({ node }) => node.uri !== '/blogs/') // Lọc bỏ trang /blogs/
     .map(({ node }) => processNode(node))
     .forEach(page => {
-      const isLayout = specialPages.includes(page.slug);
       if (!page.isFrontPage) {
-        createPageFromNode(page, '', isLayout);
+        createPageFromNode(page, '');
       }
     });
 
