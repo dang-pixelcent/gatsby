@@ -87,57 +87,17 @@ const DefaultLayout = ({ children }) => {
     }
   `);
 
-  // Đọc processed HTML từ cache hoặc xử lý runtime
-  const processedData = useMemo(() => {
-    if (!data?.cms) return data;
+  // // Ưu tiên sử dụng dữ liệu đã xử lý từ file JSON
+  // const finalData = {
+  //   ...data,
+  //   cms: {
+  //     ...data.cms,
+  //     // Ghi đè HTML thô bằng HTML đã được xử lý ở build-time
+  //     headerHtmlall: data.processedGlobalHtmlJson?.headerHtmlall || data.cms.headerHtmlall,
+  //     footerHtmlall: data.processedGlobalHtmlJson?.footerHtmlall || data.cms.footerHtmlall,
+  //   }
+  // };
 
-    let processedHeaderHtml = data.cms.headerHtmlall || "";
-    let processedFooterHtml = data.cms.footerHtmlall || "";
-
-    // Thử đọc từ cache trước (cho production)
-    try {
-      const fs = require('fs');
-      const path = require('path');
-      const cachePath = path.join(process.cwd(), '.cache/processed-global-html.json');
-
-      if (fs.existsSync(cachePath)) {
-        const cached = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-        console.log('📁 Using cached processed HTML');
-        return {
-          ...data,
-          cms: {
-            ...data.cms,
-            headerHtmlall: cached.headerHtmlall || data.cms.headerHtmlall,
-            footerHtmlall: cached.footerHtmlall || data.cms.footerHtmlall
-          }
-        };
-      }
-    } catch (error) {
-      console.log('⚠️ Could not read processed HTML cache, using client processing');
-    }
-
-    // Fallback: xử lý ở client (cho development)
-    if (typeof window !== 'undefined') {
-      const replaceInternalLinksClient = require('@helpers/replaceInternalLinksClient').default;
-
-      if (processedHeaderHtml) {
-        processedHeaderHtml = replaceInternalLinksClient(processedHeaderHtml);
-      }
-
-      if (processedFooterHtml) {
-        processedFooterHtml = replaceInternalLinksClient(processedFooterHtml);
-      }
-    }
-
-    return {
-      ...data,
-      cms: {
-        ...data.cms,
-        headerHtmlall: processedHeaderHtml,
-        footerHtmlall: processedFooterHtml
-      }
-    };
-  }, [data]);
 
   // Khởi tạo AOS
   useAos();
@@ -154,12 +114,12 @@ const DefaultLayout = ({ children }) => {
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
-        data={processedData}
+        data={finalData}
         logoSrc={logoSrc}
       />
       {children}
       <Suspense fallback={<div></div>}>
-        <Footer data={processedData} />
+        <Footer data={finalData} />
         {/* <DomEnhancer
           selector="#ast-scroll-top"
           enhancer={ScrollTop}
