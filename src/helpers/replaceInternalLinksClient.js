@@ -10,7 +10,7 @@ export default function replaceInternalLinksClient(html = '') {
     if (!html || typeof window === 'undefined') return html;
 
     // Sử dụng cùng biến môi trường như file gốc
-    const SITE_DOMAIN = process.env.REACT_APP_DOMAIN || window.location.origin;
+    const SITE_DOMAIN = process.env.REACT_APP_DOMAIN;
 
     // Tạo temporary DOM element để parse HTML
     const tempDiv = document.createElement('div');
@@ -18,9 +18,6 @@ export default function replaceInternalLinksClient(html = '') {
 
     let successCount = 0;
     let errorCount = 0;
-
-    // Thông báo bắt đầu xử lý (tương tự logic gốc)
-    console.log('🔄 Client: Đang thay thế các URL nội bộ...');
 
     // Tìm tất cả thẻ <a> có href (tương tự cheerio selector)
     const links = tempDiv.querySelectorAll('a[href]');
@@ -41,15 +38,6 @@ export default function replaceInternalLinksClient(html = '') {
             }
         }
     });
-
-    // Thông báo kết quả cuối cùng (tương tự logic gốc)
-    if (successCount > 0 || errorCount > 0) {
-        if (errorCount === 0) {
-            console.log(`✅ Client: Thành công! Đã thay thế ${successCount} URL`);
-        } else {
-            console.log(`⚠️ Client: Hoàn thành với lỗi: ${successCount} thành công, ${errorCount} lỗi`);
-        }
-    }
 
     // Trả về HTML đã được cập nhật
     return tempDiv.innerHTML;
