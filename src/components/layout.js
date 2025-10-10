@@ -1,27 +1,15 @@
-import React, { useState, useEffect, Suspense, useMemo } from "react"
+import React, { useState, Suspense } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import loadable from '@loadable/component';
-// import { Script } from "gatsby"
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import "../styles/main.min.scss"
-// // import "../styles/lightbox.min.css"
-// import "../styles/slick.css"
-// import "../styles/main.scss"
-// import "../styles/aos.css"
-// import "../styles/customStyle.scss"
-// import "../styles/dashicons.min.css"
+
 import Header from './Header'
+
 import ChatWidget from "./ChatWidget"
 import { useLocation } from "@reach/router"
 import Helmet from "react-helmet"
 // làm sạch link
 import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
-// Import replaceInternalLinks helper
-// import replaceInternalLinksClient from '@helpers/replaceInternalLinksClient'
 
-// phần scroll top
-import DomEnhancer from '@components/Tools/DomEnhancer';
 import ScrollTop from '@components/ScrollTop';
 
 // Import custom hooks
@@ -32,7 +20,6 @@ import { useAos } from "@hooks/useAos"
 import logoSrc from '@assets/logo/logo-head.png';
 
 const Footer = loadable(() => import('./Footer'));
-// const ScrollTop = loadable(() => import('./ScrollTop'));
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
@@ -42,6 +29,9 @@ const DefaultLayout = ({ children }) => {
   // bodyClass sẽ được cập nhật mỗi khi trang thay đổi hoặc kích thước cửa sổ thay đổi
   useBodyUpdate(location, isMobileMenuOpen);
   // +++ KẾT THÚC PHẦN THÊM MỚI +++
+
+  // Khởi tạo AOS
+  useAos();
 
   // 1. Lấy dữ liệu tập trung tại Layout
   const data = useStaticQuery(graphql`
@@ -84,62 +74,35 @@ const DefaultLayout = ({ children }) => {
         headerHtmlall
         footerHtmlall
       }
+      dataJson {
+        headerHtmlall
+        footerHtmlall
+      }
     }
   `);
 
-  // // Ưu tiên sử dụng dữ liệu đã xử lý từ file JSON
-  // const finalData = {
-  //   ...data,
-  //   cms: {
-  //     ...data.cms,
-  //     // Ghi đè HTML thô bằng HTML đã được xử lý ở build-time
-  //     headerHtmlall: data.processedGlobalHtmlJson?.headerHtmlall || data.cms.headerHtmlall,
-  //     footerHtmlall: data.processedGlobalHtmlJson?.footerHtmlall || data.cms.footerHtmlall,
-  //   }
-  // };
+  // Lấy dữ liệu đã xử lý ra
+  const processedHeaderHtml = data.dataJson?.headerHtmlall;
+  const processedFooterHtml = data.dataJson?.footerHtmlall;
 
-
-  // Khởi tạo AOS
-  useAos();
 
   return (
     <React.Fragment>
       <InternalLinkInterceptor />
-      {/* <Helmet>
-        <body className={bodyClass} />
-      </Helmet> */}
       <Helmet>
         <link rel="preload" as="image" href={logoSrc} fetchpriority="high" />
       </Helmet>
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
-        data={data}
-        logoSrc={logoSrc}
+        data={processedHeaderHtml}
       />
       {children}
       <Suspense fallback={<div></div>}>
-        <Footer data={data} />
-        {/* <DomEnhancer
-          selector="#ast-scroll-top"
-          enhancer={ScrollTop}
-        /> */}
+        <Footer data={processedFooterHtml} />
         <ScrollTop />
       </Suspense>
       <ChatWidget />
-
-      {/* Global AOS Script */}
-      {/* <Script
-        src="/js/aos.js"
-        strategy="idle"
-        onLoad={() => {
-          if (window.AOS) {
-            window.AOS.init({
-              offset: 150,
-            });
-          }
-        }}
-      /> */}
     </React.Fragment>
   )
 }

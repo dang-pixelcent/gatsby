@@ -493,6 +493,8 @@ exports.createPages = async ({ actions, graphql }) => {
   const result = await graphql(`
         query {
             cms {
+                headerHtmlall
+                footerHtmlall
                 pages(where: {status: PUBLISH}, first: 999) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date, 
                     htmlSnippets {
                       bodyOpenHtml
@@ -800,6 +802,37 @@ exports.createPages = async ({ actions, graphql }) => {
       console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
     }
   }
+
+  // ===================================================================
+  // PHẦN THÊM MỚI: Xử lý và cache Header/Footer
+  // ===================================================================
+  console.log(`${colors.cyan}Processing and caching global Header/Footer HTML...${colors.reset}`);
+  if (data.cms.headerHtmlall || data.cms.footerHtmlall) {
+    console.log(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
+    const rawHeaderHtml = data.cms.headerHtmlall || "";
+    const rawFooterHtml = data.cms.footerHtmlall || "";
+
+    // Gọi hàm xử lý link của bạn
+    const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
+    const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
+
+    // Lưu file vào thư mục cache đã được tạo bởi onPreInit
+    const CUSTOM_CACHE_DIR = path.join(__dirname, 'data');
+    const processedHtmlPath = path.join(CUSTOM_CACHE_DIR, 'processedglobalhtml.json');
+
+    try {
+      fs.writeFileSync(processedHtmlPath, JSON.stringify({
+        headerHtmlall: processedHeaderHtml,
+        footerHtmlall: processedFooterHtml
+      }));
+      console.log(`${colors.green}✓ Global Header/Footer HTML cached successfully.${colors.reset}`);
+    } catch (error) {
+      console.error(`${colors.red}Error caching global HTML: ${error.message}${colors.reset}`);
+    }
+  }
+  // ===================================================================
+  // KẾT THÚC PHẦN THÊM MỚI
+  // ===================================================================
 };
 
 // Hàm này sẽ "dạy" Gatsby cách tìm URL ảnh và biến nó thành file cục bộ
@@ -846,6 +879,13 @@ exports.createResolvers = ({
   });
 };
 
+// Tạo thư mục data để lưu header/footer đã xử lý nếu chưa có
+exports.onPreInit = () => {
+  const CUSTOM_CACHE_DIR = path.join(__dirname, 'data');
+  if (!fs.existsSync(CUSTOM_CACHE_DIR)) {
+    fs.mkdirSync(CUSTOM_CACHE_DIR, { recursive: true });
+  }
+};
 
 // /**
 //  * Hook này chạy một lần trước khi build.

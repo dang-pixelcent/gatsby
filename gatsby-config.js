@@ -73,7 +73,6 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-image`,
     `gatsby-plugin-preload-fonts`,
-    // `gatsby-transformer-json`,
     // `gatsby-plugin-webpack-bundle-analyser-v2`,
     // {
     //   resolve: `gatsby-plugin-purgecss`,
@@ -100,13 +99,16 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `cache`,
-    //     path: `${__dirname}/transformer-json/`,
-    //   },
-    // },
+    // Thêm nguồn dữ liệu từ thư mục data
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `data`,
+        path: `./data/`,
+      },
+    },
+    `gatsby-transformer-json`,
+    // Kết nối đến GraphQL API của WordPress
     {
       resolve: 'gatsby-source-graphql',
       options: {
