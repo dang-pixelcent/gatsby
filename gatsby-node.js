@@ -546,6 +546,38 @@ exports.createPages = async ({ actions, graphql }) => {
     throw new Error("Main GraphQL query failed!");
   }
   const { data } = result;
+
+  // // ===================================================================
+  // // PHẦN THÊM MỚI: Xử lý và cache Header/Footer
+  // // ===================================================================
+  // console.log(`${colors.cyan}Processing and caching global Header/Footer HTML...${colors.reset}`);
+  // if (data.cms.headerHtmlall || data.cms.footerHtmlall) {
+  //   console.log(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
+  //   const rawHeaderHtml = data.cms.headerHtmlall || "";
+  //   const rawFooterHtml = data.cms.footerHtmlall || "";
+
+  //   // Gọi hàm xử lý link của bạn
+  //   const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
+  //   const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
+
+  //   // Lưu file vào thư mục cache đã được tạo bởi onPreInit
+  //   const CUSTOM_CACHE_DIR = path.join(__dirname, '.cache/custom/headerfooter/');
+  //   const processedHtmlPath = path.join(CUSTOM_CACHE_DIR, 'processedglobalhtml.json');
+
+  //   try {
+  //     fs.writeFileSync(processedHtmlPath, JSON.stringify({
+  //       headerHtmlall: processedHeaderHtml,
+  //       footerHtmlall: processedFooterHtml
+  //     }));
+  //     console.log(`${colors.green}✓ Global Header/Footer HTML cached successfully.${colors.reset}`);
+  //   } catch (error) {
+  //     console.error(`${colors.red}Error caching global HTML: ${error.message}${colors.reset}`);
+  //   }
+  // }
+  // // ===================================================================
+  // // KẾT THÚC PHẦN THÊM MỚI
+  // // ===================================================================
+
   //======================PHẦN CHÍNH===================================
   // XỬ LÝ BLOGs với phân trang
   await createPaginatedBlogPages({ graphql, actions });
@@ -677,37 +709,6 @@ exports.createPages = async ({ actions, graphql }) => {
       console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
     }
   }
-
-  // ===================================================================
-  // PHẦN THÊM MỚI: Xử lý và cache Header/Footer
-  // ===================================================================
-  console.log(`${colors.cyan}Processing and caching global Header/Footer HTML...${colors.reset}`);
-  if (data.cms.headerHtmlall || data.cms.footerHtmlall) {
-    console.log(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
-    const rawHeaderHtml = data.cms.headerHtmlall || "";
-    const rawFooterHtml = data.cms.footerHtmlall || "";
-
-    // Gọi hàm xử lý link của bạn
-    const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
-    const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
-
-    // Lưu file vào thư mục cache đã được tạo bởi onPreInit
-    const CUSTOM_CACHE_DIR = path.join(__dirname, 'data');
-    const processedHtmlPath = path.join(CUSTOM_CACHE_DIR, 'processedglobalhtml.json');
-
-    try {
-      fs.writeFileSync(processedHtmlPath, JSON.stringify({
-        headerHtmlall: processedHeaderHtml,
-        footerHtmlall: processedFooterHtml
-      }));
-      console.log(`${colors.green}✓ Global Header/Footer HTML cached successfully.${colors.reset}`);
-    } catch (error) {
-      console.error(`${colors.red}Error caching global HTML: ${error.message}${colors.reset}`);
-    }
-  }
-  // ===================================================================
-  // KẾT THÚC PHẦN THÊM MỚI
-  // ===================================================================
 };
 
 // Hàm này sẽ "dạy" Gatsby cách tìm URL ảnh và biến nó thành file cục bộ
@@ -756,8 +757,96 @@ exports.createResolvers = ({
 
 // Tạo thư mục data để lưu header/footer đã xử lý nếu chưa có
 exports.onPreInit = () => {
-  const CUSTOM_CACHE_DIR = path.join(__dirname, 'data');
+  const CUSTOM_CACHE_DIR = path.join(__dirname, '.cache/headerfooter/');
   if (!fs.existsSync(CUSTOM_CACHE_DIR)) {
     fs.mkdirSync(CUSTOM_CACHE_DIR, { recursive: true });
+  }
+};
+
+/**
+ * onPreBootstrap: Chạy một lần duy nhất ngay từ đầu.
+ * Đây là nơi hoàn hảo để fetch dữ liệu và tạo ra các file cục bộ
+ * mà các plugin khác (như gatsby-source-filesystem) sẽ cần đến.
+ */
+exports.onPreBootstrap = async ({ reporter }) => {
+  reporter.info("Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...");
+
+  // Lấy URL endpoint từ biến môi trường
+  const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
+
+  if (!endpoint) {
+    reporter.panicOnBuild("GATSBY_WPGRAPHQL_URL must be set in .env file");
+    return;
+  }
+
+  // Đây là query GraphQL để lấy header và footer
+  const query = `
+    query GetGlobalHTML {
+        headerHtmlall
+        footerHtmlall
+    }
+  `;
+
+  try {
+    // ===================================================================
+    // BẮT ĐẦU PHẦN FETCH DỮ LIỆU
+    // ===================================================================
+    reporter.info(`Fetching data from: ${endpoint}`);
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Fetch failed with status: ${response.status} ${response.statusText}`);
+    }
+
+    const jsonResponse = await response.json();
+
+    // Kiểm tra lỗi từ GraphQL
+    if (jsonResponse.errors) {
+      throw new Error(`GraphQL returned errors: ${JSON.stringify(jsonResponse.errors)}`);
+    }
+
+    const data = jsonResponse.data; // Dữ liệu thật từ CMS
+
+    reporter.info("Data fetched successfully.");
+
+    // ===================================================================
+    // KẾT THÚC PHẦN FETCH - BẮT ĐẦU GHI FILE
+    // ===================================================================
+    if (data && (data.headerHtmlall || data.footerHtmlall)) {
+      const rawHeaderHtml = data.headerHtmlall || "";
+      const rawFooterHtml = data.footerHtmlall || "";
+
+      const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
+      const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
+
+      // Đảm bảo đường dẫn này khớp với cấu hình trong gatsby-config.js
+      // Ví dụ: nếu config là 'src/data' thì ở đây cũng phải là 'src/data'
+      const DATA_DIR = path.join(__dirname, '.cache/headerfooter/');
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+
+      // Đặt tên file cho nhất quán, ví dụ: globalData.json
+      const filePath = path.join(DATA_DIR, 'processedglobalhtml.json');
+
+      fs.writeFileSync(filePath, JSON.stringify({
+        headerHtmlall: processedHeaderHtml,
+        footerHtmlall: processedFooterHtml
+      }));
+
+      reporter.success(`✓ Created JSON file at: ${filePath}`);
+    } else {
+      reporter.warn("No header/footer data found from CMS.");
+    }
+
+  } catch (error) {
+    reporter.panicOnBuild("Critical error in onPreBootstrap when processing Header/Footer", error);
   }
 };

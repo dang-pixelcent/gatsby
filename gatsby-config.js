@@ -103,8 +103,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `data`,
-        path: `${__dirname}/data/`,
+        name: `data-headerfooter`,
+        path: `${__dirname}/.cache/headerfooter`,
       },
     },
     `gatsby-transformer-json`,
