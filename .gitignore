@@ -9,8 +9,6 @@
 /cache
 /extracted-scripts
 /manual-review
-/data
-
 # testing
 /coverage
 
