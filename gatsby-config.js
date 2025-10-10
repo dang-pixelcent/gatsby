@@ -104,7 +104,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `data`,
-        path: `./data/`,
+        path: `${__dirname}/data/`,
       },
     },
     `gatsby-transformer-json`,
