@@ -99,7 +99,7 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    // Thêm nguồn dữ liệu từ thư mục data
+    // Thêm nguồn dữ liệu từ thư mục .cache/headerfooter: tên truy vấn là "headerfooterJson"
     {
       resolve: `gatsby-source-filesystem`,
       options: {
