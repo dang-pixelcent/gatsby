@@ -764,89 +764,109 @@ exports.onPreInit = () => {
 };
 
 /**
+ * Hàm fetch với logic retry và backoff tăng dần.
+ * @param {object} options - Các tùy chọn.
+ * @param {string} options.endpoint - URL để fetch.
+ * @param {string} options.query - Chuỗi query GraphQL.
+ * @param {object} options.reporter - Gatsby reporter để log.
+ * @param {number} [options.retries=7] - Số lần thử lại tối đa.
+ * @returns {Promise<object>} - Dữ liệu trả về từ CMS.
+ */
+async function fetchWithRetry({ endpoint, query, reporter, retries = 7 }) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      reporter.info(`Attempt ${attempt}/${retries}: Fetching data from ${endpoint}`);
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+
+      // Nếu response không phải 429 hoặc lỗi server khác, chúng ta xử lý nó
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        if (jsonResponse.errors) {
+          throw new Error(`GraphQL returned errors: ${JSON.stringify(jsonResponse.errors)}`);
+        }
+        reporter.success(`Fetch successful on attempt ${attempt}.`);
+        return jsonResponse.data; // Trả về dữ liệu và thoát khỏi vòng lặp
+      }
+
+      // Nếu là lỗi 429 hoặc lỗi server khác thì ném ra để đi vào catch
+      throw new Error(`Fetch failed with status: ${response.status} ${response.statusText}`);
+
+    } catch (error) {
+      // Nếu là lần thử cuối cùng, ném lỗi ra ngoài để panicOnBuild
+      if (attempt === retries) {
+        reporter.error(`Final attempt (${attempt}/${retries}) failed. Aborting.`);
+        throw error; // Ném lỗi cuối cùng ra ngoài
+      }
+
+      // Tính thời gian chờ tăng dần (vd: 1s, 2s, 4s, 8s...)
+      const delay = Math.pow(2, attempt) * 1000;
+      reporter.warn(`Attempt ${attempt}/${retries} failed: ${error.message}. Retrying in ${delay / 1000}s...`);
+
+      // Chờ trước khi thử lại
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}
+
+/**
  * onPreBootstrap: Chạy một lần duy nhất ngay từ đầu.
- * Đây là nơi hoàn hảo để fetch dữ liệu và tạo ra các file cục bộ
- * mà các plugin khác (như gatsby-source-filesystem) sẽ cần đến.
  */
 exports.onPreBootstrap = async ({ reporter }) => {
   reporter.info("Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...");
 
-  // Lấy URL endpoint từ biến môi trường
   const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
-
   if (!endpoint) {
     reporter.panicOnBuild("GATSBY_WPGRAPHQL_URL must be set in .env file");
     return;
   }
 
-  // Đây là query GraphQL để lấy header và footer
   const query = `
     query GetGlobalHTML {
-        headerHtmlall
-        footerHtmlall
+      headerHtmlall
+      footerHtmlall
     }
   `;
 
   try {
-    // ===================================================================
-    // BẮT ĐẦU PHẦN FETCH DỮ LIỆU
-    // ===================================================================
-    reporter.info(`Fetching data from: ${endpoint}`);
-
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query }),
+    // Gọi hàm fetchWithRetry thay vì fetch trực tiếp
+    const data = await fetchWithRetry({
+      endpoint,
+      query,
+      reporter,
+      retries: 7
     });
 
-    if (!response.ok) {
-      throw new Error(`Fetch failed with status: ${response.status} ${response.statusText}`);
-    }
-
-    const jsonResponse = await response.json();
-
-    // Kiểm tra lỗi từ GraphQL
-    if (jsonResponse.errors) {
-      throw new Error(`GraphQL returned errors: ${JSON.stringify(jsonResponse.errors)}`);
-    }
-
-    const data = jsonResponse.data; // Dữ liệu thật từ CMS
-
-    reporter.info("Data fetched successfully.");
-
-    // ===================================================================
-    // KẾT THÚC PHẦN FETCH - BẮT ĐẦU GHI FILE
-    // ===================================================================
+    // Phần ghi file giữ nguyên như cũ
     if (data && (data.headerHtmlall || data.footerHtmlall)) {
       const rawHeaderHtml = data.headerHtmlall || "";
       const rawFooterHtml = data.footerHtmlall || "";
 
+      // Giả sử bạn có hàm replaceInternalLinks
       const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
       const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
 
-      // Đảm bảo đường dẫn này khớp với cấu hình trong gatsby-config.js
-      // Ví dụ: nếu config là 'src/data' thì ở đây cũng phải là 'src/data'
       const DATA_DIR = path.join(__dirname, '.cache/headerfooter/');
+      // onPreInit đã tạo thư mục này rồi, nhưng kiểm tra lại cho chắc
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
 
-      // Đặt tên file cho nhất quán, ví dụ: globalData.json
       const filePath = path.join(DATA_DIR, 'processedglobalhtml.json');
-
       fs.writeFileSync(filePath, JSON.stringify({
         headerHtmlall: processedHeaderHtml,
         footerHtmlall: processedFooterHtml
       }));
-
       reporter.success(`✓ Created JSON file at: ${filePath}`);
     } else {
       reporter.warn("No header/footer data found from CMS.");
     }
 
   } catch (error) {
-    reporter.panicOnBuild("Critical error in onPreBootstrap when processing Header/Footer", error);
+    reporter.panicOnBuild("Critical error in onPreBootstrap after multiple retries", error);
   }
 };
