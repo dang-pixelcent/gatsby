@@ -82,8 +82,8 @@ const DefaultLayout = ({ children }) => {
   `);
 
   // Lấy dữ liệu đã xử lý ra
-  const processedHeaderHtml = data.dataJson?.headerHtmlall;
-  const processedFooterHtml = data.dataJson?.footerHtmlall;
+  const processedHeaderHtml = data.dataJson?.headerHtmlall || '';
+  const processedFooterHtml = data.dataJson?.footerHtmlall || '';
 
 
   return (

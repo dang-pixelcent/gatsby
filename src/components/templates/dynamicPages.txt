@@ -10,7 +10,16 @@ import ReactDOM from 'react-dom';
 // ⭐️ Import component lazy-load YouTube và CSS của nó
 import LazyEmbed from '@components/Video/LazyEmbed';
 
+// Tiêm component vào một phần tử DOM, không xóa nội dung của nó.
+// import ComponentPortal from "@components/Tools/ComponentPortal"
+// Tiếp quản một phần tử DOM, xóa nội dung của nó và render các component con vào đó.
+// import DomInjector from '@components/Tools/DomInjector';
+// import DomReplacer from '@components/Tools/DomReplacer';
+// import DynamicScriptHandler from '@components/DynamicScriptHandler'
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
+// import LazyPracticeFlowForm from '@components/Blocks/LazyPracticeFlowForm';
+// import OldScheduleForm from '@components/Blocks/OldScheduleForm'; // Đảm bảo đường dẫn đúng
+// import SpecialScriptInjector from '@components/Tools/SpecialScriptInjector';
 
 // import hooks
 import useLightBoxJquery from '@src/hooks/lightBox-jquery/useLightboxJquery';
@@ -79,6 +88,50 @@ const Home = ({ pageContext }) => {
   }, [flexibleContentHtml]);
   // ================== KẾT THÚC NÂNG CẤP ==================
 
+  // React.useEffect(() => {
+  //   // Tạo các script tag mới và thêm vào DOM
+  //   const scripts = [
+  //     "https://fast.wistia.com/player.js",
+  //     "https://fast.wistia.com/embed/cxeoqwzjx0.js",
+  //   ];
+
+  //   const scriptEls = scripts.map((src) => {
+  //     const script = document.createElement("script");
+  //     script.src = src;
+  //     script.async = true;
+  //     // Nếu là module (như wistia embed script), thêm type
+  //     if (src.includes("embed/")) {
+  //       script.type = "module";
+  //     }
+  //     document.body.appendChild(script);
+  //     return script;
+  //   });
+
+  //   return () => {
+  //     scriptEls.forEach((script) => {
+  //       document.body.removeChild(script);
+  //     });
+  //   };
+  // }, []);
+
+
+  // // Thêm useEffect để chạy các hàm process()
+  // useEffect(() => {
+  //   // Hàm này sẽ chạy mỗi khi component được mount (tải trang, back/forward)
+  //   //console.log("Page content updated, processing scripts...");
+  //   scripts.forEach(script => {
+  //     if (script.resourceType === 'external-script') {
+  //       const config = getScriptConfig(script.attributes.src);
+  //       // Nếu có hàm process trong cấu hình, hãy gọi nó
+  //       if (config.process) {
+  //         //console.log(`Calling process() for: ${script.attributes.src}`);
+  //         config.process();
+  //       }
+  //     }
+  //   });
+  //   // Chạy lại effect này mỗi khi danh sách script hoặc nội dung thay đổi
+  // }, [scripts, flexibleContentHtml]);
+
   const handleScriptLoad = (script) => {
     const config = getScriptConfig(script.attributes.src);
 
@@ -93,10 +146,39 @@ const Home = ({ pageContext }) => {
     }
   };
 
+  // const memoizedScriptLoaders = useMemo(() => {
+  //   // console.log("Memoizing ScriptLoaders..."); // Bạn sẽ thấy log này chỉ chạy khi `scripts` thay đổi
+  //   return scripts.map((script) => {
+  //     if (script.resourceType === 'external-script') {
+  //       const config = getScriptConfig(script.attributes.src);
+  //       return (
+  //         <ScriptLoader
+  //           key={script.attributes.id}
+  //           attributes={script.attributes} // `script.attributes` bây giờ có tham chiếu ổn định
+  //           keepOnUnmount={config.keepOnUnmount}
+  //         />
+  //       );
+  //     }
+  //     return null;
+  //   });
+  // }, [scripts]); // Chỉ tính toán lại khi mảng `scripts` thay đổi
+
   return (
     <React.Fragment>
       <Layout>
+        {/* <SEO
+          seoData={seoData}
+        /> */}
+
+
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
+
+        {/* Sử dụng ComponentPortal để tiêm các component khác nhau vào các vị trí khác nhau.
+        Nó sẽ tự động tìm các div này trong flexibleContentHtml và tiêm vào.
+      */}
+        {/* <ComponentPortal selector="#sdformthree">
+          <ScheduleForm />
+        </ComponentPortal> */}
 
         {/* Component này sẽ tự động xử lý tất cả các script đặc biệt được tìm thấy */}
         <Suspense fallback={<div></div>}>
@@ -124,6 +206,33 @@ const Home = ({ pageContext }) => {
             <LazyServiceSlider />
           </Suspense>
         </DomInjector>
+        {/* <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
+          <SpecialtySlider />
+        </Suspense> */}
+        {/* <DomInjector selector=".sc-specialty .specialty-list">
+          <SpecialtySliderFromHtml  htmlContent={flexibleContentHtml} />
+        </DomInjector> */}
+
+
+        {/* {(slug === "streamlining-operations-and-boosting-patient-engagement-with-crm-automation-for-medspa-marketing") && (
+        <ScriptLoader
+          src="https://www.tiktok.com/embed.js"
+          // id="tiktok-embed-script"
+          async={true}
+          removeOnUnmount={true}
+        />
+      )}
+
+      {(slug == "get-started") && (
+        <ScriptLoader src="/js/script_tag_2.js" />
+      )} */}
+
+        {/* {scripts.map((scriptProps) => (
+        <ScriptLoader key={scriptProps.id || scriptProps.src} {...scriptProps} />
+      ))} */}
+
+        {/* Tự động tải tất cả các script có src */}
+        {/* {memoizedScriptLoaders} */}
       </Layout>
       {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script

@@ -553,6 +553,127 @@ exports.createPages = async ({ actions, graphql }) => {
   // XỬ LÝ CÁC TRANG CATEGORY với phân trang
   await createPaginatedCategoryPages({ graphql, actions });
 
+  /**
+   * PHẦN XỬ LÝ RIÊNG CHO TRANG HOME
+   * - Lấy dữ liệu SEO từ cache
+   *  - Tạo trang home với template riêng
+   *  - Lưu các snippets HTML riêng cho trang home vào cache
+   */
+
+  // 1. Chạy query cho trang chủ một cách thủ công
+  const homePageDataResult = await graphql(`
+    query HomePageQueryForNode {
+      cms {
+        pageBy(uri: "/") {
+          title
+          id
+          template {
+            templateName
+            ... on GraphCMS_Template_Home {
+              templateName
+              homeContent {
+                flexibleContent {
+                  ... on GraphCMS_HomeContentFlexibleContentBannerLayout {
+                    __typename
+                    desc
+                    title
+                    subTitle
+                    sepText
+                    serviceList {
+                      link
+                      title
+                    }
+                    boxDesktop {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    boxMobile {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(width: 303, height: 216, quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    badgeLogo {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE)
+                          }
+                        }
+                      }
+                    }
+                    backgroundImage {
+                      node {
+                        sourceUrl
+                        localFile {
+                          childImageSharp {
+                            gatsbyImageData(quality: 60, formats: [AUTO, WEBP, AVIF], placeholder: NONE, layout: FULL_WIDTH)
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  if (homePageDataResult.errors) {
+    console.error(`${colors.red}Homepage query in gatsby-node.js failed!${colors.reset}`, homePageDataResult.errors);
+    throw new Error("Homepage query in gatsby-node.js failed!");
+  }
+
+  // trang home riêng + SEO
+  const homeDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/`);
+  // [THAY ĐỔI] Xử lý seoData cho trang chủ
+  const processedSeo = processSeoData(homeDataSeo);
+
+  // Tìm homepage node để xử lý snippets
+  const homepageNode = data.cms.pages.edges.find(({ node }) => node.isFrontPage)?.node;
+  let homepageSnippets = null;
+
+  if (homepageNode && homepageNode.htmlSnippets) {
+    // Lưu snippets riêng cho homepage
+    const snippetPath = path.join(SNIPPETS_CACHE_DIR, 'homepage.json');
+    try {
+      fs.writeFileSync(snippetPath, JSON.stringify(homepageNode.htmlSnippets));
+      homepageSnippets = homepageNode.htmlSnippets;
+      console.log(`${colors.green}Homepage snippets saved to cache.${colors.reset}`);
+    } catch (error) {
+      console.error(`${colors.red}Error saving homepage snippets:${colors.reset}`, error);
+    }
+  }
+
+  actions.createPage({
+    path: `/`,
+    component: path.resolve(`./src/components/templates/home.js`),
+    context: {
+      // seoData: homeDataSeo || null,
+      // [THAY ĐỔI] Truyền dữ liệu đã xử lý vào context
+      metaHtml: processedSeo.metaHtml || null,
+      schemas: processedSeo.schemas || [],
+      htmlSnippets: homepageSnippets,
+      pageData: homePageDataResult.data
+    },
+  });
+  /**
+   * END PHẦN XỬ LÝ TRANG HOME
+   */
 
   /**
    * PHẦN XỬ LÝ CÁC TRANG DYNAMIC
@@ -638,9 +759,13 @@ exports.createPages = async ({ actions, graphql }) => {
   // Xử lý và tạo trang cho từng loại
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
   data.cms.pages.edges
-    .filter(({ node }) => node.uri !== '/blogs/') // Lọc bỏ trang /blogs/ để tránh trùng với trang blog chính
+    .filter(({ node }) => node.uri !== '/blogs/') // Lọc bỏ trang /blogs/
     .map(({ node }) => processNode(node))
-    .forEach(page => createPageFromNode(page, ''));
+    .forEach(page => {
+      if (!page.isFrontPage) {
+        createPageFromNode(page, '');
+      }
+    });
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
   data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, ''));
@@ -761,3 +886,52 @@ exports.onPreInit = () => {
     fs.mkdirSync(CUSTOM_CACHE_DIR, { recursive: true });
   }
 };
+
+// /**
+//  * Hook này chạy một lần trước khi build.
+//  * Rất lý tưởng để fetch và cache dữ liệu toàn cục như header/footer.
+//  */
+// exports.onPreBuild = async ({ graphql }) => {
+//   console.log(`${colors.cyan}Processing global header/footer HTML...${colors.reset}`);
+
+//   // Query để lấy headerHtmlall và footerHtmlall
+//   const globalHtmlResult = await graphql(`
+//         query GlobalHtmlQuery {
+//             cms {
+//                 headerHtmlall
+//                 footerHtmlall
+//             }
+//         }
+//     `);
+
+//   if (!globalHtmlResult.errors && globalHtmlResult.data?.cms) {
+//     let processedHeaderHtml = globalHtmlResult.data.cms.headerHtmlall || "";
+//     let processedFooterHtml = globalHtmlResult.data.cms.footerHtmlall || "";
+
+//     // Xử lý header HTML
+//     if (processedHeaderHtml) {
+//       console.log(`${colors.cyan}Processing header HTML with replaceInternalLinks...${colors.reset}`);
+//       processedHeaderHtml = replaceInternalLinks(processedHeaderHtml);
+//     }
+
+//     // Xử lý footer HTML
+//     if (processedFooterHtml) {
+//       console.log(`${colors.cyan}Processing footer HTML with replaceInternalLinks...${colors.reset}`);
+//       processedFooterHtml = replaceInternalLinks(processedFooterHtml);
+//     }
+
+//     // Lưu vào cache
+//     const processedHtmlPath = path.join(__dirname, '.cache/processed-global-html.json');
+//     try {
+//       fs.writeFileSync(processedHtmlPath, JSON.stringify({
+//         headerHtmlall: processedHeaderHtml,
+//         footerHtmlall: processedFooterHtml
+//       }, null, 2));
+//       console.log(`${colors.green}✓ Processed global HTML saved to cache${colors.reset}`);
+//     } catch (error) {
+//       console.error(`${colors.red}Failed to save processed global HTML: ${error.message}${colors.reset}`);
+//     }
+//   } else if (globalHtmlResult.errors) {
+//     console.error(`${colors.red}Failed to fetch global HTML:`, globalHtmlResult.errors);
+//   }
+// };
