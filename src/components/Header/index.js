@@ -21,7 +21,7 @@ const Header = ({ isMobileMenuOpen, setMobileMenuOpen, data }) => {
     return null;
   }
   return (
-    <div dangerouslySetInnerHTML={{ __html: data }} />
+    <div className="header" dangerouslySetInnerHTML={{ __html: data }} />
   )
 }
 

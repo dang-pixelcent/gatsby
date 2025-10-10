@@ -770,11 +770,12 @@ exports.onPreInit = () => {
  * onPreBootstrap: Chạy một lần duy nhất ngay từ đầu.
  */
 exports.onPreBootstrap = async ({ reporter }) => {
-  reporter.info("Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...");
+  const colors = getTerminalColors();
+  reporter.info(`${colors.cyan}Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...${colors.reset}`);
 
   const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
   if (!endpoint) {
-    reporter.panicOnBuild("GATSBY_WPGRAPHQL_URL must be set in .env file");
+    reporter.panicOnBuild(`${colors.red}GATSBY_WPGRAPHQL_URL must be set in .env file${colors.reset}`);
     return;
   }
 
@@ -796,6 +797,7 @@ exports.onPreBootstrap = async ({ reporter }) => {
 
     // Phần ghi file giữ nguyên như cũ
     if (data && (data.headerHtmlall || data.footerHtmlall)) {
+      reporter.info(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
       const rawHeaderHtml = data.headerHtmlall || "";
       const rawFooterHtml = data.footerHtmlall || "";
 
@@ -814,13 +816,13 @@ exports.onPreBootstrap = async ({ reporter }) => {
         headerHtmlall: processedHeaderHtml,
         footerHtmlall: processedFooterHtml
       }));
-      reporter.success(`✓ Created JSON file at: ${filePath}`);
+      reporter.success(`${colors.green}✓ Global Header/Footer HTML cached successfully at: ${filePath}${colors.reset}`);
     } else {
-      reporter.warn("No header/footer data found from CMS.");
+      reporter.warn(`${colors.yellow}No header/footer data found from CMS.${colors.reset}`);
     }
 
   } catch (error) {
-    reporter.panicOnBuild("Critical error in onPreBootstrap after multiple retries", error);
+    reporter.panicOnBuild(`${colors.red}Critical error in onPreBootstrap after multiple retries${colors.reset}`, error);
   }
 };
 
