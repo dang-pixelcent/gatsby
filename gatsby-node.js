@@ -3,222 +3,41 @@
 const path = require(`path`);
 const fs = require('fs');
 const cheerio = require('cheerio');
+
+// Các helper functions
 const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js');
 const getTerminalColors = require('./src/utils/terminalColors.js');
-// helpers retry fetch
-const fetchWithRetry = require('./src/helpers/fetchWithRetry.js');
+const getCachedSeoData = require('./src/helpers/getCachedSeoData.js');
+const processSeoData = require('./src/helpers/processSeoData.js');
+const processAllScripts = require('./src/helpers/processAllScripts.js');
 
-const { createRemoteFileNode } = require("gatsby-source-filesystem");
-
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    resolve: {
-      alias: {
-        '@src': path.resolve(__dirname, 'src'),
-        '@components': path.resolve(__dirname, 'src/components'),
-        '@templates': path.resolve(__dirname, 'src/components/templates'),
-        '@hooks': path.resolve(__dirname, 'src/hooks'),
-        '@context': path.resolve(__dirname, 'src/context'),
-        '@styles': path.resolve(__dirname, 'src/styles'),
-        '@helpers': path.resolve(__dirname, 'src/helpers'),
-        '@config': path.resolve(__dirname, 'src/config'),
-        '@assets': path.resolve(__dirname, 'src/assets'),
-        '@utils': path.resolve(__dirname, 'src/utils'),
-      },
-    },
-  });
-};
-
+// dotenv
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV || 'development'}`
 });
 
-const colors = getTerminalColors();
-const CACHE_DIR = path.join(__dirname, 'cache/seo');
-const SCRIPTS_OUTPUT_DIR = path.join(__dirname, 'public/extracted-scripts');
-const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL;
+// path
+const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
 
-if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR, { recursive: true });
-if (!fs.existsSync(SCRIPTS_OUTPUT_DIR)) fs.mkdirSync(SCRIPTS_OUTPUT_DIR, { recursive: true });
+// Các phần logic tách riêng
+const createResolvers = require('./gatsby-node-logic/createResolvers');
+const onCreateWebpackConfig = require('./gatsby-node-logic/onCreateWebpackConfig');
+const onPreInit = require('./gatsby-node-logic/onPreInit');
+const onPreBootstrap = require('./gatsby-node-logic/onPreBootstrap');
+
+// lấy màu terminal
+const colors = getTerminalColors();
+
+/** ==========================KIỂM TRA BIẾN MÔI TRƯỜNG========================== */
+const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL;
 
 if (!SEO_QUERY_URL) {
   console.error(`${colors.red}REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`);
   process.exit(1);
 }
+/**========================== END KIỂM TRA ========================== */
 
-// Tạo thư mục cache cho snippets từng page nếu chưa có
-const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
-if (!fs.existsSync(SNIPPETS_CACHE_DIR)) {
-  fs.mkdirSync(SNIPPETS_CACHE_DIR, { recursive: true });
-}
-
-
-function sanitizeFilename(url) {
-  return url.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-}
-
-function getCachedSeoData(url) {
-  try {
-    const filename = sanitizeFilename(url);
-    const filePath = path.join(CACHE_DIR, `${filename}.json`);
-    if (fs.existsSync(filePath)) {
-      const cached = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-      console.log(`${colors.cyan}Using cached SEO data for ${url}${colors.reset}`);
-      return cached.seoData;
-    }
-  } catch (error) {
-    console.error(`${colors.red}Error reading cached SEO data for ${url}: ${error.message}${colors.reset}`);
-  }
-  return null;
-}
-
-/**
- * Hàm xử lý seoData, tách riêng meta tags và schema JSON.
- * @param {string} seoDataString - Chuỗi HTML SEO từ WordPress.
- * @returns {{metaHtml: string, schemas: Array<Object>}}
- */
-function processSeoData(seoDataString) {
-  if (!seoDataString) {
-    return { metaHtml: '', schemas: [] };
-  }
-
-  const $ = cheerio.load(seoDataString);
-  const schemas = [];
-
-  // Tìm tất cả các script JSON-LD
-  $('script[type="application/ld+json"]').each((i, el) => {
-    try {
-      const scriptContent = $(el).html();
-      if (scriptContent) {
-        // Parse nội dung JSON và đẩy vào mảng schemas
-        schemas.push(JSON.parse(scriptContent));
-      }
-    } catch (e) {
-      console.error('Error parsing JSON-LD schema:', e);
-    }
-    // Xóa thẻ script này khỏi DOM ảo
-    $(el).remove();
-  });
-
-  // HTML còn lại là các thẻ meta, title, link...
-  const metaHtml = $.html();
-
-  console.log(`[processSeoData] Extracted ${schemas.length} schemas. Meta HTML length: ${metaHtml.length}`);
-
-  return { metaHtml, schemas };
-}
-
-
-// --- START: CẤU HÌNH SCRIPT ĐẶC BIỆT : XỬ LÝ VỊ TRÍ ĐỨNG CỦA SCRIPTs ---
-const SPECIAL_SCRIPT_HANDLERS = {
-  // Từ khóa để nhận diện script
-  'form.jotform.com/jsform/': {
-    // Hàm này sẽ được gọi khi tìm thấy script
-    // Nó nhận vào element script (dưới dạng cheerio) và cheerio instance ($)
-    createPlaceholder: (element, $) => {
-      const src = $(element).attr('src');
-      const formId = src.split('/').pop();
-      if (!formId) return null;
-
-      const placeholderId = `jotform-placeholder-${formId}`;
-      // Thay thế thẻ <script> bằng một thẻ <div> placeholder
-      $(element).replaceWith(`<div id="${placeholderId}"></div>`);
-
-      // Trả về thông tin cần thiết cho client-side
-      return { type: 'jotform', id: formId, placeholderId: placeholderId };
-    }
-  },
-  // Bạn có thể thêm các handler khác ở đây trong tương lai
-  // 'some-other-service.com/widget.js': {
-  //   createPlaceholder: (element, $) => { ... }
-  // }
-};
-// --- END: CẤU HÌNH SCRIPT ĐẶC BIỆT ---
-
-/**
- * Trích xuất tất cả các thẻ script từ một chuỗi HTML,
- * lấy toàn bộ thuộc tính của chúng và trả về HTML đã được làm sạch.
- * @param {string} html - Chuỗi HTML đầu vào.
- * @param {string} pageSlug - Slug của trang để tạo ID duy nhất.
- * @returns {{cleanedHtml: string, scripts: Array<Object>, specialScripts: Array<Object>}}
- */
-function processAllScripts(html = '', pageSlug) {
-  if (!html || !pageSlug) {
-    return { cleanedHtml: html || '', scripts: [], specialScripts: [] };
-  }
-
-  const $ = cheerio.load(html, null, false);
-  const scriptTags = $('script');
-  const extractedScripts = [];
-  const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
-
-  scriptTags.each((index, element) => {
-    const attributes = { ...element.attribs };
-    const src = attributes.src || '';
-    const scriptType = attributes.type || 'text/javascript'; // Lấy type, mặc định là JS
-    let isSpecial = false;
-
-    // 1. Kiểm tra xem có phải script đặc biệt không
-    for (const key in SPECIAL_SCRIPT_HANDLERS) {
-      if (src.includes(key)) {
-        const handler = SPECIAL_SCRIPT_HANDLERS[key];
-        const specialScriptInfo = handler.createPlaceholder(element, $);
-        if (specialScriptInfo) {
-          specialScriptsFound.push(specialScriptInfo);
-        }
-        isSpecial = true;
-        break; // Đã xử lý, chuyển sang script tiếp theo
-      }
-    }
-
-    // 2. Nếu là script đặc biệt, bỏ qua và không làm gì thêm
-    if (isSpecial) {
-      return;
-    }
-
-    // 3. Xử lý script thông thường (như cũ)
-    if (src) {
-      if (!attributes.id) {
-        attributes.id = `external-script-${pageSlug}-${index}`;
-      }
-      extractedScripts.push({
-        resourceType: 'external-script',
-        attributes: attributes,
-      });
-    } else {
-      const inlineContent = $(element).html();
-      if (inlineContent) {
-        // Phân loại dựa trên 'type'
-        if (scriptType === 'text/javascript') {
-          // Chỉ bọc IIFE cho các script JavaScript thực thi
-          extractedScripts.push({
-            resourceType: 'inline-script', // Script để chạy
-            content: `(function(){\n${inlineContent}\n})();`,
-            id: `inline-script-${pageSlug}-${index}`
-          });
-        } else {
-          // Đối với 'speculationrules', 'application/ld+json', etc.
-          extractedScripts.push({
-            resourceType: 'data-script', // Script dữ liệu
-            content: inlineContent,
-            attributes: attributes, // Giữ lại các attributes gốc (quan trọng là 'type')
-            id: `data-script-${pageSlug}-${index}`
-          });
-        }
-      }
-    }
-    $(element).remove();
-  });
-
-  return {
-    cleanedHtml: $.html(),
-    scripts: extractedScripts,
-    specialScripts: specialScriptsFound, // Trả về danh sách script đặc biệt
-  };
-  // return { cleanedHtml: html, scripts: [], specialScripts: [] };
-}
-
-
+/** ==========================PHẦN TẠO TRANG PHÂN TRANG CHO BLOGS========================== */
 async function createPaginatedBlogPages({ graphql, actions }) {
   const { createPage } = actions;
   // khung trang cho blogs
@@ -331,8 +150,9 @@ async function createPaginatedBlogPages({ graphql, actions }) {
     pageNumber++;
   }
 }
+/** ==========================END PHẦN TẠO TRANG PHÂN TRANG CHO BLOGS========================== */
 
-
+/** ==========================PHẦN TẠO TRANG PHÂN TRANG CHO CATEGORIES========================== */
 async function createPaginatedCategoryPages({ graphql, actions }) {
   const { createPage } = actions;
   const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
@@ -488,8 +308,10 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
     }
   }
 }
+/** ==========================END PHẦN TẠO TRANG PHÂN TRANG CHO CATEGORIES========================== */
 
 
+/** ==========================PHẦN TẠO TRANG PHỔ THÔNG============================= */
 exports.createPages = async ({ actions, graphql }) => {
   //=======================PHẦN TRUY VẤN===================================
   const result = await graphql(`
@@ -548,37 +370,6 @@ exports.createPages = async ({ actions, graphql }) => {
     throw new Error("Main GraphQL query failed!");
   }
   const { data } = result;
-
-  // // ===================================================================
-  // // PHẦN THÊM MỚI: Xử lý và cache Header/Footer
-  // // ===================================================================
-  // console.log(`${colors.cyan}Processing and caching global Header/Footer HTML...${colors.reset}`);
-  // if (data.cms.headerHtmlall || data.cms.footerHtmlall) {
-  //   console.log(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
-  //   const rawHeaderHtml = data.cms.headerHtmlall || "";
-  //   const rawFooterHtml = data.cms.footerHtmlall || "";
-
-  //   // Gọi hàm xử lý link của bạn
-  //   const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
-  //   const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
-
-  //   // Lưu file vào thư mục cache đã được tạo bởi onPreInit
-  //   const CUSTOM_CACHE_DIR = path.join(__dirname, '.cache/custom/headerfooter/');
-  //   const processedHtmlPath = path.join(CUSTOM_CACHE_DIR, 'processedglobalhtml.json');
-
-  //   try {
-  //     fs.writeFileSync(processedHtmlPath, JSON.stringify({
-  //       headerHtmlall: processedHeaderHtml,
-  //       footerHtmlall: processedFooterHtml
-  //     }));
-  //     console.log(`${colors.green}✓ Global Header/Footer HTML cached successfully.${colors.reset}`);
-  //   } catch (error) {
-  //     console.error(`${colors.red}Error caching global HTML: ${error.message}${colors.reset}`);
-  //   }
-  // }
-  // // ===================================================================
-  // // KẾT THÚC PHẦN THÊM MỚI
-  // // ===================================================================
 
   //======================PHẦN CHÍNH===================================
   // XỬ LÝ BLOGs với phân trang
@@ -712,118 +503,11 @@ exports.createPages = async ({ actions, graphql }) => {
     }
   }
 };
+// ===================END PHẦN TẠO TRANG=======================
 
-// Hàm này sẽ "dạy" Gatsby cách tìm URL ảnh và biến nó thành file cục bộ
-// để các plugin sharp có thể xử lý.
-exports.createResolvers = ({
-  actions,
-  cache,
-  createNodeId,
-  createResolvers,
-  store,
-  reporter,
-}) => {
-  const { createNode } = actions;
-
-  createResolvers({
-    // Tên Type này ("GraphCMS_MediaItem") là phỏng đoán dựa trên
-    // schema thông thường của WPGraphQL. Nếu sau khi chạy lại server
-    // bạn vẫn gặp lỗi, hãy vào http://localhost:8000/___graphql
-    // để tìm tên Type chính xác cho đối tượng ảnh của bạn (đối tượng có chứa sourceUrl).
-    GraphCMS_MediaItem: {
-      // 1. Tạo ra một trường GraphQL mới tên là `localFile`
-      localFile: {
-        type: `File`, // Trường này sẽ trả về một node kiểu `File`
-        // 2. Hàm `resolve` này sẽ được chạy để tạo ra giá trị cho trường `localFile`
-        async resolve(source, args, context, info) {
-          // 3. Dùng hàm `createRemoteFileNode` để tải ảnh từ URL
-          // và tạo ra một file node cục bộ để Sharp có thể xử lý.
-          if (source.sourceUrl &&
-            typeof source.sourceUrl === 'string' &&
-            /^https?:\/\//.test(source.sourceUrl)) {
-            return await createRemoteFileNode({
-              url: source.sourceUrl, // Lấy URL ảnh từ WordPress
-              store,
-              cache,
-              createNode,
-              createNodeId,
-              reporter,
-            });
-          }
-          return null;
-        },
-      },
-    },
-  });
-};
-
-/** PHẦN LẤY DỮ LIỆU HEADER */
-// Tạo thư mục data để lưu header/footer đã xử lý nếu chưa có
-exports.onPreInit = () => {
-  const CUSTOM_CACHE_DIR = path.join(__dirname, '.cache/headerfooter/');
-  if (!fs.existsSync(CUSTOM_CACHE_DIR)) {
-    fs.mkdirSync(CUSTOM_CACHE_DIR, { recursive: true });
-  }
-};
-
-/**
- * onPreBootstrap: Chạy một lần duy nhất ngay từ đầu.
- */
-exports.onPreBootstrap = async ({ reporter }) => {
-  const colors = getTerminalColors();
-  reporter.info(`${colors.cyan}Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...${colors.reset}`);
-
-  const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
-  if (!endpoint) {
-    reporter.panicOnBuild(`${colors.red}GATSBY_WPGRAPHQL_URL must be set in .env file${colors.reset}`);
-    return;
-  }
-
-  const query = `
-    query GetGlobalHTML {
-      headerHtmlall
-      footerHtmlall
-    }
-  `;
-
-  try {
-    // Gọi hàm fetchWithRetry thay vì fetch trực tiếp
-    const data = await fetchWithRetry({
-      endpoint,
-      query,
-      reporter,
-      retries: 7
-    });
-
-    // Phần ghi file giữ nguyên như cũ
-    if (data && (data.headerHtmlall || data.footerHtmlall)) {
-      reporter.info(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
-      const rawHeaderHtml = data.headerHtmlall || "";
-      const rawFooterHtml = data.footerHtmlall || "";
-
-      // Giả sử bạn có hàm replaceInternalLinks
-      const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
-      const processedFooterHtml = replaceInternalLinks(rawFooterHtml);
-
-      const DATA_DIR = path.join(__dirname, '.cache/headerfooter/');
-      // onPreInit đã tạo thư mục này rồi, nhưng kiểm tra lại cho chắc
-      if (!fs.existsSync(DATA_DIR)) {
-        fs.mkdirSync(DATA_DIR, { recursive: true });
-      }
-
-      const filePath = path.join(DATA_DIR, 'processedglobalhtml.json');
-      fs.writeFileSync(filePath, JSON.stringify({
-        headerHtmlall: processedHeaderHtml,
-        footerHtmlall: processedFooterHtml
-      }));
-      reporter.success(`${colors.green}✓ Global Header/Footer HTML cached successfully at: ${filePath}${colors.reset}`);
-    } else {
-      reporter.warn(`${colors.yellow}No header/footer data found from CMS.${colors.reset}`);
-    }
-
-  } catch (error) {
-    reporter.panicOnBuild(`${colors.red}Critical error in onPreBootstrap after multiple retries${colors.reset}`, error);
-  }
-};
-
-/** END PHẦN LẤY DỮ LIỆU HEADER */
+// ==================PHẦN XỬ LÝ SCRIPTS ĐẶC BIỆT KHI RENDER TRANG=======================
+exports.onCreateWebpackConfig = onCreateWebpackConfig;
+exports.createResolvers = createResolvers;
+exports.onPreBootstrap = onPreBootstrap;
+exports.onPreInit = onPreInit;
+// ==================END PHẦN XỬ LÝ SCRIPTS ĐẶC BIỆT KHI RENDER TRANG=======================
