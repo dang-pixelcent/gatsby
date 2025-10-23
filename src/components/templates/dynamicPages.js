@@ -61,13 +61,7 @@ const Home = ({ pageContext }) => {
               <LazyPracticeFlowForm />
             </DomReplacer>
           </Suspense>
-        ) : (
-          <Suspense fallback={<div></div>}>
-            <DomInjector selector="#sdformthree">
-              <OldScheduleForm />
-            </DomInjector>
-          </Suspense>
-        )}
+        ) : null}
 
         <DomInjector selector=".col-slider">
           {/* 4. Bọc component "lười biếng" trong Suspense */}
