@@ -1,5 +1,6 @@
 // gatsby-node.js
 const cheerio = require('cheerio');
+const { v4: uuidv4 } = require('uuid');
 // --- START: CẤU HÌNH SCRIPT ĐẶC BIỆT : XỬ LÝ VỊ TRÍ ĐỨNG CỦA SCRIPTs ---
 const SPECIAL_SCRIPT_HANDLERS = {
     // Từ khóa để nhận diện script
@@ -39,74 +40,27 @@ function processAllScripts(html = '', pageSlug) {
     }
 
     const $ = cheerio.load(html, null, false);
-    const scriptTags = $('script');
     const extractedScripts = [];
-    const specialScriptsFound = []; // Lưu các script đặc biệt đã được xử lý
 
-    scriptTags.each((index, element) => {
-        const attributes = { ...element.attribs };
-        const src = attributes.src || '';
-        const scriptType = attributes.type || 'text/javascript'; // Lấy type, mặc định là JS
-        let isSpecial = false;
+    $('script').each((index, element) => {
+        const scriptElement = $(element);
+        const scriptHtml = scriptElement.toString();
 
-        // 1. Kiểm tra xem có phải script đặc biệt không
-        for (const key in SPECIAL_SCRIPT_HANDLERS) {
-            if (src.includes(key)) {
-                const handler = SPECIAL_SCRIPT_HANDLERS[key];
-                const specialScriptInfo = handler.createPlaceholder(element, $);
-                if (specialScriptInfo) {
-                    specialScriptsFound.push(specialScriptInfo);
-                }
-                isSpecial = true;
-                break; // Đã xử lý, chuyển sang script tiếp theo
-            }
-        }
+        const placeholderId = `script-placeholder-${uuidv4()}`;
 
-        // 2. Nếu là script đặc biệt, bỏ qua và không làm gì thêm
-        if (isSpecial) {
-            return;
-        }
+        extractedScripts.push({
+            placeholderId,
+            scriptHtml,
+        });
 
-        // 3. Xử lý script thông thường (như cũ)
-        if (src) {
-            if (!attributes.id) {
-                attributes.id = `external-script-${pageSlug}-${index}`;
-            }
-            extractedScripts.push({
-                resourceType: 'external-script',
-                attributes: attributes,
-            });
-        } else {
-            const inlineContent = $(element).html();
-            if (inlineContent) {
-                // Phân loại dựa trên 'type'
-                if (scriptType === 'text/javascript') {
-                    // Chỉ bọc IIFE cho các script JavaScript thực thi
-                    extractedScripts.push({
-                        resourceType: 'inline-script', // Script để chạy
-                        content: `(function(){\n${inlineContent}\n})();`,
-                        id: `inline-script-${pageSlug}-${index}`
-                    });
-                } else {
-                    // Đối với 'speculationrules', 'application/ld+json', etc.
-                    extractedScripts.push({
-                        resourceType: 'data-script', // Script dữ liệu
-                        content: inlineContent,
-                        attributes: attributes, // Giữ lại các attributes gốc (quan trọng là 'type')
-                        id: `data-script-${pageSlug}-${index}`
-                    });
-                }
-            }
-        }
-        $(element).remove();
+        //thay thế thẻ script bằng placeholder
+        scriptElement.replaceWith(`<div id="${placeholderId}"></div>`);
     });
 
     return {
         cleanedHtml: $.html(),
         scripts: extractedScripts,
-        specialScripts: specialScriptsFound, // Trả về danh sách script đặc biệt
     };
-    // return { cleanedHtml: html, scripts: [], specialScripts: [] };
 }
 
 module.exports = processAllScripts;

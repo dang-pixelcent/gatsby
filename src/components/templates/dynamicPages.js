@@ -1,19 +1,16 @@
 // các import cơ bản phải có
 import { Script } from "gatsby"
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, lazy } from "react";
 import loadable from '@loadable/component';
 // import ConditionalLayout from "./tools/conditionalLayout";
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 
-import ReactDOM from 'react-dom';
-// ⭐️ Import component lazy-load YouTube và CSS của nó
-import LazyEmbed from '@components/Video/LazyEmbed';
-
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
 // import hooks
 import useLightBoxJquery from '@src/hooks/lightBox-jquery/useLightboxJquery';
+import useLazyEmbedRenderer from '@hooks/useLazyEmbedRenderer';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
@@ -23,6 +20,7 @@ const SpecialScriptInjector = loadable(() => import('@components/Tools/SpecialSc
 const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHandler'));
 const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
 const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
+const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector'));
 
 // flag kiểm soát tính năng
 const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -44,64 +42,17 @@ const Home = ({ pageContext }) => {
   useLightBoxJquery({ uri });
 
   /**
-   * Nâng cấp: Tự động lazy-load các video và nội dung nhúng
+   * Hook: useLazyEmbedRenderer - Tự động lazy-load các video và nội dung nhúng
    */
-  useEffect(() => {
-    const contentContainer = document.getElementById('content');
-    if (!contentContainer) return;
-
-    const cleanupTasks = [];
-    const totalContentHeight = contentContainer.offsetHeight;
-
-    // Tìm tất cả các placeholder vạn năng
-    document.querySelectorAll('.lazy-embed-placeholder').forEach(placeholder => {
-      const embedCode = placeholder.dataset.embedCode;
-      if (embedCode) {
-        const placeholderTop = placeholder.offsetTop;
-        const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '300px' : '100px';
-
-        ReactDOM.render(
-          <LazyEmbed
-            embedCode={decodeURIComponent(embedCode)}
-            rootMargin={rootMargin}
-          />,
-          placeholder
-        );
-        cleanupTasks.push(placeholder);
-      }
-    });
-
-    return () => {
-      cleanupTasks.forEach(placeholder => {
-        ReactDOM.unmountComponentAtNode(placeholder);
-      });
-    };
-  }, [flexibleContentHtml]);
-  // ================== KẾT THÚC NÂNG CẤP ==================
-
-  const handleScriptLoad = (script) => {
-    const config = getScriptConfig(script.attributes.src);
-
-    if (config.process) {
-      requestIdleCallback(() => {
-        try {
-          config.process();
-        } catch (error) {
-          console.warn(`Failed to process script: ${script.attributes.src}`, error);
-        }
-      });
-    }
-  };
+  useLazyEmbedRenderer({ flexibleContentHtml });
 
   return (
     <React.Fragment>
       <Layout>
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
-        {/* Component này sẽ tự động xử lý tất cả các script đặc biệt được tìm thấy */}
-        <Suspense fallback={<div></div>}>
-          <SpecialScriptInjector scripts={specialScripts} />
-        </Suspense>
+        {/* Xử lý tiêm các script đã được trích xuất */}
+        <ScriptInjector scripts={scripts} />
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (
@@ -141,46 +92,7 @@ const Home = ({ pageContext }) => {
       <Suspense fallback={null}>
         <DynamicScriptHandler />
       </Suspense>
-      {scripts.map((script) => {
-        if (script.resourceType === 'external-script') {
-          return (
-            <Script
-              key={script.attributes.id}
-              src={script.attributes.src}
-              strategy="idle" // NON-BLOCKING
-              // defer
-              onLoad={() => handleScriptLoad(script)}
-              onError={(error) => {
-                console.error(`Error loading script: ${script.attributes.src}`, error);
-              }}
-            />
-          );
-        }
-        // Trường hợp 2: Script inline
-        // if (script.resourceType === 'inline-script') {
-        //   return (
-        //     <Script
-        //       key={script.id}
-        //       strategy="idle" // Script inline cũng có thể có chiến lược
-        //       dangerouslySetInnerHTML={{ __html: script.content }}
-        //     />
-        //   );
-        // }
 
-        // // Trường hợp 3: Script dữ liệu
-        // if (script.resourceType === 'data-script') {
-        //   // Dùng thẻ <script> thường để trình duyệt tự xử lý các type đặc biệt
-        //   return (
-        //     <script
-        //       key={script.id}
-        //       {...script.attributes} // Truyền lại các attributes gốc như type="speculationrules"
-        //       dangerouslySetInnerHTML={{ __html: script.content }}
-        //     />
-        //   );
-        // }
-
-        return null;
-      })}
     </React.Fragment>
   )
 }
