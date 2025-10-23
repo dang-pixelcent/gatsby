@@ -1,16 +1,18 @@
 
 // filepath: d:\Codebase\gatsby\gatsby-node-logic\onPreBootstrap.js
 const path = require('path');
+const appRoot = require('app-root-path');
 const fs = require('fs');
 const replaceInternalLinks = require('../src/helpers/replaceButtonLinks.js');
 const getTerminalColors = require('../src/utils/terminalColors.js');
 const fetchWithRetry = require('../src/helpers/fetchWithRetry.js');
+
+const rootDir = appRoot.path;
 /**
  * Factory function to create the onPreBootstrap hook.
- * @param {string} rootDir - The absolute path to the project root.
  * @returns {function} The async onPreBootstrap function for Gatsby.
  */
-module.exports = ({ rootDir }) => async ({ reporter }) => {
+module.exports = async ({ reporter }) => {
     const colors = getTerminalColors();
     reporter.info(`${colors.cyan}Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...${colors.reset}`);
 

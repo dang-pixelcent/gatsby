@@ -1,6 +1,7 @@
 
 const path = require('path');
-const rootDir = path.join(__dirname, '..');
+const appRoot = require('app-root-path');
+const rootDir = appRoot.path;
 module.exports = ({ actions }) => {
     actions.setWebpackConfig({
         resolve: {

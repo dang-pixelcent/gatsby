@@ -1,11 +1,12 @@
 
 const path = require(`path`);
+const appRoot = require('app-root-path');
 const fs = require('fs');
 const sanitizeFilename = require('./sanitizeFilename.js');
 const getTerminalColors = require('../utils/terminalColors.js');
 const colors = getTerminalColors();
 
-const rootDir = path.join(__dirname, '..'); // Đường dẫn đến thư mục gốc của dự án
+const rootDir = appRoot.path; // Đường dẫn đến thư mục gốc của dự án
 const CACHE_DIR = path.join(rootDir, 'cache/seo');
 function getCachedSeoData(url) {
     try {

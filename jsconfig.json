@@ -1,36 +1,35 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
         "paths": {
             "@src/*": [
-                "src/*"
+                "./src/*"
             ],
             "@components/*": [
-                "src/components/*"
+                "./src/components/*"
             ],
             "@templates/*": [
-                "src/components/templates/*"
+                "./src/components/templates/*"
             ],
             "@hooks/*": [
-                "src/hooks/*"
+                "./src/hooks/*"
             ],
             "@context/*": [
-                "src/context/*"
+                "./src/context/*"
             ],
             "@styles/*": [
-                "src/styles/*"
+                "./src/styles/*"
             ],
             "@helpers/*": [
-                "src/helpers/*"
+                "./src/helpers/*"
             ],
             "@config/*": [
-                "src/config/*"
+                "./src/config/*"
             ],
             "@assets/*": [
-                "src/assets/*"
+                "./src/assets/*"
             ],
             "@utils/*": [
-                "src/utils/*"
+                "./src/utils/*"
             ]
         }
     }
