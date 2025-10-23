@@ -207,6 +207,7 @@ module.exports = {
     //   },
     // },
     // `gatsby-plugin-offline`,
+    `gatsby-plugin-preact`,
   ],
   siteMetadata: {
     title: `Gatsby WP Theme`,
