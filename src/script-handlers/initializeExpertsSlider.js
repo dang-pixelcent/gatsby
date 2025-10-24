@@ -8,7 +8,7 @@ export function initializeExpertsSlider() {
         return null; // Không có slider nào để khởi tạo
     }
 
-    console.log(`Initializing ${sliderElements.length} experts sliders.`);
+    // console.log(`Initializing ${sliderElements.length} experts sliders.`);
 
     sliderElements.forEach(slider => {
         $(slider).slick({
