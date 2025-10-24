@@ -9,7 +9,7 @@ import { SEO } from "@components/SEO"
 import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
 // import hooks
-import useLightBoxJquery from '@src/hooks/lightBox-jquery/useLightboxJquery';
+import LightboxScripts from '@src/hooks/lightBox-jquery/useLightboxJquery';
 import useLazyEmbedRenderer from '@hooks/useLazyEmbedRenderer';
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
@@ -39,7 +39,7 @@ const Home = ({ pageContext }) => {
   const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
 
   // Gọi hook để thêm jQuery và lightbox nếu cần
-  useLightBoxJquery({ uri });
+  // LightboxScripts({ uri });
 
   /**
    * Hook: useLazyEmbedRenderer - Tự động lazy-load các video và nội dung nhúng
@@ -53,6 +53,8 @@ const Home = ({ pageContext }) => {
 
         {/* Xử lý tiêm các script đã được trích xuất */}
         <ScriptInjector scripts={scripts} />
+
+        <LightboxScripts uri={uri} />
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (

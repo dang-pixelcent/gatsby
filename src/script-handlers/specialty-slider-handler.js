@@ -1,5 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
+import 'slick-carousel/slick/slick.min.js';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 export function initializeSpecialtySlider() {
     // Tìm đến đúng container của slider, và chỉ những slider chưa được khởi tạo
