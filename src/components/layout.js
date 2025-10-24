@@ -2,6 +2,33 @@ import React, { useState, Suspense } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import loadable from '@loadable/component';
 
+import '../styles/customFonts.scss';
+// Import Tailwind CSS trước
+// import './src/styles/tailwind.css';
+
+// Import custom SCSS sau
+// import './src/styles/main.scss';
+
+// // Global styles và libraries
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
+
+
+// 3. GATSBY THEME STYLES - với lower priority
+import '../styles/main.scss';
+import '../styles/aos.css';
+import '../styles/customStyle.scss';
+import '../styles/dashicons.min.css';
+import '../styles/slick.css';
+import '../styles/custom.scss';
+import '../styles/main.min.scss';
+import '../styles/layouts/_blog.scss';
+
+// 4. EXTERNAL LIBRARIES CUỐI CÙNG
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
+// import 'slick-carousel/slick/slick.min.js';
+
 import Header from './Header'
 
 import ChatWidget from "./ChatWidget"
@@ -16,8 +43,6 @@ import ScrollTop from '@components/ScrollTop';
 import { useBodyUpdate } from "@hooks/layout/useBodyUpdate"
 import { useAos } from "@hooks/useAos"
 
-// 1. Import trực tiếp file logo
-import logoSrc from '@assets/logo/logo-head.png';
 
 const Footer = loadable(() => import('./Footer'));
 
@@ -89,9 +114,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <React.Fragment>
       <InternalLinkInterceptor />
-      <Helmet>
-        <link rel="preload" as="image" href={logoSrc} fetchpriority="high" />
-      </Helmet>
+
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
