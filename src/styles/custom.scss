@@ -466,3 +466,23 @@
         line-height: 2.03 !important;
     }
 }
+
+@media (max-width: 767px) {
+    .bannerSection {
+        background-color: #0659A9;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+.lcp-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.lcp-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.3s linear !important;
+}
