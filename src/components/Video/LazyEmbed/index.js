@@ -36,9 +36,18 @@ const LazyEmbed = ({ embedCode, rootMargin = '200px' }) => {
         <>
             {parse(embedCode, {
                 replace: (domNode) => {
+                    // Xử lý thẻ <script> để dùng component <Script> của Gatsby
                     if (domNode.type === 'script' && domNode.name === 'script') {
-                        // Dùng component <Script> của Gatsby để tải script một cách tối ưu
                         return <Script {...domNode.attribs}>{domToReact(domNode.children)}</Script>;
+                    }
+
+                    // Xử lý thẻ <img> có thuộc tính onload dạng chuỗi
+                    if (domNode.type === 'tag' && domNode.name === 'img' && domNode.attribs && domNode.attribs.onload) {
+                        // Tạo một bản sao của các thuộc tính và xóa onload đi
+                        const newAttribs = { ...domNode.attribs };
+                        delete newAttribs.onload;
+                        // Trả về thẻ img mới không có onload
+                        return <img {...newAttribs} />;
                     }
                 }
             })}

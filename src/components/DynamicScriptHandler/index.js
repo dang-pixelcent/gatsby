@@ -5,7 +5,7 @@ import { useLocation } from "@reach/router";
 
 // 1. Import các handler mới
 import { initializeFAQs } from '../../script-handlers/faq-handler';
-import { initializeSlickCarousel } from '../../script-handlers/slick-carousel-handler';
+// import { initializeSlickCarousel } from '../../script-handlers/slick-carousel-handler';
 import { initializeLoadMore } from '../../script-handlers/load-more-handler';
 import { initializeTabs } from '../../script-handlers/tab-handler';
 // import { initializeFormEmbed } from '../../script-handlers/form-embed-handler';
@@ -20,7 +20,7 @@ import { initializeExpertsSlider } from '../../script-handlers/initializeExperts
 // 2. Thêm chúng vào danh sách đăng ký
 const HANDLER_REGISTRY = [
     initializeFAQs,
-    initializeSlickCarousel,
+    // initializeSlickCarousel,
     initializeLoadMore,
     initializeTabs,
     initializeHeightEqualizer,
