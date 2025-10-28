@@ -15,7 +15,7 @@ const useLazyEmbedRenderer = ({ flexibleContentHtml }) => {
             const embedCode = placeholder.dataset.embedCode;
             if (embedCode) {
                 const placeholderTop = placeholder.offsetTop;
-                const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '300px' : '100px';
+                const rootMargin = (placeholderTop < totalContentHeight * 0.6) ? '100px' : '100px'; // số càng nhỏ thì tải càng muộn
 
                 ReactDOM.render(
                     <LazyEmbed
