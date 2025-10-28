@@ -33,63 +33,59 @@ const readJsonCache = (filePath) => {
 };
 
 
-// 2. Helper function để đảm bảo output từ parse là một mảng và có key
+// Danh sách các từ khóa trong src của script để áp dụng Partytown
+const PARTYTOWN_KEYWORDS = [
+  'connect.facebook.net',
+  'js.ubembed.com',
+  'wellnessclinicmarketing.com',
+  'aimtell.com',
+];
+
+/**
+ * Hàm biến đổi chuỗi HTML để tối ưu các thẻ script.
+ * @param {string} htmlString 
+ * @returns {string} Chuỗi HTML đã được biến đổi.
+ */
+const transformHtmlString = (htmlString) => {
+  if (!htmlString) return '';
+
+  // Dùng regex để tìm và thay thế các thẻ script
+  return htmlString.replace(/<script([^>]*)>([\s\S]*?)<\/script>/g, (match, attrs, innerHtml) => {
+    let newAttrs = attrs;
+    const srcMatch = attrs.match(/src\s*=\s*["']([^"']+)["']/);
+    const src = srcMatch ? srcMatch[1] : '';
+
+    if (src && !attrs.includes('async') && !attrs.includes('defer')) {
+      newAttrs += ' defer';
+    }
+
+    return `<script${newAttrs}>${innerHtml}</script>`;
+  });
+};
+
 const parseHtmlToReact = (htmlString, baseKey) => {
   if (!htmlString || typeof htmlString !== 'string' || htmlString.trim() === '') {
     return [];
   }
   try {
-    const reactElements = parse(htmlString.trim()); // trim() để loại bỏ khoảng trắng thừa
+    // Biến đổi chuỗi HTML trước khi parse
+    const transformedHtml = transformHtmlString(htmlString);
+    const reactElements = parse(transformedHtml.trim());
 
     if (Array.isArray(reactElements)) {
-      // Nếu parse trả về mảng, gán key cho từng element
       return reactElements.map((el, index) =>
         React.isValidElement(el) ? React.cloneElement(el, { key: `${baseKey}-${index}` }) : null
-      ).filter(Boolean); // Lọc bỏ các giá trị null nếu có
+      ).filter(Boolean);
     } else if (React.isValidElement(reactElements)) {
-      // Nếu parse trả về một element đơn lẻ
       return [React.cloneElement(reactElements, { key: `${baseKey}-0` })];
     }
-    // Nếu parse trả về string hoặc thứ gì đó không phải React element (ví dụ: chuỗi rỗng sau parse)
     return [];
   } catch (error) {
-    console.error(`${color.red}[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error, "HTML String:", htmlString);
+    console.error(`${color.red}[gatsby-ssr] Error parsing HTML string for key ${baseKey}:`, error);
     return [];
   }
 };
 
-
-
-/** 3.
- * HÀM MỚI: Biến đổi các thẻ script để chạy với Partytown
- * @param {string} htmlString - Chuỗi HTML chứa các script.
- * @param {string} baseKey - Key cơ sở cho các React element.
- * @returns {Array} - Mảng các React elements đã được biến đổi.
- */
-// Nó sẽ tìm và thay thế các thẻ script, sau đó gọi hàm parseHtmlToReact ở trên.
-const transformAndParseScripts = (htmlString, baseKey) => {
-  if (!htmlString || typeof htmlString !== 'string' || htmlString.trim() === '') {
-    return [];
-  }
-
-  // Bước 1: Dùng Regex để tìm và thêm type="text/partytown" vào tất cả thẻ script.
-  // Chỉ thêm type="text/partytown" vào các thẻ script có thuộc tính `src`
-  // Regex này sẽ tìm <script ... src="..." ...> và thêm type vào
-  // const transformedHtml = htmlString.replace(
-  //   /(<script[^>]*?src\s*=\s*["'][^"']+["'][^>]*?>)/g,
-  //   (match) => {
-  //     // Nếu thẻ script đã có type="text/partytown" rồi thì không làm gì cả
-  //     if (match.includes('type="text/partytown"')) {
-  //       return match;
-  //     }
-  //     // Thêm type vào thẻ script
-  //     return match.replace('<script', '<script type="text/partytown"');
-  //   }
-  // );
-
-  // Bước 2: Gọi hàm parse ban đầu của bạn để chuyển HTML đã được biến đổi sang React.
-  return parseHtmlToReact(htmlString, baseKey);
-};
 
 
 export const onRenderBody = ({
@@ -162,7 +158,7 @@ export const onRenderBody = ({
 
   if (scriptsForHeadString_fromHeadField) {
     // Phân tích chuỗi HTML thành các React elements
-    const parsedHeadScripts = transformAndParseScripts(scriptsForHeadString_fromHeadField, 'head-script-item');
+    const parsedHeadScripts = parseHtmlToReact(scriptsForHeadString_fromHeadField, 'head-script-item');
     // Thêm các elements đã parse vào headItems (sử dụng spread operator nếu parsedHeadScripts là mảng)
     headItems.push(...parsedHeadScripts);
   }
@@ -175,7 +171,7 @@ export const onRenderBody = ({
   const preBodyItems = [];
 
   if (scriptsForPreBodyString_fromBodyField) {
-    const parsedBodyScripts = transformAndParseScripts(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
+    const parsedBodyScripts = parseHtmlToReact(scriptsForPreBodyString_fromBodyField, 'prebody-body-item');
     preBodyItems.push(...parsedBodyScripts);
   }
 
@@ -187,7 +183,7 @@ export const onRenderBody = ({
   const postBodyItems = [];
 
   if (scriptsForPreBodyString_fromFooterField) {
-    const parsedFooterScripts = transformAndParseScripts(scriptsForPreBodyString_fromFooterField, 'postbody-footer-item');
+    const parsedFooterScripts = parseHtmlToReact(scriptsForPreBodyString_fromFooterField, 'postbody-footer-item');
     postBodyItems.push(...parsedFooterScripts);
   }
 

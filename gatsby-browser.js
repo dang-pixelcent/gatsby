@@ -14,4 +14,4 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-export const wrapRootElement = wrapWithProvider
+export const wrapRootElement = wrapWithProvider;

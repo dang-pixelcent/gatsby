@@ -35,12 +35,7 @@ module.exports = {
     //       resolveUrl: function (url, location, type) {
     //         // Danh sách các domain cần được proxy để tránh lỗi CORS
     //         const proxyingDomains = [
-    //           'www.googletagmanager.com',
-    //           'connect.facebook.net',
-    //           'cdn.aimtell.com',
     //           'js.ubembed.com',
-    //           'www.google-analytics.com',
-    //           'wellnessclinicmarketing.exactmatchmarketing.com' // Thêm domain từ script của page
     //         ];
 
     //         if (proxyingDomains.some(domain => url.hostname.includes(domain))) {

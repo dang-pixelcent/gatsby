@@ -387,14 +387,31 @@ exports.createPages = async ({ actions, graphql }) => {
     const processedSeo = processSeoData(seoData);
 
     let htmlContent = node.flexibleContentHtml;
+    let specialScripts = [];
+    let bgbanner = null;
 
     // --- BƯỚC 1: XỬ LÝ VIDEO EMBEDS ---
     if (htmlContent) {
-      const $ = cheerio.load(htmlContent);
+      const $ = cheerio.load(htmlContent, { decodeEntities: false });
 
+      // --- BƯỚC 1: XỬ LÝ RIÊNG CHO WISTIA EMBEDS ---
+      $('script[src*="wistia.com"]').each((index, element) => {
+        const wistiaContainer = $(element).closest('div:has(div[class*="wistia_embed"])');
+        if (wistiaContainer.length && !wistiaContainer.hasClass('lazy-embed-placeholder')) {
+          const embedCode = wistiaContainer.html();
+          const encodedEmbedCode = encodeURIComponent(embedCode);
+          wistiaContainer.addClass('lazy-embed-placeholder');
+          wistiaContainer.attr('data-embed-code', encodedEmbedCode);
+          wistiaContainer.empty();
+        }
+      });
+
+
+      // --- BƯỚC 2: XỬ LÝ CÁC VIDEO EMBEDS CÒN LẠI (IFRAME, BLOCKQUOTE) ---
       const embedSelectors = [
         'iframe[src*="youtube.com"]',
         'iframe[src*="wistia.net"]',
+        // 'script[src*="fast.wistia.com"]',
         'blockquote.tiktok-embed',
         'blockquote.twitter-tweet'
       ];
@@ -402,6 +419,11 @@ exports.createPages = async ({ actions, graphql }) => {
       $(embedSelectors.join(', ')).each((index, element) => {
         const embedElement = $(element);
         const parent = embedElement.parent(); // Lấy thẻ cha
+
+        // KIỂM TRA: Nếu thẻ cha đã là placeholder rồi thì bỏ qua
+        if (parent.hasClass('lazy-embed-placeholder')) {
+          return;
+        }
 
         // Lấy class và style từ thẻ cha
         const parentClass = parent.attr('class') || '';
@@ -421,6 +443,48 @@ exports.createPages = async ({ actions, graphql }) => {
         parent.replaceWith(placeholder);
       });
 
+      // ===================================================================
+      // Tối ưu LCP cho banner - Xử lý phía Server
+      // ===================================================================
+      const homeBanner = $('.home-banner');
+      if (homeBanner.length) {
+        const style = homeBanner.attr('style');
+        if (style && style.includes('url(')) {
+          const match = style.match(/url\(['"]?(.*?)['"]?\)/);
+          if (match && match[1]) {
+            const bgUrl = match[1];
+            bgbanner = bgUrl;
+
+
+            // 1. Thêm data-attribute chứa URL ảnh
+            // homeBanner.attr('data-bg-url', bgUrl);
+            const newStyle = style.replace(/background-image:[^;]+;?/, '')
+              .replace(/background:[^;]+;?/, '');
+            // 2. Xóa HOÀN TOÀN thuộc tính style để đảm bảo trình duyệt không thấy ảnh nền
+            homeBanner.attr('style', newStyle.trim());
+            // 3. Tạo một thẻ <link> để preload ảnh với độ ưu tiên THẤP
+            // Thẻ này sẽ được tiêm vào <head> ở bước sau
+            const preloadLinkData = {
+              type: 'preload-lcp-image', // Dùng để nhận dạng
+              tag: 'link',
+              props: {
+                rel: 'preload',
+                href: bgUrl,
+                as: 'image',
+                fetchpriority: 'low'
+              }
+            };
+
+            // Thêm vào mảng specialScripts để component DynamicScriptHandler xử lý
+            if (!specialScripts.find(s => s.content === preloadLink)) {
+              specialScripts.push({
+                preloadLinkData
+              });
+            }
+          }
+        }
+      }
+
       htmlContent = $.html();
     }
     // --- KẾT THÚC XỬ LÝ VIDEO ---
@@ -428,7 +492,7 @@ exports.createPages = async ({ actions, graphql }) => {
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
-    const { cleanedHtml, scripts, specialScripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
+    const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
     // Bước 3: lưu snippets riêng vào cache
     if (node.htmlSnippets) {
       const slug = node.uri.replace(/\//g, '') || 'homepage';
@@ -447,7 +511,8 @@ exports.createPages = async ({ actions, graphql }) => {
       scripts: scripts,
       specialScripts: specialScripts,
       metaHtml: processedSeo.metaHtml || null,
-      schemas: processedSeo.schemas || []
+      schemas: processedSeo.schemas || [],
+      bgbanner: bgbanner || null
     };
   };
 
