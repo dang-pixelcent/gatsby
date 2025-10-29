@@ -6,29 +6,29 @@ import loadable from '@loadable/component';
 import Layout from "@components/layout"
 import { SEO } from "@components/SEO"
 
-import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
+// import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
 // import hooks
 import useLazyEmbedRenderer from '@hooks/useLazyEmbedRenderer';
 import useJqueryPlugins from '@hooks/useJqueryPlugins';
 import { getJqueryPlugins } from "@src/utils/jqueryConfig";
 import { Helmet } from "react-helmet";
-import useIsMobile from '@hooks/useIsMobile';
+// import useIsMobile from '@hooks/useIsMobile';
 
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
 const DomReplacer = loadable(() => import('@components/Tools/DomReplacer'));
 const DomInjector = loadable(() => import('@components/Tools/DomInjector'));
-const SpecialScriptInjector = loadable(() => import('@components/Tools/SpecialScriptInjector'));
+// const SpecialScriptInjector = loadable(() => import('@components/Tools/SpecialScriptInjector'));
 const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHandler'));
 const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
-const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
+// const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
 const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector'));
 
 // flag kiểm soát tính năng
-const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
-const isPublicProd = process.env.FEATURE_PUBLIC_PROD === "true";
+// const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
+// const isPublicProd = process.env.FEATURE_PUBLIC_PROD === "true";
 const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 
 // Một hàm trợ giúp để tìm cấu hình cho một script

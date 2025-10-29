@@ -16,7 +16,7 @@ export const SEO = ({
     // schemas,
     // bodyClass,
     children,
-    lcpImageUrl
+    // lcpImageUrl
 }) => {
     // LOGGING ĐỂ DEBUG: In ra các props mà component nhận được
     // Bạn hãy mở console của trình duyệt và terminal lúc build để xem kết quả
@@ -74,7 +74,7 @@ export const SEO = ({
             {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
 
             {/* Tối ưu hóa LCP cho ảnh banner */}
-            {lcpImageUrl && <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />}
+            {/* {lcpImageUrl && <link rel="preload" fetchpriority="high" as="image" href={lcpImageUrl} type="image/webp" />} */}
 
             {/* dữ liệu-seo từ wp */}
             {parsedSeoElements}
@@ -97,9 +97,9 @@ export const SEO = ({
             {children}
             <Helmet>
                 <html lang="en" />
-                {metaHtml && (
+                {/* {metaHtml && (
                     <div className="meta-html" dangerouslySetInnerHTML={{ __html: metaHtml }} />
-                )}
+                )} */}
 
                 {/* <link
                     rel="preload"

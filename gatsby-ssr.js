@@ -53,6 +53,15 @@ const transformHtmlString = (htmlString) => {
     const srcMatch = attrs.match(/src\s*=\s*["']([^"']+)["']/);
     const src = srcMatch ? srcMatch[1] : '';
 
+    // if (src && PARTYTOWN_KEYWORDS.some(keyword => src.includes(keyword))) {
+    //   // Nếu chưa có type, hoặc có type khác, thay thế bằng type của partytown
+    //   if (!newAttrs.includes('type=')) {
+    //     newAttrs += ' type="text/partytown"';
+    //   } else {
+    //     newAttrs = newAttrs.replace(/type\s*=\s*["'][^"']+["']/, 'type="text/partytown"');
+    //   }
+    // }
+    // else
     if (src && !attrs.includes('async') && !attrs.includes('defer')) {
       newAttrs += ' defer';
     }
