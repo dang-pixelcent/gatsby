@@ -32,12 +32,12 @@ const isPublicProd = process.env.FEATURE_PUBLIC_PROD === "true";
 const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 
 // Một hàm trợ giúp để tìm cấu hình cho một script
-const getScriptConfig = (src) => {
-  if (!src) return DEFAULT_SCRIPT_HANDLING;
-  // Tìm key trong config có tồn tại trong src của script không
-  const configKey = Object.keys(SCRIPT_HANDLING_CONFIG).find(key => src.includes(key));
-  return configKey ? SCRIPT_HANDLING_CONFIG[configKey] : DEFAULT_SCRIPT_HANDLING;
-};
+// const getScriptConfig = (src) => {
+//   if (!src) return DEFAULT_SCRIPT_HANDLING;
+//   // Tìm key trong config có tồn tại trong src của script không
+//   const configKey = Object.keys(SCRIPT_HANDLING_CONFIG).find(key => src.includes(key));
+//   return configKey ? SCRIPT_HANDLING_CONFIG[configKey] : DEFAULT_SCRIPT_HANDLING;
+// };
 
 const Home = ({ pageContext }) => {
   const { flexibleContentHtml, scripts = [], specialScripts = [], bgbanner, uri, schemas } = pageContext;
