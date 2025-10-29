@@ -25,13 +25,7 @@ module.exports = {
     // FAST_DEV: true,
   },
   plugins: [
-    {
-      resolve: 'gatsby-plugin-brotli',
-      options: {
-        // Nén các loại tệp văn bản phổ biến nhất
-        extensions: ['css', 'html', 'js', 'svg', 'xml', 'json']
-      }
-    },
+
     // {
     //   resolve: `gatsby-plugin-partytown`,
     //   options: {
