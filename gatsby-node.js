@@ -477,9 +477,7 @@ exports.createPages = async ({ actions, graphql }) => {
 
             // Thêm vào mảng specialScripts để component DynamicScriptHandler xử lý
             if (!specialScripts.find(s => s.content === preloadLink)) {
-              specialScripts.push({
-                preloadLinkData
-              });
+              specialScripts.push(preloadLinkData);
             }
           }
         }
