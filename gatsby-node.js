@@ -455,16 +455,13 @@ exports.createPages = async ({ actions, graphql }) => {
             const bgUrl = match[1];
             bgbanner = bgUrl;
 
-            // Thêm class bannerSection vào home-banner
-            homeBanner.addClass('bannerSection');
-
 
             // 1. Thêm data-attribute chứa URL ảnh
             // homeBanner.attr('data-bg-url', bgUrl);
-            const newStyle = style.replace(/background-image:[^;]+;?/, '')
-              .replace(/background:[^;]+;?/, '');
-            // 2. Xóa HOÀN TOÀN thuộc tính style để đảm bảo trình duyệt không thấy ảnh nền
-            homeBanner.attr('style', newStyle.trim());
+            // const newStyle = style.replace(/background-image:[^;]+;?/, '')
+            //   .replace(/background:[^;]+;?/, '');
+            // // 2. Xóa HOÀN TOÀN thuộc tính style để đảm bảo trình duyệt không thấy ảnh nền
+            // homeBanner.attr('style', newStyle.trim());
             // 3. Tạo một thẻ <link> để preload ảnh với độ ưu tiên THẤP
             // Thẻ này sẽ được tiêm vào <head> ở bước sau
             const preloadLinkData = {
