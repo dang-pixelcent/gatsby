@@ -52,11 +52,11 @@ const Home = ({ pageContext }) => {
   useLazyEmbedRenderer({ flexibleContentHtml });
 
   // Lọc và tạo các thẻ <link> cho Helmet
-  // const preloadLinks = specialScripts
-  //   .filter(script => script.type === 'preload-lcp-image' && script.tag === 'link')
-  //   .map((script, index) => (
-  //     <link key={`preload-${index}`} {...script.props} />
-  //   ));
+  const preloadLinks = specialScripts
+    .filter(script => script.type === 'preload-lcp-image' && script.tag === 'link')
+    .map((script, index) => (
+      <link key={`preload-${index}`} {...script.props} />
+    ));
 
   // const isMobile = useIsMobile();
   // const [isLcpDelayed, setLcpDelayed] = useState(false);
@@ -116,19 +116,19 @@ const Home = ({ pageContext }) => {
 
   // }, [isLcpDelayed, isMobile, flexibleContentHtml]);
 
-  useEffect(() => {
-    const banner = document.querySelector('.home-banner');
+  // useEffect(() => {
+  //   const banner = document.querySelector('.home-banner');
 
-    if (bgbanner) {
-      banner.classList.add('bannerSection');
-      const img = new Image();
-      img.src = bgbanner;
-      img.onload = () => {
-        banner.style.backgroundImage = `url('${bgbanner}')`;
-        banner.classList.remove('bannerSection');
-      };
-    }
-  }, [bgbanner]);
+  //   if (bgbanner) {
+  //     banner.classList.add('bannerSection');
+  //     const img = new Image();
+  //     img.src = bgbanner;
+  //     img.onload = () => {
+  //       banner.style.backgroundImage = `url('${bgbanner}')`;
+  //       banner.classList.remove('bannerSection');
+  //     };
+  //   }
+  // }, [bgbanner]);
 
   return (
     <React.Fragment>
@@ -139,7 +139,9 @@ const Home = ({ pageContext }) => {
         <ScriptInjector scripts={scripts} />
 
 
-
+        <Helmet>
+          {preloadLinks}
+        </Helmet>
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (
