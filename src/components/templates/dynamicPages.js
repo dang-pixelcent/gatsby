@@ -136,7 +136,7 @@ const Home = ({ pageContext }) => {
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
         {/* Xử lý tiêm các script đã được trích xuất */}
-        <ScriptInjector scripts={scripts} />
+        {/* <ScriptInjector scripts={scripts} /> */}
 
 
         <Helmet>
