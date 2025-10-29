@@ -6,6 +6,12 @@
 .pnp.js
 /.cache
 /public*
+# /public/static
+# /public/page-data
+# /public/~partytown
+# /public/manifest.webmanifest
+# /public/icons
+# /public/images
 /cache
 /extracted-scripts
 /manual-review
