@@ -24,6 +24,7 @@
     "gatsby": "next",
     "gatsby-plugin-alias-imports": "^1.0.5",
     "gatsby-plugin-apollo": "^4.0.3",
+    "gatsby-plugin-brotli": "^2.1.0",
     "gatsby-plugin-gatsby-cloud": "^5.14.0",
     "gatsby-plugin-image": "^3.14.0",
     "gatsby-plugin-manifest": "^5.14.0",

@@ -25,6 +25,13 @@ module.exports = {
     // FAST_DEV: true,
   },
   plugins: [
+    {
+      resolve: 'gatsby-plugin-brotli',
+      options: {
+        // Nén các loại tệp văn bản phổ biến nhất
+        extensions: ['css', 'html', 'js', 'svg', 'xml', 'json']
+      }
+    },
     // {
     //   resolve: `gatsby-plugin-partytown`,
     //   options: {
@@ -68,7 +75,7 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-image`,
     `gatsby-plugin-preload-fonts`,
-    // `gatsby-plugin-webpack-bundle-analyser-v2`,
+    `gatsby-plugin-webpack-bundle-analyser-v2`,
     // {
     //   resolve: `gatsby-plugin-purgecss`,
     //   options: {
