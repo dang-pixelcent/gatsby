@@ -1,8 +1,6 @@
 import React, { useState, Suspense } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import loadable from '@loadable/component';
-
-import '../styles/customFonts.scss';
 // Import Tailwind CSS trước
 // import './src/styles/tailwind.css';
 

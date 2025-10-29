@@ -1,5 +1,5 @@
 import wrapWithProvider from "./wrap-with-provider"
-
+import './src/styles/customFonts.scss';
 if (process.env.NODE_ENV === 'development') {
     console.log(
         '%c EdgeTag Mock Mode: Bật chế độ giả lập EdgeTag. ',
