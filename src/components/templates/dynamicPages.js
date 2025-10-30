@@ -44,7 +44,7 @@ const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 // };
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], bgbanner, uri, schemas } = pageContext;
+  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
 
   // --- Cấu hình các plugin jQuery cần dùng cho trang này ---
   // Gọi hook quản lý tập trung

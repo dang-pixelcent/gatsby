@@ -388,7 +388,7 @@ exports.createPages = async ({ actions, graphql }) => {
 
     let htmlContent = node.flexibleContentHtml;
     let specialScripts = [];
-    let bgbanner = null;
+    // let bgbanner = null;
 
     // --- BƯỚC 1: XỬ LÝ VIDEO EMBEDS ---
     if (htmlContent) {
@@ -453,7 +453,21 @@ exports.createPages = async ({ actions, graphql }) => {
           const match = style.match(/url\(['"]?(.*?)['"]?\)/);
           if (match && match[1]) {
             const bgUrl = match[1];
-            bgbanner = bgUrl;
+            // bgbanner = bgUrl;
+
+            const newStyle = style.replace(/background(-image)?:[^;]+;?/g, '').trim();
+            homeBanner.attr('style', newStyle);
+
+            // Thêm thẻ <img> để ưu tiên tải ảnh banner
+            const imageTag = `
+              <img 
+                class="home-banner__image" 
+                src="${bgUrl}" 
+                alt="Wellness Clinic Marketing hero banner" 
+                fetchpriority="high" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;"
+              >`;
+            homeBanner.prepend(imageTag);
 
 
             // 1. Thêm data-attribute chứa URL ảnh
@@ -562,7 +576,7 @@ exports.createPages = async ({ actions, graphql }) => {
       specialScripts: specialScripts,
       metaHtml: processedSeo.metaHtml || null,
       schemas: processedSeo.schemas || [],
-      bgbanner: bgbanner || null
+      // bgbanner: bgbanner || null
     };
   };
 
