@@ -25,18 +25,20 @@ module.exports = {
     // FAST_DEV: true,
   },
   plugins: [
-
+    '@vercel/gatsby-plugin-vercel-builder',
     // {
     //   resolve: `gatsby-plugin-partytown`,
     //   options: {
-    //     // Chuyển tiếp các lệnh gọi này đến luồng Partytown
-    //     forward: [`dataLayer.push`],
+    //     // Chuyển tiếp các lệnh gọi này đến luồng Partytown.
+    //     // Xem tài liệu của chat widget xem có cần hàm nào không, ví dụ: ['lc_chat_init']
+    //     // Nếu không có, bạn có thể để mảng rỗng: forward: []
+    //     forward: ['googletagmanager.com/gtm.js'],
     //     partytownConfig: {
-    //       // --- BƯỚC 4: BẬT LẠI CẤU HÌNH PROXY ---
     //       resolveUrl: function (url, location, type) {
     //         // Danh sách các domain cần được proxy để tránh lỗi CORS
     //         const proxyingDomains = [
-    //           'js.ubembed.com',
+    //           'widgets.leadconnectorhq.com', // <--- THÊM DOMAIN CỦA CHAT WIDGET VÀO ĐÂY
+    //           // 'www.googletagmanager.com',
     //         ];
 
     //         if (proxyingDomains.some(domain => url.hostname.includes(domain))) {
@@ -49,7 +51,6 @@ module.exports = {
     //         // Trả về URL gốc cho các script không nằm trong danh sách
     //         return url;
     //       },
-    //       // ------------------------------------
     //     },
     //   }
     // },
