@@ -5,12 +5,6 @@
       "development": true
     }
   },
-  "functions": {
-    "api/gatsby.js": {
-      "memory": 3008,
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
