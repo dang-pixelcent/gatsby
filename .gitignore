@@ -15,6 +15,7 @@
 /cache
 /extracted-scripts
 /manual-review
+/static/~partytown
 
 # testing
 /coverage
