@@ -62,8 +62,24 @@ const transformHtmlString = (htmlString) => {
     //   }
     // }
     // else
-    if (src && !attrs.includes('async') && !attrs.includes('defer')) {
-      newAttrs += ' defer';
+    // if (src && !attrs.includes('async') && !attrs.includes('defer')) {
+    //   newAttrs += ' defer';
+    // }
+
+
+    if (src) {
+      // 1. Kiểm tra xem có phải là script của bên thứ ba không (URL tuyệt đối)
+      if (src.startsWith('http') || src.startsWith('//')) {
+        // 2. Nếu là script bên thứ ba và chưa có fetchpriority, thêm fetchpriority="low"
+        if (!attrs.includes('fetchpriority')) {
+          newAttrs += ' fetchpriority="low"';
+        }
+      }
+
+      // 3. Logic cũ: Thêm 'defer' nếu chưa có 'async' hoặc 'defer'
+      if (!attrs.includes('async') && !attrs.includes('defer')) {
+        newAttrs += ' defer';
+      }
     }
 
     return `<script${newAttrs}>${innerHtml}</script>`;

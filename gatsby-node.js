@@ -483,9 +483,20 @@ exports.createPages = async ({ actions, graphql }) => {
         }
       }
 
+      // Đặt fetchpriority="low" cho TẤT CẢ các thẻ <img>
+      $('img').each((index, element) => {
+        const img = $(element);
+        // Nếu ảnh chưa có thuộc tính fetchpriority, hãy thêm nó vào.
+        if (!img.attr('fetchpriority')) {
+          img.attr('fetchpriority', 'low');
+        }
+      });
+
       htmlContent = $.html();
     }
     // --- KẾT THÚC XỬ LÝ VIDEO ---
+
+
 
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
@@ -503,8 +514,49 @@ exports.createPages = async ({ actions, graphql }) => {
       }
     }
 
+
+    // let aboveTheFoldHtml = cleanedHtml;
+    // let belowTheFoldSections = [];
+
+    // if (cleanedHtml && cleanedHtml.trim().length > 0) {
+    //   const $ = cheerio.load(cleanedHtml, { decodeEntities: false });
+
+    //   // Bước 1: Tìm tất cả các section trong toàn bộ tài liệu
+    //   const sections = $('section');
+
+    //   // Nếu có nhiều hơn 1 section, chúng ta mới tiến hành tách
+    //   if (sections.length > 2) {
+    //     let belowTheFoldHtmlStrings = [];
+
+    //     // Lặp từ section thứ hai trở đi
+    //     sections.slice(2).each((index, sectionEl) => {
+    //       let currentBlockHtml = '';
+    //       let currentEl = $(sectionEl).prev();
+
+    //       // Gom tất cả các thẻ "anh em" đứng trước section này
+    //       // cho đến khi gặp một section khác hoặc hết thẻ
+    //       while (currentEl.length > 0 && !currentEl.is('section')) {
+    //         currentBlockHtml = $.html(currentEl) + currentBlockHtml;
+    //         currentEl.remove(); // Gỡ bỏ thẻ đã gom
+    //         currentEl = $(sectionEl).prev(); // Lấy lại thẻ prev sau khi đã xóa
+    //       }
+
+    //       // Gom nốt chính thẻ section này
+    //       currentBlockHtml += $.html(sectionEl);
+    //       $(sectionEl).remove(); // Gỡ bỏ chính nó
+
+    //       belowTheFoldHtmlStrings.push(currentBlockHtml);
+    //     });
+
+    //     belowTheFoldSections = belowTheFoldHtmlStrings;
+    //     aboveTheFoldHtml = $('body').html(); // Phần còn lại là above-the-fold
+    //   }
+    // }
+
     return {
       ...node,
+      // aboveTheFoldHtml: aboveTheFoldHtml,
+      // belowTheFoldSections: belowTheFoldSections,
       flexibleContentHtml: cleanedHtml,
       scripts: scripts,
       specialScripts: specialScripts,

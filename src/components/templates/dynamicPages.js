@@ -15,6 +15,9 @@ import { getJqueryPlugins } from "@src/utils/jqueryConfig";
 import { Helmet } from "react-helmet";
 // import useIsMobile from '@hooks/useIsMobile';
 
+// import LazySection from '@components/Tools/LazySection';
+// import LazySectionDynamic from '@components/sectionLazyDynamic';
+
 const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
@@ -25,6 +28,7 @@ const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHan
 const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
 // const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
 const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector'));
+const LazySectionDynamic = loadable(() => import('@components/sectionLazyDynamic'));
 
 // flag kiểm soát tính năng
 // const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -132,16 +136,15 @@ const Home = ({ pageContext }) => {
 
   return (
     <React.Fragment>
+      <Helmet>
+        {preloadLinks}
+      </Helmet>
       <Layout>
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
+
         {/* Xử lý tiêm các script đã được trích xuất */}
         <ScriptInjector scripts={scripts} />
-
-
-        <Helmet>
-          {preloadLinks}
-        </Helmet>
 
         {/* Phần form mới */}
         {isNewFormEnabled ? (
