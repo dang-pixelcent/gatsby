@@ -8,12 +8,25 @@ const getTerminalColors = require('../src/utils/terminalColors.js');
 const fetchWithRetry = require('../src/helpers/fetchWithRetry.js');
 
 const rootDir = appRoot.path;
+
 /**
- * Factory function to create the onPreBootstrap hook.
- * @returns {function} The async onPreBootstrap function for Gatsby.
+ * Hàm Sao chép các file thư viện Partytown vào thư mục static.
  */
-module.exports = async ({ reporter }) => {
-    const colors = getTerminalColors();
+const { copyLibFiles } = require("@qwik.dev/partytown/utils");
+async function copyPartytownFiles({ reporter, colors }) {
+    reporter.info(`${colors.cyan}Copying Partytown library files...${colors.reset}`);
+    try {
+        await copyLibFiles(path.join(rootDir, "static", "~partytown"));
+        reporter.success(`${colors.green}✓ Partytown files copied successfully.${colors.reset}`);
+    } catch (error) {
+        reporter.panicOnBuild(`${colors.red}Failed to copy Partytown files.${colors.reset}`, error);
+    }
+}
+
+/**
+ * Hàm Lấy HTML của Header/Footer từ CMS và cache lại.
+ */
+async function fetchAndCacheGlobalHtml({ reporter, colors }) {
     reporter.info(`${colors.cyan}Starting onPreBootstrap: Fetching and processing Header/Footer from CMS...${colors.reset}`);
 
     const endpoint = process.env.GATSBY_WPGRAPHQL_URL;
@@ -67,6 +80,21 @@ module.exports = async ({ reporter }) => {
     } catch (error) {
         reporter.panicOnBuild(`${colors.red}Critical error in onPreBootstrap after multiple retries${colors.reset}`, error);
     }
+}
+
+/**
+ * Factory function to create the onPreBootstrap hook.
+ * @returns {function} The async onPreBootstrap function for Gatsby.
+ */
+module.exports = async ({ reporter }) => {
+    const colors = getTerminalColors();
+    reporter.info(`${colors.cyan}--- Running onPreBootstrap tasks ---${colors.reset}`);
+
+    // Chạy tuần tự các tác vụ
+    await copyPartytownFiles({ reporter, colors });
+    await fetchAndCacheGlobalHtml({ reporter, colors });
+
+    reporter.info(`${colors.cyan}--- Finished onPreBootstrap tasks ---${colors.reset}`);
 };
 
 /** END PHẦN LẤY DỮ LIỆU HEADER */
