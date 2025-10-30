@@ -31,13 +31,36 @@ const ScriptInjector = ({ scripts }) => {
 
                 if (originalScriptNode) {
                     let isInline = true;
+                    let hasSrc = false;
+                    let hasFetchPriority = false;
+
                     // Sao chép tất cả các thuộc tính (src, async, defer, type, v.v.)
                     for (const attr of originalScriptNode.attributes) {
+                        const attrName = attr.name.toLowerCase();
                         // nếu có thuộc tính src thì đây không phải là script inline
-                        if (attr.name.toLowerCase() === 'src') {
+                        if (attrName === 'src') {
+                            hasSrc = true;
                             isInline = false;
                         }
+                        if (attrName === 'fetchpriority') {
+                            hasFetchPriority = true;
+                        }
+                        // // Bỏ qua thuộc tính 'type' cũ nếu chúng ta sẽ dùng Partytown
+                        // if (scriptInfo.usePartytown && attrName === 'type') {
+                        //     continue;
+                        // }
                         newScript.setAttribute(attr.name, attr.value);
+                    }
+
+                    // // Nếu script được đánh dấu, hãy đặt type là 'text/partytown'
+                    // if (scriptInfo.usePartytown) {
+                    //     newScript.setAttribute('type', 'text/partytown');
+                    //     console.log(`ScriptInjector: Offloading script from placeholder #${scriptInfo.placeholderId} to Partytown.`);
+                    // }
+
+                    //Thêm fetchpriority="low" nếu là script bên ngoài và chưa có
+                    if (hasSrc && !hasFetchPriority) {
+                        newScript.setAttribute('fetchpriority', 'low');
                     }
 
                     const inlineContent = originalScriptNode.innerHTML;

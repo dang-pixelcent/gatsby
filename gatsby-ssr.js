@@ -2,6 +2,7 @@ const React = require('react');
 const parse = require('html-react-parser').default || require('html-react-parser');
 const path = require('path');
 const getTerminalColors = require('./src/utils/terminalColors.js');
+const { Partytown } = require('@qwik.dev/partytown/react');
 
 // Lấy màu sắc từ utils để sử dụng trong console log
 const color = getTerminalColors();
@@ -35,8 +36,7 @@ const readJsonCache = (filePath) => {
 
 // Danh sách các từ khóa trong src của script để áp dụng Partytown
 const PARTYTOWN_KEYWORDS = [
-  'js.ubembed.com',
-  'aimtell.com',
+  'googletagmanager.com', // Script GTM mà Chat Widget tải
 ];
 
 /**
@@ -53,32 +53,32 @@ const transformHtmlString = (htmlString) => {
     const srcMatch = attrs.match(/src\s*=\s*["']([^"']+)["']/);
     const src = srcMatch ? srcMatch[1] : '';
 
-    // if (src && PARTYTOWN_KEYWORDS.some(keyword => src.includes(keyword))) {
-    //   // Nếu chưa có type, hoặc có type khác, thay thế bằng type của partytown
-    //   if (!newAttrs.includes('type=')) {
-    //     newAttrs += ' type="text/partytown"';
-    //   } else {
-    //     newAttrs = newAttrs.replace(/type\s*=\s*["'][^"']+["']/, 'type="text/partytown"');
-    //   }
-    // }
-    // else
-    // if (src && !attrs.includes('async') && !attrs.includes('defer')) {
-    //   newAttrs += ' defer';
-    // }
-
-
-    if (src) {
-      // 1. Kiểm tra xem có phải là script của bên thứ ba không (URL tuyệt đối)
-      if (src.startsWith('http') || src.startsWith('//')) {
-        // 2. Nếu là script bên thứ ba và chưa có fetchpriority, thêm fetchpriority="low"
-        if (!attrs.includes('fetchpriority')) {
-          newAttrs += ' fetchpriority="low"';
-        }
+    if (src && PARTYTOWN_KEYWORDS.some(keyword => src.includes(keyword))) {
+      // Nếu chưa có type, hoặc có type khác, thay thế bằng type của partytown
+      if (!newAttrs.includes('type=')) {
+        newAttrs += ' type="text/partytown"';
+      } else {
+        newAttrs = newAttrs.replace(/type\s*=\s*["'][^"']+["']/, 'type="text/partytown"');
       }
+    }
+    else {
+      // if (src && !attrs.includes('async') && !attrs.includes('defer')) {
+      //   newAttrs += ' defer';
+      // }
 
-      // 3. Logic cũ: Thêm 'defer' nếu chưa có 'async' hoặc 'defer'
-      if (!attrs.includes('async') && !attrs.includes('defer')) {
-        newAttrs += ' defer';
+      if (src) {
+        // 1. Kiểm tra xem có phải là script của bên thứ ba không (URL tuyệt đối)
+        if (src.startsWith('http') || src.startsWith('//')) {
+          // 2. Nếu là script bên thứ ba và chưa có fetchpriority, thêm fetchpriority="low"
+          if (!attrs.includes('fetchpriority')) {
+            newAttrs += ' fetchpriority="low"';
+          }
+        }
+
+        // 3. Logic cũ: Thêm 'defer' nếu chưa có 'async' hoặc 'defer'
+        if (!attrs.includes('async') && !attrs.includes('defer')) {
+          newAttrs += ' defer';
+        }
       }
     }
 
@@ -156,7 +156,7 @@ export const onRenderBody = ({
   // const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
 
   // --- 1. Cấu hình cho <head> ---
-  const headItems = [];
+  const headItems = [<Partytown key="partytown" debug={true} forward={["dataLayer.push"]} />];
   // headItems.push(
   //   <html lang="en-US" />,
   //   <meta charSet="utf-8" />,
