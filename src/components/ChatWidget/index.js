@@ -1,7 +1,9 @@
 // src/components/ChatWidget/index.js
 
 import React, { useEffect, useRef, useCallback } from 'react';
+import { Helmet } from 'react-helmet';
 import { Script } from 'gatsby';
+import { Partytown } from '@qwik.dev/partytown/react';
 
 const ChatWidget = () => {
     // useRef để lưu trữ các observer và hàm dọn dẹp
@@ -137,12 +139,20 @@ const ChatWidget = () => {
 
     return (
         <div className="widget-chat-box">
+            {/* <Helmet> */}
+            {/* 1. Chèn mã khởi tạo Partytown */}
+            {/* <Partytown forward={["dataLayer.push"]} /> */}
+
+            {/* 2. Chèn script của Chat Widget và đánh dấu nó cho Partytown */}
             <Script
-                async
+                // type="text/partytown"
+                defer
                 src="https://widgets.leadconnectorhq.com/loader.js"
                 data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
                 data-widget-id="668d5bc943da7a2804c9bf8e"
+                strategy='idle'
             />
+            {/* </Helmet> */}
         </div>
     );
 };
