@@ -2,12 +2,12 @@ import React from "react"
 import { Helmet } from "react-helmet"
 import parse from 'html-react-parser';
 
-import soletoXBold from "../../fonts/Soleto-XBold.woff2";
-import soletoMedium from "../../fonts/Soleto-Medium.woff2";
-import soletoRegular from "../../fonts/Soleto-Regular.woff2";
-import assistant700 from "../../fonts2/assistant-v23-latin-700.woff2";
-import assistant600 from "../../fonts2/assistant-v23-latin-600.woff2";
-import inter400 from "../../fonts2/inter-v19-latin-regular.woff2";
+// import soletoXBold from "../../fonts/Soleto-XBold.woff2";
+// import soletoMedium from "../../fonts/Soleto-Medium.woff2";
+// import soletoRegular from "../../fonts/Soleto-Regular.woff2";
+// import assistant700 from "../../fonts2/assistant-v23-latin-700.woff2";
+// import assistant600 from "../../fonts2/assistant-v23-latin-600.woff2";
+// import inter400 from "../../fonts2/inter-v19-latin-regular.woff2";
 
 // import { Script } from "gatsby"
 
@@ -117,7 +117,7 @@ export const SEO = ({
                     crossOrigin="anonymous"
                     key="soleto-regular"
                 />, */}
-                <link
+                {/* <link
                     rel="preload"
                     href={soletoXBold}
                     as="font"
@@ -164,7 +164,7 @@ export const SEO = ({
                     type="font/woff2"
                     crossOrigin="anonymous"
                     key="inter-v19-latin-400"
-                />
+                /> */}
 
                 {/* <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
                 <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
