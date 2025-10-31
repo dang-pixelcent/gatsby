@@ -16,6 +16,7 @@
 /extracted-scripts
 /manual-review
 /static/~partytown
+/static/images-buildtime
 
 # testing
 /coverage
@@ -35,3 +36,4 @@ yarn-error.log*
 package-lock.json
 
 .vscode
+.vercel
