@@ -3,6 +3,7 @@
 const path = require(`path`);
 const fs = require('fs');
 const cheerio = require('cheerio');
+const axios = require('axios');
 
 // Các helper functions
 const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js');
@@ -18,6 +19,9 @@ require('dotenv').config({
 
 // path
 const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
+// đường dẫn lưu ảnh đã tải về
+const DOWNLOADED_IMAGES_DIR = path.join(__dirname, 'static/images-buildtime');
+const DOWNLOADED_IMAGES_URL_PREFIX = '/images-buildtime';
 
 // Các phần logic tách riêng
 const createResolvers = require('./gatsby-node-logic/createResolvers');
@@ -382,7 +386,7 @@ exports.createPages = async ({ actions, graphql }) => {
   /**
    * PHẦN XỬ LÝ CÁC TRANG DYNAMIC
    */
-  const processNode = (node) => {
+  const processNode = async (node) => {
     const seoData = getCachedSeoData(`${SEO_QUERY_URL}${node.uri}`);
     const processedSeo = processSeoData(seoData);
 
@@ -478,7 +482,7 @@ exports.createPages = async ({ actions, graphql }) => {
       }
 
       // --- CHUYỂN ĐỔI BACKGROUND-IMAGE THÀNH THẺ IMG ---
-      sections.each((index, section) => {
+      for (const [index, section] of sections.toArray().entries()) {
         const sectionEl = $(section);
         const style = sectionEl.attr('style');
 
@@ -487,42 +491,75 @@ exports.createPages = async ({ actions, graphql }) => {
 
           if (match && match[1]) {
             const urlContent = match[1];
-            let originalBgUrl = '';
+            let potentialUrls = [];
+
+            // --- Bước 1: Tìm tất cả các URL tiềm năng ---
             if (urlContent.startsWith('http')) {
-              originalBgUrl = urlContent;
+              potentialUrls = [urlContent];
             } else {
               const urlRegex = /(https?:\/\/[^\s,'"]+\.(?:jpg|jpeg|png|gif|webp|svg))/ig;
-              const allUrls = urlContent.match(urlRegex) || [];
-              if (allUrls.length > 0) {
-                // Ưu tiên URL từ /wp-content/uploads/
-                const preferredUrl = allUrls.find(url => url.includes('/wp-content/uploads/'));
+              potentialUrls = urlContent.match(urlRegex) || [];
+            }
 
-                if (preferredUrl) {
-                  originalBgUrl = preferredUrl;
-                } else {
-                  // Nếu không có, lấy URL hợp lệ đầu tiên tìm được
-                  originalBgUrl = allUrls[0];
+            if (potentialUrls.length === 0) {
+              console.error(`${colors.red}No valid image URLs found in style attribute for page ${node.uri}: ${style}${colors.reset}`);
+              continue; // Không tìm thấy URL nào, bỏ qua section này
+            }
+
+            let successfulLocalUrl = null;
+
+            // --- Bước 2: Lặp và thử tải từng URL cho đến khi thành công ---
+            for (const urlToTry of potentialUrls) {
+              try {
+                const imageName = path.basename(new URL(urlToTry).pathname);
+                const localImagePath = path.join(DOWNLOADED_IMAGES_DIR, imageName);
+
+                // Chỉ tải nếu file chưa tồn tại trong cache của lần build này
+                if (!fs.existsSync(localImagePath)) {
+                  console.log(`${colors.cyan}Attempting to download: ${urlToTry}${colors.reset}`);
+                  const response = await axios({
+                    url: urlToTry,
+                    method: 'GET',
+                    responseType: 'stream',
+                    timeout: 10000 // Thêm timeout 10 giây để tránh chờ quá lâu
+                  });
+                  const writer = fs.createWriteStream(localImagePath);
+                  response.data.pipe(writer);
+                  await new Promise((resolve, reject) => {
+                    writer.on('finish', resolve);
+                    writer.on('error', reject);
+                  });
+                  console.log(`${colors.green} -> Success! Saved to: ${localImagePath}${colors.reset}`);
                 }
-                console.log(`${colors.yellow}Warning: Extracted a valid URL (${originalBgUrl}) from a malformed style attribute on page ${node.uri}${colors.reset}`);
+
+                // Nếu không có lỗi (tải thành công hoặc file đã có), ghi nhận URL và thoát vòng lặp
+                successfulLocalUrl = `${DOWNLOADED_IMAGES_URL_PREFIX}/${imageName}`;
+                console.log(`${colors.green}Using local URL: ${successfulLocalUrl} for page ${node.uri}${colors.reset}`);
+                break; // Thoát khỏi vòng lặp for...of khi đã tìm được URL hợp lệ
+
+              } catch (error) {
+                console.warn(`${colors.yellow} -> Failed to process URL ${urlToTry}: ${error.message}. Trying next...${colors.reset}`);
+                // Lỗi sẽ được ghi nhận, và vòng lặp sẽ tự động thử URL tiếp theo
               }
             }
 
-            if (!originalBgUrl) {
-              console.error(`${colors.red}No valid URL found in background-image style on page ${node.uri}${colors.reset}`);
-              return;
+            // --- Bước 3: Nếu tất cả URL đều lỗi, bỏ qua. Nếu không, tiến hành thay thế HTML ---
+            if (!successfulLocalUrl) {
+              console.error(`${colors.red}All potential image URLs failed for a section on page ${node.uri}. Skipping image replacement.${colors.reset}`);
+              continue; // Bỏ qua section này
             }
 
             const isFirstSection = (index === 0);
 
-            // 2.1. Xóa style background cũ và thêm style mới cho section
+            // 2.1. Xóa style background cũ
             const newStyle = style.replace(/background(-image)?:[^;]+;?/g, '').trim();
             sectionEl.attr('style', `${newStyle} overflow: hidden; position: relative;`);
 
-            // 2.2. Tạo thẻ <img> tương ứng
+            // 2.2. Tạo thẻ <img> với URL đã thành công
             const imageAttrs = {
               'class': 'section-background-image',
-              'src': originalBgUrl,
-              'alt': 'Section background', // Alt text chung, có thể cải thiện nếu có dữ liệu
+              'src': successfulLocalUrl,
+              'alt': 'Section background',
               'decoding': 'async',
               'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
             };
@@ -535,30 +572,27 @@ exports.createPages = async ({ actions, graphql }) => {
 
             const imageTag = $('<img />');
             imageTag.attr(imageAttrs);
-
             sectionEl.prepend(imageTag);
 
-            // 2.3. Chỉ tạo preload link cho ảnh nền của section ĐẦU TIÊN
+            // 2.3. Tạo preload link cho ảnh nền của section ĐẦU TIÊN
             if (isFirstSection) {
               const preloadLinkData = {
                 type: 'preload-lcp-image',
                 tag: 'link',
                 props: {
                   rel: 'preload',
-                  href: originalBgUrl,
+                  href: successfulLocalUrl,
                   as: 'image',
                   fetchpriority: 'high'
                 }
               };
-              // Đảm bảo không thêm trùng lặp
-              if (!specialScripts.some(s => s.props && s.props.href === originalBgUrl)) {
+              if (!specialScripts.some(s => s.props && s.props.href === successfulLocalUrl)) {
                 specialScripts.push(preloadLinkData);
               }
             }
           }
         }
-      });
-
+      }
 
 
       htmlContent = $.html();
@@ -646,22 +680,32 @@ exports.createPages = async ({ actions, graphql }) => {
 
   // Xử lý và tạo trang cho từng loại
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
-  data.cms.pages.edges
-    .filter(({ node }) => node.uri !== '/blogs/') // Lọc bỏ trang /blogs/ để tránh trùng với trang blog chính
-    .map(({ node }) => processNode(node))
-    .forEach(page => createPageFromNode(page, ''));
+  const pagePromises = data.cms.pages.edges
+    .filter(({ node }) => node.uri !== '/blogs/')
+    .map(({ node }) => processNode(node));
+  const processedPages = await Promise.all(pagePromises);
+  processedPages.forEach(page => createPageFromNode(page, ''));
+
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
-  data.cms.services.nodes.map(processNode).forEach(service => createPageFromNode(service, ''));
+  const servicePromises = data.cms.services.nodes.map(processNode);
+  const processedServices = await Promise.all(servicePromises);
+  processedServices.forEach(service => createPageFromNode(service, ''));
 
   console.log(`${colors.cyan}Processing events...${colors.reset}`);
-  data.cms.events.nodes.map(processNode).forEach(event => createPageFromNode(event, ''));
+  const eventPromises = data.cms.events.nodes.map(processNode);
+  const processedEvents = await Promise.all(eventPromises);
+  processedEvents.forEach(event => createPageFromNode(event, ''));
 
   console.log(`${colors.cyan}Processing blogs...${colors.reset}`);
-  data.cms.posts.nodes.map(processNode).forEach(blog => createPageFromNode(blog, ''));
+  const blogPromises = data.cms.posts.nodes.map(processNode);
+  const processedBlogs = await Promise.all(blogPromises);
+  processedBlogs.forEach(blog => createPageFromNode(blog, ''));
 
   console.log(`${colors.cyan}Processing case studies...${colors.reset}`);
-  data.cms.caseStudiesPost.nodes.map(processNode).forEach(caseStudy => createPageFromNode(caseStudy, ''));
+  const caseStudyPromises = data.cms.caseStudiesPost.nodes.map(processNode);
+  const processedCaseStudies = await Promise.all(caseStudyPromises);
+  processedCaseStudies.forEach(caseStudy => createPageFromNode(caseStudy, ''));
 
   // tạo trang kết quả tìm kiếm cho blogs
   console.log(`${colors.cyan}Creating search result page for blogs...${colors.reset}`);
