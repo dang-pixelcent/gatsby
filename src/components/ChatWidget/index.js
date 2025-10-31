@@ -146,7 +146,8 @@ const ChatWidget = () => {
             {/* 2. Chèn script của Chat Widget và đánh dấu nó cho Partytown */}
             <Script
                 // type="text/partytown"
-                defer
+                // defer
+                // async
                 src="https://widgets.leadconnectorhq.com/loader.js"
                 data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
                 data-widget-id="668d5bc943da7a2804c9bf8e"
