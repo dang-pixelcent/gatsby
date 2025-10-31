@@ -444,67 +444,97 @@ exports.createPages = async ({ actions, graphql }) => {
       });
 
       // ===================================================================
-      // Tối ưu LCP cho banner - Xử lý phía Server
+      // Tối ưu LCP cho banner và hình ảnh - Xử lý phía Server
       // ===================================================================
-      const homeBanner = $('.home-banner');
-      if (homeBanner.length) {
-        const style = homeBanner.attr('style');
-        if (style && style.includes('url(')) {
-          const match = style.match(/url\(['"]?(.*?)['"]?\)/);
-          if (match && match[1]) {
-            const bgUrl = match[1];
-            // bgbanner = bgUrl;
+      const sections = $('section');
 
-            const newStyle = style.replace(/background(-image)?:[^;]+;?/g, '').trim();
-            homeBanner.attr('style', newStyle);
-
-            // Thêm thẻ <img> để ưu tiên tải ảnh banner
-            const imageTag = `
-              <img 
-                class="home-banner__image" 
-                src="${bgUrl}" 
-                alt="Wellness Clinic Marketing hero banner" 
-                fetchpriority="high" 
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1;"
-              >`;
-            homeBanner.prepend(imageTag);
-
-
-            // 1. Thêm data-attribute chứa URL ảnh
-            // homeBanner.attr('data-bg-url', bgUrl);
-            // const newStyle = style.replace(/background-image:[^;]+;?/, '')
-            //   .replace(/background:[^;]+;?/, '');
-            // // 2. Xóa HOÀN TOÀN thuộc tính style để đảm bảo trình duyệt không thấy ảnh nền
-            // homeBanner.attr('style', newStyle.trim());
-            // 3. Tạo một thẻ <link> để preload ảnh với độ ưu tiên THẤP
-            // Thẻ này sẽ được tiêm vào <head> ở bước sau
-            const preloadLinkData = {
-              type: 'preload-lcp-image', // Dùng để nhận dạng
-              tag: 'link',
-              props: {
-                rel: 'preload',
-                href: bgUrl,
-                as: 'image',
-                fetchpriority: 'high'
-              }
-            };
-
-            // Thêm vào mảng specialScripts để component DynamicScriptHandler xử lý
-            if (!specialScripts.find(s => s.content === preloadLink)) {
-              specialScripts.push(preloadLinkData);
-            }
+      // --- TỐI ƯU ẢNH TRONG NỘI DUNG ---
+      if (sections.length > 0) {
+        // 1. Xử lý section ĐẦU TIÊN:
+        sections.first().find('img').each((i, el) => {
+          const img = $(el);
+          // Chỉ thêm decoding="async" nếu thuộc tính này chưa tồn tại
+          if (!img.attr('decoding')) {
+            img.attr('decoding', 'async');
           }
+        });
+
+        // 2. Xử lý các section còn lại (từ thứ 2 trở đi)
+        if (sections.length > 1) {
+          sections.slice(1).each((i, section) => {
+            $(section).find('img').each((j, el) => {
+              const img = $(el);
+              // Chỉ thêm loading="lazy" nếu thuộc tính này chưa tồn tại
+              if (!img.attr('loading')) {
+                img.attr('loading', 'lazy');
+              }
+              // Chỉ thêm decoding="async" nếu thuộc tính này chưa tồn tại
+              if (!img.attr('decoding')) {
+                img.attr('decoding', 'async');
+              }
+            });
+          });
         }
       }
 
-      // Đặt fetchpriority="low" cho TẤT CẢ các thẻ <img>
-      $('img').each((index, element) => {
-        const img = $(element);
-        // Nếu ảnh chưa có thuộc tính fetchpriority, hãy thêm nó vào.
-        if (!img.attr('fetchpriority')) {
-          img.attr('fetchpriority', 'low');
+      // --- CHUYỂN ĐỔI BACKGROUND-IMAGE THÀNH THẺ IMG ---
+      sections.each((index, section) => {
+        const sectionEl = $(section);
+        const style = sectionEl.attr('style');
+
+        if (style && (style.includes('background:') || style.includes('background-image:'))) {
+          const match = style.match(/url\(['"]?(.*?)['"]?\)/);
+
+          if (match && match[1]) {
+            const bgUrl = match[1];
+            const isFirstSection = (index === 0);
+
+            // 2.1. Xóa style background cũ và thêm style mới cho section
+            const newStyle = style.replace(/background(-image)?:[^;]+;?/g, '').trim();
+            sectionEl.attr('style', `${newStyle} overflow: hidden; position: relative;`);
+
+            // 2.2. Tạo thẻ <img> tương ứng
+            const imageAttrs = {
+              'class': 'section-background-image',
+              'src': bgUrl,
+              'alt': 'Section background', // Alt text chung, có thể cải thiện nếu có dữ liệu
+              'decoding': 'async',
+              'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
+            };
+
+            if (isFirstSection) {
+              imageAttrs.fetchpriority = 'high';
+            } else {
+              imageAttrs.loading = 'lazy';
+            }
+
+            const imageTag = $('<img />');
+            imageTag.attr(imageAttrs);
+
+            sectionEl.prepend(imageTag);
+
+            // 2.3. Chỉ tạo preload link cho ảnh nền của section ĐẦU TIÊN
+            if (isFirstSection) {
+              const preloadLinkData = {
+                type: 'preload-lcp-image',
+                tag: 'link',
+                props: {
+                  rel: 'preload',
+                  href: bgUrl,
+                  as: 'image',
+                  fetchpriority: 'high'
+                }
+              };
+              // Đảm bảo không thêm trùng lặp
+              if (!specialScripts.some(s => s.props && s.props.href === bgUrl)) {
+                specialScripts.push(preloadLinkData);
+              }
+            }
+          }
         }
       });
+
+
 
       htmlContent = $.html();
     }

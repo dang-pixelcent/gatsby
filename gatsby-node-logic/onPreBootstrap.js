@@ -3,6 +3,7 @@
 const path = require('path');
 const appRoot = require('app-root-path');
 const fs = require('fs');
+const cheerio = require('cheerio');
 const replaceInternalLinks = require('../src/helpers/replaceButtonLinks.js');
 const getTerminalColors = require('../src/utils/terminalColors.js');
 const fetchWithRetry = require('../src/helpers/fetchWithRetry.js');
@@ -54,8 +55,50 @@ async function fetchAndCacheGlobalHtml({ reporter, colors }) {
         // Phần ghi file giữ nguyên như cũ
         if (data && (data.headerHtmlall || data.footerHtmlall)) {
             reporter.info(`${colors.cyan}Raw Header/Footer HTML fetched. Processing...${colors.reset}`);
-            const rawHeaderHtml = data.headerHtmlall || "";
-            const rawFooterHtml = data.footerHtmlall || "";
+            let rawHeaderHtml = data.headerHtmlall || "";
+            let rawFooterHtml = data.footerHtmlall || "";
+
+            /** ===================tối ưu ảnh====================== */
+            // Xử lý Header
+            const $header = cheerio.load(rawHeaderHtml);
+            $header('img').each((i, el) => {
+                const img = $header(el);
+
+                // Luôn thêm decoding="async" cho tất cả ảnh trong header nếu chưa có
+                if (!img.attr('decoding')) {
+                    img.attr('decoding', 'async');
+                }
+
+                // Xử lý riêng cho logo và các ảnh khác
+                if (img.hasClass('custom-logo')) {
+                    // Đây là logo: thêm fetchpriority="high" nếu chưa có
+                    if (!img.attr('fetchpriority')) {
+                        img.attr('fetchpriority', 'high');
+                    }
+                } else {
+                    // Đây không phải logo: thêm loading="lazy" nếu chưa có
+                    if (!img.attr('loading')) {
+                        img.attr('loading', 'lazy');
+                    }
+                }
+            });
+            rawHeaderHtml = $header.html();
+
+            // Xử lý Footer
+            const $footer = cheerio.load(rawFooterHtml);
+            $footer('img').each((i, el) => {
+                const img = $footer(el);
+                // Thêm loading="lazy" nếu chưa có
+                if (!img.attr('loading')) {
+                    img.attr('loading', 'lazy');
+                }
+                // Thêm decoding="async" nếu chưa có
+                if (!img.attr('decoding')) {
+                    img.attr('decoding', 'async');
+                }
+            });
+            rawFooterHtml = $footer.html();
+            /**========================== END TỐI ƯU ẢNH ========================== */
 
             // Giả sử bạn có hàm replaceInternalLinks
             const processedHeaderHtml = replaceInternalLinks(rawHeaderHtml);
