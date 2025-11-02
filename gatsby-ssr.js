@@ -2,7 +2,7 @@ const React = require('react');
 const parse = require('html-react-parser').default || require('html-react-parser');
 const path = require('path');
 const getTerminalColors = require('./src/utils/terminalColors.js');
-const { Partytown } = require('@qwik.dev/partytown/react');
+// const { Partytown } = require('@qwik.dev/partytown/react');
 
 // Lấy màu sắc từ utils để sử dụng trong console log
 const color = getTerminalColors();
@@ -36,7 +36,7 @@ const readJsonCache = (filePath) => {
 
 // Danh sách các từ khóa trong src của script để áp dụng Partytown
 const PARTYTOWN_KEYWORDS = [
-  'googletagmanager.com', // Script GTM mà Chat Widget tải
+  // 'googletagmanager.com', // Script GTM mà Chat Widget tải
 ];
 
 /**
@@ -156,7 +156,9 @@ export const onRenderBody = ({
   // const scriptsForPreBodyString_fromFooterField = globalSnippets.footerHtml || "";
 
   // --- 1. Cấu hình cho <head> ---
-  const headItems = [<Partytown key="partytown" debug={true} forward={["dataLayer.push"]} />];
+  const headItems = [
+    // <Partytown key="partytown" debug={true} forward={["dataLayer.push"]} />
+  ];
   // headItems.push(
   //   <html lang="en-US" />,
   //   <meta charSet="utf-8" />,

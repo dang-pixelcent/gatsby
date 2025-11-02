@@ -205,21 +205,20 @@ module.exports = {
     },
     `gatsby-plugin-offline`,
     `gatsby-plugin-preact`,
-    `gatsby-plugin-gatsby-cloud`,
-    {
-      resolve: `gatsby-plugin-preconnect`,
-      options: {
-        domains: [
-          "https://www.googletagmanager.com",
-          "https://www.google-analytics.com",
-          "https://connect.facebook.net",
-          "https://www.facebook.com",
-          "https://cdn.aimtell.com",
-          "https://dashboard.wellnessclinicmarketing.com",
-          "https://d6e924dfdd9047e58ab4d02edbc3ed70.js.ubembed.com",
-        ],
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-preconnect`,
+    //   options: {
+    //     domains: [
+    //       "https://www.googletagmanager.com",
+    //       "https://www.google-analytics.com",
+    //       "https://connect.facebook.net",
+    //       "https://www.facebook.com",
+    //       "https://cdn.aimtell.com",
+    //       "https://dashboard.wellnessclinicmarketing.com",
+    //       "https://d6e924dfdd9047e58ab4d02edbc3ed70.js.ubembed.com",
+    //     ],
+    //   },
+    // },
   ],
   siteMetadata: {
     title: `Gatsby WP Theme`,

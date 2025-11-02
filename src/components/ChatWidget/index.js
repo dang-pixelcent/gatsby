@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import { Script } from 'gatsby';
-import { Partytown } from '@qwik.dev/partytown/react';
+// import { Partytown } from '@qwik.dev/partytown/react';
 
 const ChatWidget = () => {
     // useRef để lưu trữ các observer và hàm dọn dẹp

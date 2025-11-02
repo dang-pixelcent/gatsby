@@ -13,16 +13,16 @@ const rootDir = appRoot.path;
 /**
  * Hàm Sao chép các file thư viện Partytown vào thư mục static.
  */
-const { copyLibFiles } = require("@qwik.dev/partytown/utils");
-async function copyPartytownFiles({ reporter, colors }) {
-    reporter.info(`${colors.cyan}Copying Partytown library files...${colors.reset}`);
-    try {
-        await copyLibFiles(path.join(rootDir, "static", "~partytown"));
-        reporter.success(`${colors.green}✓ Partytown files copied successfully.${colors.reset}`);
-    } catch (error) {
-        reporter.panicOnBuild(`${colors.red}Failed to copy Partytown files.${colors.reset}`, error);
-    }
-}
+// const { copyLibFiles } = require("@qwik.dev/partytown/utils");
+// async function copyPartytownFiles({ reporter, colors }) {
+//     reporter.info(`${colors.cyan}Copying Partytown library files...${colors.reset}`);
+//     try {
+//         await copyLibFiles(path.join(rootDir, "static", "~partytown"));
+//         reporter.success(`${colors.green}✓ Partytown files copied successfully.${colors.reset}`);
+//     } catch (error) {
+//         reporter.panicOnBuild(`${colors.red}Failed to copy Partytown files.${colors.reset}`, error);
+//     }
+// }
 
 /**
  * Hàm Lấy HTML của Header/Footer từ CMS và cache lại.
@@ -134,7 +134,7 @@ module.exports = async ({ reporter }) => {
     reporter.info(`${colors.cyan}--- Running onPreBootstrap tasks ---${colors.reset}`);
 
     // Chạy tuần tự các tác vụ
-    await copyPartytownFiles({ reporter, colors });
+    // await copyPartytownFiles({ reporter, colors });
     await fetchAndCacheGlobalHtml({ reporter, colors });
 
     reporter.info(`${colors.cyan}--- Finished onPreBootstrap tasks ---${colors.reset}`);
