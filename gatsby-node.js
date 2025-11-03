@@ -11,6 +11,8 @@ const getTerminalColors = require('./src/utils/terminalColors.js');
 const getCachedSeoData = require('./src/helpers/getCachedSeoData.js');
 const processSeoData = require('./src/helpers/processSeoData.js');
 const processAllScripts = require('./src/helpers/processAllScripts.js');
+const processContentImages = require('./src/helpers/processContentImages.js');
+const processBackgroundImages = require('./src/helpers/processBackgroundImages.js');
 
 // dotenv
 require('dotenv').config({
@@ -20,7 +22,7 @@ require('dotenv').config({
 // path
 const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
 // đường dẫn lưu ảnh đã tải về
-const DOWNLOADED_IMAGES_DIR = path.join(__dirname, 'static/images-buildtime');
+const DOWNLOADED_IMAGES_DIR = path.join(__dirname, 'public/images-buildtime');
 const DOWNLOADED_IMAGES_URL_PREFIX = '/images-buildtime';
 
 // Các phần logic tách riêng
@@ -452,147 +454,26 @@ exports.createPages = async ({ actions, graphql }) => {
       // ===================================================================
       const sections = $('section');
 
-      // --- TỐI ƯU ẢNH TRONG NỘI DUNG ---
-      if (sections.length > 0) {
-        // 1. Xử lý section ĐẦU TIÊN:
-        sections.first().find('img').each((i, el) => {
-          const img = $(el);
-          // Chỉ thêm decoding="async" nếu thuộc tính này chưa tồn tại
-          if (!img.attr('decoding')) {
-            img.attr('decoding', 'async');
-          }
-        });
+      // --- TỐI ƯU VÀ TẢI ẢNH TRONG NỘI DUNG ---
+      await processContentImages({
+        $,
+        sections,
+        node,
+        colors,
+        DOWNLOADED_IMAGES_DIR,
+        DOWNLOADED_IMAGES_URL_PREFIX
+      });
 
-        // 2. Xử lý các section còn lại (từ thứ 2 trở đi)
-        if (sections.length > 1) {
-          sections.slice(1).each((i, section) => {
-            $(section).find('img').each((j, el) => {
-              const img = $(el);
-              // Chỉ thêm loading="lazy" nếu thuộc tính này chưa tồn tại
-              if (!img.attr('loading')) {
-                img.attr('loading', 'lazy');
-              }
-              // Chỉ thêm decoding="async" nếu thuộc tính này chưa tồn tại
-              if (!img.attr('decoding')) {
-                img.attr('decoding', 'async');
-              }
-            });
-          });
-        }
-      }
-
-      // --- CHUYỂN ĐỔI BACKGROUND-IMAGE THÀNH THẺ IMG ---
-      for (const [index, section] of sections.toArray().entries()) {
-        const sectionEl = $(section);
-        const style = sectionEl.attr('style');
-
-        if (style && (style.includes('background:') || style.includes('background-image:'))) {
-          const match = style.match(/url\(['"]?(.*?)['"]?\)/);
-
-          if (match && match[1]) {
-            const urlContent = match[1];
-            let potentialUrls = [];
-
-            // --- Bước 1: Tìm tất cả các URL tiềm năng ---
-            if (urlContent.startsWith('http')) {
-              potentialUrls = [urlContent];
-            } else {
-              const urlRegex = /(https?:\/\/[^\s,'"]+\.(?:jpg|jpeg|png|gif|webp|svg))/ig;
-              potentialUrls = urlContent.match(urlRegex) || [];
-            }
-
-            if (potentialUrls.length === 0) {
-              console.error(`${colors.red}No valid image URLs found in style attribute for page ${node.uri}: ${style}${colors.reset}`);
-              continue; // Không tìm thấy URL nào, bỏ qua section này
-            }
-
-            let successfulLocalUrl = null;
-
-            // --- Bước 2: Lặp và thử tải từng URL cho đến khi thành công ---
-            for (const urlToTry of potentialUrls) {
-              try {
-                const imageName = path.basename(new URL(urlToTry).pathname);
-                const localImagePath = path.join(DOWNLOADED_IMAGES_DIR, imageName);
-
-                // Chỉ tải nếu file chưa tồn tại trong cache của lần build này
-                if (!fs.existsSync(localImagePath)) {
-                  console.log(`${colors.cyan}Attempting to download: ${urlToTry}${colors.reset}`);
-                  const response = await axios({
-                    url: urlToTry,
-                    method: 'GET',
-                    responseType: 'stream',
-                    timeout: 10000 // Thêm timeout 10 giây để tránh chờ quá lâu
-                  });
-                  const writer = fs.createWriteStream(localImagePath);
-                  response.data.pipe(writer);
-                  await new Promise((resolve, reject) => {
-                    writer.on('finish', resolve);
-                    writer.on('error', reject);
-                  });
-                  console.log(`${colors.green} -> Success! Saved to: ${localImagePath}${colors.reset}`);
-                }
-
-                // Nếu không có lỗi (tải thành công hoặc file đã có), ghi nhận URL và thoát vòng lặp
-                successfulLocalUrl = `${DOWNLOADED_IMAGES_URL_PREFIX}/${imageName}`;
-                console.log(`${colors.green}Using local URL: ${successfulLocalUrl} for page ${node.uri}${colors.reset}`);
-                break; // Thoát khỏi vòng lặp for...of khi đã tìm được URL hợp lệ
-
-              } catch (error) {
-                console.warn(`${colors.yellow} -> Failed to process URL ${urlToTry}: ${error.message}. Trying next...${colors.reset}`);
-                // Lỗi sẽ được ghi nhận, và vòng lặp sẽ tự động thử URL tiếp theo
-              }
-            }
-
-            // --- Bước 3: Nếu tất cả URL đều lỗi, bỏ qua. Nếu không, tiến hành thay thế HTML ---
-            if (!successfulLocalUrl) {
-              console.error(`${colors.red}All potential image URLs failed for a section on page ${node.uri}. Skipping image replacement.${colors.reset}`);
-              continue; // Bỏ qua section này
-            }
-
-            const isFirstSection = (index === 0);
-
-            // 2.1. Xóa style background cũ
-            const newStyle = style.replace(/background(-image)?:[^;]+;?/g, '').trim();
-            sectionEl.attr('style', `${newStyle} overflow: hidden; position: relative;`);
-
-            // 2.2. Tạo thẻ <img> với URL đã thành công
-            const imageAttrs = {
-              'class': 'section-background-image',
-              'src': successfulLocalUrl,
-              'alt': 'Section background',
-              'decoding': 'async',
-              'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
-            };
-
-            if (isFirstSection) {
-              imageAttrs.fetchpriority = 'high';
-            } else {
-              imageAttrs.loading = 'lazy';
-            }
-
-            const imageTag = $('<img />');
-            imageTag.attr(imageAttrs);
-            sectionEl.prepend(imageTag);
-
-            // 2.3. Tạo preload link cho ảnh nền của section ĐẦU TIÊN
-            if (isFirstSection) {
-              const preloadLinkData = {
-                type: 'preload-lcp-image',
-                tag: 'link',
-                props: {
-                  rel: 'preload',
-                  href: successfulLocalUrl,
-                  as: 'image',
-                  fetchpriority: 'high'
-                }
-              };
-              if (!specialScripts.some(s => s.props && s.props.href === successfulLocalUrl)) {
-                specialScripts.push(preloadLinkData);
-              }
-            }
-          }
-        }
-      }
+      // --- TỐI ƯU VÀ CHUYỂN ĐỔI ẢNH NỀN ---
+      await processBackgroundImages({
+        $,
+        sections,
+        node,
+        colors,
+        DOWNLOADED_IMAGES_DIR,
+        DOWNLOADED_IMAGES_URL_PREFIX,
+        specialScripts // Truyền mảng để helper có thể thêm preload links
+      });
 
 
       htmlContent = $.html();

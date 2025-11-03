@@ -11,7 +11,7 @@ module.exports = () => {
 
     // --- PHẦN DỌN DẸP ---//
     const dirsToClean = [
-        path.join(rootDir, 'static/images-buildtime'),
+        path.join(rootDir, 'public/images-buildtime'),
         //...
     ];
 
@@ -29,7 +29,7 @@ module.exports = () => {
         path.join(rootDir, '.cache/page-snippets'),
         path.join(rootDir, 'cache/seo'),
         path.join(rootDir, 'public/extracted-scripts'),
-        path.join(rootDir, 'static/images-buildtime'),
+        path.join(rootDir, 'public/images-buildtime'),
     ];
 
     console.log('Ensuring required directories exist...');
