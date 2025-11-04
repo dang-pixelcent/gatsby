@@ -97,6 +97,7 @@ export const SEO = ({
             {children}
             <Helmet>
                 <html lang="en" />
+
                 {/* {metaHtml && (
                     <div className="meta-html" dangerouslySetInnerHTML={{ __html: metaHtml }} />
                 )} */}
@@ -173,6 +174,13 @@ export const SEO = ({
                 <meta name="apple-mobile-web-app-title" content="Wellness Clinic Marketing" />
                 <link rel="manifest" href="/favicon/site.webmanifest" /> */}
             </Helmet>
+            <link href="https://www.googletagmanager.com" rel="preconnect" />
+            <link href="https://www.google-analytics.com" rel="preconnect" />
+            <link href="https://a.wellnessclinicmarketing.com" rel="preconnect" />
+            <link href="https://connect.facebook.net" rel="preconnect" />
+            <link href="https://cdn.aimtell.com" rel="preconnect" />
+            <link href="https://dashboard.wellnessclinicmarketing.com" rel="preconnect" />
+            <link href="https://d6e924dfdd9047e58ab4d02edbc3ed70.js.ubembed.com" rel="preconnect" />
         </>
     )
 }

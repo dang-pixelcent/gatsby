@@ -209,14 +209,7 @@ module.exports = {
       resolve: `gatsby-plugin-preconnect`,
       options: {
         domains: [
-          "https://a.wellnessclinicmarketing.com",
-          "https://www.googletagmanager.com",
-          "https://www.google-analytics.com",
-          "https://connect.facebook.net",
           "https://www.facebook.com",
-          "https://cdn.aimtell.com",
-          "https://dashboard.wellnessclinicmarketing.com",
-          // "https://d6e924dfdd9047e58ab4d02edbc3ed70.js.ubembed.com",
         ],
       },
     },
