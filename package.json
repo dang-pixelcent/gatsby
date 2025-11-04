@@ -27,7 +27,6 @@
     "gatsby-plugin-apollo": "^4.0.3",
     "gatsby-plugin-image": "^3.14.0",
     "gatsby-plugin-manifest": "^5.14.0",
-    "gatsby-plugin-offline": "^6.14.0",
     "gatsby-plugin-preact": "^7.15.0",
     "gatsby-plugin-preconnect": "^1.4.0",
     "gatsby-plugin-preload-fonts": "^4.14.0",
