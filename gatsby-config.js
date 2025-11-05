@@ -203,8 +203,8 @@ module.exports = {
         icon: `static/favicon.png`, // Đường dẫn đến icon của bạn
       },
     },
-    // `gatsby-plugin-offline`,
-    // `gatsby-plugin-preact`,
+    `gatsby-plugin-offline`,
+    `gatsby-plugin-preact`,
     // {
     //   resolve: `gatsby-plugin-preconnect`,
     //   options: {

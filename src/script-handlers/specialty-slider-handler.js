@@ -12,7 +12,7 @@ export function initializeSpecialtySlider() {
         return null; // Không có slider nào để khởi tạo
     }
 
-    console.log(`Initializing ${sliderElements.length} specialty sliders.`);
+    // console.log(`Initializing ${sliderElements.length} specialty sliders.`);
 
     sliderElements.forEach(slider => {
         $(slider).slick({
