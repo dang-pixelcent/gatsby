@@ -204,15 +204,15 @@ module.exports = {
       },
     },
     // `gatsby-plugin-offline`,
-    `gatsby-plugin-preact`,
-    {
-      resolve: `gatsby-plugin-preconnect`,
-      options: {
-        domains: [
-          "https://www.facebook.com",
-        ],
-      },
-    },
+    // `gatsby-plugin-preact`,
+    // {
+    //   resolve: `gatsby-plugin-preconnect`,
+    //   options: {
+    //     domains: [
+    //       "https://www.facebook.com",
+    //     ],
+    //   },
+    // },
   ],
   siteMetadata: {
     title: `Gatsby WP Theme`,
