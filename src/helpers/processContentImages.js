@@ -79,14 +79,33 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
     // --- 3. CẬP NHẬT LẠI HTML ---
     imagesToProcess.forEach((sources, imgElement) => {
         const srcsetParts = [];
+        const webpSrcsetParts = [];
         let isSpecial = false;
+        let width = null;
+        let height = null;
+        let foundFirstValid = false;
 
         sources.forEach(({ descriptor }, imageName) => {
             const processed = allUniqueImages.get(imageName);
-            if (processed) {
-                if (processed.isSpecial) isSpecial = true;
-                const url = processed.error ? processed.original : processed.fallback;
-                srcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${url} ${descriptor}`.trim());
+            if (processed && !processed.error) {
+                // Lấy kích thước và loại ảnh từ ảnh đầu tiên hợp lệ
+                if (!foundFirstValid) {
+                    width = processed.width;
+                    height = processed.height;
+                    isSpecial = processed.isSpecial || false; // Đảm bảo isSpecial có giá trị
+                    foundFirstValid = true;
+                }
+
+                // Luôn xây dựng srcset cho fallback
+                srcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.fallback} ${descriptor}`.trim());
+
+                // Chỉ xây dựng webp srcset nếu không phải ảnh đặc biệt
+                if (!processed.isSpecial) {
+                    webpSrcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.webp} ${descriptor}`.trim());
+                }
+            } else if (processed) {
+                // Xử lý trường hợp ảnh bị lỗi, dùng lại ảnh gốc
+                srcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.original} ${descriptor}`.trim());
             }
         });
 
@@ -97,6 +116,9 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
             const newSrc = srcsetParts[0].split(' ')[0];
             imgElement.attr('src', newSrc);
 
+            if (width) imgElement.attr('width', width);
+            if (height) imgElement.attr('height', height);
+
             // Chỉ thêm srcset nếu có nhiều hơn 1 ảnh nguồn
             if (sources.size > 1) {
                 imgElement.attr('srcset', srcsetParts.join(', '));
@@ -105,20 +127,16 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
             }
 
             // Áp dụng lazy loading
-            if (!imgElement.closest('section').is(sections.first())) {
+            if (!imgElement.closest('section').is(sections.first())) { // nếu không phải section đầu tiên
                 if (!imgElement.attr('loading')) imgElement.attr('loading', 'lazy');
+            }
+            else { // nếu là section đầu tiên
+                if (!imgElement.attr('fetchpriority')) imgElement.attr('fetchpriority', 'low');
             }
             if (!imgElement.attr('decoding')) imgElement.attr('decoding', 'async');
 
         } else {
             // --- XỬ LÝ CHO ẢNH RASTER: TẠO THẺ PICTURE ---
-            const webpSrcsetParts = [];
-            sources.forEach(({ descriptor }, imageName) => {
-                const processed = allUniqueImages.get(imageName);
-                if (processed && !processed.error) {
-                    webpSrcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.webp} ${descriptor}`.trim());
-                }
-            });
 
             const picture = $('<picture></picture>');
             picture.append($('<source>').attr({ srcset: webpSrcsetParts.join(', '), type: 'image/webp' }));
@@ -127,9 +145,15 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
             const fallbackSrc = srcsetParts[0].split(' ')[0];
             const newImg = $('<img>').attr(imgElement.attr()).attr('src', fallbackSrc).removeAttr('srcset');
 
+            if (width) newImg.attr('width', width);
+            if (height) newImg.attr('height', height);
+
             // Áp dụng lazy loading cho ảnh mới trong picture
             if (!imgElement.closest('section').is(sections.first())) {
                 if (!newImg.attr('loading')) newImg.attr('loading', 'lazy');
+            }
+            else { // nếu là section đầu tiên
+                if (!imgElement.attr('fetchpriority')) imgElement.attr('fetchpriority', 'low');
             }
             if (!newImg.attr('decoding')) newImg.attr('decoding', 'async');
 

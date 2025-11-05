@@ -23,10 +23,15 @@ async function optimizeImage(imageBuffer, originalFileName, outputDir, colors) {
             if (!fs.existsSync(filePath)) {
                 await fsp.writeFile(filePath, imageBuffer);
             }
+
+            const metadata = await sharp(imageBuffer).metadata();
+
             // Trả về một cấu trúc đơn giản, chỉ có fallback và đánh dấu là loại đặc biệt
             return {
                 fallback: originalFileName,
                 isSpecial: true,
+                width: metadata.width,
+                height: metadata.height,
             };
         } catch (error) {
             console.warn(`${colors.red}Error saving special file ${originalFileName}:${colors.reset}`, error);
@@ -35,6 +40,16 @@ async function optimizeImage(imageBuffer, originalFileName, outputDir, colors) {
     }
 
     // --- XỬ LÝ CÁC ĐỊNH DẠNG ẢNH CẦN TỐI ƯU (JPG, PNG, etc.) ---
+    let image;
+    let metadata;
+    try {
+        image = sharp(imageBuffer);
+        metadata = await image.metadata();
+    } catch (error) {
+        console.warn(`${colors.red}Error reading metadata for ${originalFileName}:${colors.reset}`, error);
+        return null; // Không thể xử lý nếu không đọc được metadata
+    }
+
     const webpFileName = `${imageName}.webp`;
     const fallbackFileName = `${imageName}-fallback${parsedPath.ext}`;
 
@@ -46,12 +61,12 @@ async function optimizeImage(imageBuffer, originalFileName, outputDir, colors) {
             webp: webpFileName,
             fallback: fallbackFileName,
             isSpecial: false,
+            width: metadata.width,
+            height: metadata.height,
         };
     }
 
     try {
-        const image = sharp(imageBuffer);
-        const metadata = await image.metadata();
         const optimizationPromises = [];
 
         if (!fs.existsSync(webpPath)) {
@@ -76,6 +91,8 @@ async function optimizeImage(imageBuffer, originalFileName, outputDir, colors) {
             webp: webpFileName,
             fallback: fallbackFileName,
             isSpecial: false,
+            width: metadata.width,
+            height: metadata.height,
         };
     } catch (error) {
         // console.warn(`${colors.red}Error optimizing image ${originalFileName}:${colors.reset}`, error);

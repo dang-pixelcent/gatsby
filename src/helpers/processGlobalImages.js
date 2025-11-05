@@ -93,6 +93,9 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
         const webpSrcsetParts = [];
         let isSpecial = false;
         let hasError = false;
+        let width = null;
+        let height = null;
+        let foundFirstValid = false;
 
         sources.forEach(({ descriptor }, imageName) => {
             const processed = allUniqueImages.get(imageName);
@@ -101,7 +104,12 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
                     hasError = true;
                     srcsetParts.push(`${processed.originalUrl} ${descriptor}`.trim());
                 } else {
-                    if (processed.isSpecial) isSpecial = true;
+                    if (!foundFirstValid) {
+                        width = processed.width;
+                        height = processed.height;
+                        isSpecial = processed.isSpecial || false;
+                        foundFirstValid = true;
+                    }
                     srcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.fallback} ${descriptor}`.trim());
                     if (processed.webp) {
                         webpSrcsetParts.push(`${DOWNLOADED_IMAGES_URL_PREFIX}/${processed.webp} ${descriptor}`.trim());
@@ -116,6 +124,9 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
         if (hasError || isSpecial) {
             const newSrc = srcsetParts[0].split(' ')[0];
             imgElement.attr('src', newSrc);
+            if (width) imgElement.attr('width', width);
+            if (height) imgElement.attr('height', height);
+
             if (sources.size > 1) {
                 imgElement.attr('srcset', srcsetParts.join(', '));
             } else {
@@ -129,6 +140,9 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
 
             const fallbackSrc = srcsetParts[0].split(' ')[0];
             const newImg = $('<img>').attr(imgElement.attr()).attr('src', fallbackSrc).removeAttr('srcset');
+            if (width) newImg.attr('width', width);
+            if (height) newImg.attr('height', height);
+
             picture.append(newImg);
             imgElement.replaceWith(picture);
         }
@@ -140,15 +154,15 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
         if (!img.attr('decoding')) img.attr('decoding', 'async');
 
         if (imageType === 'header') {
-            if (!img.hasClass('custom-logo')) {
-                if (!img.attr('loading')) img.attr('loading', 'lazy');
-            }
-
+            // if (!img.hasClass('custom-logo')) {
+            //     if (!img.attr('loading')) img.attr('loading', 'lazy');
+            // }
             //  if (img.hasClass('custom-logo')) {
-            //     if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'high');
+            //     if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'low');
             // } else {
             //     if (!img.attr('loading')) img.attr('loading', 'lazy');
             // }
+            if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'low');
         } else { // footer
             if (!img.attr('loading')) img.attr('loading', 'lazy');
         }

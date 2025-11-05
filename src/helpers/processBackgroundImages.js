@@ -83,22 +83,26 @@ async function processBackgroundImages({ $, sections, node, colors, DOWNLOADED_I
         const fallbackUrl = `${DOWNLOADED_IMAGES_URL_PREFIX}/${processedImage.fallback}`;
         const isFirstSection = (index === 0);
 
+        // Tạo thuộc tính chung cho thẻ <img>
+        const imageAttrs = {
+            'class': 'section-background-image',
+            'src': fallbackUrl,
+            'alt': 'Section background',
+            'decoding': 'async',
+            'width': processedImage.width,
+            'height': processedImage.height,
+            'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
+        };
+
+        if (isFirstSection) {
+            imageAttrs.fetchpriority = 'high';
+        } else {
+            imageAttrs.loading = 'lazy';
+        }
+
         if (processedImage.isSpecial) {
             // --- XỬ LÝ ẢNH ĐẶC BIỆT (SVG, GIF, WEBP): DÙNG THẺ IMG ---
-            const imageTag = $('<img>').attr({
-                'class': 'section-background-image',
-                'src': fallbackUrl,
-                'alt': 'Section background',
-                'decoding': 'async',
-                'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
-            });
-
-            if (isFirstSection) {
-                imageTag.attr('fetchpriority', 'high');
-            } else {
-                imageTag.attr('loading', 'lazy');
-            }
-
+            const imageTag = $('<img>').attr(imageAttrs);
             sectionEl.prepend(imageTag);
 
         } else {
@@ -108,20 +112,7 @@ async function processBackgroundImages({ $, sections, node, colors, DOWNLOADED_I
             picture.append($('<source>').attr({ srcset: webpUrl, type: 'image/webp' }));
             picture.append($('<source>').attr('srcset', fallbackUrl));
 
-            const imageTag = $('<img>').attr({
-                'class': 'section-background-image',
-                'src': fallbackUrl,
-                'alt': 'Section background',
-                'decoding': 'async',
-                'style': 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none;'
-            });
-
-            if (isFirstSection) {
-                imageTag.attr('fetchpriority', 'high');
-            } else {
-                imageTag.attr('loading', 'lazy');
-            }
-
+            const imageTag = $('<img>').attr(imageAttrs);
             picture.append(imageTag);
             sectionEl.prepend(picture);
         }
