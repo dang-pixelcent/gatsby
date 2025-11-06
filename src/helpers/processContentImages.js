@@ -153,7 +153,7 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
                 if (!newImg.attr('loading')) newImg.attr('loading', 'lazy');
             }
             else { // nếu là section đầu tiên
-                if (!imgElement.attr('fetchpriority')) imgElement.attr('fetchpriority', 'low');
+                if (!newImg.attr('fetchpriority')) newImg.attr('fetchpriority', 'low');
             }
             if (!newImg.attr('decoding')) newImg.attr('decoding', 'async');
 
