@@ -497,3 +497,51 @@
 .circle-item figure img {
     height: 5.20vw;
 }
+
+.gallery-slider img {
+    width: 100%;
+}
+
+@media only screen and (min-width: 922px) {
+    .events-video .cus-container {
+        aspect-ratio: 16 / 5;
+    }
+
+    .gallery-box .cus-container {
+        aspect-ratio: 16 / 3;
+    }
+}
+
+@media only screen and (max-width: 922px) {
+    .events-video .cus-container {
+        aspect-ratio: 16 / 10;
+    }
+
+    .gallery-box .cus-container {
+        aspect-ratio: 16 / 8;
+    }
+
+    .slick-slide {
+        height: 200px !important;
+    }
+
+    .gallery-slider img {
+        height: 100% !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .team-list .item {
+        min-height: 326px;
+    }
+
+    .team-list {
+        min-height: 3160px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .team-list {
+        min-height: 600px;
+    }
+}
