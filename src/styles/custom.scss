@@ -486,3 +486,14 @@
     visibility: visible !important;
     transition: opacity 0.3s linear !important;
 }
+
+
+.circle-item figure {
+    width: 100%;
+    height: auto !important;
+    margin-bottom: 12px;
+}
+
+.circle-item figure img {
+    height: 5.20vw;
+}
