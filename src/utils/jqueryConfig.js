@@ -1,8 +1,9 @@
-import { slickCarouselPlugin, lightbox2Plugin } from '@src/script-handlers/script-plugins';
+import { slickCarouselPlugin, serviceSlickSliderPlugin, lightbox2Plugin } from '@src/script-handlers/script-plugins';
 export const getJqueryPlugins = (uri) => {
     // mảng chứa cấu hình để tải jQuery cho các script cần jQuery
     const jqueryPlugins = [
         slickCarouselPlugin,
+        serviceSlickSliderPlugin,
     ];
 
     // mảng chứa uri cần lightbox (có thể mở rộng)

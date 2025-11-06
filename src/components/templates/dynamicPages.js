@@ -18,7 +18,7 @@ import { Helmet } from "react-helmet";
 // import LazySection from '@components/Tools/LazySection';
 // import LazySectionDynamic from '@components/sectionLazyDynamic';
 
-const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
+// const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
 const DomReplacer = loadable(() => import('@components/Tools/DomReplacer'));
@@ -155,12 +155,13 @@ const Home = ({ pageContext }) => {
           </Suspense>
         ) : null}
 
-        <DomInjector selector=".col-slider">
-          {/* 4. Bọc component "lười biếng" trong Suspense */}
-          <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
+        {/* <DomInjector selector=".col-slider"> */}
+        {/* 4. Bọc component "lười biếng" trong Suspense */}
+        {/* <Suspense fallback={<img src="/loading.gif" alt="Loading..." />}>
             <LazyServiceSlider />
-          </Suspense>
-        </DomInjector>
+          </Suspense> */}
+        {/* </DomInjector> */}
+
       </Layout>
       {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script

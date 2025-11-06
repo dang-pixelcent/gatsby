@@ -36,6 +36,43 @@ export const slickCarouselPlugin = {
     }
 };
 
+/**
+ * Cấu hình riêng cho Service Hero Slider (.service-slider-hero).
+ */
+export const serviceSlickSliderPlugin = {
+    id: 'slick-service-slider',
+    // Chỉ tải plugin này nếu có phần tử .service-slider-hero trên trang.
+    shouldLoad: () => document.querySelector('.service-slider-hero') !== null,
+
+    // Các file CSS và JS này giống hệt với plugin ở trên.
+    // Hook `useJqueryPlugins` sẽ đủ thông minh để chỉ tải mỗi file một lần.
+    css: [
+        "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css",
+        "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"
+    ],
+    js: "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js",
+
+    initialize: ($) => {
+        if ($.fn.slick) {
+            const serviceSlider = $(".service-slider-hero");
+            if (serviceSlider.length > 0 && !serviceSlider.hasClass('slick-initialized')) {
+                // console.log('Slick Carousel loaded and ready. Initializing .service-slider-hero...');
+                serviceSlider.slick({
+                    infinite: true,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 1000,
+                    cssEase: 'ease',
+                    speed: 1500,
+                    arrows: false,
+                    dots: false,
+                });
+            }
+        }
+    }
+};
+
 export const lightbox2Plugin = {
     id: 'lightbox2',
     css: 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css',
