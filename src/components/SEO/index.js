@@ -182,6 +182,14 @@ export const SEO = ({
             <link href="https://dashboard.wellnessclinicmarketing.com" rel="preconnect" />
             <link href="https://d6e924dfdd9047e58ab4d02edbc3ed70.js.ubembed.com" rel="preconnect" /> */}
 
+            <link
+                rel="preload"
+                href="/fonts/Soleto-XBold.woff2"
+                as="font"
+                type="font/woff2"
+                crossOrigin="anonymous"
+                key="soleto-xbold"
+            />
 
         </>
     )
