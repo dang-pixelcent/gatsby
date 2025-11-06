@@ -154,15 +154,15 @@ async function processGlobalImages({ html, imageType, colors, DOWNLOADED_IMAGES_
         if (!img.attr('decoding')) img.attr('decoding', 'async');
 
         if (imageType === 'header') {
-            // if (!img.hasClass('custom-logo')) {
-            //     if (!img.attr('loading')) img.attr('loading', 'lazy');
-            // }
+            if (!img.hasClass('custom-logo')) {
+                if (!img.attr('loading')) img.attr('loading', 'lazy');
+            }
             //  if (img.hasClass('custom-logo')) {
             //     if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'low');
             // } else {
             //     if (!img.attr('loading')) img.attr('loading', 'lazy');
             // }
-            if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'low');
+            // if (!img.attr('fetchpriority')) img.attr('fetchpriority', 'low');
         } else { // footer
             if (!img.attr('loading')) img.attr('loading', 'lazy');
         }
