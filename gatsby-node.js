@@ -486,56 +486,56 @@ exports.createPages = async ({ actions, graphql }) => {
     const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
     const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
-    // Bước 3: lưu snippets riêng vào cache
+    // Bước 3: xử lý htmlsnippets từng page
+    let cmsSafeSnippets = []; // Cho ld+json
+    let cmsDangerousSnippets = []; // Cho script thực thi
+    let cmsNoscriptSnippets = []; // Cho <noscript>
+
     if (node.htmlSnippets) {
-      const slug = node.uri.replace(/\//g, '') || 'homepage';
-      const snippetPath = path.join(SNIPPETS_CACHE_DIR, `${slug}.json`);
-      try {
-        fs.writeFileSync(snippetPath, JSON.stringify(node.htmlSnippets));
-        console.log(`${colors.green}Page snippets saved for: ${node.uri}${colors.reset}`);
-      } catch (error) {
-        console.error(`${colors.red}Error saving snippets for ${node.uri}:${colors.reset}`, error);
-      }
+      const { headerHtml, footerHtml, bodyOpenHtml } = node.htmlSnippets;
+
+      // Hàm trợ giúp để quét HTML, dùng lại cheerio
+      const parseSnippets = (htmlString) => {
+        if (!htmlString || htmlString.trim() === '') return;
+        const $s = cheerio.load(htmlString, { decodeEntities: false });
+
+        // 1. Tìm script thực thi và script JSON-LD
+        $s('script').each((i, el) => {
+          const $script = $s(el);
+          const type = $script.attr('type');
+          const src = $script.attr('src');
+          const content = $script.html();
+          const props = $script.attr(); // Lấy tất cả props (id, data-uuid...)
+
+          if (type === 'application/ld+json') {
+            // AN TOÀN: Đây là schema
+            try {
+              // Lưu trữ dưới dạng object JSON, không phải chuỗi
+              cmsSafeSnippets.push(JSON.parse(content));
+            } catch (e) {
+              console.warn(`${colors.yellow}Lỗi parse JSON-LD: ${e.message}${colors.reset}`);
+            }
+          } else {
+            // NGUY HIỂM: Đây là script thực thi
+            cmsDangerousSnippets.push({
+              src: src || null,
+              content: content || null,
+              props: props // Lưu tất cả props (async, id, etc)
+            });
+          }
+        });
+
+        // 2. Tìm thẻ <noscript> (thường trong bodyOpenHtml)
+        $s('noscript').each((i, el) => {
+          cmsNoscriptSnippets.push($s(el).html()); // Lấy HTML bên trong noscript
+        });
+      };
+
+      // Quét tất cả các snippet
+      parseSnippets(headerHtml);
+      parseSnippets(footerHtml);
+      parseSnippets(bodyOpenHtml);
     }
-
-
-    // let aboveTheFoldHtml = cleanedHtml;
-    // let belowTheFoldSections = [];
-
-    // if (cleanedHtml && cleanedHtml.trim().length > 0) {
-    //   const $ = cheerio.load(cleanedHtml, { decodeEntities: false });
-
-    //   // Bước 1: Tìm tất cả các section trong toàn bộ tài liệu
-    //   const sections = $('section');
-
-    //   // Nếu có nhiều hơn 1 section, chúng ta mới tiến hành tách
-    //   if (sections.length > 2) {
-    //     let belowTheFoldHtmlStrings = [];
-
-    //     // Lặp từ section thứ hai trở đi
-    //     sections.slice(2).each((index, sectionEl) => {
-    //       let currentBlockHtml = '';
-    //       let currentEl = $(sectionEl).prev();
-
-    //       // Gom tất cả các thẻ "anh em" đứng trước section này
-    //       // cho đến khi gặp một section khác hoặc hết thẻ
-    //       while (currentEl.length > 0 && !currentEl.is('section')) {
-    //         currentBlockHtml = $.html(currentEl) + currentBlockHtml;
-    //         currentEl.remove(); // Gỡ bỏ thẻ đã gom
-    //         currentEl = $(sectionEl).prev(); // Lấy lại thẻ prev sau khi đã xóa
-    //       }
-
-    //       // Gom nốt chính thẻ section này
-    //       currentBlockHtml += $.html(sectionEl);
-    //       $(sectionEl).remove(); // Gỡ bỏ chính nó
-
-    //       belowTheFoldHtmlStrings.push(currentBlockHtml);
-    //     });
-
-    //     belowTheFoldSections = belowTheFoldHtmlStrings;
-    //     aboveTheFoldHtml = $('body').html(); // Phần còn lại là above-the-fold
-    //   }
-    // }
 
     return {
       ...node,
@@ -547,6 +547,9 @@ exports.createPages = async ({ actions, graphql }) => {
       metaHtml: processedSeo.metaHtml || null,
       schemas: processedSeo.schemas || [],
       // bgbanner: bgbanner || null
+      cmsSafeSnippets: cmsSafeSnippets,     // Mảng các object JSON-LD
+      cmsDangerousSnippets: cmsDangerousSnippets, // Mảng các script (src, content, props)
+      cmsNoscriptSnippets: cmsNoscriptSnippets
     };
   };
 
@@ -598,19 +601,19 @@ exports.createPages = async ({ actions, graphql }) => {
 
 
   /** Lưu tracking codes vào cache */
-  if (data.cms.htmlSnippets) {
-    const snippetsData = data.cms.htmlSnippets;
-    const cacheDir = path.join(__dirname, '.cache');
-    // Đổi tên file cache cho rõ nghĩa hơn
-    const snippetsCachePath = path.join(cacheDir, 'global-html-snippets.json');
-    try {
-      if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
-      fs.writeFileSync(snippetsCachePath, JSON.stringify(snippetsData, null, 2));
-      console.log(`${colors.green}Global HTML snippets saved to cache.${colors.reset}`);
-    } catch (error) {
-      console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
-    }
-  }
+  // if (data.cms.htmlSnippets) {
+  //   const snippetsData = data.cms.htmlSnippets;
+  //   const cacheDir = path.join(__dirname, '.cache');
+  //   // Đổi tên file cache cho rõ nghĩa hơn
+  //   const snippetsCachePath = path.join(cacheDir, 'global-html-snippets.json');
+  //   try {
+  //     if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+  //     fs.writeFileSync(snippetsCachePath, JSON.stringify(snippetsData, null, 2));
+  //     console.log(`${colors.green}Global HTML snippets saved to cache.${colors.reset}`);
+  //   } catch (error) {
+  //     console.error(`${colors.red}Error saving global snippets:${colors.reset}`, error);
+  //   }
+  // }
 };
 // ===================END PHẦN TẠO TRANG=======================
 

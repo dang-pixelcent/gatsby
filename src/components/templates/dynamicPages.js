@@ -28,7 +28,9 @@ const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHan
 const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
 // const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
 const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector'));
-const LazySectionDynamic = loadable(() => import('@components/sectionLazyDynamic'));
+// const LazySectionDynamic = loadable(() => import('@components/sectionLazyDynamic'));
+
+const LazyCmsScripts = loadable(() => import('@components/Tools/LazyCmsScripts'));
 
 // flag kiểm soát tính năng
 // const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -43,8 +45,25 @@ const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 //   return configKey ? SCRIPT_HANDLING_CONFIG[configKey] : DEFAULT_SCRIPT_HANDLING;
 // };
 
+// Component Noscript (đơn giản, không cần lazy-load)
+const NoscriptInjector = ({ snippets = [] }) => (
+  <>
+    {snippets.map((snippet, i) => (
+      <noscript key={`cms-noscript-${i}`} dangerouslySetInnerHTML={{ __html: snippet }} />
+    ))}
+  </>
+);
+
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml, scripts = [], specialScripts = [], uri, schemas } = pageContext;
+  const { flexibleContentHtml,
+    scripts = [],
+    specialScripts = [],
+    uri,
+    schemas,
+    cmsSafeSnippets = [],
+    cmsDangerousSnippets = [],
+    cmsNoscriptSnippets = []
+  } = pageContext;
 
   // --- Cấu hình các plugin jQuery cần dùng cho trang này ---
   // Gọi hook quản lý tập trung
@@ -62,83 +81,15 @@ const Home = ({ pageContext }) => {
       <link key={`preload-${index}`} {...script.props} />
     ));
 
-  // const isMobile = useIsMobile();
-  // const [isLcpDelayed, setLcpDelayed] = useState(false);
-  // const [isLcpDelayed2, setLcpDelayed2] = useState(false);
-
-  // 1. Hook này chỉ để kích hoạt state isLcpDelayed sau một khoảng thời gian
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLcpDelayed(true);
-  //   }, isMobile ? 150 : 0); // Delay 150ms trên mobile, desktop thì không delay
-  //   return () => clearTimeout(timer);
-  // }, [isMobile]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLcpDelayed2(true);
-  //   }, 100); // Delay 100ms trên mobile, desktop thì không delay
-  //   return () => clearTimeout(timer);
-  // }, []);
-
-
-  // 2. Hook này thực hiện việc ẩn/hiện các phần tử dựa trên isLcpDelayed
-  // useEffect(() => {
-  //   const banner = document.querySelector('.home-banner');
-  //   const boxDesktop = document.querySelector('.box-desktop');
-  //   const boxMobile = document.querySelector('.box-mobile');
-
-  //   if (!banner) return; // Nếu không có banner thì không làm gì cả
-
-  //   if (!isLcpDelayed) {
-  //     // --- GIAI ĐOẠN BAN ĐẦU (TRƯỚC KHI DELAY) ---
-  //     if (isMobile) {
-  //       // Trên mobile, ẩn ảnh nền và box mobile
-  //       if (bgbanner) banner.classList.add('bannerSection');
-  //       if (boxMobile) boxMobile.classList.add('lcp-hidden');
-  //     }
-  //     // Ẩn box desktop trên mọi thiết bị ban đầu
-  //     if (boxDesktop) boxDesktop.classList.add('lcp-hidden');
-
-  //   } else {
-  //     // --- GIAI ĐOẠN SAU KHI DELAY ---
-  //     // Tải lại ảnh nền nếu có
-
-  //     // Hiện các box
-  //     if (boxDesktop) {
-  //       boxDesktop.classList.remove('lcp-hidden');
-  //       boxDesktop.classList.add('lcp-visible');
-  //     }
-  //     if (boxMobile) {
-  //       boxMobile.classList.remove('lcp-hidden');
-  //       boxMobile.classList.add('lcp-visible');
-  //     }
-  //   }
-
-
-
-
-  // }, [isLcpDelayed, isMobile, flexibleContentHtml]);
-
-  // useEffect(() => {
-  //   const banner = document.querySelector('.home-banner');
-
-  //   if (bgbanner) {
-  //     banner.classList.add('bannerSection');
-  //     const img = new Image();
-  //     img.src = bgbanner;
-  //     img.onload = () => {
-  //       banner.style.backgroundImage = `url('${bgbanner}')`;
-  //       banner.classList.remove('bannerSection');
-  //     };
-  //   }
-  // }, [bgbanner]);
-
   return (
     <React.Fragment>
       <Helmet>
         {preloadLinks}
       </Helmet>
+
+      {/* Tiêm các thẻ <noscript> */}
+      <NoscriptInjector snippets={cmsNoscriptSnippets} />
+
       <Layout>
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
 
@@ -163,7 +114,7 @@ const Home = ({ pageContext }) => {
         {/* </DomInjector> */}
 
       </Layout>
-      {schemas && schemas.length > 0 && schemas.map((schema, index) => (
+      {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script
           key={`schema-ld-${index}`}
           type="application/ld+json"
@@ -173,7 +124,25 @@ const Home = ({ pageContext }) => {
             __html: JSON.stringify(schema),
           }}
         />
+      ))} */}
+
+      {/* GỘP 2 NGUỒN SCHEMA LẠI VÀ RENDER (AN TOÀN) */}
+      {[...schemas, ...cmsSafeSnippets].map((schema, index) => (
+        <Script
+          key={`schema-ld-${index}`}
+          type="application/ld+json"
+          className="rank-math-schema-pro"
+          strategy="post-hydrate" // Tải khi rảnh
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
       ))}
+
+      {/* TẢI LƯỜI CÁC SCRIPT NGUY HIỂM TỪ CMS */}
+      <Suspense fallback={null}>
+        <LazyCmsScripts scripts={cmsDangerousSnippets} />
+      </Suspense>
 
       {/* Tiêm các script động vào cuối body */}
       <Suspense fallback={null}>
