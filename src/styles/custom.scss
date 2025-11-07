@@ -547,13 +547,13 @@
 }
 
 @media only screen and (max-width: 1922px) {
-    .get-started-content.get-started-video {
+    .get-started-content.get-started-video .cus-container {
         aspect-ratio: 15/10;
     }
 }
 
 @media only screen and (max-width: 768px) {
-    .get-started-content.get-started-video {
+    .get-started-content.get-started-video .cus-container {
         aspect-ratio: unset;
         min-height: 1637px;
     }
