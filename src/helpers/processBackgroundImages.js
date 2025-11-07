@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const axios = require('axios');
-const optimizeImage = require('./optimizeImage'); // Tái sử dụng helper tối ưu ảnh
+const { downloadAndProcessImage } = require('./imageProcessingQueue'); // Sử dụng hàm mới
 
 /**
  * Tìm và xử lý các ảnh nền (background-image) trong các section và các phần tử con của chúng.
@@ -19,6 +18,7 @@ const optimizeImage = require('./optimizeImage'); // Tái sử dụng helper t�
  */
 async function processBackgroundImages({ $, sections, node, colors, DOWNLOADED_IMAGES_DIR, DOWNLOADED_IMAGES_URL_PREFIX, specialScripts }) {
     let isLcpBackgroundAssigned = false; // Flag để đánh dấu ảnh LCP đã được chỉ định hay chưa.
+    const processedCache = new Map(); // Cache để tránh xử lý lại cùng một ảnh trong một lần chạy
 
     // Duyệt qua từng section để xác định ngữ cảnh (ví dụ: có phải section đầu tiên không)
     for (const [index, section] of sections.toArray().entries()) {
@@ -61,24 +61,20 @@ async function processBackgroundImages({ $, sections, node, colors, DOWNLOADED_I
             for (const urlToTry of potentialUrls) {
                 try {
                     const imageName = path.basename(new URL(urlToTry).pathname);
-                    const originalImagePath = path.join(DOWNLOADED_IMAGES_DIR, imageName);
+                    // Sử dụng hàm xử lý mới với cache
+                    const result = await downloadAndProcessImage(imageName, urlToTry, DOWNLOADED_IMAGES_DIR, colors, processedCache);
 
-                    if (!fs.existsSync(originalImagePath)) {
-                        const response = await axios({ url: urlToTry, method: 'GET', responseType: 'arraybuffer', timeout: 15000 });
-                        await fs.promises.writeFile(originalImagePath, response.data);
-                    }
-
-                    const imageBuffer = await fs.promises.readFile(originalImagePath);
-                    processedImage = await optimizeImage(imageBuffer, imageName, DOWNLOADED_IMAGES_DIR, colors);
-
-                    if (processedImage) {
+                    if (result && !result.error) {
+                        processedImage = result;
                         console.log(`${colors.green}Successfully processed background for element in ${node.uri}${colors.reset}`);
-                        break;
+                        break; // Thoát vòng lặp khi xử lý thành công một URL
                     }
                 } catch (error) {
-                    console.warn(`${colors.yellow} -> Failed to process background URL ${urlToTry}: ${error.message}. Trying next...${colors.reset}`);
+                    // Lỗi đã được log bên trong downloadAndProcessImage, chỉ cần tiếp tục
+                    console.warn(`${colors.yellow} -> Failed to process background URL ${urlToTry}. Trying next...${colors.reset}`);
                 }
             }
+
 
             if (!processedImage) {
                 console.warn(`${colors.red}All potential background URLs failed for an element on page ${node.uri}.${colors.reset}`);

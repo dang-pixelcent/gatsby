@@ -1,7 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
-const optimizeImage = require('./optimizeImage');
+// const optimizeImage = require('./optimizeImage');
+const { processImageTasks } = require('./imageProcessingQueue');
 
 /**
  * Xử lý, tải, tối ưu hóa và thay thế các thẻ <img> trong nội dung HTML.
@@ -50,31 +51,16 @@ async function processContentImages({ $, sections, node, colors, DOWNLOADED_IMAG
     if (imagesToProcess.size === 0) return;
 
     // --- 2. TẢI VÀ XỬ LÝ TẤT CẢ ẢNH DUY NHẤT ---
-    const allUniqueImages = new Map();
+    const uniqueImageTasks = new Map();
     imagesToProcess.forEach(sources => {
         sources.forEach(({ url }, imageName) => {
-            if (!allUniqueImages.has(imageName)) {
-                allUniqueImages.set(imageName, url);
+            if (!uniqueImageTasks.has(imageName)) {
+                uniqueImageTasks.set(imageName, url);
             }
         });
     });
 
-    const processingPromises = Array.from(allUniqueImages.entries()).map(async ([imageName, url]) => {
-        const originalImagePath = path.join(DOWNLOADED_IMAGES_DIR, imageName);
-        try {
-            if (!fs.existsSync(originalImagePath)) {
-                const response = await axios({ url, method: 'GET', responseType: 'arraybuffer', timeout: 15000 });
-                await fs.promises.writeFile(originalImagePath, response.data);
-            }
-            const imageBuffer = await fs.promises.readFile(originalImagePath);
-            const processed = await optimizeImage(imageBuffer, imageName, DOWNLOADED_IMAGES_DIR, colors);
-            allUniqueImages.set(imageName, processed || { error: true, original: imageName });
-        } catch (error) {
-            console.warn(`${colors.yellow}Failed to download/process ${url}: ${error.message}${colors.reset}`);
-            allUniqueImages.set(imageName, { error: true, original: imageName });
-        }
-    });
-    await Promise.all(processingPromises);
+    const allUniqueImages = await processImageTasks(Array.from(uniqueImageTasks.entries()), DOWNLOADED_IMAGES_DIR, colors);
 
     // --- 3. CẬP NHẬT LẠI HTML ---
     imagesToProcess.forEach((sources, imgElement) => {
