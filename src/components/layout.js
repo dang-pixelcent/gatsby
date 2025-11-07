@@ -1,6 +1,7 @@
 import React, { useState, Suspense } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import loadable from '@loadable/component';
+import LazyTrackingScripts from '@components/Tracking/LazyTrackingScripts';
 // Import Tailwind CSS trước
 // import './src/styles/tailwind.css';
 
@@ -124,6 +125,7 @@ const DefaultLayout = ({ children }) => {
         <ScrollTop />
       </Suspense>
       <ChatWidget />
+      <LazyTrackingScripts />
     </React.Fragment>
   )
 }
