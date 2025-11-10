@@ -11,16 +11,22 @@ const LazyCmsScripts = ({ scripts = [] }) => {
             window.removeEventListener('scroll', handleInteraction, { capture: true });
             window.removeEventListener('mousemove', handleInteraction, { capture: true });
             window.removeEventListener('touchstart', handleInteraction, { capture: true });
+            window.removeEventListener('click', handleInteraction, { capture: true });
+            window.removeEventListener('keydown', handleInteraction, { capture: true });
         };
 
         window.addEventListener('scroll', handleInteraction, { once: true, passive: true, capture: true });
         window.addEventListener('mousemove', handleInteraction, { once: true, passive: true, capture: true });
         window.addEventListener('touchstart', handleInteraction, { once: true, passive: true, capture: true });
+        window.addEventListener('click', handleInteraction, { once: true, passive: true, capture: true });
+        window.addEventListener('keydown', handleInteraction, { once: true, passive: true, capture: true });
 
         return () => {
             window.removeEventListener('scroll', handleInteraction, { capture: true });
             window.removeEventListener('mousemove', handleInteraction, { capture: true });
             window.removeEventListener('touchstart', handleInteraction, { capture: true });
+            window.removeEventListener('click', handleInteraction, { capture: true });
+            window.removeEventListener('keydown', handleInteraction, { capture: true });
         };
     }, [hasInteracted]);
 
@@ -41,7 +47,7 @@ const LazyCmsScripts = ({ scripts = [] }) => {
                     return (
                         <Script
                             key={`cms-script-${index}`}
-                            strategy="idle"
+                            // strategy="idle"
                             src={script.src}
                             {...scriptProps} // Truyền tất cả props
                         />
@@ -52,7 +58,7 @@ const LazyCmsScripts = ({ scripts = [] }) => {
                     return (
                         <Script
                             key={`cms-script-${index}`}
-                            strategy="idle"
+                            // strategy="idle"
                             {...scriptProps}
                             dangerouslySetInnerHTML={{ __html: script.content }}
                         />
