@@ -32,7 +32,7 @@ const LazyCmsScripts = ({ scripts = [] }) => {
 
         // --- 3. HẸN GIỜ TỰ ĐỘNG (Cách 2 - "Failsafe") ---
         // Tự động kích hoạt sau 2.5 giây nếu không có tương tác
-        timerId = setTimeout(triggerLoad, 1000);
+        timerId = setTimeout(triggerLoad, 4000);
 
         // Hàm dọn dẹp cuối cùng (nếu component bị gỡ bỏ)
         return () => {
