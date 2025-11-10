@@ -26,9 +26,9 @@ module.exports = () => {
     // --- PHẦN TẠO THƯ MỤC CẦN THIẾT ---//
     const dirsToCreate = [
         path.join(rootDir, '.cache/headerfooter'),
-        path.join(rootDir, '.cache/page-snippets'),
+        // path.join(rootDir, '.cache/page-snippets'),
         path.join(rootDir, 'cache/seo'),
-        path.join(rootDir, 'public/extracted-scripts'),
+        // path.join(rootDir, 'public/extracted-scripts'),
         path.join(rootDir, 'public/images-buildtime'),
     ];
 
