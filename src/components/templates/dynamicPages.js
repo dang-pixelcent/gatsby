@@ -13,6 +13,7 @@ import useLazyEmbedRenderer from '@hooks/useLazyEmbedRenderer';
 import useJqueryPlugins from '@hooks/useJqueryPlugins';
 import { getJqueryPlugins } from "@src/utils/jqueryConfig";
 import { Helmet } from "react-helmet";
+import CmsScriptsForHead from "@components/Tools/CmsScriptsForHead";
 // import useIsMobile from '@hooks/useIsMobile';
 
 // import LazySection from '@components/Tools/LazySection';
@@ -31,6 +32,7 @@ const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector')
 // const LazySectionDynamic = loadable(() => import('@components/sectionLazyDynamic'));
 
 const LazyCmsScripts = loadable(() => import('@components/Tools/LazyCmsScripts'));
+
 
 // flag kiểm soát tính năng
 // const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -59,10 +61,11 @@ const Home = ({ pageContext }) => {
     scripts = [],
     specialScripts = [],
     uri,
-    schemas,
-    cmsSafeSnippets = [],
-    cmsDangerousSnippets = [],
-    cmsNoscriptSnippets = []
+    schemas = [],
+    mergedCmsNoscriptSnippets = [],
+    mergedCmsSafeSnippets = [],
+    mergedHeaderSnippets = [],
+    mergedFooterSnippets = []
   } = pageContext;
 
   // --- Cấu hình các plugin jQuery cần dùng cho trang này ---
@@ -88,7 +91,7 @@ const Home = ({ pageContext }) => {
       </Helmet>
 
       {/* Tiêm các thẻ <noscript> */}
-      <NoscriptInjector snippets={cmsNoscriptSnippets} />
+      <NoscriptInjector snippets={mergedCmsNoscriptSnippets} />
 
       <Layout>
         <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
@@ -126,8 +129,9 @@ const Home = ({ pageContext }) => {
         />
       ))} */}
 
+
       {/* GỘP 2 NGUỒN SCHEMA LẠI VÀ RENDER (AN TOÀN) */}
-      {[...schemas, ...cmsSafeSnippets].map((schema, index) => (
+      {[...schemas, ...mergedCmsSafeSnippets].map((schema, index) => (
         <Script
           key={`schema-ld-${index}`}
           type="application/ld+json"
@@ -141,8 +145,10 @@ const Home = ({ pageContext }) => {
 
       {/* TẢI LƯỜI CÁC SCRIPT NGUY HIỂM TỪ CMS */}
       <Suspense fallback={null}>
-        <LazyCmsScripts scripts={cmsDangerousSnippets} />
+        <LazyCmsScripts scripts={mergedFooterSnippets} />
       </Suspense>
+
+      <CmsScriptsForHead scripts={mergedHeaderSnippets} />
 
       {/* Tiêm các script động vào cuối body */}
       <Suspense fallback={null}>
@@ -153,10 +159,12 @@ const Home = ({ pageContext }) => {
   )
 }
 export const Head = ({ pageContext }) => (
-  <SEO
-    metaHtml={pageContext.metaHtml || {}}
-  // schemas={pageContext.schemas || []}
-  />
+  <>
+    <SEO
+      metaHtml={pageContext.metaHtml || {}}
+    // schemas={pageContext.schemas || []}
+    />
+  </>
 );
 
 export default Home

@@ -316,6 +316,50 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
 }
 /** ==========================END PHẦN TẠO TRANG PHÂN TRANG CHO CATEGORIES========================== */
 
+const parseSnippets = (htmlString) => {
+  let cmsSafeSnippets = []; // Cho ld+json
+  let cmsDangerousSnippets = []; // Cho script thực thi
+  let cmsNoscriptSnippets = []; // Cho <noscript>
+
+  // Sửa lại logic: chỉ phân tích khi có htmlString
+  if (htmlString && htmlString.trim() !== '') {
+    const $s = cheerio.load(htmlString, { decodeEntities: false });
+
+    // 1. Tìm script thực thi và script JSON-LD
+    $s('script').each((i, el) => {
+      const $script = $s(el);
+      const type = $script.attr('type');
+      const src = $script.attr('src');
+      const content = $script.html();
+      const props = $script.attr(); // Lấy tất cả props (id, data-uuid...)
+
+      if (type === 'application/ld+json') {
+        // AN TOÀN: Đây là schema
+        try {
+          // Lưu trữ dưới dạng object JSON, không phải chuỗi
+          cmsSafeSnippets.push(JSON.parse(content));
+        } catch (e) {
+          console.warn(`${colors.yellow}Lỗi parse JSON-LD: ${e.message}${colors.reset}`);
+        }
+      } else {
+        // NGUY HIỂM: Đây là script thực thi
+        cmsDangerousSnippets.push({
+          src: src || null,
+          content: content || null,
+          props: props // Lưu tất cả props (async, id, etc)
+        });
+      }
+    });
+
+    // 2. Tìm thẻ <noscript> (thường trong bodyOpenHtml)
+    $s('noscript').each((i, el) => {
+      cmsNoscriptSnippets.push($s(el).html()); // Lấy HTML bên trong noscript
+    });
+  }
+
+  // Luôn luôn trả về object, dù nó có rỗng hay không
+  return { cmsSafeSnippets, cmsDangerousSnippets, cmsNoscriptSnippets };
+};
 
 /** ==========================PHẦN TẠO TRANG PHỔ THÔNG============================= */
 exports.createPages = async ({ actions, graphql }) => {
@@ -376,6 +420,26 @@ exports.createPages = async ({ actions, graphql }) => {
     throw new Error("Main GraphQL query failed!");
   }
   const { data } = result;
+
+  // lấy snippets chung
+  const snippetsData = data.cms.htmlSnippets;
+  // const allSnippetsHtml = snippetsData.headerHtml + snippetsData.footerHtml + snippetsData.bodyOpenHtml;
+  const globalHeaderSnippets = parseSnippets(snippetsData.headerHtml);
+  const globalFooterSnippets = parseSnippets(snippetsData.footerHtml);
+  const globalBodyOpenSnippets = parseSnippets(snippetsData.bodyOpenHtml);
+
+  const globalCmsSafeSnippets = [
+    ...globalHeaderSnippets.cmsSafeSnippets,
+    ...globalFooterSnippets.cmsSafeSnippets,
+    ...globalBodyOpenSnippets.cmsSafeSnippets
+  ];
+
+  const globalCmsNoscriptSnippets = [
+    ...globalHeaderSnippets.cmsNoscriptSnippets,
+    ...globalFooterSnippets.cmsNoscriptSnippets,
+    ...globalBodyOpenSnippets.cmsNoscriptSnippets
+  ];
+
 
   //======================PHẦN CHÍNH===================================
   // XỬ LÝ BLOGs với phân trang
@@ -487,54 +551,48 @@ exports.createPages = async ({ actions, graphql }) => {
     // Bước 2: Xử lý script trên HTML đã được cập nhật
     const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
     // Bước 3: xử lý htmlsnippets từng page
-    let cmsSafeSnippets = []; // Cho ld+json
-    let cmsDangerousSnippets = []; // Cho script thực thi
-    let cmsNoscriptSnippets = []; // Cho <noscript>
+    let mergedCmsSafeSnippets = [...globalCmsSafeSnippets];
+    let mergedCmsNoscriptSnippets = [...globalCmsNoscriptSnippets];
+    let mergedHeaderSnippets = [
+      ...globalHeaderSnippets.cmsDangerousSnippets,
+    ];
+    let mergedFooterSnippets = [
+      ...globalFooterSnippets.cmsDangerousSnippets,
+      ...globalBodyOpenSnippets.cmsDangerousSnippets
+    ];
 
     if (node.htmlSnippets) {
       const { headerHtml, footerHtml, bodyOpenHtml } = node.htmlSnippets;
+      // const htmlSnippets = headerHtml + footerHtml + bodyOpenHtml;
+      const headerSnippets = parseSnippets(headerHtml);
+      const footerSnippets = parseSnippets(footerHtml);
+      const bodyOpenSnippets = parseSnippets(bodyOpenHtml);
 
-      // Hàm trợ giúp để quét HTML, dùng lại cheerio
-      const parseSnippets = (htmlString) => {
-        if (!htmlString || htmlString.trim() === '') return;
-        const $s = cheerio.load(htmlString, { decodeEntities: false });
+      mergedCmsSafeSnippets = [
+        ...globalCmsSafeSnippets,
+        ...headerSnippets.cmsSafeSnippets,
+        ...footerSnippets.cmsSafeSnippets,
+        ...bodyOpenSnippets.cmsSafeSnippets
+      ];
 
-        // 1. Tìm script thực thi và script JSON-LD
-        $s('script').each((i, el) => {
-          const $script = $s(el);
-          const type = $script.attr('type');
-          const src = $script.attr('src');
-          const content = $script.html();
-          const props = $script.attr(); // Lấy tất cả props (id, data-uuid...)
+      mergedCmsNoscriptSnippets = [
+        ...globalCmsNoscriptSnippets,
+        ...headerSnippets.cmsNoscriptSnippets,
+        ...footerSnippets.cmsNoscriptSnippets,
+        ...bodyOpenSnippets.cmsNoscriptSnippets
+      ];
 
-          if (type === 'application/ld+json') {
-            // AN TOÀN: Đây là schema
-            try {
-              // Lưu trữ dưới dạng object JSON, không phải chuỗi
-              cmsSafeSnippets.push(JSON.parse(content));
-            } catch (e) {
-              console.warn(`${colors.yellow}Lỗi parse JSON-LD: ${e.message}${colors.reset}`);
-            }
-          } else {
-            // NGUY HIỂM: Đây là script thực thi
-            cmsDangerousSnippets.push({
-              src: src || null,
-              content: content || null,
-              props: props // Lưu tất cả props (async, id, etc)
-            });
-          }
-        });
+      mergedHeaderSnippets = [
+        ...headerSnippets.cmsDangerousSnippets,
+        ...globalHeaderSnippets.cmsDangerousSnippets
+      ];
 
-        // 2. Tìm thẻ <noscript> (thường trong bodyOpenHtml)
-        $s('noscript').each((i, el) => {
-          cmsNoscriptSnippets.push($s(el).html()); // Lấy HTML bên trong noscript
-        });
-      };
-
-      // Quét tất cả các snippet
-      parseSnippets(headerHtml);
-      parseSnippets(footerHtml);
-      parseSnippets(bodyOpenHtml);
+      mergedFooterSnippets = [
+        ...globalFooterSnippets.cmsDangerousSnippets,
+        ...footerSnippets.cmsDangerousSnippets,
+        ...globalBodyOpenSnippets.cmsDangerousSnippets,
+        ...bodyOpenSnippets.cmsDangerousSnippets
+      ];
     }
 
     return {
@@ -547,9 +605,10 @@ exports.createPages = async ({ actions, graphql }) => {
       metaHtml: processedSeo.metaHtml || null,
       schemas: processedSeo.schemas || [],
       // bgbanner: bgbanner || null
-      cmsSafeSnippets: cmsSafeSnippets,     // Mảng các object JSON-LD
-      cmsDangerousSnippets: cmsDangerousSnippets, // Mảng các script (src, content, props)
-      cmsNoscriptSnippets: cmsNoscriptSnippets
+      mergedHeaderSnippets,
+      mergedFooterSnippets,
+      mergedCmsSafeSnippets,
+      mergedCmsNoscriptSnippets
     };
   };
 
