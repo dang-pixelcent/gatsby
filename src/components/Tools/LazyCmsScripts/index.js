@@ -5,26 +5,49 @@ const LazyCmsScripts = ({ scripts = [] }) => {
     const [hasInteracted, setHasInteracted] = useState(false);
 
     useEffect(() => {
-        const handleInteraction = () => {
-            if (hasInteracted) return;
+        // Nếu đã chạy rồi thì không làm gì cả
+        if (hasInteracted) return;
+
+        let timerId = null;
+
+        // --- 1. HÀM KÍCH HOẠT (Sẽ được gọi 1 lần duy nhất) ---
+        const triggerLoad = () => {
+            // Dọn dẹp các trình lắng nghe và hẹn giờ
+            window.removeEventListener('scroll', triggerLoad, { capture: true });
+            window.removeEventListener('mousemove', triggerLoad, { capture: true });
+            window.removeEventListener('touchstart', triggerLoad, { capture: true });
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+
+            // Kích hoạt việc tải script!
             setHasInteracted(true);
-            window.removeEventListener('scroll', handleInteraction, { capture: true });
-            window.removeEventListener('mousemove', handleInteraction, { capture: true });
-            window.removeEventListener('touchstart', handleInteraction, { capture: true });
         };
 
-        window.addEventListener('scroll', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('mousemove', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('touchstart', handleInteraction, { once: true, passive: true, capture: true });
+        // --- 2. LẮNG NGHE TƯƠNG TÁC (Cách 1) ---
+        // (Dùng `once: true` để nó tự động gỡ bỏ sau khi chạy)
+        window.addEventListener('scroll', triggerLoad, { once: true, passive: true, capture: true });
+        window.addEventListener('mousemove', triggerLoad, { once: true, passive: true, capture: true });
+        window.addEventListener('touchstart', triggerLoad, { once: true, passive: true, capture: true });
 
+        // --- 3. HẸN GIỜ TỰ ĐỘNG (Cách 2 - "Failsafe") ---
+        // Tự động kích hoạt sau 2.5 giây nếu không có tương tác
+        timerId = setTimeout(triggerLoad, 2500);
+
+        // Hàm dọn dẹp cuối cùng (nếu component bị gỡ bỏ)
         return () => {
-            window.removeEventListener('scroll', handleInteraction, { capture: true });
-            window.removeEventListener('mousemove', handleInteraction, { capture: true });
-            window.removeEventListener('touchstart', handleInteraction, { capture: true });
+            // Đảm bảo dọn dẹp nếu component unmount trước khi trigger
+            window.removeEventListener('scroll', triggerLoad, { capture: true });
+            window.removeEventListener('mousemove', triggerLoad, { capture: true });
+            window.removeEventListener('touchstart', triggerLoad, { capture: true });
+            if (timerId) {
+                clearTimeout(timerId);
+            }
         };
-    }, [hasInteracted]);
 
-    // Nếu chưa tương tác, hoặc không có script, không render gì cả
+    }, [hasInteracted]); // Dependency vẫn là [hasInteracted]
+
+    // --- Phần render không thay đổi ---
     if (!hasInteracted || !scripts || scripts.length === 0) {
         return null;
     }

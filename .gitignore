@@ -17,6 +17,7 @@
 /manual-review
 /static/~partytown
 /static/images-buildtime
+/temp
 
 # testing
 /coverage
