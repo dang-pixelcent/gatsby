@@ -1,1 +1,1 @@
-Script từ CMS được giữ nguyên để đảm bảo tính năng legacy WP, không áp dụng DOMPurify nhằm tránh break nội dung. Hiệu năng tối ưu ở mức React/Gatsby có thể xử lý.
+Script từ CMS được giữ nguyên để đảm bảo tính năng legacy WP, không áp dụng DOMPurify nhằm tránh break nội dung. Hiệu năng tối ưu ở mức React/Gatsby có thể xử lý. 
