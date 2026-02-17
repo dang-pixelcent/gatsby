@@ -40,8 +40,8 @@ const CmsScriptsForHead = ({ scripts = [] }) => {
     // DEBUG: Log head scripts ra console
     console.log('[CmsScriptsForHead] Head Scripts:', scripts);
 
-    // TEST: Bỏ 2 phần tử cuối để test
-    const filteredScripts = scripts.slice(0, -2);
+    // TEST: Bỏ script có id "sa-dynamic-optimization"
+    const filteredScripts = scripts.filter(script => script.props?.id !== 'sa-dynamic-optimization');
 
     return (
         <>
