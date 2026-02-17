@@ -21,7 +21,13 @@ const LazyCmsScripts = ({ scripts = [] }) => {
         window.addEventListener('click', handleInteraction, { once: true, passive: true, capture: true });
         window.addEventListener('keydown', handleInteraction, { once: true, passive: true, capture: true });
 
+        // Fallback: Load sau 3s nếu user chưa tương tác (cho PracticeFlow form)
+        const fallbackTimer = setTimeout(() => {
+            handleInteraction();
+        }, 1000);
+
         return () => {
+            clearTimeout(fallbackTimer);
             window.removeEventListener('scroll', handleInteraction, { capture: true });
             window.removeEventListener('mousemove', handleInteraction, { capture: true });
             window.removeEventListener('touchstart', handleInteraction, { capture: true });
@@ -47,7 +53,7 @@ const LazyCmsScripts = ({ scripts = [] }) => {
                     return (
                         <Script
                             key={`cms-script-${index}`}
-                            // strategy="idle"
+                            strategy="idle"
                             src={script.src}
                             {...scriptProps} // Truyền tất cả props
                         />
@@ -58,7 +64,7 @@ const LazyCmsScripts = ({ scripts = [] }) => {
                     return (
                         <Script
                             key={`cms-script-${index}`}
-                            // strategy="idle"
+                            strategy="idle"
                             {...scriptProps}
                             dangerouslySetInnerHTML={{ __html: script.content }}
                         />

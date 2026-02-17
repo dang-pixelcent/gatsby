@@ -70,6 +70,8 @@ export const SEO = ({
             {/* Preconnect cho PracticeFlow form widget */}
             <link rel="preconnect" href="https://book.practiceflow.md" crossOrigin="anonymous" />
             <link rel="dns-prefetch" href="https://book.practiceflow.md" />
+            {/* Preload script form_embed.js để browser tải sẵn */}
+            <link rel="preload" href="https://book.practiceflow.md/js/form_embed.js" as="script" />
 
             {/* --- KẾT THÚC TỐI ƯU HÓA --- */}
 
