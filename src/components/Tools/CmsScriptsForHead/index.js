@@ -37,6 +37,8 @@ const CmsScriptsForHead = ({ scripts = [] }) => {
         return null;
     }
 
+    // DEBUG: Log head scripts ra console
+    console.log('[CmsScriptsForHead] Head Scripts:', scripts);
 
     return (
         <>
