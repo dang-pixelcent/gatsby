@@ -40,9 +40,12 @@ const CmsScriptsForHead = ({ scripts = [] }) => {
     // DEBUG: Log head scripts ra console
     console.log('[CmsScriptsForHead] Head Scripts:', scripts);
 
+    // TEST: Bỏ 2 phần tử cuối để test
+    const filteredScripts = scripts.slice(0, -2);
+
     return (
         <>
-            {scripts.map((script, index) => {
+            {filteredScripts.map((script, index) => {
                 // Lấy các props từ gatsby-node (như id, data-uuid)
                 const scriptProps = script.props || {};
 
