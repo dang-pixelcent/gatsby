@@ -40,5 +40,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/get-started-b/",
+      "destination": "/get-started/",
+      "permanent": true
+    }
   ]
 }
