@@ -127,6 +127,43 @@ export const partnersSliderPlugin = {
     }
 };
 
+/**
+ * Cấu hình cho Video Controls (.client-video).
+ * Plugin vanilla JS không cần jQuery.
+ */
+export const videoControlsPlugin = {
+    id: 'video-controls',
+    shouldLoad: () => document.querySelector('.client-video') !== null,
+    
+    initialize: () => {
+        /* process click video thumb */
+        const videos = document.querySelectorAll('.client-video');
+        videos.forEach((item) => {
+            const video = item.querySelector('video');
+            const btnPlay = item.querySelector('.btn-play');
+            
+            if (!video || !btnPlay) return;
+            
+            const toggleVideo = () => {
+                if (video.paused) {
+                    video.controls = true;
+                    btnPlay.classList.add('hide');
+                    video.play();
+                } else {
+                    video.removeAttribute('controls');
+                    btnPlay.classList.remove('hide');
+                    video.pause();
+                }
+            };
+            
+            btnPlay.addEventListener('click', toggleVideo);
+            video.addEventListener('click', toggleVideo);
+        });
+        
+        console.log('Video controls initialized.');
+    }
+};
+
 export const lightbox2Plugin = {
     id: 'lightbox2',
     css: 'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css',
