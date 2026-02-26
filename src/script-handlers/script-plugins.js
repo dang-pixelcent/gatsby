@@ -93,11 +93,14 @@ export const partnersSliderPlugin = {
                 partnersSlider.slick({
                     dots: false,
                     infinite: true,
-                    speed: 300,
+                    speed: 4000,
                     centerPadding: '0px',
                     slidesToShow: 6,
                     slidesToScroll: 1,
                     arrows: false,
+                    autoplay: true,
+                    autoplaySpeed: 0,
+                    cssEase: 'linear',
                     prevArrow: '<button type="button" class="slick-arrow slider-prev"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.6625 18.4567L0 9.65669L8.8 0.856689L9.7625 1.81919L1.925 9.65669L9.625 17.3567L8.6625 18.4567Z" fill="#AAAAAA"/></svg></button>',
                     nextArrow: '<button type="button" class="slick-arrow slider-next"><svg width="10" height="19" viewBox="0 0 10 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.33726 18.4567L9.99976 9.65669L1.19976 0.856689L0.237257 1.81919L8.07476 9.65669L0.374756 17.3567L1.33726 18.4567Z" fill="#AAAAAA"/></svg></button>',
                     responsive: [
