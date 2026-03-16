@@ -1,6 +1,7 @@
 import React from "react"
 import { Provider } from "react-redux"
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import createStore from "./src/state/createStore"
 
@@ -14,7 +15,7 @@ export default ({ element }) => {
 
     <Provider store={store}>
         {element}
-        <Analytics />
+        <SpeedInsights />
     </Provider>
   )
 }
