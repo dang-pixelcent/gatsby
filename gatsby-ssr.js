@@ -1,4 +1,7 @@
 import React from 'react';
+import wrapWithProvider from './wrap-with-provider';
+
+export const wrapRootElement = wrapWithProvider;
 
 // Hàm này chèn code vào *ngay sau* thẻ <body> mở
 export const onRenderBody = ({ setPreBodyComponents }) => {
