@@ -1,35 +1,35 @@
 // gatsby-node.js
 
 const path = require(`path`);
-const fs = require('fs');
-const cheerio = require('cheerio');
-const axios = require('axios');
+const fs = require("fs");
+const cheerio = require("cheerio");
+const axios = require("axios");
 
 // Các helper functions
-const replaceInternalLinks = require('./src/helpers/replaceButtonLinks.js');
-const getTerminalColors = require('./src/utils/terminalColors.js');
-const getCachedSeoData = require('./src/helpers/getCachedSeoData.js');
-const processSeoData = require('./src/helpers/processSeoData.js');
-const processAllScripts = require('./src/helpers/processAllScripts.js');
-const processContentImages = require('./src/helpers/processContentImages.js');
-const processBackgroundImages = require('./src/helpers/processBackgroundImages.js');
+const replaceInternalLinks = require("./src/helpers/replaceButtonLinks.js");
+const getTerminalColors = require("./src/utils/terminalColors.js");
+const getCachedSeoData = require("./src/helpers/getCachedSeoData.js");
+const processSeoData = require("./src/helpers/processSeoData.js");
+const processAllScripts = require("./src/helpers/processAllScripts.js");
+const processContentImages = require("./src/helpers/processContentImages.js");
+const processBackgroundImages = require("./src/helpers/processBackgroundImages.js");
 
 // dotenv
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV || 'development'}`
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
 });
 
 // path
-const SNIPPETS_CACHE_DIR = path.join(__dirname, '.cache/page-snippets');
+const SNIPPETS_CACHE_DIR = path.join(__dirname, ".cache/page-snippets");
 // đường dẫn lưu ảnh đã tải về
-const DOWNLOADED_IMAGES_DIR = path.join(__dirname, 'public/images-buildtime');
-const DOWNLOADED_IMAGES_URL_PREFIX = '/images-buildtime';
+const DOWNLOADED_IMAGES_DIR = path.join(__dirname, "public/images-buildtime");
+const DOWNLOADED_IMAGES_URL_PREFIX = "/images-buildtime";
 
 // Các phần logic tách riêng
-const createResolvers = require('./gatsby-node-logic/createResolvers');
-const onCreateWebpackConfig = require('./gatsby-node-logic/onCreateWebpackConfig');
-const onPreInit = require('./gatsby-node-logic/onPreInit');
-const onPreBootstrap = require('./gatsby-node-logic/onPreBootstrap');
+const createResolvers = require("./gatsby-node-logic/createResolvers");
+const onCreateWebpackConfig = require("./gatsby-node-logic/onCreateWebpackConfig");
+const onPreInit = require("./gatsby-node-logic/onPreInit");
+const onPreBootstrap = require("./gatsby-node-logic/onPreBootstrap");
 
 // lấy màu terminal
 const colors = getTerminalColors();
@@ -38,7 +38,9 @@ const colors = getTerminalColors();
 const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL;
 
 if (!SEO_QUERY_URL) {
-  console.error(`${colors.red}REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`);
+  console.error(
+    `${colors.red}REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`,
+  );
   process.exit(1);
 }
 /**========================== END KIỂM TRA ========================== */
@@ -47,7 +49,9 @@ if (!SEO_QUERY_URL) {
 async function createPaginatedBlogPages({ graphql, actions }) {
   const { createPage } = actions;
   // khung trang cho blogs
-  const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
+  const blogArchiveTemplate = path.resolve(
+    "./src/components/templates/blog/blogArchive.js",
+  );
   const postsPerPage = 5;
   // lấy date seo cho blogs từ cacche
   const blogsDataSeo = getCachedSeoData(`${SEO_QUERY_URL}/blogs/`);
@@ -55,14 +59,16 @@ async function createPaginatedBlogPages({ graphql, actions }) {
 
   // Bước 1: Vẫn lấy tổng số bài viết để tính tổng số trang (numPages)
   const countResult = await graphql(`
-        query GetAllPostIds {
-            cms {
-                posts(first: 9999) {
-                    nodes { id }
-                }
-            }
+    query GetAllPostIds {
+      cms {
+        posts(first: 9999) {
+          nodes {
+            id
+          }
         }
-    `);
+      }
+    }
+  `);
 
   if (countResult.errors) {
     console.error("Failed to fetch post count", countResult.errors);
@@ -74,7 +80,6 @@ async function createPaginatedBlogPages({ graphql, actions }) {
 
   console.log(`Total Posts: ${totalPosts}, Total Pages: ${numPages}`);
 
-
   let hasNextPage = true;
   let endCursor = null; // Ban đầu chưa có "dấu trang"
   let pageNumber = 1;
@@ -84,44 +89,56 @@ async function createPaginatedBlogPages({ graphql, actions }) {
     console.log(`Fetching data for blog page ${pageNumber}...`);
 
     // Query cho trang hiện tại, dùng `after: $endCursor`
-    const pageResult = await graphql(`
-            query GetPostsForPage($first: Int!, $after: String) {
-                cms {
-                    posts(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
-                        edges {
-                            node {
-                                id
-                                title
-                                uri
-                                excerpt(format: RENDERED)
-                                featuredImage {
-                                    node {
-                                        sourceUrl
-                                        altText
-                                    }
-                                }
-                            }
-                        }
-                        pageInfo {
-                            hasNextPage
-                            endCursor
-                        }
+    const pageResult = await graphql(
+      `
+        query GetPostsForPage($first: Int!, $after: String) {
+          cms {
+            posts(
+              first: $first
+              after: $after
+              where: { orderby: { field: DATE, order: DESC } }
+            ) {
+              edges {
+                node {
+                  id
+                  title
+                  uri
+                  excerpt(format: RENDERED)
+                  featuredImage {
+                    node {
+                      sourceUrl
+                      altText
                     }
+                  }
                 }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
             }
-        `, { first: postsPerPage, after: endCursor });
+          }
+        }
+      `,
+      { first: postsPerPage, after: endCursor },
+    );
 
     if (pageResult.errors) {
       const error429 = pageResult.errors.find(
-        err => err.message && err.message.includes('429')
+        (err) => err.message && err.message.includes("429"),
       );
       if (error429) {
         const delay = 2000 * pageNumber; // tăng dần theo số lần thử
-        console.warn(`${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`);
-        await new Promise(resolve => setTimeout(resolve, delay));
+        console.warn(
+          `${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
         continue; // thử lại vòng lặp này
       }
-      console.error(`GraphQL query for blog page ${pageNumber} failed`, pageResult.errors);
+      console.error(
+        `GraphQL query for blog page ${pageNumber} failed`,
+        pageResult.errors,
+      );
       hasNextPage = false;
       continue;
     }
@@ -129,24 +146,24 @@ async function createPaginatedBlogPages({ graphql, actions }) {
     const postsOnPage = pageResult.data.cms.posts.edges;
     const pageInfo = pageResult.data.cms.posts.pageInfo;
 
-    const pagePath = pageNumber === 1 ? '/blogs/' : `/blogs/page/${pageNumber}`;
+    const pagePath = pageNumber === 1 ? "/blogs/" : `/blogs/page/${pageNumber}`;
 
     createPage({
       path: pagePath,
       component: blogArchiveTemplate,
       context: {
-        posts: postsOnPage.map(edge => edge.node),
+        posts: postsOnPage.map((edge) => edge.node),
         pageNumber: pageNumber,
         numPages: numPages, // Tổng số trang vẫn được truyền xuống
         hasNextPage: pageInfo.hasNextPage,
         metaHtml: processedBlogsSeo.metaHtml || null,
         schemas: processedBlogsSeo.schemas || [],
         pageInfo: {
-          name: 'Blogs',
+          name: "Blogs",
           slug: null,
-          uri: '/blogs/',
-          id: null // Không cần id cho blogs, chỉ cần uri
-        }
+          uri: "/blogs/",
+          id: null, // Không cần id cho blogs, chỉ cần uri
+        },
       },
     });
 
@@ -161,7 +178,9 @@ async function createPaginatedBlogPages({ graphql, actions }) {
 /** ==========================PHẦN TẠO TRANG PHÂN TRANG CHO CATEGORIES========================== */
 async function createPaginatedCategoryPages({ graphql, actions }) {
   const { createPage } = actions;
-  const blogArchiveTemplate = path.resolve('./src/components/templates/blog/blogArchive.js');
+  const blogArchiveTemplate = path.resolve(
+    "./src/components/templates/blog/blogArchive.js",
+  );
   const postsPerPage = 5;
 
   // Bước 1: Lấy tất cả categories
@@ -190,7 +209,9 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
 
   // Bước 2: Xử lý từng category
   for (const category of categories) {
-    console.log(`${colors.cyan}Processing category: ${category.name}${colors.reset}`);
+    console.log(
+      `${colors.cyan}Processing category: ${category.name}${colors.reset}`,
+    );
 
     // Lấy cached SEO data cho category
     const categoryDataSeo = getCachedSeoData(`${SEO_QUERY_URL}${category.uri}`);
@@ -198,18 +219,26 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
     const processedCategorySeo = processSeoData(categoryDataSeo);
 
     // Đếm tổng số posts trong category này
-    const countResult = await graphql(`
-      query GetCategoryPostCount($categoryName: String!) {
-        cms {
-          posts(first: 9999, where: {categoryName: $categoryName}) {
-            nodes { id }
+    const countResult = await graphql(
+      `
+        query GetCategoryPostCount($categoryName: String!) {
+          cms {
+            posts(first: 9999, where: { categoryName: $categoryName }) {
+              nodes {
+                id
+              }
+            }
           }
         }
-      }
-    `, { categoryName: category.name });
+      `,
+      { categoryName: category.name },
+    );
 
     if (countResult.errors) {
-      console.error(`Failed to count posts for category ${category.name}`, countResult.errors);
+      console.error(
+        `Failed to count posts for category ${category.name}`,
+        countResult.errors,
+      );
       continue;
     }
 
@@ -217,11 +246,15 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
     const numPages = Math.ceil(totalPosts / postsPerPage);
 
     if (totalPosts === 0) {
-      console.log(`${colors.yellow}Category ${category.name} has no posts, skipping...${colors.reset}`);
+      console.log(
+        `${colors.yellow}Category ${category.name} has no posts, skipping...${colors.reset}`,
+      );
       continue;
     }
 
-    console.log(`Category ${category.name}: ${totalPosts} posts, ${numPages} pages`);
+    console.log(
+      `Category ${category.name}: ${totalPosts} posts, ${numPages} pages`,
+    );
 
     // Bước 3: Tạo các trang phân trang cho category này
     let hasNextPage = true;
@@ -229,53 +262,71 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
     let pageNumber = 1;
 
     while (hasNextPage) {
-      console.log(`Fetching data for category ${category.name}, page ${pageNumber}...`);
+      console.log(
+        `Fetching data for category ${category.name}, page ${pageNumber}...`,
+      );
 
-      const pageResult = await graphql(`
-        query GetCategoryPostsForPage($categoryName: String!, $first: Int!, $after: String) {
-          cms {
-            posts(first: $first, after: $after, where: { 
-              categoryName: $categoryName,
-              orderby: { field: DATE, order: DESC } 
-            }) {
-              edges {
-                node {
-                  id
-                  title
-                  uri
-                  excerpt(format: RENDERED)
-                  featuredImage {
-                    node {
-                      sourceUrl
-                      altText
+      const pageResult = await graphql(
+        `
+          query GetCategoryPostsForPage(
+            $categoryName: String!
+            $first: Int!
+            $after: String
+          ) {
+            cms {
+              posts(
+                first: $first
+                after: $after
+                where: {
+                  categoryName: $categoryName
+                  orderby: { field: DATE, order: DESC }
+                }
+              ) {
+                edges {
+                  node {
+                    id
+                    title
+                    uri
+                    excerpt(format: RENDERED)
+                    featuredImage {
+                      node {
+                        sourceUrl
+                        altText
+                      }
                     }
                   }
                 }
-              }
-              pageInfo {
-                hasNextPage
-                endCursor
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
               }
             }
           }
-        }
-      `, {
-        categoryName: category.name,
-        first: postsPerPage,
-        after: endCursor
-      });
+        `,
+        {
+          categoryName: category.name,
+          first: postsPerPage,
+          after: endCursor,
+        },
+      );
 
       if (pageResult.errors) {
         const error429 = pageResult.errors.find(
-          err => err.message && err.message.includes('429')
+          (err) => err.message && err.message.includes("429"),
         );
         if (error429) {
           const delay = 2000 * pageNumber; // tăng dần theo số lần thử
-          console.warn(`${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`);
-          await new Promise(resolve => setTimeout(resolve, delay));
+          console.warn(
+            `${colors.yellow}429 Too Many Requests. Delay ${delay}ms before retry...${colors.reset}`,
+          );
+          await new Promise((resolve) => setTimeout(resolve, delay));
           continue; // thử lại vòng lặp này
         }
-        console.error(`GraphQL query for category ${category.name}, page ${pageNumber} failed`, pageResult.errors);
+        console.error(
+          `GraphQL query for category ${category.name}, page ${pageNumber} failed`,
+          pageResult.errors,
+        );
         hasNextPage = false;
         continue;
       }
@@ -284,15 +335,14 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
       const pageInfo = pageResult.data.cms.posts.pageInfo;
 
       // Tạo đường dẫn cho trang category
-      const pagePath = pageNumber === 1
-        ? category.uri
-        : `${category.uri}page/${pageNumber}/`;
+      const pagePath =
+        pageNumber === 1 ? category.uri : `${category.uri}page/${pageNumber}/`;
 
       createPage({
         path: pagePath,
         component: blogArchiveTemplate,
         context: {
-          posts: postsOnPage.map(edge => edge.node),
+          posts: postsOnPage.map((edge) => edge.node),
           pageNumber: pageNumber,
           numPages: numPages,
           hasNextPage: pageInfo.hasNextPage,
@@ -302,8 +352,8 @@ async function createPaginatedCategoryPages({ graphql, actions }) {
             name: category.name,
             slug: category.slug,
             uri: category.uri,
-            id: category.id
-          }
+            id: category.id,
+          },
         },
       });
 
@@ -322,37 +372,39 @@ const parseSnippets = (htmlString) => {
   let cmsNoscriptSnippets = []; // Cho <noscript>
 
   // Sửa lại logic: chỉ phân tích khi có htmlString
-  if (htmlString && htmlString.trim() !== '') {
+  if (htmlString && htmlString.trim() !== "") {
     const $s = cheerio.load(htmlString, { decodeEntities: false });
 
     // 1. Tìm script thực thi và script JSON-LD
-    $s('script').each((i, el) => {
+    $s("script").each((i, el) => {
       const $script = $s(el);
-      const type = $script.attr('type');
-      const src = $script.attr('src');
+      const type = $script.attr("type");
+      const src = $script.attr("src");
       const content = $script.html();
       const props = $script.attr(); // Lấy tất cả props (id, data-uuid...)
 
-      if (type === 'application/ld+json') {
+      if (type === "application/ld+json") {
         // AN TOÀN: Đây là schema
         try {
           // Lưu trữ dưới dạng object JSON, không phải chuỗi
           cmsSafeSnippets.push(JSON.parse(content));
         } catch (e) {
-          console.warn(`${colors.yellow}Lỗi parse JSON-LD: ${e.message}${colors.reset}`);
+          console.warn(
+            `${colors.yellow}Lỗi parse JSON-LD: ${e.message}${colors.reset}`,
+          );
         }
       } else {
         // NGUY HIỂM: Đây là script thực thi
         cmsDangerousSnippets.push({
           src: src || null,
           content: content || null,
-          props: props // Lưu tất cả props (async, id, etc)
+          props: props, // Lưu tất cả props (async, id, etc)
         });
       }
     });
 
     // 2. Tìm thẻ <noscript> (thường trong bodyOpenHtml)
-    $s('noscript').each((i, el) => {
+    $s("noscript").each((i, el) => {
       cmsNoscriptSnippets.push($s(el).html()); // Lấy HTML bên trong noscript
     });
   }
@@ -365,54 +417,97 @@ const parseSnippets = (htmlString) => {
 exports.createPages = async ({ actions, graphql }) => {
   //=======================PHẦN TRUY VẤN===================================
   const result = await graphql(`
-        query {
-            cms {
-                headerHtmlall
-                footerHtmlall
-                pages(where: {status: PUBLISH}, first: 999) { edges { node { id, slug, uri, title, flexibleContentHtml, isFrontPage, date, 
-                    htmlSnippets {
-                      bodyOpenHtml
-                      footerHtml
-                      headerHtml
-                    }
-                } } }
-                services(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
-                    htmlSnippets {
-                      bodyOpenHtml
-                      footerHtml
-                      headerHtml
-                    }
-                } }
-                events(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
-                    htmlSnippets {
-                      bodyOpenHtml
-                      footerHtml
-                      headerHtml
-                    }
-                } }
-                posts(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
-                    htmlSnippets {
-                      bodyOpenHtml
-                      footerHtml
-                      headerHtml
-                    }
-                } }
-                caseStudiesPost(first: 999) { nodes { id, slug, uri, title, flexibleContentHtml, date, 
-                    htmlSnippets {
-                      bodyOpenHtml
-                      footerHtml
-                      headerHtml
-                    }
-                } }
-
-                htmlSnippets {
-                    bodyOpenHtml
-                    footerHtml
-                    headerHtml
-                }
+    query {
+      cms {
+        headerHtmlall
+        footerHtmlall
+        pages(where: { status: PUBLISH }, first: 999) {
+          edges {
+            node {
+              id
+              slug
+              uri
+              title
+              flexibleContentHtml
+              isFrontPage
+              date
+              htmlSnippets {
+                bodyOpenHtml
+                footerHtml
+                headerHtml
+              }
             }
+          }
         }
-    `);
+        services(first: 999) {
+          nodes {
+            id
+            slug
+            uri
+            title
+            flexibleContentHtml
+            date
+            htmlSnippets {
+              bodyOpenHtml
+              footerHtml
+              headerHtml
+            }
+          }
+        }
+        events(first: 999) {
+          nodes {
+            id
+            slug
+            uri
+            title
+            flexibleContentHtml
+            date
+            htmlSnippets {
+              bodyOpenHtml
+              footerHtml
+              headerHtml
+            }
+          }
+        }
+        posts(first: 999) {
+          nodes {
+            id
+            slug
+            uri
+            title
+            flexibleContentHtml
+            date
+            htmlSnippets {
+              bodyOpenHtml
+              footerHtml
+              headerHtml
+            }
+          }
+        }
+        caseStudiesPost(first: 999) {
+          nodes {
+            id
+            slug
+            uri
+            title
+            flexibleContentHtml
+            date
+            htmlSnippets {
+              bodyOpenHtml
+              footerHtml
+              headerHtml
+            }
+          }
+        }
+
+        htmlSnippets {
+          bodyOpenHtml
+          footerHtml
+          headerHtml
+        }
+      }
+    }
+  `);
 
   // Kiểm tra lỗi sau khi query (rất quan trọng)
   if (result.errors) {
@@ -420,6 +515,20 @@ exports.createPages = async ({ actions, graphql }) => {
     throw new Error("Main GraphQL query failed!");
   }
   const { data } = result;
+
+  if (
+    !data ||
+    !data.cms ||
+    !data.cms.pages ||
+    data.cms.pages.edges.length === 0
+  ) {
+    console.error(
+      `${colors.red}❌ CRITICAL ERROR: Dữ liệu WordPress trả về bị rỗng!${colors.reset}`,
+    );
+    throw new Error(
+      "Hủy build ngay lập tức để bảo vệ trang Live khỏi bị trắng trang.",
+    );
+  }
 
   // lấy snippets chung
   const snippetsData = data.cms.htmlSnippets;
@@ -431,15 +540,14 @@ exports.createPages = async ({ actions, graphql }) => {
   const globalCmsSafeSnippets = [
     ...globalHeaderSnippets.cmsSafeSnippets,
     ...globalFooterSnippets.cmsSafeSnippets,
-    ...globalBodyOpenSnippets.cmsSafeSnippets
+    ...globalBodyOpenSnippets.cmsSafeSnippets,
   ];
 
   const globalCmsNoscriptSnippets = [
     ...globalHeaderSnippets.cmsNoscriptSnippets,
     ...globalFooterSnippets.cmsNoscriptSnippets,
-    ...globalBodyOpenSnippets.cmsNoscriptSnippets
+    ...globalBodyOpenSnippets.cmsNoscriptSnippets,
   ];
-
 
   //======================PHẦN CHÍNH===================================
   // XỬ LÝ BLOGs với phân trang
@@ -447,7 +555,6 @@ exports.createPages = async ({ actions, graphql }) => {
 
   // XỬ LÝ CÁC TRANG CATEGORY với phân trang
   await createPaginatedCategoryPages({ graphql, actions });
-
 
   /**
    * PHẦN XỬ LÝ CÁC TRANG DYNAMIC
@@ -466,38 +573,42 @@ exports.createPages = async ({ actions, graphql }) => {
 
       // --- BƯỚC 1: XỬ LÝ RIÊNG CHO WISTIA EMBEDS ---
       $('script[src*="wistia.com"]').each((index, element) => {
-        const wistiaContainer = $(element).closest('div:has(div[class*="wistia_embed"])');
-        if (wistiaContainer.length && !wistiaContainer.hasClass('lazy-embed-placeholder')) {
+        const wistiaContainer = $(element).closest(
+          'div:has(div[class*="wistia_embed"])',
+        );
+        if (
+          wistiaContainer.length &&
+          !wistiaContainer.hasClass("lazy-embed-placeholder")
+        ) {
           const embedCode = wistiaContainer.html();
           const encodedEmbedCode = encodeURIComponent(embedCode);
-          wistiaContainer.addClass('lazy-embed-placeholder');
-          wistiaContainer.attr('data-embed-code', encodedEmbedCode);
+          wistiaContainer.addClass("lazy-embed-placeholder");
+          wistiaContainer.attr("data-embed-code", encodedEmbedCode);
           wistiaContainer.empty();
         }
       });
-
 
       // --- BƯỚC 2: XỬ LÝ CÁC VIDEO EMBEDS CÒN LẠI (IFRAME, BLOCKQUOTE) ---
       const embedSelectors = [
         'iframe[src*="youtube.com"]',
         'iframe[src*="wistia.net"]',
         // 'script[src*="fast.wistia.com"]',
-        'blockquote.tiktok-embed',
-        'blockquote.twitter-tweet'
+        "blockquote.tiktok-embed",
+        "blockquote.twitter-tweet",
       ];
 
-      $(embedSelectors.join(', ')).each((index, element) => {
+      $(embedSelectors.join(", ")).each((index, element) => {
         const embedElement = $(element);
         const parent = embedElement.parent(); // Lấy thẻ cha
 
         // KIỂM TRA: Nếu thẻ cha đã là placeholder rồi thì bỏ qua
-        if (parent.hasClass('lazy-embed-placeholder')) {
+        if (parent.hasClass("lazy-embed-placeholder")) {
           return;
         }
 
         // Lấy class và style từ thẻ cha
-        const parentClass = parent.attr('class') || '';
-        const parentStyle = parent.attr('style') || '';
+        const parentClass = parent.attr("class") || "";
+        const parentStyle = parent.attr("style") || "";
 
         // Lấy HTML bên trong thẻ cha (chính là mã nhúng)
         const embedCode = encodeURIComponent(parent.html());
@@ -516,7 +627,7 @@ exports.createPages = async ({ actions, graphql }) => {
       // ===================================================================
       // Tối ưu LCP cho banner và hình ảnh - Xử lý phía Server
       // ===================================================================
-      const sections = $('section');
+      const sections = $("section");
 
       // --- TỐI ƯU VÀ TẢI ẢNH TRONG NỘI DUNG ---
       await processContentImages({
@@ -525,7 +636,7 @@ exports.createPages = async ({ actions, graphql }) => {
         node,
         colors,
         DOWNLOADED_IMAGES_DIR,
-        DOWNLOADED_IMAGES_URL_PREFIX
+        DOWNLOADED_IMAGES_URL_PREFIX,
       });
 
       // --- TỐI ƯU VÀ CHUYỂN ĐỔI ẢNH NỀN ---
@@ -536,29 +647,27 @@ exports.createPages = async ({ actions, graphql }) => {
         colors,
         DOWNLOADED_IMAGES_DIR,
         DOWNLOADED_IMAGES_URL_PREFIX,
-        specialScripts // Truyền mảng để helper có thể thêm preload links
+        specialScripts, // Truyền mảng để helper có thể thêm preload links
       });
-
 
       htmlContent = $.html();
     }
     // --- KẾT THÚC XỬ LÝ VIDEO ---
 
-
-
     // Bước 1: Thay thế các link nội bộ trước
     const htmlWithReplacedLinks = replaceInternalLinks(htmlContent);
     // Bước 2: Xử lý script trên HTML đã được cập nhật
-    const { cleanedHtml, scripts } = processAllScripts(htmlWithReplacedLinks, node.slug);
+    const { cleanedHtml, scripts } = processAllScripts(
+      htmlWithReplacedLinks,
+      node.slug,
+    );
     // Bước 3: xử lý htmlsnippets từng page
     let mergedCmsSafeSnippets = [...globalCmsSafeSnippets];
     let mergedCmsNoscriptSnippets = [...globalCmsNoscriptSnippets];
-    let mergedHeaderSnippets = [
-      ...globalHeaderSnippets.cmsDangerousSnippets,
-    ];
+    let mergedHeaderSnippets = [...globalHeaderSnippets.cmsDangerousSnippets];
     let mergedFooterSnippets = [
       ...globalFooterSnippets.cmsDangerousSnippets,
-      ...globalBodyOpenSnippets.cmsDangerousSnippets
+      ...globalBodyOpenSnippets.cmsDangerousSnippets,
     ];
 
     if (node.htmlSnippets) {
@@ -572,26 +681,26 @@ exports.createPages = async ({ actions, graphql }) => {
         ...globalCmsSafeSnippets,
         ...headerSnippets.cmsSafeSnippets,
         ...footerSnippets.cmsSafeSnippets,
-        ...bodyOpenSnippets.cmsSafeSnippets
+        ...bodyOpenSnippets.cmsSafeSnippets,
       ];
 
       mergedCmsNoscriptSnippets = [
         ...globalCmsNoscriptSnippets,
         ...headerSnippets.cmsNoscriptSnippets,
         ...footerSnippets.cmsNoscriptSnippets,
-        ...bodyOpenSnippets.cmsNoscriptSnippets
+        ...bodyOpenSnippets.cmsNoscriptSnippets,
       ];
 
       mergedHeaderSnippets = [
         ...headerSnippets.cmsDangerousSnippets,
-        ...globalHeaderSnippets.cmsDangerousSnippets
+        ...globalHeaderSnippets.cmsDangerousSnippets,
       ];
 
       mergedFooterSnippets = [
         ...globalFooterSnippets.cmsDangerousSnippets,
         ...footerSnippets.cmsDangerousSnippets,
         ...globalBodyOpenSnippets.cmsDangerousSnippets,
-        ...bodyOpenSnippets.cmsDangerousSnippets
+        ...bodyOpenSnippets.cmsDangerousSnippets,
       ];
     }
 
@@ -608,12 +717,12 @@ exports.createPages = async ({ actions, graphql }) => {
       mergedHeaderSnippets,
       mergedFooterSnippets,
       mergedCmsSafeSnippets,
-      mergedCmsNoscriptSnippets
+      mergedCmsNoscriptSnippets,
     };
   };
 
   /** PHẦN TẠO TRANG */
-  const createPageFromNode = (node, pathPrefix = '') => {
+  const createPageFromNode = (node, pathPrefix = "") => {
     actions.createPage({
       path: `${pathPrefix}${node.uri}`,
       component: path.resolve(`./src/components/templates/dynamicPages.js`),
@@ -624,40 +733,52 @@ exports.createPages = async ({ actions, graphql }) => {
   // Xử lý và tạo trang cho từng loại
   console.log(`${colors.cyan}Processing pages...${colors.reset}`);
   const pagePromises = data.cms.pages.edges
-    .filter(({ node }) => node.uri !== '/blogs/')
+    .filter(({ node }) => node.uri !== "/blogs/")
     .map(({ node }) => processNode(node));
-  const processedPages = await Promise.all(pagePromises);
-  processedPages.forEach(page => createPageFromNode(page, ''));
-
+  // const processedPages = await Promise.all(pagePromises);
+  const processedPages = [];
+  const PAGE_CHUNK_SIZE = 10; // Xử lý mỗi đợt 10 trang để không làm nghẽn server
+  for (let i = 0; i < pagePromises.length; i += PAGE_CHUNK_SIZE) {
+    const chunk = pagePromises.slice(i, i + PAGE_CHUNK_SIZE);
+    const results = await Promise.all(chunk);
+    processedPages.push(...results);
+    console.log(
+      `${colors.cyan}   - Đã xử lý xong ${processedPages.length}/${pagePromises.length} trang...${colors.reset}`,
+    );
+  }
+  processedPages.forEach((page) => createPageFromNode(page, ""));
 
   console.log(`${colors.cyan}Processing services...${colors.reset}`);
   const servicePromises = data.cms.services.nodes.map(processNode);
   const processedServices = await Promise.all(servicePromises);
-  processedServices.forEach(service => createPageFromNode(service, ''));
+  processedServices.forEach((service) => createPageFromNode(service, ""));
 
   console.log(`${colors.cyan}Processing events...${colors.reset}`);
   const eventPromises = data.cms.events.nodes.map(processNode);
   const processedEvents = await Promise.all(eventPromises);
-  processedEvents.forEach(event => createPageFromNode(event, ''));
+  processedEvents.forEach((event) => createPageFromNode(event, ""));
 
   console.log(`${colors.cyan}Processing blogs...${colors.reset}`);
   const blogPromises = data.cms.posts.nodes.map(processNode);
   const processedBlogs = await Promise.all(blogPromises);
-  processedBlogs.forEach(blog => createPageFromNode(blog, ''));
+  processedBlogs.forEach((blog) => createPageFromNode(blog, ""));
 
   console.log(`${colors.cyan}Processing case studies...${colors.reset}`);
   const caseStudyPromises = data.cms.caseStudiesPost.nodes.map(processNode);
   const processedCaseStudies = await Promise.all(caseStudyPromises);
-  processedCaseStudies.forEach(caseStudy => createPageFromNode(caseStudy, ''));
+  processedCaseStudies.forEach((caseStudy) =>
+    createPageFromNode(caseStudy, ""),
+  );
 
   // tạo trang kết quả tìm kiếm cho blogs
-  console.log(`${colors.cyan}Creating search result page for blogs...${colors.reset}`);
+  console.log(
+    `${colors.cyan}Creating search result page for blogs...${colors.reset}`,
+  );
   actions.createPage({
     path: "/blogs/search",
     matchPath: "/blogs/search/*", // Dấu * cho phép các query param như ?q=...
     component: path.resolve("./src/components/templates/blog/searchResult.js"),
   });
-
 
   /** Lưu tracking codes vào cache */
   // if (data.cms.htmlSnippets) {

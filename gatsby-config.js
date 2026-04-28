@@ -13,7 +13,7 @@ module.exports = {
     PRESERVE_WEBPACK_CACHE: true,
     PRESERVE_FILE_DOWNLOAD_CACHE: true,
     // Có thể tăng tốc quá trình lấy dữ liệu trên các máy có nhiều CPU.
-    PARALLEL_SOURCING: true,
+    // PARALLEL_SOURCING: true,
 
     // Tăng tốc độ SSR trong quá trình phát triển
     // DEV_SSR: true,
