@@ -1,6 +1,6 @@
 // components/CookieBanner.tsx
 import React, { useState, useEffect } from "react";
-import "./CookieBanner.css"; // Nhớ import file CSS vào đây!
+import "./CookieBanner.scss"; // Nhớ import file CSS vào đây!
 
 // const CookieBannerProps = {
 //   onAccept: () => void,
