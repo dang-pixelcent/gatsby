@@ -1,78 +1,53 @@
-import { Script } from 'gatsby';
-import React, { useState, useEffect } from 'react';
-// import { Script } from 'gatsby'; // Dùng <Script> của Gatsby
-// import { Helmet } from 'react-helmet';
+// components/Tools/CmsScriptsForHead.tsx
+import { Script } from "gatsby";
+import React from "react";
 
 const CmsScriptsForHead = ({ scripts = [] }) => {
-    const [hasInteracted, setHasInteracted] = useState(false);
+  // Nếu không có script, không render gì cả
+  if (!scripts || scripts.length === 0) {
+    return null;
+  }
 
-    useEffect(() => {
-        const handleInteraction = () => {
-            if (hasInteracted) return;
-            setHasInteracted(true);
-            window.removeEventListener('scroll', handleInteraction, { capture: true });
-            window.removeEventListener('mousemove', handleInteraction, { capture: true });
-            window.removeEventListener('touchstart', handleInteraction, { capture: true });
-            window.removeEventListener('click', handleInteraction, { capture: true });
-            window.removeEventListener('keydown', handleInteraction, { capture: true });
-        };
+  // DEBUG: Log head scripts ra console
+  console.log("[CmsScriptsForHead] Head Scripts:", scripts);
 
-        window.addEventListener('scroll', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('mousemove', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('touchstart', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('click', handleInteraction, { once: true, passive: true, capture: true });
-        window.addEventListener('keydown', handleInteraction, { once: true, passive: true, capture: true });
+  // TEST: Bỏ script có id "sa-dynamic-optimization"
+  const filteredScripts = scripts.filter(
+    (script) => script.props?.id !== "sa-dynamic-optimization",
+  );
 
-        return () => {
-            window.removeEventListener('scroll', handleInteraction, { capture: true });
-            window.removeEventListener('mousemove', handleInteraction, { capture: true });
-            window.removeEventListener('touchstart', handleInteraction, { capture: true });
-            window.removeEventListener('click', handleInteraction, { capture: true });
-            window.removeEventListener('keydown', handleInteraction, { capture: true });
-        };
-    }, [hasInteracted]);
+  return (
+    <>
+      {filteredScripts.map((script, index) => {
+        const scriptProps = script.props || {};
 
-    // Nếu chưa tương tác, hoặc không có script, không render gì cả
-    if (!hasInteracted || !scripts || scripts.length === 0) {
+        if (script.src) {
+          return (
+            <Script
+              key={`cms-script-${index}`}
+              src={script.src}
+              {...scriptProps}
+              // Dùng "idle" để Gatsby tự đợi trình duyệt rảnh rỗi mới load,
+              // thay vì mình phải tự viết event listener
+              strategy="idle"
+            />
+          );
+        }
+        if (script.content) {
+          return (
+            <Script
+              key={`cms-script-${index}`}
+              {...scriptProps}
+              // Dùng "idle" cho các script tracking/CMS
+              strategy="idle"
+              dangerouslySetInnerHTML={{ __html: script.content }}
+            />
+          );
+        }
         return null;
-    }
-
-    // DEBUG: Log head scripts ra console
-    console.log('[CmsScriptsForHead] Head Scripts:', scripts);
-
-    // TEST: Bỏ script có id "sa-dynamic-optimization"
-    const filteredScripts = scripts.filter(script => script.props?.id !== 'sa-dynamic-optimization');
-
-    return (
-        <>
-            {filteredScripts.map((script, index) => {
-                // Lấy các props từ gatsby-node (như id, data-uuid)
-                const scriptProps = script.props || {};
-
-                if (script.src) {
-                    return (
-                        <Script
-                            key={`cms-script-${index}`}
-                            src={script.src}
-                            {...scriptProps} // Truyền tất cả props
-                            strategy="post-hydrate" // Chiến lược tải
-                        />
-                    );
-                }
-                if (script.content) {
-                    return (
-                        <Script
-                            key={`cms-script-${index}`}
-                            {...scriptProps}
-                            strategy="post-hydrate" // Chiến lược tải
-                            dangerouslySetInnerHTML={{ __html: script.content }}
-                        />
-                    );
-                }
-                return null;
-            })}
-        </>
-    );
+      })}
+    </>
+  );
 };
 
 export default CmsScriptsForHead;
