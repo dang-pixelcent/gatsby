@@ -156,3 +156,35 @@
     padding-bottom: 0;
   }
 }
+
+.openBtnCookie {
+  cursor: pointer;
+  position: fixed;
+  z-index: 999999999;
+  background-color: #fff;
+  color: #111;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb; // border-gray-200
+  transition: transform 0.2s;
+
+  // Mobile mặc định
+  bottom: 0;
+  right: 5rem; // right-20 (20 * 0.25rem)
+  padding: 0.625rem 1rem; // py-2.5 px-4
+  border-radius: 8px 8px 0 0;
+  font-size: 12px;
+
+  &:hover {
+    color: #111;
+    transform: scale(1.05);
+    background: #fff;
+  }
+
+  // Desktop (md)
+  @media (min-width: 768px) {
+    bottom: -0.25rem; // -bottom-1
+    right: 5rem;
+    font-size: 16px;
+  }
+}

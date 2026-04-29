@@ -26,12 +26,12 @@ function setCookie(name, value, days) {
 }
 
 const CookieBanner = ({ onAccept, onDecline }) => {
-  const [visible, setVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const consent = getCookie(COOKIE_KEY);
     if (!consent) {
-      setVisible(true);
+      setIsExpanded(true);
     } else if (consent === "true") {
       onAccept();
     }
@@ -39,7 +39,7 @@ const CookieBanner = ({ onAccept, onDecline }) => {
 
   const handleAccept = () => {
     setCookie(COOKIE_KEY, "true", 365);
-    setVisible(false);
+    setIsExpanded(false);
     onAccept();
 
     // Phát sự kiện toàn cục để Home và Layout biết mà thả Script ra
@@ -49,16 +49,35 @@ const CookieBanner = ({ onAccept, onDecline }) => {
   };
 
   const handleDecline = () => {
+    // 1. Kiểm tra xem trước đó khách đã Accept chưa?
+    const previousConsent = getCookie(COOKIE_KEY);
+
+    // 2. Cập nhật lại Cookie thành false
     setCookie(COOKIE_KEY, "false", 365);
-    setVisible(false);
+    setIsExpanded(false);
     onDecline();
+
+    // 3. Nếu khách đang "quay xe" (từ true chuyển sang false) -> Ép Reload để dọn rác
+    if (previousConsent === "true" && typeof window !== "undefined") {
+      window.location.reload();
+    }
   };
 
   const handleClose = () => {
-    setVisible(false);
+    setIsExpanded(false);
   };
 
-  if (!visible) return null;
+  if (!isExpanded) {
+    return (
+      <button
+        onClick={() => setIsExpanded(true)}
+        className="openBtnCookie"
+        aria-label="Open Cookie Consent Manager"
+      >
+        Manage consent
+      </button>
+    );
+  }
 
   return (
     <div
