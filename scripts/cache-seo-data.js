@@ -111,7 +111,7 @@ function addUrlsToCache(urls, data, contentType) {
 
 // Helper function to process URLs in batches
 async function processBatches(urls) {
-  const BATCH_SIZE = 2; // Xử lý 10 URLs cùng lúc
+  const BATCH_SIZE = 5; // Xử lý 5 URLs cùng lúc
   const batches = [];
 
   for (let i = 0; i < urls.length; i += BATCH_SIZE) {
@@ -157,8 +157,6 @@ async function processBatches(urls) {
         );
       }),
     );
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
