@@ -84,6 +84,9 @@ const CookieBanner = ({ onAccept, onDecline }) => {
       role="dialog"
       aria-label="Manage Consent"
       className="cookie-banner-wrapper"
+      style={{
+        zIndex: 999999999, // Đảm bảo banner luôn nằm trên cùng
+      }}
     >
       {/* Drag handle - chỉ hiện trên mobile */}
       <div className="cookie-banner-drag">
