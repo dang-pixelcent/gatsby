@@ -71,9 +71,12 @@
   line-height: 1;
   padding: 0 0.125rem;
   transition: color 0.2s;
+  box-shadow: none;
 }
+
 .cookie-banner-close:hover {
-  color: #ef4444;
+  color: #2e2e2e;
+  background: transparent;
 }
 
 .cookie-banner-body {
@@ -137,9 +140,11 @@
   text-decoration: underline;
   padding: 0;
   transition: color 0.2s;
+  box-shadow: none;
 }
 .cookie-banner-link-btn:hover {
   color: #0f4994;
+  background: transparent;
 }
 
 /* Xử lý khoảng trống an toàn cho các dòng iPhone tai thỏ (Notch) */
