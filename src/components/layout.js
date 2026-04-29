@@ -1,6 +1,6 @@
-import React, { useState, Suspense } from "react"
-import { useStaticQuery, graphql } from "gatsby"
-import loadable from '@loadable/component';
+import React, { useEffect, useState, Suspense } from "react";
+import { useStaticQuery, graphql } from "gatsby";
+import loadable from "@loadable/component";
 // import LazyTrackingScripts from '@components/Tracking/LazyTrackingScripts';
 // Import Tailwind CSS trước
 // import './src/styles/tailwind.css';
@@ -12,43 +12,60 @@ import loadable from '@loadable/component';
 // import 'slick-carousel/slick/slick.css';
 // import 'slick-carousel/slick/slick-theme.css';
 
-
 // 3. GATSBY THEME STYLES - với lower priority
-import '../styles/main.scss';
-import '../styles/aos.css';
-import '../styles/customStyle.scss';
-import '../styles/dashicons.min.css';
-import '../styles/slick.css';
-import '../styles/custom.scss';
-import '../styles/main.min.scss';
-import '../styles/layouts/_blog.scss';
+import "../styles/main.scss";
+import "../styles/aos.css";
+import "../styles/customStyle.scss";
+import "../styles/dashicons.min.css";
+import "../styles/slick.css";
+import "../styles/custom.scss";
+import "../styles/main.min.scss";
+import "../styles/layouts/_blog.scss";
 
 // 4. EXTERNAL LIBRARIES CUỐI CÙNG
 // import 'slick-carousel/slick/slick.css';
 // import 'slick-carousel/slick/slick-theme.css';
 // import 'slick-carousel/slick/slick.min.js';
 
-import Header from './Header'
+import Header from "./Header";
 
-import ChatWidget from "./ChatWidget"
-import { useLocation } from "@reach/router"
-import Helmet from "react-helmet"
+import ChatWidget from "./ChatWidget";
+import { useLocation } from "@reach/router";
+import Helmet from "react-helmet";
 // làm sạch link
-import InternalLinkInterceptor from '@components/InternalLinkInterceptor'
+import InternalLinkInterceptor from "@components/InternalLinkInterceptor";
 
-import ScrollTop from '@components/ScrollTop';
+import ScrollTop from "@components/ScrollTop";
 
 // Import custom hooks
-import { useBodyUpdate } from "@hooks/layout/useBodyUpdate"
-import { useAos } from "@hooks/useAos"
+import { useBodyUpdate } from "@hooks/layout/useBodyUpdate";
+import { useAos } from "@hooks/useAos";
+import CookieBanner, { getCookie } from "./CookieBanner";
 
-
-const Footer = loadable(() => import('./Footer'));
+const Footer = loadable(() => import("./Footer"));
 
 const DefaultLayout = ({ children }) => {
   const location = useLocation(); // Lấy thông tin về trang hiện tại
 
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // +++ PHẦN THÊM MỚI: QUẢN LÝ COOKIE CONSENT +++
+  const [hasConsented, setHasConsented] = useState(false);
+
+  useEffect(() => {
+    // Check ngay lúc load trang
+    if (getCookie("site_cookie_consent") === "true") {
+      setHasConsented(true);
+    }
+
+    // Lắng nghe loa thông báo từ Banner (nếu user mới vừa bấm Accept)
+    const handleConsent = () => setHasConsented(true);
+    window.addEventListener("cookie_consent_accepted", handleConsent);
+
+    return () =>
+      window.removeEventListener("cookie_consent_accepted", handleConsent);
+  }, []);
+  // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
   // bodyClass sẽ được cập nhật mỗi khi trang thay đổi hoặc kích thước cửa sổ thay đổi
   useBodyUpdate(location, isMobileMenuOpen);
@@ -74,7 +91,7 @@ const DefaultLayout = ({ children }) => {
             }
           }
         }
-        menuItems(where: {location: PRIMARY}) {
+        menuItems(where: { location: PRIMARY }) {
           nodes {
             uri
             title
@@ -106,9 +123,8 @@ const DefaultLayout = ({ children }) => {
   `);
 
   // Lấy dữ liệu đã xử lý ra
-  const processedHeaderHtml = data.headerfooterJson?.headerHtmlall || '';
-  const processedFooterHtml = data.headerfooterJson?.footerHtmlall || '';
-
+  const processedHeaderHtml = data.headerfooterJson?.headerHtmlall || "";
+  const processedFooterHtml = data.headerfooterJson?.footerHtmlall || "";
 
   return (
     <React.Fragment>
@@ -124,10 +140,19 @@ const DefaultLayout = ({ children }) => {
         <Footer data={processedFooterHtml} />
         <ScrollTop />
       </Suspense>
-      <ChatWidget />
+      {hasConsented && (
+        <>
+          <ChatWidget />
+        </>
+      )}
+      {/* 4. Gắn Cookie Banner vào Layout để trang nào cũng hiện */}
+      <CookieBanner
+        onAccept={() => setHasConsented(true)}
+        onDecline={() => console.log("User declined tracking")}
+      />
       {/* <LazyTrackingScripts /> */}
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default DefaultLayout
+export default DefaultLayout;

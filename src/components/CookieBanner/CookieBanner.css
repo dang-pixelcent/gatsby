@@ -1,0 +1,153 @@
+/* CookieBanner.css */
+
+.cookie-banner-wrapper {
+  position: fixed;
+  z-index: 9999;
+  background-color: #ffffff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  font-family: sans-serif;
+
+  /* Mobile Style (Mặc định) */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+/* Desktop Style */
+@media (min-width: 768px) {
+  .cookie-banner-wrapper {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    left: auto;
+    width: 500px;
+    border-radius: 0.75rem;
+  }
+}
+
+.cookie-banner-drag {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+@media (min-width: 768px) {
+  .cookie-banner-drag {
+    display: none !important;
+  }
+}
+.cookie-banner-drag-line {
+  width: 2.5rem;
+  height: 0.25rem;
+  background-color: #d1d5db;
+  border-radius: 9999px;
+}
+
+.cookie-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem 0.75rem;
+}
+
+.cookie-banner-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #111;
+  text-align: center;
+  width: 100%;
+}
+
+.cookie-banner-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.875rem;
+  font-weight: 900;
+  color: #000;
+  line-height: 1;
+  padding: 0 0.125rem;
+  transition: color 0.2s;
+}
+.cookie-banner-close:hover {
+  color: #ef4444;
+}
+
+.cookie-banner-body {
+  padding: 0.5rem 1.25rem 1rem;
+}
+
+.cookie-banner-text {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.cookie-banner-action {
+  padding: 0 1.25rem 0.75rem;
+}
+
+.cookie-banner-accept-btn {
+  width: 100%;
+  background-color: #1a6fd4;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background-color 0.2s;
+}
+@media (min-width: 768px) {
+  .cookie-banner-accept-btn {
+    margin-top: 1rem;
+  }
+}
+.cookie-banner-accept-btn:hover {
+  background-color: #155ba6;
+}
+.cookie-banner-accept-btn:active {
+  background-color: #0f4994;
+}
+
+.cookie-banner-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 0 1.25rem 1.25rem;
+}
+@media (min-width: 768px) {
+  .cookie-banner-footer {
+    padding-bottom: 18px;
+  }
+}
+
+.cookie-banner-link-btn {
+  background: transparent;
+  border: none;
+  color: #1a6fd4;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  transition: color 0.2s;
+}
+.cookie-banner-link-btn:hover {
+  color: #0f4994;
+}
+
+/* Xử lý khoảng trống an toàn cho các dòng iPhone tai thỏ (Notch) */
+.cookie-banner-safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@media (min-width: 768px) {
+  .cookie-banner-safe-area {
+    padding-bottom: 0;
+  }
+}

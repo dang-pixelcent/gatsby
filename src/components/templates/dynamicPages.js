@@ -1,16 +1,17 @@
 // các import cơ bản phải có
-import { Script } from "gatsby"
+import { Script } from "gatsby";
 import React, { Suspense, lazy, useState, useEffect } from "react";
-import loadable from '@loadable/component';
+import loadable from "@loadable/component";
 // import ConditionalLayout from "./tools/conditionalLayout";
-import Layout from "@components/layout"
-import { SEO } from "@components/SEO"
+import Layout from "@components/layout";
+import { SEO } from "@components/SEO";
+import { getCookie } from "@components/CookieBanner";
 
 // import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
 // import hooks
-import useLazyEmbedRenderer from '@hooks/useLazyEmbedRenderer';
-import useJqueryPlugins from '@hooks/useJqueryPlugins';
+import useLazyEmbedRenderer from "@hooks/useLazyEmbedRenderer";
+import useJqueryPlugins from "@hooks/useJqueryPlugins";
 import { getJqueryPlugins } from "@src/utils/jqueryConfig";
 import { Helmet } from "react-helmet";
 import CmsScriptsForHead from "@components/Tools/CmsScriptsForHead";
@@ -22,17 +23,24 @@ import CmsScriptsForHead from "@components/Tools/CmsScriptsForHead";
 // const LazyServiceSlider = lazy(() => import('@components/Blocks/ServiceSlider.js/'));
 // const SpecialtySliderFromHtml  = lazy(() => import('@components/Blocks/SpecialtySlider/index.js'));
 
-const DomReplacer = loadable(() => import('@components/Tools/DomReplacer'));
-const DomInjector = loadable(() => import('@components/Tools/DomInjector'));
+const DomReplacer = loadable(() => import("@components/Tools/DomReplacer"));
+const DomInjector = loadable(() => import("@components/Tools/DomInjector"));
 // const SpecialScriptInjector = loadable(() => import('@components/Tools/SpecialScriptInjector'));
-const DynamicScriptHandler = loadable(() => import('@components/DynamicScriptHandler'));
-const LazyPracticeFlowForm = loadable(() => import('@components/Blocks/LazyPracticeFlowForm'));
+const DynamicScriptHandler = loadable(() =>
+  import("@components/DynamicScriptHandler"),
+);
+const LazyPracticeFlowForm = loadable(() =>
+  import("@components/Blocks/LazyPracticeFlowForm"),
+);
 // const OldScheduleForm = loadable(() => import('@components/Blocks/OldScheduleForm'));
-const ScriptInjector = loadable(() => import('@components/Tools/ScriptInjector'));
+const ScriptInjector = loadable(() =>
+  import("@components/Tools/ScriptInjector"),
+);
 // const LazySectionDynamic = loadable(() => import('@components/sectionLazyDynamic'));
 
-const LazyCmsScripts = loadable(() => import('@components/Tools/LazyCmsScripts'));
-
+const LazyCmsScripts = loadable(() =>
+  import("@components/Tools/LazyCmsScripts"),
+);
 
 // flag kiểm soát tính năng
 // const isInternalTest = process.env.FEATURE_INTERNAL_TEST === "true";
@@ -51,13 +59,18 @@ const isNewFormEnabled = process.env.FEATURE_NEW_FORM === "true";
 const NoscriptInjector = ({ snippets = [] }) => (
   <>
     {snippets.map((snippet, i) => (
-      <noscript key={`cms-noscript-${i}`} dangerouslySetInnerHTML={{ __html: snippet }} />
+      <noscript
+        key={`cms-noscript-${i}`}
+        dangerouslySetInnerHTML={{ __html: snippet }}
+      />
     ))}
   </>
 );
 
 const Home = ({ pageContext }) => {
-  const { flexibleContentHtml,
+  const [hasConsented, setHasConsented] = useState(false);
+  const {
+    flexibleContentHtml,
     scripts = [],
     specialScripts = [],
     uri,
@@ -65,7 +78,7 @@ const Home = ({ pageContext }) => {
     mergedCmsNoscriptSnippets = [],
     mergedCmsSafeSnippets = [],
     mergedHeaderSnippets = [],
-    mergedFooterSnippets = []
+    mergedFooterSnippets = [],
   } = pageContext;
 
   // --- Cấu hình các plugin jQuery cần dùng cho trang này ---
@@ -79,23 +92,38 @@ const Home = ({ pageContext }) => {
 
   // Lọc và tạo các thẻ <link> cho Helmet
   const preloadLinks = specialScripts
-    .filter(script => script.type === 'preload-lcp-image' && script.tag === 'link')
+    .filter(
+      (script) => script.type === "preload-lcp-image" && script.tag === "link",
+    )
     .map((script, index) => (
       <link key={`preload-${index}`} {...script.props} />
     ));
 
+  // +++ PHẦN THÊM MỚI: QUẢN LÝ COOKIE CONSENT +++
+  useEffect(() => {
+    if (getCookie("site_cookie_consent") === "true") {
+      setHasConsented(true);
+    }
+    const handleConsent = () => setHasConsented(true);
+    window.addEventListener("cookie_consent_accepted", handleConsent);
+    return () =>
+      window.removeEventListener("cookie_consent_accepted", handleConsent);
+  }, []);
+  // +++ KẾT THÚC PHẦN THÊM MỚI +++
+
   return (
     <React.Fragment>
-      <Helmet>
-        {preloadLinks}
-      </Helmet>
+      <Helmet>{preloadLinks}</Helmet>
 
       {/* Tiêm các thẻ <noscript> */}
       <NoscriptInjector snippets={mergedCmsNoscriptSnippets} />
 
       <Layout>
-        <div id="content" className="site-content" dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}></div>
-
+        <div
+          id="content"
+          className="site-content"
+          dangerouslySetInnerHTML={{ __html: flexibleContentHtml }}
+        ></div>
 
         {/* Xử lý tiêm các script đã được trích xuất */}
         <ScriptInjector scripts={scripts} />
@@ -115,7 +143,6 @@ const Home = ({ pageContext }) => {
             <LazyServiceSlider />
           </Suspense> */}
         {/* </DomInjector> */}
-
       </Layout>
       {/* {schemas && schemas.length > 0 && schemas.map((schema, index) => (
         <Script
@@ -128,7 +155,6 @@ const Home = ({ pageContext }) => {
           }}
         />
       ))} */}
-
 
       {/* GỘP 2 NGUỒN SCHEMA LẠI VÀ RENDER (AN TOÀN) */}
       {[...schemas, ...mergedCmsSafeSnippets].map((schema, index) => (
@@ -144,27 +170,28 @@ const Home = ({ pageContext }) => {
       ))}
 
       {/* TẢI LƯỜI CÁC SCRIPT NGUY HIỂM TỪ CMS */}
-      <Suspense fallback={null}>
-        <LazyCmsScripts scripts={mergedFooterSnippets} />
-      </Suspense>
+      {hasConsented && (
+        <>
+          <Suspense fallback={null}>
+            <LazyCmsScripts scripts={mergedFooterSnippets} />
+          </Suspense>
 
-      <CmsScriptsForHead scripts={mergedHeaderSnippets} />
-
-      {/* Tiêm các script động vào cuối body */}
+          <CmsScriptsForHead scripts={mergedHeaderSnippets} />
+        </>
+      )}
       <Suspense fallback={null}>
         <DynamicScriptHandler />
       </Suspense>
-
     </React.Fragment>
-  )
-}
+  );
+};
 export const Head = ({ pageContext }) => (
   <>
     <SEO
       metaHtml={pageContext.metaHtml || {}}
-    // schemas={pageContext.schemas || []}
+      // schemas={pageContext.schemas || []}
     />
   </>
 );
 
-export default Home
+export default Home;
