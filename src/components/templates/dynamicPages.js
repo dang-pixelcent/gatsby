@@ -5,7 +5,7 @@ import loadable from "@loadable/component";
 // import ConditionalLayout from "./tools/conditionalLayout";
 import Layout from "@components/layout";
 import { SEO } from "@components/SEO";
-import { getCookie } from "@components/CookieBanner";
+import { COOKIE_KEY, getCookie } from "@components/CookieBanner";
 
 // import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
@@ -101,7 +101,7 @@ const Home = ({ pageContext }) => {
 
   // +++ PHẦN THÊM MỚI: QUẢN LÝ COOKIE CONSENT +++
   useEffect(() => {
-    if (getCookie("site_cookie_consent") === "true") {
+    if (getCookie(COOKIE_KEY) === "true") {
       setHasConsented(true);
     }
     const handleConsent = () => setHasConsented(true);

@@ -40,7 +40,7 @@ import ScrollTop from "@components/ScrollTop";
 // Import custom hooks
 import { useBodyUpdate } from "@hooks/layout/useBodyUpdate";
 import { useAos } from "@hooks/useAos";
-import CookieBanner, { getCookie } from "./CookieBanner";
+import CookieBanner, { COOKIE_KEY, getCookie } from "./CookieBanner";
 
 const Footer = loadable(() => import("./Footer"));
 
@@ -54,7 +54,7 @@ const DefaultLayout = ({ children }) => {
 
   useEffect(() => {
     // Check ngay lúc load trang
-    if (getCookie("site_cookie_consent") === "true") {
+    if (getCookie(COOKIE_KEY) === "true") {
       setHasConsented(true);
     }
 

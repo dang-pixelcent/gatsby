@@ -7,7 +7,7 @@ import "./CookieBanner.scss"; // Nhớ import file CSS vào đây!
 //   onDecline: () => void
 // };
 
-const COOKIE_KEY =
+export const COOKIE_KEY =
   process.env.GATSBY_COOKIE_CONSENT_KEY || "default_site_cookie_v1";
 
 // Export để các component khác có thể xài lại hàm check cookie
