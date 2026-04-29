@@ -1,101 +1,136 @@
-const axios = require('axios')
-const fs = require('fs')
-const path = require('path')
-const getTerminalColors = require('../src/utils/terminalColors.js')
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+const getTerminalColors = require("../src/utils/terminalColors.js");
 
-require('dotenv').config({
-  path: `.env.${process.env.NODE_ENV || 'development'}`
-})
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
 
 // ANSI color codes
-const colors = getTerminalColors()
+const colors = getTerminalColors();
 
-const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL
-const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL
+const WP_BASE_URL = process.env.GATSBY_WP_BASE_URL;
+const SEO_QUERY_URL = process.env.REACT_APP_SEO_QUERY_URL;
 if (!WP_BASE_URL || !SEO_QUERY_URL) {
-  console.error(`${colors.red}GATSBY_WP_BASE_URL and REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`)
-  process.exit(1)
+  console.error(
+    `${colors.red}GATSBY_WP_BASE_URL and REACT_APP_SEO_QUERY_URL must be set in .env file${colors.reset}`,
+  );
+  process.exit(1);
 }
-const CACHE_DIR = path.join(__dirname, '../cache/seo')
+const CACHE_DIR = path.join(__dirname, "../cache/seo");
 
 // Tạo thư mục cache nếu chưa có
 if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR, { recursive: true })
+  fs.mkdirSync(CACHE_DIR, { recursive: true });
 }
 
 async function fetchSeoData(url, retries = 7) {
   for (let i = 0; i < retries; i++) {
     try {
-      console.log(`${colors.blue}Fetching SEO data for ${url} (attempt ${i + 1}/${retries})${colors.reset}`)
+      console.log(
+        `${colors.blue}Fetching SEO data for ${url} (attempt ${
+          i + 1
+        }/${retries})${colors.reset}`,
+      );
 
-      const response = await axios.get(`${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(url)}`, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; GatsbyJS/4.0; +https://www.wellnessclinicmarketing.com/)',
-          'Accept': 'application/json',
+      const response = await axios.get(
+        `${WP_BASE_URL}/wp-json/rankmath/v1/getHead?url=${encodeURIComponent(
+          url,
+        )}`,
+        {
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (compatible; GatsbyJS/4.0; +https://www.wellnessclinicmarketing.com/)",
+            Accept: "application/json",
+          },
+          timeout: 10000,
         },
-        timeout: 10000
-      })
+      );
 
       if (response.status !== 200) {
-        console.warn(`${colors.yellow}HTTP error! status: ${response.status} for ${url} on attempt ${i + 1}${colors.reset}`)
-        if (i === retries - 1) return null
-        continue
+        console.warn(
+          `${colors.yellow}HTTP error! status: ${
+            response.status
+          } for ${url} on attempt ${i + 1}${colors.reset}`,
+        );
+        if (i === retries - 1) return null;
+        continue;
       }
 
-      const result = response.data.success && response.data.head ? response.data.head : null
+      const result =
+        response.data.success && response.data.head ? response.data.head : null;
       if (result) {
-        console.log(`${colors.green}✓ SEO data fetched successfully for ${url}${colors.reset}`)
+        console.log(
+          `${colors.green}✓ SEO data fetched successfully for ${url}${colors.reset}`,
+        );
       } else {
-        console.warn(`${colors.yellow}⚠ No SEO data available for ${url}${colors.reset}`)
+        console.warn(
+          `${colors.yellow}⚠ No SEO data available for ${url}${colors.reset}`,
+        );
       }
-      return result
+      return result;
     } catch (error) {
       // Kiểm tra lỗi 429
       const is429 = error.response && error.response.status === 429;
       let delay = is429 ? 1000 * Math.pow(2, i) : 500 * (i + 1); // tăng dần nếu 429
-      console.error(`${colors.red}✗ Error fetching SEO data for ${url} (attempt ${i + 1}): ${error.message}${colors.reset}`);
+      console.error(
+        `${colors.red}✗ Error fetching SEO data for ${url} (attempt ${
+          i + 1
+        }): ${error.message}${colors.reset}`,
+      );
       if (i === retries - 1) {
-        console.error(`${colors.red}Failed to fetch SEO data for ${url} after ${retries} attempts${colors.reset}`);
+        console.error(
+          `${colors.red}Failed to fetch SEO data for ${url} after ${retries} attempts${colors.reset}`,
+        );
         return null;
       }
-      console.warn(`${colors.yellow}Delaying ${delay}ms before retry${colors.reset}`);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      console.warn(
+        `${colors.yellow}Delaying ${delay}ms before retry${colors.reset}`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 }
 
 function sanitizeFilename(url) {
-  return url.replace(/[^a-z0-9]/gi, '_').toLowerCase()
+  return url.replace(/[^a-z0-9]/gi, "_").toLowerCase();
 }
 
 // Helper function to add URLs to cache list
 function addUrlsToCache(urls, data, contentType) {
   if (data[contentType]) {
-    const nodes = data[contentType].edges ? data[contentType].edges.map(edge => edge.node) : data[contentType].nodes;
-    nodes.forEach(node => {
-      urls.push(`${SEO_QUERY_URL}${node.uri}`)
-    })
+    const nodes = data[contentType].edges
+      ? data[contentType].edges.map((edge) => edge.node)
+      : data[contentType].nodes;
+    nodes.forEach((node) => {
+      urls.push(`${SEO_QUERY_URL}${node.uri}`);
+    });
   }
 }
 
 // Helper function to process URLs in batches
 async function processBatches(urls) {
-  const BATCH_SIZE = 10 // Xử lý 10 URLs cùng lúc
-  const batches = []
+  const BATCH_SIZE = 2; // Xử lý 10 URLs cùng lúc
+  const batches = [];
 
   for (let i = 0; i < urls.length; i += BATCH_SIZE) {
-    batches.push(urls.slice(i, i + BATCH_SIZE))
+    batches.push(urls.slice(i, i + BATCH_SIZE));
   }
 
   for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
-    const batch = batches[batchIndex]
-    console.log(`${colors.cyan}Processing batch ${batchIndex + 1}/${batches.length}${colors.reset}`)
+    const batch = batches[batchIndex];
+    console.log(
+      `${colors.cyan}Processing batch ${batchIndex + 1}/${batches.length}${
+        colors.reset
+      }`,
+    );
 
     // Xử lý song song trong batch
     await Promise.allSettled(
       batch.map(async (url, index) => {
-        const filename = sanitizeFilename(url)
-        const filePath = path.join(CACHE_DIR, `${filename}.json`)
+        const filename = sanitizeFilename(url);
+        const filePath = path.join(CACHE_DIR, `${filename}.json`);
 
         // // Check cache exists và còn fresh (ví dụ: trong 24h)
         // if (fs.existsSync(filePath)) {
@@ -107,32 +142,49 @@ async function processBatches(urls) {
         //   }
         // }
 
-        const seoData = await fetchSeoData(url)
-        fs.writeFileSync(filePath, JSON.stringify({
-          url,
-          seoData,
-          cachedAt: new Date().toISOString()
-        }, null, 2))
-      })
-    )
+        const seoData = await fetchSeoData(url);
+        fs.writeFileSync(
+          filePath,
+          JSON.stringify(
+            {
+              url,
+              seoData,
+              cachedAt: new Date().toISOString(),
+            },
+            null,
+            2,
+          ),
+        );
+      }),
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
 async function cacheSeoData() {
-  console.log(`${colors.cyan}${colors.bright}Starting SEO data caching...${colors.reset}`)
+  console.log(
+    `${colors.cyan}${colors.bright}Starting SEO data caching...${colors.reset}`,
+  );
 
   const retries = 7; // Định nghĩa số lần thử lại
-  for (let i = 0; i < retries; i++) { // Bắt đầu vòng lặp for, định nghĩa biến i
+  for (let i = 0; i < retries; i++) {
+    // Bắt đầu vòng lặp for, định nghĩa biến i
     try {
       // List of URLs to cache
       const urls = [
         `${SEO_QUERY_URL}/`, // Home page
         // Add more URLs here or fetch from GraphQL
-      ]
+      ];
 
       // Fetch URLs from GraphQL
-      const { GraphQLClient } = require('graphql-request')
-      const client = new GraphQLClient(process.env.GATSBY_WPGRAPHQL_URL)
+      const { GraphQLClient } = require("graphql-request");
+      const client = new GraphQLClient(process.env.GATSBY_WPGRAPHQL_URL, {
+        method: "GET", // Ép dùng GET để nhận Cache
+        headers: {
+          "User-Agent": "WellnessClinic-Vercel-Build/1.0",
+        },
+      });
 
       const query = `
       query {
@@ -175,38 +227,49 @@ async function cacheSeoData() {
           }
         }
       }
-      `
-      const data = await client.request(query)
+      `;
+      const data = await client.request(query);
 
       // Add all URLs to cache list using helper function
-      addUrlsToCache(urls, data, 'pages')
-      addUrlsToCache(urls, data, 'services')
-      addUrlsToCache(urls, data, 'events')
-      addUrlsToCache(urls, data, 'posts')
-      addUrlsToCache(urls, data, 'caseStudiesPost')
-      addUrlsToCache(urls, data, 'categories')
+      addUrlsToCache(urls, data, "pages");
+      addUrlsToCache(urls, data, "services");
+      addUrlsToCache(urls, data, "events");
+      addUrlsToCache(urls, data, "posts");
+      addUrlsToCache(urls, data, "caseStudiesPost");
+      addUrlsToCache(urls, data, "categories");
 
-      console.log(`${colors.magenta}Found ${urls.length} URLs to cache${colors.reset}`)
+      console.log(
+        `${colors.magenta}Found ${urls.length} URLs to cache${colors.reset}`,
+      );
 
       // Tối ưu: Xử lý song song với giới hạn concurrency
-      await processBatches(urls)
+      await processBatches(urls);
 
-      console.log(`${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`)
+      console.log(
+        `${colors.green}${colors.bright}✓ SEO data caching completed!${colors.reset}`,
+      );
 
       return; // Thoát khỏi hàm và vòng lặp nếu thành công
-
     } catch (error) {
       // Bây giờ i và retries đã được định nghĩa
-      console.error(`${colors.red}✗ Error caching SEO data (attempt ${i + 1}/${retries}): ${error.message}${colors.reset}`)
+      console.error(
+        `${colors.red}✗ Error caching SEO data (attempt ${i + 1}/${retries}): ${
+          error.message
+        }${colors.reset}`,
+      );
       if (i === retries - 1) {
-        console.error(`${colors.red}Failed to cache SEO data after ${retries} attempts.${colors.reset}`)
+        console.error(
+          `${colors.red}Failed to cache SEO data after ${retries} attempts.${colors.reset}`,
+        );
         process.exit(1); // Thoát tiến trình nếu thất bại sau tất cả các lần thử
       }
       const delay = 1000 * Math.pow(2, i); // Thời gian chờ tăng dần (1s, 2s, 4s, ...)
-      console.warn(`${colors.yellow}Retrying after ${delay}ms...${colors.reset}`)
-      await new Promise(resolve => setTimeout(resolve, delay))
+      console.warn(
+        `${colors.yellow}Retrying after ${delay}ms...${colors.reset}`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 }
 
-cacheSeoData()
+cacheSeoData();
