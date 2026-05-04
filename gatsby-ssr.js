@@ -1,21 +1,24 @@
-import React from 'react';
-import wrapWithProvider from './wrap-with-provider';
+import React from "react";
+import wrapWithProvider from "./wrap-with-provider";
 
 export const wrapRootElement = wrapWithProvider;
 
 export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
   setHeadComponents([
+    // 1. Khai báo thư viện Gtag
     <script
       key="gtag-lib"
       async
       src="https://www.googletagmanager.com/gtag/js?id=UA-179011612-1"
     />,
+    // 2. Lệnh nội tuyến của Gtag (Ép cứng format bằng \n)
     <script
       key="gtag-inline"
       dangerouslySetInnerHTML={{
         __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'UA-179011612-1');\ngtag('config', 'AW-578323724');`,
       }}
     />,
+    // 3. Lệnh nội tuyến của GTM (Ép cứng format bằng \n)
     <script
       key="gtm-inline"
       dangerouslySetInnerHTML={{
@@ -25,6 +28,7 @@ export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
   ]);
 
   setPreBodyComponents([
+    // 4. No-script của GTM (Ép thành 1 dòng sát nhau)
     <noscript
       key="gtm-noscript"
       dangerouslySetInnerHTML={{
