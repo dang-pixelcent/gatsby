@@ -15,7 +15,7 @@ export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {
     <script
       key="gtag-inline"
       dangerouslySetInnerHTML={{
-        __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'UA-179011612-1');\ngtag('config', 'AW-578323724');`,
+        __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'AW-578323724');`,
       }}
     />,
     // 3. Lệnh nội tuyến của GTM (Ép cứng format bằng \n)
