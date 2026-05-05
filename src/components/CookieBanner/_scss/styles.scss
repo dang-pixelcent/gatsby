@@ -267,7 +267,6 @@
 }
 
 .preference-toggle {
-  align-items: center !important;
   position: relative;
   display: inline-flex;
   height: 24px;
@@ -280,15 +279,7 @@
   transition: background-color 0.2s ease !important;
   padding: 0;
   border-color: none !important;
-}
-
-.preference-toggle:active {
-  border-color: unset !important;
-  outline: 0;
-}
-
-.preference-toggle:focus {
-  outline: none;
+  align-items: center !important;
 }
 
 .preference-toggle--checked {
