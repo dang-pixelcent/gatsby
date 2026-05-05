@@ -51,19 +51,31 @@ const DefaultLayout = ({ children }) => {
 
   // +++ PHẦN THÊM MỚI: QUẢN LÝ COOKIE CONSENT +++
   const [hasConsented, setHasConsented] = useState(false);
+  const [consentPrefs, setConsentPrefs] = useState({
+    functional: true,
+    statistics: false,
+    marketing: false,
+  });
 
   useEffect(() => {
-    // Check ngay lúc load trang
-    if (getCookie(COOKIE_KEY) === "true") {
-      setHasConsented(true);
+    const consent = getCookie(COOKIE_KEY);
+    if (consent) {
+      try {
+        if (consent === "true")
+          setConsentPrefs({
+            functional: true,
+            statistics: true,
+            marketing: true,
+          });
+        else if (consent === "false")
+          setConsentPrefs({
+            functional: true,
+            statistics: false,
+            marketing: false,
+          });
+        else setConsentPrefs(JSON.parse(consent));
+      } catch (e) {}
     }
-
-    // Lắng nghe loa thông báo từ Banner (nếu user mới vừa bấm Accept)
-    const handleConsent = () => setHasConsented(true);
-    window.addEventListener("cookie_consent_accepted", handleConsent);
-
-    return () =>
-      window.removeEventListener("cookie_consent_accepted", handleConsent);
   }, []);
   // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
@@ -140,15 +152,29 @@ const DefaultLayout = ({ children }) => {
         <Footer data={processedFooterHtml} />
         <ScrollTop />
       </Suspense>
-      {hasConsented && (
+      {consentPrefs.marketing && (
         <>
           <ChatWidget />
         </>
       )}
       {/* 4. Gắn Cookie Banner vào Layout để trang nào cũng hiện */}
       <CookieBanner
-        onAccept={() => setHasConsented(true)}
-        onDecline={() => console.log("User declined tracking")}
+        onAccept={(prefs) => {
+          setConsentPrefs(prefs);
+          // PHÁT LOA THÔNG BÁO CHO Home.js biết
+          const event = new CustomEvent("cookie_consent_accepted", {
+            detail: prefs,
+          });
+          window.dispatchEvent(event);
+        }}
+        onDecline={() => {
+          const defaults = {
+            functional: true,
+            statistics: false,
+            marketing: false,
+          };
+          setConsentPrefs(defaults);
+        }}
       />
       {/* <LazyTrackingScripts /> */}
     </React.Fragment>

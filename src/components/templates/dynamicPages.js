@@ -5,7 +5,7 @@ import loadable from "@loadable/component";
 // import ConditionalLayout from "./tools/conditionalLayout";
 import Layout from "@components/layout";
 import { SEO } from "@components/SEO";
-import { COOKIE_KEY, getCookie } from "@components/CookieBanner";
+import { COOKIE_KEY, getCookie } from "@src/components/CookieBanner";
 
 // import { SCRIPT_HANDLING_CONFIG, DEFAULT_SCRIPT_HANDLING } from '@config/scriptManager';
 
@@ -15,6 +15,10 @@ import useJqueryPlugins from "@hooks/useJqueryPlugins";
 import { getJqueryPlugins } from "@src/utils/jqueryConfig";
 import { Helmet } from "react-helmet";
 import CmsScriptsForHead from "@components/Tools/CmsScriptsForHead";
+import {
+  filterAllowedNoscripts,
+  filterAllowedScripts,
+} from "../CookieBanner/_utils/filterAllowedScripts";
 // import useIsMobile from '@hooks/useIsMobile';
 
 // import LazySection from '@components/Tools/LazySection';
@@ -68,6 +72,7 @@ const NoscriptInjector = ({ snippets = [] }) => (
 );
 
 const Home = ({ pageContext }) => {
+  const [consentPrefs, setConsentPrefs] = useState(null);
   const [hasConsented, setHasConsented] = useState(false);
   const {
     flexibleContentHtml,
@@ -101,14 +106,61 @@ const Home = ({ pageContext }) => {
 
   // +++ PHẦN THÊM MỚI: QUẢN LÝ COOKIE CONSENT +++
   useEffect(() => {
-    if (getCookie(COOKIE_KEY) === "true") {
-      setHasConsented(true);
+    const consent = getCookie(COOKIE_KEY);
+    if (consent) {
+      try {
+        if (consent === "true") {
+          setConsentPrefs({
+            functional: true,
+            statistics: true,
+            marketing: true,
+          });
+        } else if (consent === "false") {
+          setConsentPrefs({
+            functional: true,
+            statistics: false,
+            marketing: false,
+          });
+        } else {
+          setConsentPrefs(JSON.parse(consent));
+        }
+      } catch (e) {
+        console.error("Lỗi đọc Cookie", e);
+      }
+    } else {
+      // Chưa chọn gì -> Chỉ mở Functional (Chặn hết Stats/Mktg)
+      setConsentPrefs({
+        functional: true,
+        statistics: false,
+        marketing: false,
+      });
     }
-    const handleConsent = () => setHasConsented(true);
+
+    // Lắng nghe loa báo (Bây giờ CustomEvent truyền kèm object detail)
+    const handleConsent = (e) => {
+      setConsentPrefs(
+        e.detail || { functional: true, statistics: true, marketing: true },
+      );
+    };
     window.addEventListener("cookie_consent_accepted", handleConsent);
     return () =>
       window.removeEventListener("cookie_consent_accepted", handleConsent);
   }, []);
+
+  // 4. CHẠY BỘ LỌC (CHỈ CHẠY KHI ĐÃ CÓ STATE)
+  // Nếu consentPrefs là null (đang ở Server-side rendering), ta KHÔNG LỌC vì chưa biết khách chọn gì
+  const safeHeaderScripts = consentPrefs
+    ? filterAllowedScripts(mergedHeaderSnippets, consentPrefs)
+    : [];
+  const safeFooterScripts = consentPrefs
+    ? filterAllowedScripts(mergedFooterSnippets, consentPrefs)
+    : [];
+  const safeScripts = consentPrefs
+    ? filterAllowedScripts(scripts, consentPrefs)
+    : [];
+  const safeNoscripts = consentPrefs
+    ? filterAllowedNoscripts(mergedCmsNoscriptSnippets, consentPrefs)
+    : [];
   // +++ KẾT THÚC PHẦN THÊM MỚI +++
 
   return (
@@ -116,7 +168,7 @@ const Home = ({ pageContext }) => {
       <Helmet>{preloadLinks}</Helmet>
 
       {/* Tiêm các thẻ <noscript> */}
-      <NoscriptInjector snippets={mergedCmsNoscriptSnippets} />
+      <NoscriptInjector snippets={safeNoscripts} />
 
       <Layout>
         <div
@@ -170,13 +222,12 @@ const Home = ({ pageContext }) => {
       ))}
 
       {/* TẢI LƯỜI CÁC SCRIPT NGUY HIỂM TỪ CMS */}
-      {hasConsented && (
+      {consentPrefs && (
         <>
           <Suspense fallback={null}>
-            <LazyCmsScripts scripts={mergedFooterSnippets} />
+            <LazyCmsScripts scripts={safeFooterScripts} />
           </Suspense>
-
-          <CmsScriptsForHead scripts={mergedHeaderSnippets} />
+          <CmsScriptsForHead scripts={safeHeaderScripts} />
         </>
       )}
       <Suspense fallback={null}>
