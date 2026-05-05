@@ -222,16 +222,18 @@
 }
 
 .preference-item__chevron-btn {
-  color: #9ca3af;
+  color: #9ca3af !important;
   transition: color 0.2s ease;
-  background: transparent;
+  background: transparent !important;
+  background-color: transparent !important;
   border: none;
   cursor: pointer;
 }
 
 .preference-item__chevron-btn:hover {
-  color: #4b5563;
-  background: transparent;
+  background: transparent !important;
+  color: #4b5563 !important;
+  background-color: transparent !important;
 }
 
 .preference-item__chevron-icon {
