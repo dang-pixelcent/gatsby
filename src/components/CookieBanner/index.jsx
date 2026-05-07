@@ -72,6 +72,9 @@ const CookieBanner = ({ onAccept, onDecline }) => {
   const handleAcceptAll = () => {
     const allTrue = { functional: true, statistics: true, marketing: true };
     setCookie(COOKIE_KEY, JSON.stringify(allTrue), 365);
+
+    setPrefs(allTrue);
+
     setIsExpanded(false);
     setShowPreferences(false);
     onAccept(allTrue);
@@ -125,6 +128,9 @@ const CookieBanner = ({ onAccept, onDecline }) => {
     const previousConsent = getCookie(COOKIE_KEY);
 
     setCookie(COOKIE_KEY, JSON.stringify(allFalse), 365);
+
+    setPrefs(allFalse);
+
     setIsExpanded(false);
     setShowPreferences(false);
     onDecline();
