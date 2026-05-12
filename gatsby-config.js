@@ -1,10 +1,14 @@
-const path = require(`path`)
+const path = require(`path`);
+
+const rawSiteUrl =
+  process.env.REACT_APP_DOMAIN || "https://www.wellnessclinicmarketing.com";
+const cleanSiteUrl = rawSiteUrl.replace(/\/+$/, "");
 
 //nơi lấy dữ liệu từ GraphQL
-const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL
+const WPGRAPHQL_URL = process.env.GATSBY_WPGRAPHQL_URL;
 if (!WPGRAPHQL_URL) {
-  console.error(`GATSBY_WPGRAPHQL_URL must be set in .env file`)
-  process.exit(1)
+  console.error(`GATSBY_WPGRAPHQL_URL must be set in .env file`);
+  process.exit(1);
 }
 
 module.exports = {
@@ -25,7 +29,7 @@ module.exports = {
     // FAST_DEV: true,
   },
   plugins: [
-    '@vercel/gatsby-plugin-vercel-builder',
+    "@vercel/gatsby-plugin-vercel-builder",
     // {
     //   resolve: `gatsby-plugin-partytown`,
     //   options: {
@@ -77,7 +81,7 @@ module.exports = {
     //     // In ra console các class CSS đã bị xóa (hữu ích khi gỡ lỗi)
     //     printRejected: true,
     //     // Bỏ qua các file CSS từ các thư viện bên thứ 3 nếu cần
-    //     // ignore: ['swiper/'], 
+    //     // ignore: ['swiper/'],
     //     // BẬT tùy chọn này nếu bạn đang dùng Tailwind CSS
     //     // tailwind: true,
     //     // develop: true,
@@ -107,7 +111,7 @@ module.exports = {
     `gatsby-transformer-json`,
     // Kết nối đến GraphQL API của WordPress
     {
-      resolve: 'gatsby-source-graphql',
+      resolve: "gatsby-source-graphql",
       options: {
         url: WPGRAPHQL_URL,
         fieldName: `cms`,
@@ -115,8 +119,8 @@ module.exports = {
         // BỔ SUNG CÁC TÙY CHỌN RETRY VÀ RATE LIMITING Ở ĐÂY
         // refetchInterval: 60,
         createLink: (pluginOptions) => {
-          const { createHttpLink } = require(`@apollo/client`)
-          const { RetryLink } = require(`@apollo/client/link/retry`)
+          const { createHttpLink } = require(`@apollo/client`);
+          const { RetryLink } = require(`@apollo/client/link/retry`);
 
           const httpLink = createHttpLink({
             uri: pluginOptions.url,
@@ -127,27 +131,29 @@ module.exports = {
             fetchOptions: {
               timeout: 60000, // Tăng timeout lên 60 giây
             },
-          })
+          });
 
           const retryLink = new RetryLink({
             attempts: (count, operation, error) => {
               // Retry tối đa 7 lần cho các lỗi 429
               if (error && error.statusCode === 429 && count <= 7) {
-                console.log(`Retry attempt #${count} for ${operation.operationName} due to 429`)
+                console.log(
+                  `Retry attempt #${count} for ${operation.operationName} due to 429`,
+                );
                 // Tính toán thời gian chờ tăng dần (exponential backoff)
-                const delay = Math.pow(2, count) * 1000
-                setTimeout(() => true, delay)
-                return true
+                const delay = Math.pow(2, count) * 1000;
+                setTimeout(() => true, delay);
+                return true;
               }
               // Không retry cho các lỗi khác
-              return false
+              return false;
             },
-          })
+          });
 
           // Kết hợp retryLink và httpLink
-          return retryLink.concat(httpLink)
+          return retryLink.concat(httpLink);
         },
-      }
+      },
     },
     // {
     //   resolve: 'gatsby-plugin-web-font-loader',
@@ -164,17 +170,44 @@ module.exports = {
     //   }
     // },
     {
-      resolve: "gatsby-plugin-sitemap",
+      resolve: `gatsby-plugin-sitemap`,
       options: {
-        // Tùy chọn nếu cần  
+        output: "/",
+        query: `
+          {
+            allSitePage {
+              nodes {
+                path
+              }
+            }
+          }
+        `,
+        resolveSiteUrl: () => cleanSiteUrl,
+        excludes: [
+          `/dev-404-page/`,
+          `/404`,
+          `/404.html`,
+          `/preview/`,
+          // `/locations/*`,
+          // `/locations/**/*`,
+        ],
+      },
+    },
+    {
+      resolve: "gatsby-plugin-robots-txt",
+      options: {
+        host: cleanSiteUrl,
+        // 👇 Chỉ trỏ đến sitemap chính, KHÔNG trỏ sitemap geo
+        sitemap: [`${cleanSiteUrl}/sitemap-index.xml`],
+        policy: [{ userAgent: "*", allow: "/" }],
       },
     },
     /**
-     * Plugin để sử dụng các alias import 
+     * Plugin để sử dụng các alias import
      * Giúp bạn có thể import các module một cách ngắn gọn hơn
      */
     {
-      resolve: 'gatsby-plugin-alias-imports',
+      resolve: "gatsby-plugin-alias-imports",
       options: {
         alias: {
           "@src": "src",
@@ -186,10 +219,8 @@ module.exports = {
           "@helpers": "src/helpers",
           "@config": "src/config",
         },
-        extensions: [
-          "js",
-        ],
-      }
+        extensions: ["js"],
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,
@@ -219,4 +250,4 @@ module.exports = {
     // description: "Professional marketing services for wellness clinics and healthcare providers. Top Google rankings for keywords your ideal patients are already searching.",
     siteUrl: process.env.GATSBY_SITE_URL,
   },
-}
+};
