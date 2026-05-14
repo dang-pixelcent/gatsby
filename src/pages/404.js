@@ -1,13 +1,13 @@
-import React, { useEffect } from "react"
-import { navigate } from "gatsby"
+import React, { useEffect } from "react";
+import { navigate } from "gatsby";
 
 const NotFoundPage = () => {
-    useEffect(() => {
-        // Redirect ngay lập tức về trang chủ
-        navigate("/", { replace: true })
-    }, [])
+  useEffect(() => {
+    // Redirect ngay lập tức về trang chủ
+    navigate("/", { replace: true });
+  }, []);
 
-    return null
-}
+  return null;
+};
 
-export default NotFoundPage
+export default NotFoundPage;
