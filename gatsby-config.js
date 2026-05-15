@@ -222,18 +222,18 @@ module.exports = {
         extensions: ["js"],
       },
     },
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `Wellness Clinic Marketing`,
-        short_name: `Wellness Clinic`,
-        start_url: `/`,
-        background_color: `#ffffff`,
-        theme_color: `#0659A9`,
-        display: `standalone`,
-        icon: `static/favicon.png`, // Đường dẫn đến icon của bạn
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-manifest`,
+    //   options: {
+    //     name: `Wellness Clinic Marketing`,
+    //     short_name: `Wellness Clinic`,
+    //     start_url: `/`,
+    //     background_color: `#ffffff`,
+    //     theme_color: `#0659A9`,
+    //     display: `standalone`,
+    //     icon: `static/favicon.png`, // Đường dẫn đến icon của bạn
+    //   },
+    // },
     // `gatsby-plugin-offline`,
     `gatsby-plugin-preact`,
     // {
